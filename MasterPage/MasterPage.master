@@ -1,0 +1,130 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage_MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="../css/myITRIproject/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
+    <link href="../css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../css/noheader.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script type="text/javascript" src="../js/navigation.js"></script><!-- 下拉選單 -->
+    <script type='text/javascript' src='../js/jquery.fancybox.pack.js'></script><!-- fancybox -->
+    <script type="text/javascript" src="../js/jquery.mCustomScrollbar.concat.min.js"></script><!-- 捲軸美化 -->
+    <script type="text/javascript" src="../js/tableHeadFixer.js"></script>
+    <script type="text/javascript" src="../js/GCommon.js"></script>
+    <script type="text/javascript" src="../js/CmFmCommon.js"></script>
+    <script type="text/javascript" src="../js/TableSorting.js"></script>
+    <script type="text/javascript" src="../js/jquery.blockUI.js"></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+    <div class="WrapperBody">
+	<div class="WrapperContent">
+    	<div class="WrapperHeader fixwidth">
+        	<div class="logo"><a href="#"><img src="../images/logo.png" border="0" /></a></div>
+           
+            <div class="infolink font-black">
+登入者：Lynn   <a href="#">管理者</a> |  <a href="http://leave.encirclize.com/admin/login">請假系統</a>  
+            </div><!-- infolink -->
+            <!--<div class="staffmenucontrol font-black font-bold"><a href="#staffmenu" id="staffmenubtn" target="_self">統計資訊</a></div>-->
+            <div class="basemenu font-white">
+<!--{* 選單start *}-->
+<div class="nav">
+  <ul id='nav_js' >
+  	<li><a href='#' title="首頁">首頁</a></li>
+    <li>
+    <a href='#' target='_self' title="人事資料管理">人事資料管理</a>
+        <ul>
+            <li><a href='page-route-list.html' target='_self' title="基本資料管理">基本資料管理</a></li>
+            <li><a href='page-LaborProtection.html' target='_self' title="保險管理">保險管理</a></li>
+            <li><a href='page-Modify.html' target='_self' title="異動管理">異動管理</a></li>
+            <li><a href='page-WorkHours.html' target='_self' title="時數管理">時數管理</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href='' target='_self' title="薪資管理">薪資管理</a>
+        <ul>
+            <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
+            <li><a href='page-Gifts.html' target='_self' title="禮金管理">禮金管理</a></li>
+            <li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>
+        </ul>
+        <!--<a href='page-dialog.html' target='_self' title="薪資管理">薪資管理</a>
+      <ul>
+          <li><a href='#' target='_self' title="加班費計算">加班費計算</a></li>
+          <li><a href='#' target='_self' title="勞健保比對">勞健保比對</a></li>
+          <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
+          <li><a href='page-Gifts.html' target='_self' title="禮金管理">禮金管理</a></li>
+          <li><a href='#' target='_self' title="獎金補貼管理">獎金補貼管理</a></li>
+          <li><a href='#' target='_self' title="薪資管理">薪資管理</a></li><li><a href='#' target='_self' title="扣繳管理">扣繳管理</a></li>
+    </ul>-->
+
+    </li>
+    <li><a href='page-Attendance.html' target='_self' title="出勤管理">出勤管理</a></li>
+   <li><a href='#' target='_self' title="報表輸出管理">報表輸出管理</a></li>
+    <li>
+    <a href='#' target='_self' title="統計查詢">統計查詢</a>
+    	<ul>
+        	<li><a href='#' target='_self' title="管理查詢">管理查詢</a></li>
+            <li><a href='#' target='_self' title="離職人員列表">統計表</a></li>
+      </ul>
+    </li>
+    <li><a href='#' target='_self' title="系統設定">系統設定</a>
+    	<ul>
+            <li><a href='page-company.aspx' target='_self' title="公司資料設定">公司資料設定</a></li>
+            <li><a href='#' target='_self'>管理者資料管理</a>
+                <ul>
+                    <li><a href='page-admin.aspx' target='_self' title="管理者資料">管理者資料</a></li>
+                    <li><a href='page-Competence.aspx' target='_self' title="角色管理">角色管理</a></li>
+                </ul>
+            </li>
+            <li><a href='page-regionadmin.aspx' target='_self' title="分店管理">分店管理</a></li>
+            <li><a href='page-calendaradmin.html' target='_self' title="行事曆設定">行事曆設定</a></li>
+            <li><a href='page-hourlyadmin.html' target='_self' title="薪資管理設定">薪資管理設定</a></li>
+            <li><a href='page-nssadmin.html' target='_self' title="保險設定">保險設定</a></li>     
+      </ul>
+    </li>
+    
+  </ul>
+  </div>
+<!--{* 選單end *}-->
+            </div><!-- basemenu -->
+            
+        </div><!-- WrapperHeader -->
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+
+    </div><!-- WrapperContent -->
+</div><!-- WrapperBody -->
+</div>
+
+        <!-- fancybox -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.fancybox').fancybox();
+    });
+</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //tabs
+            $(".statabs").tabs();
+
+            $(".fixTable").tableHeadFixer();
+
+        });
+    </script>
+<script type="text/javascript" src="js/GenCommon.js"></script>
+<script type='text/javascript' src='js/autoheight.js'></script><!-- 置底 -->
+</form>
+</body>
+</html>
