@@ -10,7 +10,7 @@
                     <div class="left font-light">首頁 / 系統設定 /  管理者資料管理 /<span class="font-black font-bold">管理者資料</span></div>
                 </div>
                 <div class="fixwidth" id="div_Search">
-                <br /><br />
+                <br /><br /> 
                 <table>
                     <tr>
                         <th><div class="font-title titlebackicon">姓名</div></th>
