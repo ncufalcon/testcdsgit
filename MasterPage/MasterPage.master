@@ -45,7 +45,7 @@
     <li>
     <a href='#' target='_self' title="人事資料管理">人事資料管理</a>
         <ul>
-            <li><a href='page-route-list.html' target='_self' title="基本資料管理">基本資料管理</a></li>
+            <li><a href='PersonnelInfo.aspx' target='_self' title="基本資料管理">基本資料管理</a></li>
             <li><a href='page-LaborProtection.html' target='_self' title="保險管理">保險管理</a></li>
             <li><a href='page-Modify.html' target='_self' title="異動管理">異動管理</a></li>
             <li><a href='page-WorkHours.html' target='_self' title="時數管理">時數管理</a></li>
