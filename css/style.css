@@ -1,0 +1,221 @@
+﻿@charset "utf-8";
+/*  ===== 基本覆寫 ===== */
+*{font-family:Verdana,微軟正黑體, Microsoft JhengHei, Arial, Helvetica, sans-serif;}
+html,body{height:100%; margin:0; padding:0;}
+body{font-size:13px; margin:0;background:url(../images/bgbody.gif) repeat-x #f4f1ea;}
+h1,h2,h3,h4,h5,h6{margin:0; padding:0;}
+
+h1{font-size:3em;}
+h2{font-size:1.615em;}
+h3{font-size:1.154em;}
+
+/*  ===== 系統layout ===== */
+.WrapperFooter{background:#fce358; height:60px;}
+.WrapperFooter .footerblock{text-align:center; padding-top:10px;}
+.WrapperContent{padding:0 5px;}
+.WrapperContent .WrapperHeader{height:135px; background:url(../images/BgHeader.jpg) no-repeat;}
+.WrapperContent .WrapperHeader .logo{position:absolute; margin-top:25px; margin-left:110px;}
+.WrapperContent .WrapperHeader .headernews{position:absolute; margin-top:55px; height:17px; overflow: hidden;}
+.WrapperContent .WrapperHeader .headernews ul{margin:0 0 0 -40px; *margin:0; _margin:0;}
+.WrapperContent .WrapperHeader .headernews li{list-style:none;}
+.WrapperContent .WrapperHeader .infolink{text-align:right; padding-top:5px; position:relative; right:0;}
+.WrapperContent .WrapperHeader .basemenu{text-align:right; position:relative; right:0; top:76px;}
+.WrapperContent .WrapperHeader .staffmenucontrol{position:absolute; margin-top:73px;}
+.WrapperContent .WrapperMain{}
+
+/*  ===== 套用元件樣式 ===== */
+/* btnstyle */
+.genbtn{background:url(../images/BgBtnOut.gif) repeat-x bottom #9fdef8; border:1px solid #9fdef8; padding:5px 15px;*padding:5px;_padding:5px;color:#2e6b87; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px; font-weight:bold;}
+.genbtnhover{background:url(../images/BgBtnOver.gif) repeat-x bottom #1abcff; border:1px solid #1abcff; padding:5px 15px;*padding:5px;_padding:5px;color:#05336d; font-size:15px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+.keybtn{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; padding:5px 15px;*padding:5px;_padding:5px;color:#87712e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
+.keybtnhover{background:url(../images/BginfoBtnOver.gif) repeat-x bottom #ffb51a; border:1px solid #ffb51a; padding:5px 15px;*padding:5px;_padding:5px;color:#491a00; font-size:15px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
+.infobtn{background:url(../images/BgkeyBtnOut.gif) repeat-x bottom #c8eda9; border:1px solid #c8eda9; padding:5px 15px;*padding:5px;_padding:5px;color:#64872e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+.infobtnhover{background:url(../images/BgkeyBtnOver.gif) repeat-x bottom #84e335; border:1px solid #84e335; padding:5px 15px;*padding:5px;_padding:5px;color:#000; font-size:15px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+
+.genbtnS{background:url(../images/BgBtnOut.gif) repeat-x bottom #9fdef8; border:1px solid #9fdef8; padding:3px 10px;*padding:5px;_padding:5px;color:#2e6b87; font-size:12px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px; font-weight:bold;}
+.genbtnShover{background:url(../images/BgBtnOver.gif) repeat-x bottom #1abcff; border:1px solid #1abcff; padding:3px 10px;*padding:5px;_padding:5px;color:#05336d; font-size:12px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+.keybtnS{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; text-decoration:none; padding:3px 10px;*padding:5px;_padding:5px;color:#87712e; font-size:12px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
+.keybtnShover{background:url(../images/BginfoBtnOver.gif) repeat-x bottom #ffb51a; border:1px solid #ffb51a; padding:3px 10px;*padding:5px;_padding:5px;color:#491a00; font-size:12px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
+.infobtnS{background:url(../images/BgkeyBtnOut.gif) repeat-x bottom #c8eda9; border:1px solid #c8eda9; padding:3px 10px;*padding:5px;_padding:5px;color:#64872e; font-size:12px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+.infobtnShover{background:url(../images/BgkeyBtnOver.gif) repeat-x bottom #84e335; border:1px solid #84e335; padding:3px 10px;*padding:5px;_padding:5px;color:#000; font-size:12px; cursor:pointer; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;}
+
+
+/* 下拉選單 */
+.nav{float:right; margin-top:0px;margin-top:2px \0;*margin-top:0px;_margin-top:0px;}
+:root .nav{margin-top:0px \0/;}/* IE9 */
+.nav ul{padding:0;margin:0;*margin:0;_margin:0;list-style-type:none; }
+.nav ul li {float:left; position: relative; border:none;height:29px;}
+
+.nav ul li a{color:#8E3737; font-weight:bold; text-decoration:none;padding:9px 12px; height:22px;height:21px \0;*height:21px;_height:21px;}
+.nav ul li a:link{text-decoration:none;}
+.nav ul li a:visited{text-decoration:none;}
+.nav ul li a:hover{text-decoration:none;color:#000;} 
+.nav ul li a:active{text-decoration:none; }
+/*navigation layer 2*/
+.nav ul li ul{position:absolute;right:0px;top:0px;visibility: hidden;margin:0px;z-index:99;background-image:none;padding:0px ;display:block;height:auto;margin-top:0;background:#fada27;}
+.nav ul li ul li{margin:0px;padding:0px;border:none; text-align:right; height:22px;}
+.nav ul li ul li a{display:block;position: relative;font-weight:normal;font-size:13px;width:150px;padding:0 5px 0 0;color:#000;letter-spacing:1px;
+line-height:1.55em;border:none;z-index:1;}
+.nav ul li ul li a:hover{background:#FFFF00;}
+
+/*navigation layer 3*/
+.nav ul li ul li ul{position:absolute;right:0px;top:-5px;visibility: hidden;margin:0px;z-index:99;background-image:none;padding:5px 0 0 0;display:block;height:auto;margin-top:0; background-color:transparent;}
+.nav ul li ul li ul li{margin:0px;padding:0px;border:none; text-align:right; height:22px;background:#fada27;}
+.nav ul li ul li ul li a{display:block;position:relative;font-weight:normal;font-size:13px;width:130px;padding:0 5px 0 0;letter-spacing:1px;
+line-height:1.55em;border:none;z-index:2;}
+
+/*  ===== 基本CSS ===== */
+/* 雙色表單 */
+.gentable table{border-collapse:collapse;}
+.gentable td{padding:5px; border-collapse:collapse; border-bottom:1px dotted #bababa;}
+
+.nolinegentable td{border:0; padding:5px 0;}
+
+.titlebackicon{background:url(../images/twocoltitleback.gif) no-repeat right; padding-right:10px;}
+
+.stripeMe table{border-collapse:collapse;}
+.stripeMe td{padding:5px; border-collapse:collapse; border:1px solid #8f7c66; border-left-color:#d6d0c9;border-right-color:#d6d0c9; border-bottom-color:#d6d0c9; background-color:#f7f5f2;}
+.stripeMe th{color:#242424; padding:8px; border-collapse:collapse; border:1px solid #8f7c66;border-left-color:#bcb0a1;border-right-color:#bcb0a1; background:#d4c8b9;}
+.stripeMe tr td:first-child{border-left-color:#8f7c66;}
+.stripeMe tr th:first-child{border-left-color:#8f7c66;}
+.stripeMe tr td:last-child{border-right-color:#8f7c66;}
+.stripeMe tr th:last-child{border-right-color:#8f7c66;}
+.stripeMe tr:last-child td{border-bottom-color:#8f7c66;}
+.stripeMe tr.alt td {background-color:#ebe4de;}
+.stripeMe tr.over td { background-color:#fff;}
+.stripeMe tr.total td { background-color:#FEEEB6}
+.stripeMe tr td.total { background-color:#FEEEB6}
+/* 版面控制項 */
+.twocol:after{display:block; clear:both; content:"."; visibility:hidden; height:0;}
+.twocol .right{float:right;}
+.twocol .left{float:left;}
+.twocol .center{text-align:center;}
+
+.halfliqid{width:auto; max-width:1240px; min-width:970px;}
+.fixwidth{width:970px;margin:0 auto;}
+.fullliquid{width:100%; min-width:970px; padding:0;}
+.tabfixwidth{width:920px;margin:0 auto;}
+.ui-widget .stripeMe{font-size:13px;}
+/* 間距微調與美編 */
+.margin5TB{margin:5px 0;}
+.margin10TB{margin:10px 0;}
+.margin15TB{margin:15px 0;}
+.margin20TB{margin:20px 0;}
+.margin25TB{margin:25px 0;}
+.margin30TB{margin:30px 0;}
+.margin5B{margin:0 0 5px 0;}
+.margin5T{margin:5px 0 0 0;}
+.margin10B{margin:0 0 10px 0;}
+.margin10T{margin:10px 0 0 0;}
+.margin15B{margin:0 0 15px 0;}
+.margin15T{margin:15px 0 0 0;}
+.margin20B{margin:0 0 20px 0;}
+.margin20T{margin:20px 0 0 0;}
+.margin25B{margin:0 0 25px 0;}
+.margin25T{margin:25px 0 0 0;}
+.margin30B{margin:0 0 30px 0;}
+.margin30T{margin:30px 0 0 0;}
+.underlineT1{border-bottom:1px solid #d4ccb8; padding-bottom:5px;}
+
+/* input */
+.inputsizeSSS{width:40px;}
+.inputsizeSS{width:60px;}
+.inputsizeS{width:100px;}
+.inputsizeM{width:150px;}
+.inputsizeMM{width:190px;}
+.inputsizeL{width:300px;}
+.inputsizeLL{width:350px;}
+.inputsizeXL{width:500px;}
+.width10{width:10%;}
+.width13{width:13%;}
+.width15{width:15%;}
+.width17{width:17%;}
+.width20{width:20%;}
+.width25{width:25%;}
+.width30{width:30%;}
+.width35{width:35%;}
+.width40{width:40%;}
+.width45{width:45%;}
+.width48{width:48%;}
+.width50{width:50%;}
+.width60{width:60%;}
+.width65{width:65%;}
+.width70{width:70%;}
+.width75{width:75%;}
+.width80{width:80%;}
+.width85{width:85%;}
+.width90{width:90%;}
+.width95{width:95%;}
+.width99{width:99%;}
+.width100{width:100%;}
+.inputex{padding:3px; border:1px solid #999;}
+	
+/* line-hight */
+.lineheight01{line-height:1.2em;}
+.lineheight02{line-height:1.5em;}
+.lineheight03{line-height:1.8em;}
+.lineheight04{line-height:2em;}
+
+/* font */
+.font-size1{font-size:0.769em;}
+.font-size2{font-size:0.923em;}
+.font-size3{font-size:1.154em;}
+.font-size4{font-size:1.385em;}
+.font-size5{font-size:1.615em;}
+.font-size6{font-size:1.843em;}
+.font-size7{font-size:2em;}
+.font-size8{font-size:2.2em;}
+.font-size9{font-size:2.5em;}
+.font-bold{font-weight:bold;}
+
+/* 藍色淺底系統 */
+/* 一般用字 */
+.font-normal{color:#181818;}
+.font-normal a{color:#b71600; text-decoration:none;}
+.font-normal a:hover{color:#e71b00; text-decoration:underline;}
+/* 有色用字 */
+.font-stress{color:#e27a00;}
+.font-stress a{color:#e27a00; text-decoration:none;}
+.font-stress a:hover{color:#ffc600;}
+/* 標題用字 */
+.font-title{color:#8b3c31;}
+.font-title a{color:#8b3c31; text-decoration:none;}
+.font-title a:hover{color:#c5250f;}
+/* 說明用字 */
+.font-light{color:#666;}
+.font-light a{color:#666; text-decoration:none;}
+.font-light a:hover{color:#00aeee;}
+/* 純白字 */
+.font-white{color:#fff;}
+.font-white a{color:#fff; text-decoration:none;}
+.font-white a:hover{color:#FF6;}
+/* 正黑色 */
+.font-black{color:#000;}
+.font-black a{color:#000; text-decoration:none;}
+.font-black a:hover{text-decoration:underline;}
+
+.font-red{color:#FF0000;}
+
+
+.div-line {border-style: solid;border-width:1px; border-color:white;}
+.table-margin{margin:10px 10px 10px 10px}
+
+/*
+*{
+scrollbar-3Dlight-color:#433E30;
+scrollbar-arrow-color:#756842;
+scrollbar-darkshadow-color:#555144;
+scrollbar-face-color:#AB9962;
+scrollbar-highlight-color:#CAC5A6;
+scrollbar-shadow-color:#766E38;
+scrollbar-track-color:#605F53;
+}
+SCROLLBAR-3DLIGHT-COLOR 捲軸邊框3D底部顏色 
+SCROLLBAR-ARROW-COLOR 捲軸箭頭顏色 
+SCROLLBAR-DARKSHADOW-COLOR 捲軸右下邊框陰影顏色 
+SCROLLBAR-FACE-COLOR 捲軸整體面顏色 
+SCROLLBAR-HIGHLIGHT-COLOR 捲軸邊框亮面顏色 
+SCROLLBAR-SHADOW-COLOR 捲軸左上邊框陰影顏色 
+SCROLLBAR-TRACK-COLOR 捲軸底部顏色 
+
+*/
