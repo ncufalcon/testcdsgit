@@ -24,7 +24,7 @@ public class Personnel_DB
 	string perPhone = string.Empty;
 	string perContract = string.Empty;
 	string perSex = string.Empty;
-	string perbirthday = string.Empty;
+	string perBirthday = string.Empty;
 	string perIDNumber = string.Empty;
 	string perMarriage = string.Empty;
 	string perFirstDate = string.Empty;
@@ -107,9 +107,9 @@ public class Personnel_DB
 	{
 		set { perSex = value; }
 	}
-	public string _perbirthday
+	public string _perBirthday
 	{
-		set { perbirthday = value; }
+		set { perBirthday = value; }
 	}
 	public string _perIDNumber
 	{
@@ -268,5 +268,4 @@ public class Personnel_DB
 		set { perModifyDate = value; }
 	}
 	#endregion
-
 }

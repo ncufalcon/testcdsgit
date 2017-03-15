@@ -3,14 +3,68 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script type="text/javascript">
         $(document).ready(function () {
-          
+            getddl();
+
+            $(document).on("click", "#addbtn", function () {
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+
+                form.appendChild(iframe[0]);
+
+                form.setAttribute("action", "../handler/addPerson.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
         });
+
+        function getddl() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/GetDDL.ashx",
+                data: {
+                    Group: "02"
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("GetDDL Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#pPosition").empty();
+                        var ddlstr = '<option value="00">請選擇</option>';
+                        if ($(data).find("code").length > 0) {
+                            $(data).find("code").each(function (i) {
+                                ddlstr += '<option value="' + $(this).attr("v") + '">' + $(this).attr("desc") + '</option>';
+                            });
+                        }
+                        $("#pPosition").append(ddlstr);
+                    }
+                }
+            });
+        }
+
+        function feedbackFun(msg) {
+            if (msg == "error")
+                alert("addPerson Error");
+            else
+                alert("完成")
+            //location.href = "../Manage/ItemManage.aspx?v=" + $.getParamValue('sid');
+        }
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <div class="WrapperMain">
-
-
                 <div class="fixwidth">
                     <div class="twocol underlineT1 margin10T">
                         <div class="left font-light">首頁 / 人事資料管理 / <span class="font-black font-bold">基本資料管理</span></div>
@@ -25,7 +79,6 @@
                 </div>
                 <br /><br />
                 <div class="fixwidth">
-
                     <div class="stripeMe fixTable" style="height:175px;">
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <thead>
@@ -155,7 +208,6 @@
                             </tbody>
                         </table>
                     </div><!-- overwidthblock -->
-
                 </div><!-- fixwidth -->
                 <div class="fixwidth" style="margin-top:10px;">
                     <!-- 詳細資料start -->
@@ -169,109 +221,107 @@
                             <li><a href="#tabs-6">個人津貼</a></li>
                         </ul>
                         <div id="tabs-1">
-
+                            <div class="twocol margin15TB">
+                                <div class="right">
+                                    <a id="addbtn" href="javascript:void(0);" class="keybtn">儲存</a>
+                                </div>
+                                <div class="font-title">
+                                    維護狀態:新增
+                                </div>
+                            </div>
                             <div class="gentable">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="width10" align="right"><div class="font-title titlebackicon" style="color:Red">員工編號</div></td>
-                                        <td class="width15"><input type="text" class="inputex width100" /></td>
+                                        <td class="width15"><input type="text" id="pNo" name="pNo" class="inputex width100" /></td>
                                         <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">員工姓名</div></td>
-                                        <td class="width15"><input type="text" class="inputex width100" /></td>
+                                        <td class="width15"><input type="text" id="pName" name="pName" class="inputex width100" /></td>
                                         <td class="width10" align="right"><div class="font-title titlebackicon" style="color:Red">公司別</div></td>
-                                        <td class="width15">
-                                            <input type="text" class="inputex width60" /><img src="images/btn-search.gif" />
-                                        </td>
+                                        <td class="width15"><input type="text" id="pComGuid" name="pComGuid" class="inputex width60" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
                                         <td class="width10" align="right"><div class="font-title titlebackicon" style="color:Red">部門</div></td>
-                                        <td class="width15">
-                                            <input type="text" class="inputex width60" /><img src="images/btn-search.gif" />
-                                        </td>
-
+                                        <td class="width15"><input type="text" id="pDep" name="pDep" class="inputex width60" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
                                     </tr>
                                     <tr>
-
                                         <td align="right"><div class="font-title titlebackicon" style="color:Red">性別</div></td>
-                                        <td><input type="radio" name="2" />男<input type="radio" name="2" />女</td>
+                                        <td><input type="radio" name="pSex" />男<input type="radio" name="pSex" />女</td>
                                         <td align="right"><div class="font-title titlebackicon" >婚姻狀況</div></td>
-                                        <td><input type="radio" name="3" />已婚<input type="radio" name="3" />未婚</td>
+                                        <td><input type="radio" name="perMarriage" />已婚<input type="radio" name="perMarriage" />未婚</td>
                                         <td class="width10" align="right"><div class="font-title titlebackicon" style="color:Red">職務</div></td>
                                         <td class="width15">
-                                            <select class="inputex width95" name="D1">
-                                                <option>請選擇</option>
-                                                <option value="01">一般</option>
-                                                <option value="02">季節</option>
-                                            </select>
-
+                                            <select id="pPosition" name="pPosition" class="inputex width95"></select>
                                         </td>
                                     </tr>           
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">出生日期</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pBirthday" name="pBirthday" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon" style="color:Red">身分證<br />居留證編號</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pIDNumber" name="pIDNumber" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon" style="color:Red">合約別</div></td>
-                                        <td><input type="radio" name="1" />正式<input type="radio" name="1" />季節</td>
+                                        <td><input type="radio" name="pContract" />正式<input type="radio" name="pContract" />季節</td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon" style="color:Red">到職日期</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pFirstDate" name="pFirstDate" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">離職日期</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pLastDate" name="pLastDate" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">體檢日期</div></td>
-                                        <td ><input type="text" class="inputex width100" /></td>
+                                        <td ><input type="text" id="pExaminationDate" name="pExaminationDate" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">體檢到期日</div></td>
-                                        <td ><input type="text" class="inputex width100" /></td>
+                                        <td ><input type="text" id="pExaminationLastDate" name="pExaminationLastDate" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">合約/試用期滿日</div></td>
                                         <td><input type="text" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">居留證到期日</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pResidentPermitDate" name="pResidentPermitDate" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
-
-
                                         <td align="right"><div class="font-title titlebackicon">電話</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pTel" name="pTel" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">手機號碼</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
-
-
+                                        <td><input type="text" id="pPhone" name="pPhone" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">Email</div></td>
-                                        <td colspan="3"><input type="text" class="inputex width100" /></td>
-
+                                        <td colspan="3"><input type="text" id="pEmail" name="pEmail" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">通訊地址</div></td>
-                                        <td colspan="7"><input type="text" class="inputex width10" />(郵遞區號)-<input type="text" class="inputex width75" /></td>
+                                        <td colspan="7">
+                                            <input type="text" id="pPostalCode" name="pPostalCode" class="inputex width10" />(郵遞區號)-<input type="text" id="pAddr" name="pAddr" class="inputex width75" />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">戶籍地址</div></td>
                                         <td colspan="7">
-                                        <input type="text" class="inputex width10" />(郵遞區號)-<input type="text" class="inputex width75" /></td>
+                                            <input type="text" id="pResPostalCode" name="pResPostalCode" class="inputex width10" />(郵遞區號)-<input type="text" id="pResidentAddr" name="pResidentAddr" class="inputex width75" />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">緊急聯絡人</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pContactPerson" name="pContactPerson" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">緊急聯電話</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pContactTel" name="pContactTel" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">關係</div></td>
-                                        <td><input type="text" class="inputex width100" /></td>
+                                        <td><input type="text" id="pRel" name="pRel" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">備註</div></td>
-                                        <td colspan="7"><input type="text" class="inputex width99" /></td>
+                                        <td colspan="7"><input type="text" id="pPs" name="pPs" class="inputex width99" /></td>
                                     </tr>
                                 </table>
                             </div>
-
                         </div><!-- tabs-1 -->
                         <div id="tabs-2">
+                            <div class="twocol margin15TB">
+                                <div class="right">
+                                    <a href="" class="keybtn">儲存</a>
+                                </div>
+                            </div>
                             <div class="gentable">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td class="width15" align="right"><div class="font-title titlebackicon">二代健保身分類別</div></td>
+                                        <td class="width15" align="right"><div class="font-title titlebackicon font-red">二代健保身分類別</div></td>
                                         <td class="width35">
                                             <select class="inputex width95" name="D1">
                                                 <option>請選擇</option>
@@ -281,7 +331,7 @@
                                                 <option value="04">免扣繳者</option>
                                             </select>                                      
                                         </td>
-                                        <td class="width15" align="right"><div class="font-title titlebackicon">投保身分</div></td>
+                                        <td class="width15" align="right"><div class="font-title titlebackicon font-red">投保身分</div></td>
                                         <td class="width35">
                                             <select class="inputex width95" name="D1">
                                                 <option>請選擇</option>
@@ -291,7 +341,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">團保保險</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">團保保險</div></td>
                                         <td>
                                             <select class="inputex width95" name="D4">
                                                 <option value="00">未參加</option>
@@ -300,7 +350,7 @@
                                                 <option value="03">ZZZZ</option>
                                             </select>
                                         </td>
-                                        <td align="right" class="auto-style3"><div class="font-title titlebackicon">勞保補助身分</div></td>
+                                        <td align="right" class="auto-style3"><div class="font-title titlebackicon font-red">勞保補助身分</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
@@ -308,17 +358,22 @@
                                     </tr>
                                     <tr>
 
-                                        <td align="right"><div class="font-title titlebackicon">健保補助身分</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">健保補助身分</div></td>
                                         <td><input type="text" class="inputex width95" /></td>
                                     </tr>
                                 </table>
                             </div>
                         </div><!-- tabs-2 -->
                         <div id="tabs-3">
+                            <div class="twocol margin15TB">
+                                <div class="right">
+                                    <a href="" class="keybtn">儲存</a>
+                                </div>
+                            </div>
                             <div class="gentable">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td class="width15" align="right"><div class="font-title titlebackicon">計薪別</div></td>
+                                        <td class="width15" align="right"><div class="font-title titlebackicon font-red">計薪別</div></td>
                                         <td class="width35">
                                             <select class="inputex width95" name="D8">
                                                 <option>請選擇</option>
@@ -326,7 +381,7 @@
                                                 <option value="02">月薪</option>
                                             </select>
                                         </td>
-                                        <td align="right"><div class="font-title titlebackicon">課稅方式</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">課稅方式</div></td>
                                         <td>
                                             <select class="inputex width95" name="D9">
                                                 <option>請選擇</option>
@@ -336,18 +391,18 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">底薪</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">底薪</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
-                                        <td align="right"><div class="font-title titlebackicon">職能加給</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">職能加給</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
 
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">薪資轉入帳戶名</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">薪資轉入帳戶名</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
@@ -355,11 +410,11 @@
                                         <td>&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">薪資轉入行(局)號</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">薪資轉入行(局)號</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
-                                        <td align="right"><div class="font-title titlebackicon">薪資轉入帳號</div></td>
+                                        <td align="right"><div class="font-title titlebackicon font-red">薪資轉入帳號</div></td>
                                         <td>
                                             <input type="text" class="inputex width95" />
                                         </td>
@@ -444,7 +499,7 @@
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">眷屬身分證字號</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">補助代號</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input type="text" class="inputex width50" /><img src="images/btn-search.gif" /></td>
                                         </tr>  
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">稱謂</div></td>
@@ -462,15 +517,15 @@
                            <div class="gentable font-normal">
                                <table>
                                    <tr>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">執行明令發文字號</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行明令發文字號</div></td>
                                        <td class="width15"><input type="text" class="inputex width100" /></td>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">執行扣押薪資比例</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
                                        <td class="width15"><input type="text" class="inputex width100" /></td>
                                    </tr>
                                    <tr>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">每月應領薪津</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red"">每月應領薪津</div></td>
                                        <td class="width15"><input type="text" class="inputex width100" /></td>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">年終獎金</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red"">年終獎金</div></td>
                                        <td class="width15"><input type="text" class="inputex width100" /></td>
                                    </tr>
                                </table>
@@ -555,33 +610,33 @@
                                 <div class="gentable">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td class="width15" align="right"><div class="font-title titlebackicon" style="color:Red">債權人</div></td>
+                                            <td class="width15" align="right"><div class="font-title titlebackicon font-red" >債權人</div></td>
                                             <td class="width15"><input type="text" class="inputex width100" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">債權金額</div></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >債權金額</div></td>
                                             <td class="width15"><input type="text" class="inputex width100" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">執行命令發文日期</div></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >執行命令發文日期</div></td>
                                             <td class="width15"><input type="text" class="inputex width100" /></td>
 
                                         </tr>
                                         <tr>
-                                            <td align="right"><div class="font-title titlebackicon">解款行代號</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">解款行代號</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
-                                            <td align="right"><div class="font-title titlebackicon">收款人帳號</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">收款人帳號</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
                                         </tr>
                                         <tr>
-                                            <td align="right"><div class="font-title titlebackicon">戶名</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">戶名</div></td>
                                             <td colspan="3"><input type="text" class="inputex width100" /></td>
-                                            <td align="right"><div class="font-title titlebackicon">繳款方式</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">繳款方式</div></td>
                                             <td><input type="radio" />支票<input type="radio" />匯款</td>
                                         </tr>
                                         <tr>
 
-                                            <td align="right"><div class="font-title titlebackicon">債權人承辦人</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">債權人承辦人</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
-                                            <td align="right"><div class="font-title titlebackicon">聯絡電話</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">聯絡電話</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
-                                            <td align="right"><div class="font-title titlebackicon">匯款手續費<br />掛號郵資</div></td>
+                                            <td align="right"><div class="font-title titlebackicon font-red">匯款手續費<br />掛號郵資</div></td>
                                             <td><input type="text" class="inputex width100" /></td>
                                         </tr>
                                     </table>
@@ -631,11 +686,9 @@
                                 <div class="gentable">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">津貼代號</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">津貼名稱</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon" style="color:Red">金額</div></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red">津貼代號</div></td>
+                                            <td class="width15"><input type="text" class="inputex width50" /><img src="images/btn-search.gif" /></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red">金額</div></td>
                                             <td class="width15"><input type="text" class="inputex width100" /></td>
                                         </tr>
                                     </table>
@@ -645,7 +698,7 @@
                     </div><!-- statabs -->
                     <!-- 詳細資料end -->
                 </div><!-- fixwidth -->
-
             </div>
+    <br />
 </asp:Content>
 
