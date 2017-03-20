@@ -108,6 +108,22 @@ public class Common
 
 
     /// <summary>
+    /// 傳入陣列字串 驗證危險字元 如果有危險字元則回傳 N 否則 空白
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public string CheckSqlInJection(string[] str)
+    {
+        string s = "";
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (!CheckSQLInjectionEncode(str[i]))
+                s = "N";
+        }
+        return s;
+    }
+
+    /// <summary>
     /// 檢查特殊字元
     /// </summary>
     /// <param name="checkValue">欲檢查的值</param>

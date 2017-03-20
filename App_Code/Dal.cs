@@ -662,7 +662,7 @@ where mbGuid =@mbGuid";
         string sql = @"insert sy_MemberCom (
 cmClass,cmName,cmCompetence,cmDesc,cmCreateId,cmStatus) 
 values(
-@cmClass,@cmName,@cmCompetence,@cmDesc,@cmCreateId,cmStatus)";
+@cmClass,@cmName,@cmCompetence,@cmDesc,@cmCreateId,@cmStatus)";
 
         SqlConnection AD = new SqlConnection(connectionStr);
         SqlCommand cmd = new SqlCommand(sql, AD);
@@ -681,6 +681,26 @@ values(
         }
         catch (Exception ex) { throw ex; }
         finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //取最大一碼
+    public DataTable SelCompetenceInt()
+    {
+        string sql = @"select top 1 * from sy_MemberCom order by cmClass DESC";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
     }
 
     //top 200 List
@@ -704,18 +724,22 @@ values(
     }
 
     //查詢 where 姓名&工號&角色
-    public DataTable SearchCompetenceData(string cmClass)
+    public DataTable SearchCompetenceData(string cmClass, string cmName)
     {
         string sql = @"select * from sy_MemberCom where cmStatus <> 'D' ";
 
         if (!string.IsNullOrEmpty(cmClass))
-            sql += "and cmClass =@cmClass ";        
+            sql += "and cmClass =@cmClass ";
+
+        if (!string.IsNullOrEmpty(cmName))
+            sql += "and cmName =@cmName ";  
 
         sql += "order by cmClass ASC";
         SqlConnection conn = new SqlConnection(connectionStr);
         SqlCommand cmd = new SqlCommand(sql, conn);
 
         cmd.Parameters.AddWithValue("@cmClass", cmClass);
+        cmd.Parameters.AddWithValue("@cmName", cmName);
 
         try
         {
@@ -729,5 +753,386 @@ values(
             cmd.Dispose();
         }
     }
+
+    //取得主資料
+    public DataTable GetCompetenceData(string cmClass)
+    {
+        string sql = @"select * from sy_MemberCom where cmClass = @cmClass";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("@cmClass", cmClass);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //修改資料
+    public void Up_CompetenceData(string cmName, string cmCompetence, string cmDesc,
+        string cmModifyId, DateTime cmModifyDate, string cmClass)
+    {
+        string sql = @"update sy_MemberCom set 
+cmName=@cmName,cmCompetence=@cmCompetence,cmDesc=@cmDesc,
+cmModifyId=@cmModifyId,cmModifyDate=@cmModifyDate,cmStatus=@cmStatus 
+where cmClass =@cmClass";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+        cmd.Parameters.AddWithValue("@cmStatus", "M");//狀態 修改:M
+
+        cmd.Parameters.AddWithValue("@cmName", cmName);
+        cmd.Parameters.AddWithValue("@cmCompetence", cmCompetence);
+        cmd.Parameters.AddWithValue("@cmDesc", cmDesc);
+
+        cmd.Parameters.AddWithValue("@cmModifyId", cmModifyId);
+        cmd.Parameters.AddWithValue("@cmModifyDate", cmModifyDate);
+        cmd.Parameters.AddWithValue("@cmClass", cmClass);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //刪除資料
+    public void Del_CompetenceData(string cmClass)
+    {
+        string sql = @"delete sy_MemberCom where cmClass=@cmClass";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+        cmd.Parameters.AddWithValue("@cmClass", cmClass);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    #endregion
+
+    #region 行事曆設定 page-calendaradmin
+
+    //新增 國定假日 主資料 
+    public void insertHoliday(string dayName, string dayDate, string dayPs, string dayCreatId)
+    {
+        string sql = @"insert sy_Holiday (
+dayName,dayDate,dayPs,dayCreatId,dayStatus) 
+values (
+@dayName,@dayDate,@dayPs,@dayCreatId,@dayStatus)";
+
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+
+        cmd.Parameters.AddWithValue("@dayName", dayName);
+        cmd.Parameters.AddWithValue("@dayDate", dayDate);
+        cmd.Parameters.AddWithValue("@dayPs", dayPs);
+        cmd.Parameters.AddWithValue("@dayCreatId", dayCreatId);
+        cmd.Parameters.AddWithValue("@dayStatus", "A");//狀態 正常:A
+
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //top 200 List 國定假日
+    public DataTable SelHoliday()
+    {
+        string sql = @"select top 200 * from sy_Holiday where dayStatus <> 'D' order by dayDate ASC ";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //查詢 where 假日名稱&日期 國定假日
+    public DataTable SearchHolidayData(string dayName, string dayDate)
+    {
+        string sql = @"select * from sy_Holiday where dayStatus <> 'D' ";
+
+        if (!string.IsNullOrEmpty(dayName))
+            sql += "and dayName like '%'+@dayName+'%' ";
+
+        if (!string.IsNullOrEmpty(dayDate))
+            sql += "and dayDate =@dayDate ";
+
+        sql += "order by dayDate ASC";
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("@dayName", dayName);
+        cmd.Parameters.AddWithValue("@dayDate", dayDate);
+
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //取得主資料 國定假日
+    public DataTable GetHolidayData(string dayGuid)
+    {
+        string sql = @"select * from sy_Holiday where dayGuid = @dayGuid";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("@dayGuid", dayGuid);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //修改資料 國定假日
+    public void Up_HolidayData(string dayName, string dayDate, string dayPs,
+        string dayModifyId, DateTime dayModifyDate, string dayGuid)
+    {
+        string sql = @"update sy_Holiday set 
+  dayName=@dayName,dayDate=@dayDate,dayPs=@dayPs,
+  dayModifyId=@dayModifyId,dayModifyDate=@dayModifyDate
+  where dayGuid =@dayGuid";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+
+        cmd.Parameters.AddWithValue("@dayName", dayName);
+        cmd.Parameters.AddWithValue("@dayDate", dayDate);
+        cmd.Parameters.AddWithValue("@dayPs", dayPs);
+
+        cmd.Parameters.AddWithValue("@dayModifyId", dayModifyId);
+        cmd.Parameters.AddWithValue("@dayModifyDate", dayModifyDate);
+        cmd.Parameters.AddWithValue("@dayGuid", dayGuid);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //刪除資料 國定假日
+    public void Up_Status_HolidayData(string dayGuid)
+    {
+        string sql = @"update sy_Holiday set 
+  dayStatus=@dayStatus
+  where dayGuid =@dayGuid";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+        cmd.Parameters.AddWithValue("@dayStatus", "D"); //刪除:D
+        cmd.Parameters.AddWithValue("@dayGuid", dayGuid);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+
+    //新增 計薪週期 主資料 
+    public void insertSalaryRange(string sr_Year, string sr_BeginDate, string sr_Enddate, string sr_SalaryDate, string sr_Ps)
+    {
+        string sql = @"insert sy_SalaryRange (
+sr_Year,sr_BeginDate,sr_Enddate,sr_SalaryDate,sr_Ps,sr_Status) 
+values(
+@sr_Year,@sr_BeginDate,@sr_Enddate,@sr_SalaryDate,@sr_Ps,sr_Status
+)";
+
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+
+        cmd.Parameters.AddWithValue("@sr_Year", sr_Year);
+        cmd.Parameters.AddWithValue("@sr_BeginDate", sr_BeginDate);
+        cmd.Parameters.AddWithValue("@sr_Enddate", sr_Enddate);
+        cmd.Parameters.AddWithValue("@sr_SalaryDate", sr_SalaryDate);
+        cmd.Parameters.AddWithValue("@sr_Ps", sr_Ps);
+        cmd.Parameters.AddWithValue("@sr_Status", "A");//狀態 正常:A
+
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //top 200 List 計薪週期
+    public DataTable SelSalaryRange()
+    {
+        string sql = @"select top 200 * from sy_SalaryRange where sr_Status <> 'D' order by sr_BeginDate ASC ";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //查詢 where 年度&發薪日&週期起&週期迄 計薪週期
+    public DataTable SearchSalaryRange(string sr_Year, string sr_SalaryDate, string sr_BeginDate, string sr_Enddate)
+    {
+        string sql = @"select * from sy_SalaryRange where sr_Status <> 'D' ";
+
+        if (!string.IsNullOrEmpty(sr_Year))
+            sql += "and sr_Year =@sr_Year ";
+
+        if (!string.IsNullOrEmpty(sr_SalaryDate))
+            sql += "and sr_SalaryDate =@sr_SalaryDate ";
+
+        if (!string.IsNullOrEmpty(sr_BeginDate) && string.IsNullOrEmpty(sr_Enddate))
+            sql += "and @sr_BeginDate > '" + sr_BeginDate + "'";
+
+        if (string.IsNullOrEmpty(sr_BeginDate) && !string.IsNullOrEmpty(sr_Enddate))
+            sql += "and @sr_Enddate < '" + sr_Enddate + "' ";
+
+
+
+        sql += "order by sr_BeginDate ASC";
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("@sr_Year", sr_Year);
+        cmd.Parameters.AddWithValue("@sr_SalaryDate", sr_SalaryDate);
+        cmd.Parameters.AddWithValue("@sr_BeginDate", sr_BeginDate);
+        cmd.Parameters.AddWithValue("@sr_Enddate", sr_Enddate);
+
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //取得主資料 計薪週期
+    public DataTable GetSalaryRange(string sr_Guid)
+    {
+        string sql = @"select * from sy_SalaryRange where sr_Guid = @sr_Guid";
+
+        SqlConnection conn = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, conn);
+
+        cmd.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+        try
+        {
+            DataTable dt = new DataTable();
+            new SqlDataAdapter(cmd).Fill(dt);
+            return dt;
+        }
+        catch (Exception ex) { throw ex; }
+        finally
+        {
+            cmd.Dispose();
+        }
+    }
+
+    //修改資料 計薪週期
+    public void Up_SalaryRange(string sr_Year, string sr_BeginDate, string sr_Enddate,
+        string sr_SalaryDate, string sr_Ps, string sr_Guid)
+    {
+        string sql = @"update sy_SalaryRange set sr_Year=@sr_Year,sr_BeginDate=@sr_BeginDate,sr_Enddate=@sr_Enddate,
+  sr_SalaryDate=@sr_SalaryDate,sr_Ps=@sr_Ps where sr_Guid=@sr_Guid";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+
+        cmd.Parameters.AddWithValue("@sr_Year", sr_Year);
+        cmd.Parameters.AddWithValue("@sr_BeginDate", sr_BeginDate);
+        cmd.Parameters.AddWithValue("@sr_Enddate", sr_Enddate);
+
+        cmd.Parameters.AddWithValue("@sr_SalaryDate", sr_SalaryDate);
+        cmd.Parameters.AddWithValue("@sr_Ps", sr_Ps);
+        cmd.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+    //刪除資料 計薪週期
+    public void Up_Status_CompetenceData(string sr_Guid)
+    {
+        string sql = @"update sy_SalaryRange set 
+  sr_Status=@sr_Status
+  where sr_Guid =@sr_Guid";
+        SqlConnection AD = new SqlConnection(connectionStr);
+        SqlCommand cmd = new SqlCommand(sql, AD);
+
+        cmd.Parameters.AddWithValue("@sr_Status", "D"); //刪除:D
+        cmd.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+        try
+        {
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+    }
+
+
     #endregion
 }
