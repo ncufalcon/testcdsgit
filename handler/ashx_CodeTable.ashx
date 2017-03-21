@@ -64,7 +64,7 @@ public class ashx_CodeTable : IHttpHandler {
                     for (int i = 0; i < dv.Count; i++)
                     {
                         Code e = new Code();
-                        e.Text = dv[i]["gpName"].ToString();
+                        e.Text = dv[i]["gpCName"].ToString();
                         e.Value = dv[i]["gpCode"].ToString();
                         Tool_List.Add(e);
                     }
