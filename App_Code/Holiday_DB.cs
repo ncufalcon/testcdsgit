@@ -33,7 +33,7 @@ public class Holiday_DB
     }
     #endregion
 
-    #region labview_cleanlog 私用
+    #region holiday 私用
     string dayGuid = string.Empty;
     string dayName = string.Empty;
     string dayDate = string.Empty;
@@ -44,7 +44,7 @@ public class Holiday_DB
     DateTime dayCreatDate;
     DateTime dayModifyDate;
     #endregion
-    #region labview_cleanlog 公用
+    #region holiday 公用
     public string _dayGuid
     {
         set { dayGuid = value; }
@@ -232,7 +232,7 @@ public class Holiday_DB
         try
         {
             show_value.Append(@" 
-                update sy_Holiday set dayStatus='D' where dayGuid=@dayGuid
+                update sy_Holiday set dayStatus='D',dayModifyId=@dayModifyId,dayModifyDate=@dayModifyDate where dayGuid=@dayGuid
             ");
             thisCommand.Parameters.AddWithValue("@dayGuid", dayGuid);
             thisCommand.Parameters.AddWithValue("@dayModifyId", dayModifyId);
