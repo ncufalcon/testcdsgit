@@ -8,7 +8,7 @@ using System.Text;
 using System.Configuration;
 
 /// <summary>
-/// SalaryRange_DB 的摘要描述
+/// SalaryRange_DB 的摘要描述 
 /// </summary>
 public class SalaryRange_DB
 {

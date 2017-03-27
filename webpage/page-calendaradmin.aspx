@@ -11,7 +11,7 @@
             $("#txt_holiday_date,#search_date,#search_sr_paydate,#search_sr_dates,#search_sr_datee,#txt_sr_paydate,#txt_sr_dates,#txt_sr_datee").datetimepicker({
                 lang: 'zh-TW',
                 format: 'Y/m/d',//'Y-m-d H:i:s'
-                timepicker: false,    //false關閉時間選項
+                timepicker: false,    //false關閉時間選項 
                 defaultDate: false
             });
             call_holidaydata();
