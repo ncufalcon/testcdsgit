@@ -9,6 +9,19 @@
             $(document).on("keyup", "#pIDNumber,#pf_IDNumber", function () {
                 this.value = this.value.toUpperCase();
             });
+
+            //datepicker
+            $("#pBirthday,#pFirstDate,#pLastDate,#pExaminationDate,#pExaminationLastDate,#pContractDeadline,#pResidentPermitDate,#pf_Birthday,#pb_Issued").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'yy/mm/dd',
+                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+                yearRange: '-100:+0',
+                onClose: function (dateText, inst) {
+                    $(this).datepicker('option', 'dateFormat', 'yy/mm/dd');
+                }
+            });
         });
 
         //DDL
@@ -42,6 +55,142 @@
                     }
                 }
             });
+        }
+
+        //確認欄位資料key in是否正確
+        function checkData(type,v) {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/checkData.ashx",
+                data: {
+                    tp: type,
+                    str: v
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("checkData Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        if ($(data).find("data_item").length > 1)
+                            alert("有兩筆資料")
+                        else if ($(data).find("data_item").length > 0) {
+                            switch (type) {
+                                case "Company":
+                                    $("#CompStr").html($("comAbbreviate", data).text());
+                                    $("#pComGuid").val($("comGuid", data).text());
+                                    $("#CompStr").css("color", "");
+                                    $("#Compstatus").val("Y");
+                                    break;
+                                case "Dep":
+                                    $("#DepStr").html($("cbName", data).text());
+                                    $("#pDep").val($("cbGuid", data).text());
+                                    $("#DepStr").css("color", "");
+                                    $("#Depstatus").val("Y");
+                                    break;
+                                case "PA":
+                                    $("#PaStr").html($("siItemName", data).text());
+                                    $("#pa_CodeGuid").val($("siGuid", data).text());
+                                    $("#PaStr").css("color", "");
+                                    $("#PAstatus").val("Y");
+                                    break;
+                                case "PF":
+                                    $("#PfStr").html($("slSubsidyIdentity", data).text());
+                                    $("#pf_CodeGuid").val($("slGuid", data).text());
+                                    $("#PfStr").css("color", "");
+                                    $("#PFstatus").val("Y");
+                                    break;
+                            }
+                        }
+                        else {
+                            switch (type) {
+                                case "Company":
+                                    $("#CompStr").html("X");
+                                    $("#CompStr").css("color", "red");
+                                    $("#Compstatus").val("N");
+                                    break;
+                                case "Dep":
+                                    $("#DepStr").html("X");
+                                    $("#DepStr").css("color", "red");
+                                    $("#Depstatus").val("N");
+                                    break;
+                                case "PA":
+                                    $("#PaStr").html("X");
+                                    $("#PaStr").css("color", "red");
+                                    $("#PAstatus").val("N");
+                                    break;
+                                case "PF":
+                                    $("#PfStr").html("X");
+                                    $("#PfStr").css("color", "red");
+                                    $("#PFstatus").val("N");
+                                    break;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        //查詢視窗
+        function openfancybox(item) {
+            switch ($(item).attr("id")) {
+                case "Cbox":
+                    link = "SearchWindow.aspx?v=Comp";
+                    break;
+                case "Dbox":
+                    link = "SearchWindow.aspx?v=Dep";
+                    break;
+                case "PFbox":
+                    link = "SearchWindow.aspx?v=Family";
+                    break;
+                case "PAbox":
+                    link = "SearchWindow.aspx?v=Allowance";
+                    break;
+            }
+            $.fancybox({
+                href: link,
+                type: "iframe",
+                minHeight: "400",
+                closeClick: false,
+                openEffect: 'elastic',
+                closeEffect: 'elastic'
+            });
+        }
+
+        //fancybox回傳
+        function setReturnValue(type, gv, str) {
+            switch (type) {
+                case "Comp":
+                    $("#pCompName").val(str);
+                    $("#pComGuid").val(gv);
+                    $("#CompStr").html("");
+                    $("#Compstatus").val("Y");
+                    break;
+                case "Dep":
+                    $("#pDepName").val(str);
+                    $("#pDep").val(gv);
+                    $("#DepStr").html("");
+                    $("#Depstatus").val("Y");
+                    break;
+                case "Family":
+                    $("#pf_Code").val(str);
+                    $("#pf_CodeGuid").val(gv);
+                    $("#PfStr").html("");
+                    $("#PFstatus").val("Y");
+                    break;
+                case "Allowance":
+                    $("#pa_AllowanceCode").val(str);
+                    $("#pa_CodeGuid").val(gv);
+                    $("#PaStr").html("");
+                    $("#PAstatus").val("Y");
+                    break;
+            }
         }
 
         //清空欄位
@@ -81,6 +230,18 @@
                     alert("完成");
                     getPerFamilyList();
                     PFNewClick();
+                    $("#PfStr").html("");
+                    break;
+                case "PB":
+                    alert("完成");
+                    getPerBuckleList();
+                    PbNewClick();
+                    break;
+                case "PA":
+                    alert("完成");
+                    getPerAllowanceList();
+                    PaNewClick();
+                    $("#PaStr").html("");
                     break;
             }
         }
@@ -198,7 +359,7 @@
             });
 
             //編輯
-            $(document).on("click", "#perlist tr", function () {
+            $(document).on("click", "#perlist tbody tr td:not(:first-child)", function () {
                 $("#editstatus").html("編輯");
                 $("#Psavebtn").show();
                 $("#Paddbtn").hide();
@@ -208,7 +369,7 @@
                     url: "../handler/editPerson.ashx",
                     data: {
                         Mode: "E",
-                        id: $(this).attr("aid")
+                        id: $(this).closest('tr').attr("aid")
                     },
                     error: function (xhr) {
                         alert(xhr);
@@ -228,9 +389,13 @@
                                 $("#pNo").val($(this).children("perNo").text().trim());
                                 $("#pName").val($(this).children("perName").text().trim());
                                 $("#pComGuid").val($(this).children("perComGuid").text().trim());
-                                $("#pCompName").val($(this).children("perCompName").text().trim());
+                                $("#pCompName").val($(this).children("comAbbreviate").text().trim());
+                                $("#CompStr").html("");
+                                $("#Compstatus").val("Y");
                                 $("#pDep").val($(this).children("perDep").text().trim());
-                                $("#pDepName").val($(this).children("perDepName").text().trim());
+                                $("#pDepName").val($(this).children("cbValue").text().trim());
+                                $("#DepStr").html("");
+                                $("#Depstatus").val("Y");
                                 $("input[name='pSex'][value='" + $(this).children("perSex").text().trim() + "']").prop("checked", true);
                                 $("input[name='perMarriage'][value='" + $(this).children("perMarriage").text().trim() + "']").prop("checked", true);
                                 $("#pPosition").val($(this).children("perPosition").text().trim());
@@ -268,25 +433,20 @@
                                 $("#pSyAccountName").val($(this).children("perSyAccountName").text().trim());
                                 $("#pSyNumber").val($(this).children("perSyNumber").text().trim());
                                 $("#pSyAccount").val($(this).children("perSyAccount").text().trim());
+                                //法院執行命令
+                                $("#pReferenceNumber").val($(this).children("perReferenceNumber").text().trim());
+                                $("#pDetentionRatio").val($(this).children("perDetentionRatio").text().trim());
+                                $("#pMonthPayroll").val($(this).children("perMonthPayroll").text().trim());
+                                $("#pYearEndBonuses").val($(this).children("perYearEndBonuses").text().trim());
+
                             });
                         }
                     }
                 });
-                $(".noSpan").html($(this).children().get(1).innerText);
+                $(".noSpan").html($(this).closest('tr').children().get(1).innerText);
                 getPerFamilyList();
-            });
-
-            //datepicker
-            $("#pBirthday,#pFirstDate,#pLastDate,#pExaminationDate,#pExaminationLastDate,#pContractDeadline,#pResidentPermitDate,#pf_Birthday").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'yy/mm/dd',
-                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-                yearRange: '-100:+0',
-                onClose: function (dateText, inst) {
-                    $(this).datepicker('option', 'dateFormat', 'yy/mm/dd');
-                }
+                getPerBuckleList();
+                getPerAllowanceList();
             });
 
             //設定合約/試用期滿日
@@ -305,56 +465,9 @@
 
             //確認公司&部門
             $(document).on("change", "#pCompName,#pDepName", function () {
-                if (this.id == "pCompName") type = "C"
-                else type = "D"
-                $.ajax({
-                    type: "POST",
-                    async: false, //在沒有返回值之前,不會執行下一步動作
-                    url: "../handler/checkData.ashx",
-                    data: {
-                        tp: type,
-                        str: $("#" + this.id + "").val()
-                    },
-                    error: function (xhr) {
-                        alert(xhr);
-                    },
-                    success: function (data) {
-                        if (data == "error") {
-                            alert("checkData Error");
-                            return false;
-                        }
-
-                        if (data != null) {
-                            data = $.parseXML(data);
-                            if ($(data).find("data_item").length > 1)
-                                alert("兩項")
-                           else if ($(data).find("data_item").length > 0) {
-                               if (type == "C") {
-                                   $("#cyesimg").show();
-                                   $("#cnoimg").hide();
-                                   $("#Compstatus").val("Y");
-                               }
-                               else {
-                                   $("#dyesimg").show();
-                                   $("#dnoimg").hide();
-                                   $("#Depstatus").val("Y");
-                               }
-                           }
-                           else {
-                               if (type == "C") {
-                                   $("#cyesimg").hide();
-                                   $("#cnoimg").show();
-                                   $("#Compstatus").val("N");
-                               }
-                               else {
-                                   $("#dyesimg").hide();
-                                   $("#dnoimg").show();
-                                   $("#Depstatus").val("N");
-                               }
-                           }
-                        }
-                    }
-                });
+                if (this.id == "pCompName") type = "Company"
+                else type = "Dep"
+                checkData(type, $("#" + this.id).val());
             });
 
             //新增人員
@@ -416,7 +529,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pdelbtn" aid=' + $(this).children("perGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perDepName").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
                                 if ($(this).children("perSex").text()=="M")
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">男</td>';
                                 else
@@ -436,41 +549,6 @@
                     }
                 }
             });
-        }
-
-        //查詢視窗
-        function openfancybox(item) {
-            if ($(item).attr("id") == "Cbox")
-                link = "SearchWindow.aspx?v=C";
-            else
-                link = "SearchWindow.aspx?v=D";
-
-            $.fancybox({
-                href: link,
-                type:"iframe",
-                minHeight: "400",
-                closeClick: false,
-                openEffect: 'elastic',
-                closeEffect: 'elastic'
-            });
-        }
-
-        //fancybox回傳
-        function setReturnValue(type, gv,str) {
-            if (type == "C") {
-                $("#pCompName").val(str);
-                $("#pComGuid").val(gv);
-                $("#Compstatus").val("Y");
-                $("#cyesimg").show();
-                $("#cnoimg").hide();
-            }
-            else {
-                $("#pDepName").val(str);
-                $("#pDep").val(gv);
-                $("#Depstatus").val("Y");
-                $("#dyesimg").show();
-                $("#dnoimg").hide();
-            }
         }
     </script>
     <%--保險關聯--%>
@@ -531,7 +609,7 @@
                 }
             });
 
-            //保險儲存
+            //計薪儲存
             $(document).on("click", "#savSalaryBtn", function () {
                 var msg = "";
                 if ($("#idtmp").val().trim() == "")
@@ -596,19 +674,22 @@
                         msg += "請輸入眷屬身分證字號\n";
                     if ($("#pf_Code").val().trim() == "")
                         msg += "請輸入補助代號\n";
+                    else if ($("#PFstatus").val() == "N")
+                        msg += "找不到該補助代號，請重新確認\n";
                     if ($("#pf_Title").val().trim() == "")
                         msg += "請輸入稱謂\n";
                     if ($("#pf_Birthday").val().trim() == "")
                         msg += "請輸入生日\n";
                     else if ($("#pf_Birthday").val() != "" && $("#pf_Birthday").val().substring(4, 5) != "/" && $("#pf_Birthday").val().substring(7, 8) != "/")
                         msg += "請檢查日期格式，格式範例：2017/01/01 \n";
-            }
+                }
                 if (msg != "") {
                     alert(msg);
                     return false;
                 }
 
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var mode = "";
                 if (this.id == "pf_addBtn")
                     mode = $('<input type="hidden" name="mode" id="mode" value="New" />');
                 if (this.id == "pf_saveBtn")
@@ -658,7 +739,7 @@
             });
 
             //眷屬編輯
-            $(document).on("click", "#pfTab tr", function () {
+            $(document).on("click", "#pfTab tbody tr td:not(:first-child)", function () {
                 $("#pf_editstatus").html("編輯");
                 $("#pf_saveBtn").show();
                 $("#pf_addBtn").hide();
@@ -668,7 +749,7 @@
                     url: "../handler/editPersonFamily.ashx",
                     data: {
                         Mode: "E",
-                        id: $(this).attr("aid")
+                        id: $(this).closest('tr').attr("aid")
                     },
                     error: function (xhr) {
                         alert(xhr);
@@ -701,6 +782,10 @@
                         }
                     }
                 });
+            });
+
+            $(document).on("change", "#pf_Code", function () {
+                checkData("PF", this.value);
             });
         });
 
@@ -759,7 +844,7 @@
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">是</td>';
                                 else
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">否</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfCode").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
                                 if ($(this).children("pfGroupInsurance").text() == "Y")
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">是</td>';
                                 else
@@ -778,6 +863,428 @@
             });
         }
     </script>
+    <%--法院執行命令--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getPerBuckleList();
+
+            //法院執行命令儲存
+            $(document).on("click", "#perBuckleSavBtn", function () {
+                var msg = "";
+                if ($("#idtmp").val().trim() == "")
+                    msg += "請選擇要修改的員工編號\n";
+                else {
+                    if ($("#pReferenceNumber").val().trim() == "")
+                        msg += "請輸入執行明令發文字號\n";
+                    if ($("#pDetentionRatio").val().trim() == "")
+                        msg += "請輸入執行扣押薪資比例\n";
+                    if ($("#pMonthPayroll").val().trim() == "")
+                        msg += "請輸入每月應領薪津\n";
+                    if ($("#pYearEndBonuses").val().trim() == "")
+                        msg += "請輸入年終獎金\n";
+            }
+                if (msg != "") {
+                    alert(msg);
+                    return false;
+                }
+
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var mode = $('<input type="hidden" name="mode" id="mode" value="Buckle" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+                $("input[name='mode']").remove();
+
+                form.appendChild(iframe[0]);
+                form.appendChild(mode[0]);
+
+                form.setAttribute("action", "../handler/addPerson.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
+
+            //法院強制扣繳來源新增/修改
+            $(document).on("click", "#pb_addBtn,#pb_saveBtn", function () {
+                var msg = "";
+                if ($("#idtmp").val().trim() == "")
+                    msg += "請選擇要修改的員工編號\n";
+                else {
+                    if ($("#pb_Creditor").val().trim() == "")
+                        msg += "請輸入債權人\n";
+                    if ($("#pb_CreditorCost").val().trim() == "")
+                        msg += "請輸入債權金額\n";
+                    if ($("#pb_Issued").val().trim() == "")
+                        msg += "請輸入執行命令發文日期\n";
+                    else if ($("#pb_Issued").val() != "" && $("#pb_Issued").val().substring(4, 5) != "/" && $("#pb_Issued").val().substring(7, 8) != "/")
+                        msg += "請檢查日期格式，格式範例：2017/01/01 \n";
+                    if ($("#pb_IntoNumber").val().trim() == "")
+                        msg += "請輸入解款行代號\n";
+                    if ($("#pb_IntoAccount").val().trim() == "")
+                        msg += "請輸入收款人帳號\n";
+                    if ($("#pb_IntoName").val().trim() == "")
+                        msg += "請輸入戶名\n";
+                    if ($("input[name='pb_Payment']:checked").length == 0)
+                        msg += "請選擇繳款方式\n";
+                    if ($("#pb_Contractor").val().trim() == "")
+                        msg += "請輸入債權人承辦人\n";
+                    if ($("#pb_Tel").val().trim() == "")
+                        msg += "請輸入聯絡電話\n";
+                    if ($("#pb_Fee").val().trim() == "")
+                        msg += "請輸入匯款手續費/掛號郵資\n";
+            }
+                if (msg != "") {
+                    alert(msg);
+                    return false;
+                }
+
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var mode = "";
+                if (this.id == "pb_addBtn")
+                    mode = $('<input type="hidden" name="mode" id="mode" value="New" />');
+                if (this.id == "pb_saveBtn")
+                    mode = $('<input type="hidden" name="mode" id="mode" value="Modify" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+                $("input[name='mode']").remove();
+
+                form.appendChild(iframe[0]);
+                form.appendChild(mode[0]);
+
+                form.setAttribute("action", "../handler/addPersonBuckle.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
+
+            //法院強制扣繳來源刪除
+            $(document).on("click", "a[name='pbdelbtn']", function () {
+                if (confirm("確定刪除?")) {
+                    $.ajax({
+                        type: "POST",
+                        async: false, //在沒有返回值之前,不會執行下一步動作
+                        url: "../handler/editPersonBuckle.ashx",
+                        data: {
+                            Mode: "D",
+                            id: $(this).attr("aid")
+                        },
+                        error: function (xhr) {
+                            alert(xhr);
+                        },
+                        success: function (data) {
+                            if (data == "error") {
+                                alert("editPersonBuckle Error");
+                                return false;
+                            }
+
+                            if (data != null) {
+                                getPerBuckleList();
+                            }
+                        }
+                    });
+                }
+            });
+
+            //法院強制扣繳來源編輯
+            $(document).on("click", "#pbTab tbody tr td:not(:first-child)", function () {
+                $("#pb_editstatus").html("編輯");
+                $("#pb_saveBtn").show();
+                $("#pb_addBtn").hide();
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/editPersonBuckle.ashx",
+                    data: {
+                        Mode: "E",
+                        id: $(this).closest('tr').attr("aid")
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("editPersonBuckle Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            data = $.parseXML(data);
+                            //清除資料
+                            $(".pbtxt").val("");
+                            var optobj = $(".pbrao");
+                            for (i = 0; i < optobj.length; i++) {
+                                optobj[i].checked = false;
+                            }
+                            $(data).find("info_item").each(function (i) {
+                                $("#pbid").val($(this).children("pbGuid").text().trim());
+                                $("#pb_Creditor").val($(this).children("pbCreditor").text().trim());
+                                $("#pb_CreditorCost").val($(this).children("pbCreditorCost").text().trim());
+                                $("#pb_Issued").val($(this).children("pbIssued").text().trim());
+                                $("#pb_IntoNumber").val($(this).children("pbIntoNumber").text().trim());
+                                $("#pb_IntoAccount").val($(this).children("pbIntoAccount").text().trim());
+                                $("#pb_IntoName").val($(this).children("pbIntoName").text().trim());
+                                $("input[name='pb_Payment'][value='" + $(this).children("pbPayment").text().trim() + "']").prop("checked", true);
+                                $("#pb_Contractor").val($(this).children("pbContractor").text().trim());
+                                $("#pb_Tel").val($(this).children("pbTel").text().trim());
+                                $("#pb_Fee").val($(this).children("pbFee").text().trim());
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        function PbNewClick() {
+            $("#pb_editstatus").html("新增");
+            $("#pb_saveBtn").hide();
+            $("#pb_addBtn").show();
+            $(".pbtxt").val("");
+            var optobj = $(".pbrao");
+            for (i = 0; i < optobj.length; i++) {
+                optobj[i].checked = false;
+            }
+        }
+
+        //扣繳來源列表
+        function getPerBuckleList() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/getPersonBuckleList.ashx",
+                data: {
+                    id: $("#idtmp").val()
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("getPersonBuckleList Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#pbTab").empty();
+                        var tabstr = '<tr>';
+                        tabstr += '<th width="60" nowrap="nowrap">操作</th>';
+                        tabstr += '<th nowrap="nowrap">債權人</th>';
+                        tabstr += '<th nowrap="nowrap">債權金額</th>';
+                        tabstr += '<th nowrap="nowrap">移轉比例</th>';
+                        tabstr += '<th nowrap="nowrap">執行命令<br />發文日期</th>';
+                        tabstr += '<th nowrap="nowrap">繳款方式</th>';
+                        tabstr += '<th nowrap="nowrap">戶名</th>';
+                        tabstr += '<th nowrap="nowrap">解款行代號</th>';
+                        tabstr += '<th nowrap="nowrap">收款人帳號</th>';
+                        tabstr += '<th nowrap="nowrap">匯款手續費/<br />掛號郵資</th>';
+                        tabstr += '</tr>';
+                        if ($(data).find("pb_item").length > 0) {
+                            $(data).find("pb_item").each(function (i) {
+                                tabstr += '<tr aid=' + $(this).children("pbGuid").text() + '>';
+                                tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditorCost").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
+                                if ($(this).children("pbPayment").text() == "01")
+                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
+                                else
+                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">匯款</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoName").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoNumber").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoAccount").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbFee").text() + '</td>';
+                                tabstr += '</tr>';
+                            });
+                        }
+                        else
+                            tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
+                        tabstr += '</tbody>';
+                        $("#pbTab").append(tabstr);
+                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $(".stripeMe tr:even").addClass("alt");
+                    }
+                }
+            });
+        }
+    </script>
+    <%--個人津貼--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getPerAllowanceList();
+            //津貼新增/修改
+            $(document).on("click", "#pa_addBtn,#pa_saveBtn", function () {
+                var msg = "";
+                if ($("#idtmp").val().trim() == "")
+                    msg += "請選擇要修改的員工編號\n";
+                else {
+                    if ($("#pa_AllowanceCode").val().trim() == "")
+                        msg += "請輸入津貼代號\n";
+                    else if ($("#PAstatus").val() == "N")
+                        msg += "找不到該津貼代號，請重新確認\n";
+                    if ($("#pa_Cost").val().trim() == "")
+                        msg += "請輸入金額\n";
+                }
+                if (msg != "") {
+                    alert(msg);
+                    return false;
+                }
+
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var mode = "";
+                if (this.id == "pa_addBtn")
+                    mode = $('<input type="hidden" name="mode" id="mode" value="New" />');
+                if (this.id == "pa_saveBtn")
+                    mode = $('<input type="hidden" name="mode" id="mode" value="Modify" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+                $("input[name='mode']").remove();
+
+                form.appendChild(iframe[0]);
+                form.appendChild(mode[0]);
+
+                form.setAttribute("action", "../handler/addPersonAllowance.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
+
+            //津貼刪除
+            $(document).on("click", "a[name='padelbtn']", function () {
+                if (confirm("確定刪除?")) {
+                    $.ajax({
+                        type: "POST",
+                        async: false, //在沒有返回值之前,不會執行下一步動作
+                        url: "../handler/editPersonAllowance.ashx",
+                        data: {
+                            Mode: "D",
+                            id: $(this).attr("aid")
+                        },
+                        error: function (xhr) {
+                            alert(xhr);
+                        },
+                        success: function (data) {
+                            if (data == "error") {
+                                alert("editPersonAllowance Error");
+                                return false;
+                            }
+
+                            if (data != null) {
+                                getPerAllowanceList();
+                            }
+                        }
+                    });
+                }
+            });
+
+            //津貼編輯
+            $(document).on("click", "#paTab tbody tr td:not(:first-child)", function () {
+                $("#pa_editstatus").html("編輯");
+                $("#pa_saveBtn").show();
+                $("#pa_addBtn").hide();
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/editPersonAllowance.ashx",
+                    data: {
+                        Mode: "E",
+                        id: $(this).closest('tr').attr("aid")
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("editPersonAllowance Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            data = $.parseXML(data);
+                            //清除資料
+                            $(".patxt").val("");
+                            $(data).find("info_item").each(function (i) {
+                                $("#paid").val($(this).children("paGuid").text().trim());
+                                $("#pa_AllowanceCode").val($(this).children("paAllowanceCode").text().trim());
+                                $("#pa_Cost").val($(this).children("paCost").text().trim());
+                            });
+                        }
+                    }
+                });
+            });
+
+            $(document).on("change", "#pa_AllowanceCode", function () {
+                checkData("PA", this.value);
+            });
+        });
+
+        function PaNewClick() {
+            $("#pa_editstatus").html("新增");
+            $("#pa_saveBtn").hide();
+            $("#pa_addBtn").show();
+            $(".patxt").val("");
+        }
+
+        //津貼列表
+        function getPerAllowanceList() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/getPersonAllowanceList.ashx",
+                data: {
+                    id: $("#idtmp").val()
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("getPersonAllowanceList Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#paTab").empty();
+                        var tabstr = '<tr>';
+                        tabstr += '<th width="60" nowrap="nowrap" >操作</th>';
+                        tabstr += '<th nowrap="nowrap" >津貼扣款代號</th>';
+                        tabstr += '<th nowrap="nowrap" >津貼扣款名稱</th>';
+                        tabstr += '<th nowrap="nowrap" >加扣別</th>';
+                        tabstr += '<th nowrap="nowrap" >金額</th></tr>';
+                        if ($(data).find("pa_item").length > 0) {
+                            $(data).find("pa_item").each(function (i) {
+                                tabstr += '<tr aid=' + $(this).children("paGuid").text() + '>';
+                                tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="padelbtn" aid=' + $(this).children("paGuid").text() + '>刪除</a></td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
+                                if ($(this).children("siAdd").text()=="01")
+                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">加項</td>';
+                                else
+                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">扣項</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("paCost").text() + '</td>';
+                                tabstr += '</tr>';
+                            });
+                        }
+                        else
+                            tabstr += "<tr><td colspan='5'>查詢無資料</td></tr>";
+                        tabstr += '</tbody>';
+                        $("#paTab").append(tabstr);
+                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $(".stripeMe tr:even").addClass("alt");
+                    }
+                }
+            });
+        }
+    </script>
     <style type="text/css">
         .ui-datepicker {
             background: #D4C8B9;
@@ -789,13 +1296,15 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <input type="hidden" id="idtmp" name="idtmp" class="inputex" />
     <input type="hidden" id="pfid" name="pfid" class="inputex" />
+    <input type="hidden" id="pbid" name="pbid" class="inputex" />
+    <input type="hidden" id="paid" name="paid" class="inputex" />
     <div class="WrapperMain">
                 <div class="fixwidth">
                     <div class="twocol underlineT1 margin10T">
                         <div class="left font-light">首頁 / 人事資料管理 / <span class="font-black font-bold">基本資料管理</span></div>
                     </div>
                     <div class="twocol margin15T">
-                        <div class="left">資料管理:<a href="#" class="keybtn fancybox">匯入WorkDay資料</a></div>
+                        <div class="left">資料管理:<a href="#" class="keybtn fancybox">匯入資料</a></div>
                         <div class="right">
                             <a href="javascript:void(0);" id="newPerBtn" class="keybtn">新增人員</a>
                             <a href="javascript:void(0);" id="searchPerBtn" sv="N" class="keybtn">查詢人員</a>
@@ -842,18 +1351,16 @@
                                         <td class="width15"><input type="text" id="pName" name="pName" class="inputex width100" /></td>
                                         <td style="width:8%" align="right"><div class="font-title titlebackicon" style="color:Red">公司別</div></td>
                                         <td class="width15">
-                                            <input type="text" id="pCompName" name="pCompName" class="inputex width50" /><input type="hidden" id="pComGuid" name="pComGuid" />
+                                            <input type="text" id="pCompName" name="pCompName" class="inputex width60" /><input type="hidden" id="pComGuid" name="pComGuid" />
                                             <img id="Cbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                            <img id="cyesimg" class="imgtag" src="<%= ResolveUrl("~/images/yes.png") %>" width="19" height="19" style="display:none;" />
-                                            <img id="cnoimg" class="imgtag" src="<%= ResolveUrl("~/images/no.png") %>" width="19" height="19" style="display:none;" />
+                                            <span id="CompStr"></span>
                                             <input id="Compstatus" type="hidden" />
                                         </td>
                                         <td style="width:8%" align="right"><div class="font-title titlebackicon" style="color:Red">部門</div></td>
                                         <td class="width15">
-                                            <input type="text" id="pDepName" name="pDepName" class="inputex width50" /><input type="hidden" id="pDep" name="pDep" />
+                                            <input type="text" id="pDepName" name="pDepName" class="inputex width60" /><input type="hidden" id="pDep" name="pDepGuid" />
                                             <img id="Dbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                            <img id="dyesimg" class="imgtag" src="<%= ResolveUrl("~/images/yes.png") %>" width="19" height="19" style="display:none;" />
-                                            <img id="dnoimg" class="imgtag" src="<%= ResolveUrl("~/images/no.png") %>" width="19" height="19" style="display:none;" />
+                                            <span id="DepStr"></span>
                                             <input id="Depstatus" type="hidden" />
                                         </td>
                                     </tr>
@@ -1001,7 +1508,7 @@
                         <div id="tabs-4">
                             <div class="twocol margin10B">
                                 <div class="right">
-                                    <a href="javascript:void(0);" onclick="PFNewClick()" class="keybtn fancybox">新增眷屬</a>
+                                    <a href="javascript:void(0);" onclick="PFNewClick()" class="keybtn">新增眷屬</a>
                                 </div>
                                  <div class="left font-title">
                                     修改編號:<span class="noSpan">無</span>
@@ -1034,7 +1541,12 @@
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">眷屬身分證字號</div></td>
                                             <td><input id="pf_IDNumber" name="pf_IDNumber" type="text" class="inputex width100 pftxt" maxlength="10" /></td>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">補助代號</div></td>
-                                            <td><input id="pf_Code" name="pf_Code" type="text" class="inputex width50 pftxt" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
+                                            <td>
+                                                <input id="pf_Code" name="pf_Code" type="text" class="inputex width50 pftxt" /><input type="hidden" id="pf_CodeGuid" name="pf_CodeGuid" />
+                                                <img id="PFbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                                <span id="PfStr"></span>
+                                                <input id="PFstatus" type="hidden" />
+                                            </td>
                                         </tr>  
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">稱謂</div></td>
@@ -1047,96 +1559,47 @@
                             </div>
                         </div><!-- tabs-4 -->
                         <div id="tabs-5">
+                             <div class="twocol margin10B">
+                                <div class="right">
+                                    <a href="javascript:void(0);" id="perBuckleSavBtn" class="keybtn">儲存</a>
+                                </div>
+                                 <div class="left font-title">
+                                    修改編號:<span class="noSpan">無</span>
+                                </div>
+                            </div>
                            <div class="gentable font-normal">
                                <table>
                                    <tr>
                                        <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行明令發文字號</div></td>
-                                       <td class="width15"><input type="text" class="inputex width100" /></td>
+                                       <td class="width15"><input id="pReferenceNumber" name="pReferenceNumber" type="text" class="inputex width100" /></td>
                                        <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
-                                       <td class="width15"><input type="text" class="inputex width100" /></td>
+                                       <td class="width15"><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
                                    </tr>
                                    <tr>
                                        <td class="width13" align="right"><div class="font-title titlebackicon font-red"">每月應領薪津</div></td>
-                                       <td class="width15"><input type="text" class="inputex width100" /></td>
+                                       <td class="width15"><input id="pMonthPayroll" name="pMonthPayroll" type="text" class="inputex width100" /></td>
                                        <td class="width13" align="right"><div class="font-title titlebackicon font-red"">年終獎金</div></td>
-                                       <td class="width15"><input type="text" class="inputex width100" /></td>
+                                       <td class="width15"><input id="pYearEndBonuses" name="pYearEndBonuses" type="text" class="inputex width100" /></td>
                                    </tr>
                                </table>
                            </div><br />
                             <div class="twocol margin10B">
                                 <div class="right">
-                                    <a href="#" class="keybtn">新增法院強制扣繳來源</a><a href="#" class="keybtn">重新計算分配比例</a>
+                                    <a href="javascript:void(0);" onclick="PbNewClick()" class="keybtn">新增法院強制扣繳來源</a>
+                                    <a href="javascript:void(0);" class="keybtn">重新計算分配比例</a>
                                 </div>
                             </div>
-                        
                             <div class="stripeMe font-normal">
-                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <th width="60" nowrap="nowrap">操作</th>
-                                        <th nowrap="nowrap">債權人序號</th>
-                                        <th nowrap="nowrap">債權人</th>
-                                        <th nowrap="nowrap">債權金額</th>
-                                        <th nowrap="nowrap">移轉比例</th>
-                                        <th nowrap="nowrap">執行命令<br />發文日期</th>
-                                        <th nowrap="nowrap">繳款方式</th>
-                                        <th nowrap="nowrap">法扣轉入<br />戶名</th>
-                                        <th nowrap="nowrap">法扣行轉入<br />局號</th>
-                                        <th nowrap="nowrap">法扣轉入<br />帳號</th>
-                                        <th nowrap="nowrap">匯款手續費/<br />掛號郵資</th>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" nowrap="nowrap"><a href="#" class="fancybox">刪除</a>&nbsp;&nbsp;</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">台新銀行</td>
-                                        <td nowrap="nowrap">100000</td>
-                                        <td nowrap="nowrap">20%</td>
-                                        <td nowrap="nowrap">20170101</td>
-                                        <td nowrap="nowrap">匯款</td>
-                                        <td nowrap="nowrap">台新銀</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">78909</td>
-                                        <td nowrap="nowrap">10</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" nowrap="nowrap"><a href="#" class="fancybox">刪除</a>&nbsp;&nbsp;</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">花旗</td>
-                                        <td nowrap="nowrap">100000</td>
-                                        <td nowrap="nowrap">20%</td>
-                                        <td nowrap="nowrap">20170101</td>
-                                        <td nowrap="nowrap">匯款</td>
-                                        <td nowrap="nowrap">台新銀</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">78909</td>
-                                        <td nowrap="nowrap">10</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" nowrap="nowrap"><a href="#" class="fancybox">刪除</a>&nbsp;&nbsp;</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">國泰</td>
-                                        <td nowrap="nowrap">100000</td>
-                                        <td nowrap="nowrap">20%</td>
-                                        <td nowrap="nowrap">20170101</td>
-                                        <td nowrap="nowrap">匯款</td>
-                                        <td nowrap="nowrap">台新銀</td>
-                                        <td nowrap="nowrap">123456</td>
-                                        <td nowrap="nowrap">78909</td>
-                                        <td nowrap="nowrap">10</td>
-                                    </tr>
-                                </table>
+                                <table id="pbTab" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
                             </div>
-                            <!--<div class="twocol margin5TB">
-                                <div class="right">
-                                    <div class="font-title ">
-                                        總金額
-                                        <span>22000</span>
-                                    </div>
-                                </div>
-
-                            </div>--><br />
+                            <br />
                             <div class="twocol margin10B">
                                 <div class="right">
-                                    <a href="#" class="keybtn">儲存</a>
+                                    <a href="javascript:void(0);" id="pb_addBtn" class="keybtn">儲存</a>
+                                    <a href="javascript:void(0);" id="pb_saveBtn" style="display:none;" class="keybtn">儲存</a>
+                                </div>
+                                 <div class="left font-title">
+                                    維護狀態:<span id="pb_editstatus">新增</span>
                                 </div>
                             </div>
                             <div class="gentable">
@@ -1144,75 +1607,55 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td class="width15" align="right"><div class="font-title titlebackicon font-red" >債權人</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
+                                            <td class="width15"><input id="pb_Creditor" name="pb_Creditor" type="text" class="inputex width100 pbtxt" /></td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >債權金額</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
+                                            <td class="width15"><input id="pb_CreditorCost" name="pb_CreditorCost" type="text" class="inputex width100 pbtxt" /></td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >執行命令發文日期</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
-
+                                            <td class="width15"><input id="pb_Issued" name="pb_Issued" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon font-red">解款行代號</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input id="pb_IntoNumber" name="pb_IntoNumber" type="text" class="inputex width100 pbtxt" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">收款人帳號</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input id="pb_IntoAccount" name="pb_IntoAccount" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon font-red">戶名</div></td>
-                                            <td colspan="3"><input type="text" class="inputex width100" /></td>
+                                            <td colspan="3"><input id="pb_IntoName" name="pb_IntoName" type="text" class="inputex width100 pbtxt" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">繳款方式</div></td>
-                                            <td><input type="radio" />支票<input type="radio" />匯款</td>
+                                            <td><input type="radio" name="pb_Payment" value="01" class="pbrao" />支票<input type="radio" name="pb_Payment" value="02" class="pbrao" />匯款</td>
                                         </tr>
                                         <tr>
-
                                             <td align="right"><div class="font-title titlebackicon font-red">債權人承辦人</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input type="text" id="pb_Contractor" name="pb_Contractor" class="inputex width100 pbtxt" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">聯絡電話</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input type="text" id="pb_Tel" name="pb_Tel" class="inputex width100 pbtxt num" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">匯款手續費<br />掛號郵資</div></td>
-                                            <td><input type="text" class="inputex width100" /></td>
+                                            <td><input id="pb_Fee" name="pb_Fee" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
                         </div><!-- tabs-5 -->
                         <div id="tabs-6">
-
                             <div class="twocol margin10B">
                                 <div class="right">
-                                    <a href="#" class="keybtn fancybox">新增</a>
+                                    <a href="javascript:void(0);" onclick="PaNewClick()" class="keybtn fancybox">新增</a>
+                                </div>
+                                 <div class="left font-title">
+                                    修改編號:<span class="noSpan">無</span>
                                 </div>
                             </div>
                             <div class="stripeMe font-normal">
-                                <table width="100%" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <th width="60" nowrap="nowrap" >操作</th>
-                                        <th nowrap="nowrap" >津貼扣款代號</th>
-                                        <th nowrap="nowrap" >津貼扣款名稱</th>
-                                        <th nowrap="nowrap" >加扣別</th>
-                                        <th nowrap="nowrap" >金額</th>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" nowrap="nowrap"><a href="#">刪除</a></td>
-                                        <td nowrap="nowrap">0001</td>
-                                        <td nowrap="nowrap">捐款</td>
-                                        <td nowrap="nowrap">扣</td>
-                                        <td nowrap="nowrap">1500</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td align="center" nowrap="nowrap"><a href="#">刪除</a></td>
-                                        <td nowrap="nowrap">0002</td>
-                                        <td nowrap="nowrap">其它津貼</td>
-                                        <td nowrap="nowrap">加</td>
-                                        <td nowrap="nowrap">1000</td>    
-                                    </tr>
-
-                                </table>
+                                <table id="paTab" width="100%" cellspacing="0" cellpadding="0"></table>
                             </div><br />
                             <div class="twocol margin10B">
                                 <div class="right">
-                                    <a href="#" class="keybtn">儲存</a>
+                                    <a href="javascript:void(0);" id="pa_addBtn" class="keybtn">儲存</a>
+                                    <a href="javascript:void(0);" id="pa_saveBtn" style="display:none;" class="keybtn">儲存</a>
+                                </div>
+                                 <div class="left font-title">
+                                    維護狀態:<span id="pa_editstatus">新增</span>
                                 </div>
                             </div>
                             <div class="gentable">
@@ -1220,9 +1663,14 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red">津貼代號</div></td>
-                                            <td class="width15"><input type="text" class="inputex width50" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
+                                            <td class="width15">
+                                                <input id="pa_AllowanceCode" name="pa_AllowanceCode" type="text" class="inputex width50 patxt" /><input type="hidden" id="pa_CodeGuid" name="pa_CodeGuid" />
+                                                <img id="PAbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                                <span id="PaStr"></span>
+                                                <input type="hidden" id="PAstatus" />
+                                            </td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red">金額</div></td>
-                                            <td class="width15"><input type="text" class="inputex width100" /></td>
+                                            <td class="width15"><input id="pa_Cost" name="pa_Cost" type="text" class="inputex width100 patxt" /></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -1234,4 +1682,3 @@
             </div>
     <br />
 </asp:Content>
-

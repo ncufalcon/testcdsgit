@@ -22,9 +22,7 @@ public class Personnel_DB
 	string perNo = string.Empty;
 	string perName = string.Empty;
 	string perComGuid = string.Empty;
-	string perCompName = string.Empty;
     string perDep = string.Empty;
-    string perDepName = string.Empty;
     string perPosition = string.Empty;
 	string perTel = string.Empty;
 	string perPhone = string.Empty;
@@ -57,15 +55,15 @@ public class Personnel_DB
 	string perInsuranceID = string.Empty;
 	string perSalaryClass = string.Empty;
 	string perTaxable = string.Empty;
-	string perBasicSalary = string.Empty;
-	string perAllowance = string.Empty;
+    decimal perBasicSalary;
+    decimal perAllowance;
 	string perSyAccountName = string.Empty;
 	string perSyNumber = string.Empty;
 	string perSyAccount = string.Empty;
 	string perReferenceNumber = string.Empty;
-	string perDetentionRatio = string.Empty;
-	string perMonthPayroll = string.Empty;
-	string perYearEndBonuses = string.Empty;
+    decimal perDetentionRatio;
+    decimal perMonthPayroll;
+    decimal perYearEndBonuses;
 	string perCreateId = string.Empty;
 	string perModifyId = string.Empty;
 	string perStatus = string.Empty;
@@ -90,17 +88,9 @@ public class Personnel_DB
 	{
 		set { perComGuid = value; }
 	}
-	public string _perCompName
-	{
-		set { perCompName = value; }
-	}
 	public string _perDep
 	{
 		set { perDep = value; }
-	}
-	public string _perDepName
-	{
-		set { perDepName = value; }
 	}
 	public string _perPosition
 	{
@@ -230,11 +220,11 @@ public class Personnel_DB
 	{
 		set { perTaxable = value; }
 	}
-	public string _perBasicSalary
+	public decimal _perBasicSalary
 	{
 		set { perBasicSalary = value; }
 	}
-	public string _perAllowance
+	public decimal _perAllowance
 	{
 		set { perAllowance = value; }
 	}
@@ -254,15 +244,15 @@ public class Personnel_DB
 	{
 		set { perReferenceNumber = value; }
 	}
-	public string _perDetentionRatio
+	public decimal _perDetentionRatio
 	{
 		set { perDetentionRatio = value; }
 	}
-	public string _perMonthPayroll
+	public decimal _perMonthPayroll
 	{
 		set { perMonthPayroll = value; }
 	}
-	public string _perYearEndBonuses
+	public decimal _perYearEndBonuses
 	{
 		set { perYearEndBonuses = value; }
 	}
@@ -294,7 +284,10 @@ public class Personnel_DB
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT top 200 * from sy_Person where perStatus<>'D' ");
+		sb.Append(@"SELECT top 200 * from sy_Person 
+left join sy_Company on comGuid=perComGuid
+left join sy_CodeBranches on cbGuid=perDep
+where perStatus<>'D' ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(perDepName) LIKE '%' + upper(@KeyWord) + '%')) ");
@@ -315,7 +308,10 @@ public class Personnel_DB
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT * from sy_Person where perGuid=@perGuid ");
+		sb.Append(@"SELECT * from sy_Person 
+left join sy_Company on comGuid=perComGuid
+left join sy_CodeBranches on cbGuid=perDep
+where perGuid=@perGuid ");
 
 		oCmd.CommandText = sb.ToString();
 		oCmd.CommandType = CommandType.Text;
@@ -335,9 +331,7 @@ perGuid,
 perNo,
 perName,
 perComGuid,
-perCompName,
 perDep,
-perDepName,
 perPosition,
 perTel,
 perPhone,
@@ -405,9 +399,7 @@ perStatus
 		oCmd.Parameters.AddWithValue("@perNo", perNo);
 		oCmd.Parameters.AddWithValue("@perName", perName);
 		oCmd.Parameters.AddWithValue("@perComGuid", perComGuid);
-		oCmd.Parameters.AddWithValue("@perCompName", perCompName);
 		oCmd.Parameters.AddWithValue("@perDep", perDep);
-		oCmd.Parameters.AddWithValue("@perDepName", perDepName);
         oCmd.Parameters.AddWithValue("@perPosition", perPosition);
 		oCmd.Parameters.AddWithValue("@perTel", perTel);
 		oCmd.Parameters.AddWithValue("@perPhone", perPhone);
@@ -449,9 +441,7 @@ perStatus
 perNo=@perNo,
 perName=@perName,
 perComGuid=@perComGuid,
-perCompName=@perCompName,
 perDep=@perDep,
-perDepName=@perDepName,
 perPosition=@perPosition,
 perTel=@perTel,
 perPhone=@perPhone,
@@ -485,9 +475,7 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perNo", perNo);
         oCmd.Parameters.AddWithValue("@perName", perName);
         oCmd.Parameters.AddWithValue("@perComGuid", perComGuid);
-		oCmd.Parameters.AddWithValue("@perCompName", perCompName);
         oCmd.Parameters.AddWithValue("@perDep", perDep);
-        oCmd.Parameters.AddWithValue("@perDepName", perDepName);
         oCmd.Parameters.AddWithValue("@perPosition", perPosition);
         oCmd.Parameters.AddWithValue("@perTel", perTel);
         oCmd.Parameters.AddWithValue("@perPhone", perPhone);
@@ -624,13 +612,83 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         return ds;
     }
 
+    public DataSet getAllowance(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_SalaryItem where siStatus<>'D' ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(siItemName) LIKE '%' + upper(@KeyWord) + '%') or (upper(siItemCode) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+          select ROW_NUMBER() over (order by siCreatDate) itemNo,
+          * from sy_SalaryItem where siStatus<>'D' ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(siItemName) LIKE '%' + upper(@KeyWord) + '%') or (upper(siItemCode) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataSet getSubsidyLevel(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_SubsidyLevel where slStatus<>'D' ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(slSubsidyCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(slSubsidyIdentity) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+          select ROW_NUMBER() over (order by slCreatDate) itemNo,
+          * from sy_SubsidyLevel where slStatus<>'D' ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(slSubsidyCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(slSubsidyIdentity) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataTable checkComp(string ckStr)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT comGuid from sy_Company where comAbbreviate=@ckStr ");
+        sb.Append(@"SELECT * from sy_Company where (comAbbreviate=@ckStr or comUniform=@ckStr) and comStatus<>'D' ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -648,7 +706,43 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT cbGuid from sy_CodeBranches where cbName=@ckStr ");
+        sb.Append(@"SELECT * from sy_CodeBranches where cbValue=@ckStr and cbStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkPFamily(string ckStr)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_SubsidyLevel where slSubsidyCode=@ckStr and slStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkPAllowance(string ckStr)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_SalaryItem where siItemCode=@ckStr and siStatus<>'D' ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -669,7 +763,9 @@ perHIClass=@perHIClass,
 perInsuranceDes=@perInsuranceDes,
 perGroupInsurance=@perGroupInsurance,
 perLaborID=@perLaborID,
-perInsuranceID=@perInsuranceID
+perInsuranceID=@perInsuranceID,
+perModifyId=@perModifyId,
+perModifyDate=@perModifyDate
 where perGuid=@perGuid
 ";
         oCmd.CommandType = CommandType.Text;
@@ -680,6 +776,8 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perGroupInsurance", perGroupInsurance);
         oCmd.Parameters.AddWithValue("@perLaborID", perLaborID);
         oCmd.Parameters.AddWithValue("@perInsuranceID", perInsuranceID);
+        oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
+        oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
 
         oCmd.Connection.Open();
         oCmd.ExecuteNonQuery();
@@ -697,7 +795,9 @@ perBasicSalary=@perBasicSalary,
 perAllowance=@perAllowance,
 perSyAccountName=@perSyAccountName,
 perSyNumber=@perSyNumber,
-perSyAccount=@perSyAccount
+perSyAccount=@perSyAccount,
+perModifyId=@perModifyId,
+perModifyDate=@perModifyDate
 where perGuid=@perGuid
 ";
         oCmd.CommandType = CommandType.Text;
@@ -710,6 +810,36 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perSyAccountName", perSyAccountName);
         oCmd.Parameters.AddWithValue("@perSyNumber", perSyNumber);
         oCmd.Parameters.AddWithValue("@perSyAccount", perSyAccount);
+        oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
+        oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
+
+        oCmd.Connection.Open();
+        oCmd.ExecuteNonQuery();
+        oCmd.Connection.Close();
+    }
+
+    public void modBuckle()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.CommandText = @"update sy_Person set
+perReferenceNumber=@perReferenceNumber,
+perDetentionRatio=@perDetentionRatio,
+perMonthPayroll=@perMonthPayroll,
+perYearEndBonuses=@perYearEndBonuses,
+perModifyId=@perModifyId,
+perModifyDate=@perModifyDate
+where perGuid=@perGuid
+";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oCmd.Parameters.AddWithValue("@perReferenceNumber", perReferenceNumber);
+        oCmd.Parameters.AddWithValue("@perDetentionRatio", perDetentionRatio);
+        oCmd.Parameters.AddWithValue("@perMonthPayroll", perMonthPayroll);
+        oCmd.Parameters.AddWithValue("@perYearEndBonuses", perYearEndBonuses);
+        oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
+        oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
 
         oCmd.Connection.Open();
         oCmd.ExecuteNonQuery();

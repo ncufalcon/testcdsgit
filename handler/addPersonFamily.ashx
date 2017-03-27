@@ -18,6 +18,7 @@ public class addPersonFamily : IHttpHandler {
             string pf_GroupInsurance = (context.Request.Form["pf_GroupInsurance"] != null) ? context.Request.Form["pf_GroupInsurance"].ToString() : "";
             string pf_IDNumber = (context.Request.Form["pf_IDNumber"] != null) ? context.Request.Form["pf_IDNumber"].ToString() : "";
             string pf_Code = (context.Request.Form["pf_Code"] != null) ? context.Request.Form["pf_Code"].ToString() : "";
+            string pf_CodeGuid = (context.Request.Form["pf_CodeGuid"] != null) ? context.Request.Form["pf_CodeGuid"].ToString() : "";
             string pf_Title = (context.Request.Form["pf_Title"] != null) ? context.Request.Form["pf_Title"].ToString() : "";
             string pf_Birthday = (context.Request.Form["pf_Birthday"] != null) ? context.Request.Form["pf_Birthday"].ToString() : "";
 
@@ -31,7 +32,7 @@ public class addPersonFamily : IHttpHandler {
                     PF_Db._pfHealthInsurance = pf_HealthInsurance;
                     PF_Db._pfGroupInsurance = pf_GroupInsurance;
                     PF_Db._pfIDNumber = pf_IDNumber;
-                    PF_Db._pfCode = pf_Code;
+                    PF_Db._pfCode = pf_CodeGuid;
                     PF_Db._pfTitle = pf_Title;
                     PF_Db._pfBirthday = pf_Birthday;
                     PF_Db.addPersonFamily();
@@ -42,7 +43,7 @@ public class addPersonFamily : IHttpHandler {
                     PF_Db._pfHealthInsurance = pf_HealthInsurance;
                     PF_Db._pfGroupInsurance = pf_GroupInsurance;
                     PF_Db._pfIDNumber = pf_IDNumber;
-                    PF_Db._pfCode = pf_Code;
+                    PF_Db._pfCode = pf_CodeGuid;
                     PF_Db._pfTitle = pf_Title;
                     PF_Db._pfBirthday = pf_Birthday;
                     PF_Db.modPersonFamily();

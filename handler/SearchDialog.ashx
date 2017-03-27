@@ -23,7 +23,7 @@ public class SearchDialog : IHttpHandler {
 
             switch (type)
             {
-                case "C":
+                case "Comp":
                     Personnel_Db._KeyWord = SearchStr;
                     DataSet ds = Personnel_Db.getCompany(pageStart.ToString(), pageEnd.ToString());
                     DataTable dt = ds.Tables[1];
@@ -31,13 +31,29 @@ public class SearchDialog : IHttpHandler {
                     xmlStr = "<total>" + ds.Tables[0].Rows[0]["total"].ToString() + "</total>";
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt, "CompList", "comp_item");
                     break;
-                case "D":
+                case "Dep":
                     Personnel_Db._KeyWord = SearchStr;
                     DataSet ds2 = Personnel_Db.getDepartment(pageStart.ToString(), pageEnd.ToString());
                     DataTable dt2 = ds2.Tables[1];
 
                     xmlStr = "<total>" + ds2.Tables[0].Rows[0]["total"].ToString() + "</total>";
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt2, "DepList", "dep_item");
+                    break;
+                case "Family":
+                    Personnel_Db._KeyWord = SearchStr;
+                    DataSet ds3 = Personnel_Db.getSubsidyLevel(pageStart.ToString(), pageEnd.ToString());
+                    DataTable dt3 = ds3.Tables[1];
+
+                    xmlStr = "<total>" + ds3.Tables[0].Rows[0]["total"].ToString() + "</total>";
+                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt3, "AList", "a_item");
+                    break;
+                case "Allowance":
+                    Personnel_Db._KeyWord = SearchStr;
+                    DataSet ds4 = Personnel_Db.getAllowance(pageStart.ToString(), pageEnd.ToString());
+                    DataTable dt4 = ds4.Tables[1];
+
+                    xmlStr = "<total>" + ds4.Tables[0].Rows[0]["total"].ToString() + "</total>";
+                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt4, "AList", "a_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + xmlStr2 + "</root>";

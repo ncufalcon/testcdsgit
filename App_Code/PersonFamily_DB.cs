@@ -99,7 +99,9 @@ public class PersonFamily_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT * from sy_PersonFamily where pfStatus<>'D' and pfPerGuid=@pfPerGuid ");
+        sb.Append(@"SELECT * from sy_PersonFamily
+left join sy_SubsidyLevel on slGuid=pfCode
+where pfStatus<>'D' and pfPerGuid=@pfPerGuid ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(pfName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");

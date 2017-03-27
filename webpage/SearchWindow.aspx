@@ -42,7 +42,7 @@
                         data = $.parseXML(data);
                         $("#sarchTab").empty();
                         switch ($.getParamValue('v')) {
-                            case "C":
+                            case "Comp":
                                 var tabstr = '<tr>';
                                 tabstr += '<th nowrap="nowrap">申報公司</th>';
                                 tabstr += '<th nowrap="nowrap">工司名稱</th>';
@@ -60,7 +60,7 @@
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
-                            case "D":
+                            case "Dep":
                                 var tabstr = '<tr>';
                                 tabstr += '<th nowrap="nowrap">代碼</th>';
                                 tabstr += '<th nowrap="nowrap">分店</th>';
@@ -68,10 +68,47 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("dep_item").length > 0) {
                                     $(data).find("dep_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("cbGuid").text() + ' str=' + $(this).children("cbName").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("cbGuid").text() + ' str=' + $(this).children("cbValue").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbValue").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbDesc").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
+                            case "Family":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">補助代碼</th>';
+                                tabstr += '<th nowrap="nowrap">補助身分說明</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("a_item").length > 0) {
+                                    $(data).find("a_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("slGuid").text() + ' str=' + $(this).children("slSubsidyCode").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyIdentity").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
+                            case "Allowance":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">項目代碼</th>';		
+                                tabstr += '<th nowrap="nowrap">項目名稱</th>';
+                                tabstr += '<th nowrap="nowrap">加/扣項</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("a_item").length > 0) {
+                                    $(data).find("a_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
+                                        if ($(this).children("siAdd").text()=="01")
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">加項</td>';
+                                       else
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">扣項</td>';
                                         tabstr += '</tr>';
                                     });
                                 }
