@@ -37,7 +37,7 @@ public class SearchDialog : IHttpHandler {
                     DataTable dt2 = ds2.Tables[1];
 
                     xmlStr = "<total>" + ds2.Tables[0].Rows[0]["total"].ToString() + "</total>";
-                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt2, "DepList", "dep_item");
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt2, "DepList", "dep_item");
                     break;
                 case "Family":
                     Personnel_Db._KeyWord = SearchStr;
@@ -45,7 +45,7 @@ public class SearchDialog : IHttpHandler {
                     DataTable dt3 = ds3.Tables[1];
 
                     xmlStr = "<total>" + ds3.Tables[0].Rows[0]["total"].ToString() + "</total>";
-                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt3, "AList", "a_item");
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt3, "AList", "a_item");
                     break;
                 case "Allowance":
                     Personnel_Db._KeyWord = SearchStr;
@@ -53,7 +53,15 @@ public class SearchDialog : IHttpHandler {
                     DataTable dt4 = ds4.Tables[1];
 
                     xmlStr = "<total>" + ds4.Tables[0].Rows[0]["total"].ToString() + "</total>";
-                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt4, "AList", "a_item");
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt4, "AList", "a_item");
+                    break;
+                case "Personnel":
+                    Personnel_Db._KeyWord = SearchStr;
+                    DataSet ds5 = Personnel_Db.getPersonnel(pageStart.ToString(), pageEnd.ToString());
+                    DataTable dt5 = ds5.Tables[1];
+
+                    xmlStr = "<total>" + ds5.Tables[0].Rows[0]["total"].ToString() + "</total>";
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt5, "pList", "p_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + xmlStr2 + "</root>";

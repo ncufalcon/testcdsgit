@@ -14,8 +14,16 @@
             getData(0);
 
             $(document).on("click", "#sarchTab tr", function () {
-                parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"));
-                parent.$.fancybox.close();
+                switch ($.getParamValue('v')) {
+                    default:
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"));
+                        parent.$.fancybox.close();
+                        break;
+                    case "Personnel":
+                        parent.setReturnValue($(this).attr("gv"), $(this).attr("pno"), $(this).attr("pname"));
+                        parent.$.fancybox.close();
+                        break;
+                }
             });
         });
 
@@ -115,6 +123,28 @@
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
+                            case "Personnel":
+                                    var tabstr = '<tr>';
+                                    tabstr += '<th nowrap="nowrap">員工編號</th>';
+                                    tabstr += '<th nowrap="nowrap">員工姓名</th>';
+                                    tabstr += '<th nowrap="nowrap">公司別</th>';
+                                    tabstr += '<th nowrap="nowrap">部門</th>';
+                                    tabstr += '<th nowrap="nowrap">職務</th>';
+                                    tabstr += '</tr>';
+                                    if ($(data).find("p_item").length > 0) {
+                                        $(data).find("p_item").each(function (i) {
+                                            tabstr += '<tr gv=' + $(this).children("perGuid").text() + ' pno=' + $(this).children("perNo").text() + ' pname=' + $(this).children("perName").text() + '>';
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comAbbreviate").text() + '</td>';
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
+                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
+                                            tabstr += '</tr>';
+                                        });
+                                    }
+                                    $("#sarchTab").append(tabstr);
+                                    PageFun(p, $("total", data).text());
+                                    break;
                         }
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
