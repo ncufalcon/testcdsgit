@@ -41,10 +41,10 @@ public class addPerson : IHttpHandler {
             string pPs = (context.Request.Form["pPs"] != null) ? context.Request.Form["pPs"].ToString() : "";
             //保險
             string pHIClass = (context.Request.Form["pHIClass"] != null) ? context.Request.Form["pHIClass"].ToString() : "";
-            string pInsuranceDes = (context.Request.Form["pInsuranceDes"] != null) ? context.Request.Form["pInsuranceDes"].ToString() : "";
+            string pInsuranceDes = (context.Request.Form["plv_CodeGuid"] != null) ? context.Request.Form["plv_CodeGuid"].ToString() : "";
             string pGroupInsurance = (context.Request.Form["pGroupInsurance"] != null) ? context.Request.Form["pGroupInsurance"].ToString() : "";
-            string pLaborID = (context.Request.Form["pLaborID"] != null) ? context.Request.Form["pLaborID"].ToString() : "";
-            string pInsuranceID = (context.Request.Form["pInsuranceID"] != null) ? context.Request.Form["pInsuranceID"].ToString() : "";
+            string pLaborID = (context.Request.Form["Labor_CodeGuid"] != null) ? context.Request.Form["Labor_CodeGuid"].ToString() : "";
+            string pInsuranceID = (context.Request.Form["Health_CodeGuid"] != null) ? context.Request.Form["Health_CodeGuid"].ToString() : "";
             //計薪
             string pSalaryClass = (context.Request.Form["pSalaryClass"] != null) ? context.Request.Form["pSalaryClass"].ToString() : "";
             string pTaxable = (context.Request.Form["pTaxable"] != null) ? context.Request.Form["pTaxable"].ToString() : "";

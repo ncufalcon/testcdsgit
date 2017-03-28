@@ -287,6 +287,7 @@ public class Personnel_DB
 		sb.Append(@"SELECT top 200 * from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
+left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
 where perStatus<>'D' ");
         if (KeyWord != "")
         {
@@ -308,9 +309,12 @@ where perStatus<>'D' ");
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT * from sy_Person 
+		sb.Append(@"SELECT *,a.slGuid Lgv,a.slSubsidyCode LCode,b.slGuid Hgv,b.slSubsidyCode HCode from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
+left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
+left join sy_SubsidyLevel a on a.slGuid=perLaborID
+left join sy_SubsidyLevel b on b.slGuid=perInsuranceID
 where perGuid=@perGuid ");
 
 		oCmd.CommandText = sb.ToString();
@@ -647,6 +651,41 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         return ds;
     }
 
+    public DataSet getInsuranceIdentity(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_InsuranceIdentity where iiStatus<>'D' ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(iiIdentityCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(iiIdentity) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+          select ROW_NUMBER() over (order by iiCreatDate) itemNo,
+          * from sy_InsuranceIdentity where iiStatus<>'D' ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(iiIdentityCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(iiIdentity) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataSet getPersonnel(string pStart, string pEnd)
     {
         SqlCommand oCmd = new SqlCommand();
@@ -757,7 +796,7 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         return ds;
     }
 
-    public DataTable checkPFamily(string ckStr)
+    public DataTable checkSLevel(string ckStr)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -792,6 +831,26 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         oda.Fill(ds);
         return ds;
     }
+
+
+    public DataTable checkInsuranceID(string ckStr)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_InsuranceIdentity where iiIdentityCode=@ckStr and iiStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
+        oda.Fill(ds);
+        return ds;
+    }
+    
 
     public void modInsurance()
     {

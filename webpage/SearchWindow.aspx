@@ -12,11 +12,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             getData(0);
-            
+
             $(document).on("click", "#sarchTab tr", function () {
                 switch ($.getParamValue('v')) {
                     default:
-                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"));
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"));
                         parent.$.fancybox.close();
                         break;
                     case "Personnel":
@@ -58,7 +58,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("comp_item").length > 0) {
                                     $(data).find("comp_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("comGuid").text() + ' str=' + $(this).children("comAbbreviate").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("comGuid").text() + ' str=' + $(this).children("comAbbreviate").text() + ' str2=' + $(this).children("comAbbreviate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comAbbreviate").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comUniform").text() + '</td>';
@@ -76,7 +76,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("dep_item").length > 0) {
                                     $(data).find("dep_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("cbGuid").text() + ' str=' + $(this).children("cbValue").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("cbGuid").text() + ' str=' + $(this).children("cbValue").text() + ' str2=' + $(this).children("cbName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbValue").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbDesc").text() + '</td>';
@@ -87,13 +87,15 @@
                                 PageFun(p, $("total", data).text());
                                 break;
                             case "Family":
+                            case "LB":
+                            case "Heal":
                                 var tabstr = '<tr>';
                                 tabstr += '<th nowrap="nowrap">補助代碼</th>';
                                 tabstr += '<th nowrap="nowrap">補助身分說明</th>';
                                 tabstr += '</tr>';
                                 if ($(data).find("a_item").length > 0) {
                                     $(data).find("a_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("slGuid").text() + ' str=' + $(this).children("slSubsidyCode").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("slGuid").text() + ' str=' + $(this).children("slSubsidyCode").text() + ' str2=' + $(this).children("slSubsidyIdentity").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyIdentity").text() + '</td>';
                                         tabstr += '</tr>';
@@ -110,13 +112,43 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("a_item").length > 0) {
                                     $(data).find("a_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
                                         if ($(this).children("siAdd").text()=="01")
                                             tabstr += '<td nowrap="nowrap" style="cursor: pointer;">加項</td>';
                                        else
                                             tabstr += '<td nowrap="nowrap" style="cursor: pointer;">扣項</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
+                            case "PLv":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap" rowspan="2">身分代碼</th>';
+                                tabstr += '<th nowrap="nowrap" rowspan="2">身分名稱</th>';
+                                tabstr += '<th nowrap="nowrap" colspan="5">投保項目</th>';
+                                tabstr += '<th nowrap="nowrap" rowspan="2">勞退雇主提撥率(%)</th>';
+                                tabstr += '</tr><tr>';
+                                tabstr += '<th nowrap="nowrap">普通事故</th>';
+                                tabstr += '<th nowrap="nowrap">就業保險</th>';
+                                tabstr += '<th nowrap="nowrap">職災保險</th>';
+                                tabstr += '<th nowrap="nowrap">墊償基金</th>';
+                                tabstr += '<th nowrap="nowrap">健保</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("i_item").length > 0) {
+                                    $(data).find("i_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("iiGuid").text() + ' str=' + $(this).children("iiIdentityCode").text() + ' str2=' + $(this).children("iiIdentity").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentityCode").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentity").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiInsurance1").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiInsurance2").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiInsurance3").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiInsurance4").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiInsurance5").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiRetirement").text() + '</td>';
                                         tabstr += '</tr>';
                                     });
                                 }

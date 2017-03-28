@@ -26,12 +26,18 @@ public class checkData : IHttpHandler
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt2, "dataList", "data_item");
                     break;
                 case "PF":
-                    DataTable dt3 = Personnel_Db.checkPFamily(str);
+                case "LB":
+                case "Heal":
+                    DataTable dt3 = Personnel_Db.checkSLevel(str);
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt3, "dataList", "data_item");
                     break;
                 case "PA":
                     DataTable dt4 = Personnel_Db.checkPAllowance(str);
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt4, "dataList", "data_item");
+                    break;
+                case "PLv":
+                    DataTable dt5 = Personnel_Db.checkInsuranceID(str);
+                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt5, "dataList", "data_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + "</root>";

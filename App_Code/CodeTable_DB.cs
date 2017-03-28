@@ -59,4 +59,22 @@ public class CodeTable_DB
 		oda.Fill(ds);
 		return ds;
 	}
+
+    public DataTable getCodeCn(string group,string item)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT code_desc from sy_codetable where code_group=@group and code_value=@code_value ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@group", group);
+        oda.Fill(ds);
+        return ds;
+    }
 }

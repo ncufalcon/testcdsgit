@@ -23,7 +23,7 @@
                 }
             });
         });
-        
+
         //DDL
         function getddl(gno, tagName) {
             $.ajax({
@@ -106,6 +106,24 @@
                                     $("#PfStr").css("color", "");
                                     $("#PFstatus").val("Y");
                                     break;
+                                case "PLv":
+                                    $("#PLvStr").html($("iiIdentity", data).text());
+                                    $("#plv_CodeGuid").val($("iiGuid", data).text());
+                                    $("#PLvStr").css("color", "");
+                                    $("#PLVstatus").val("Y");
+                                    break;
+                                case "LB":
+                                    $("#LaborStr").html($("slSubsidyIdentity", data).text());
+                                    $("#Labor_CodeGuid").val($("slGuid", data).text());
+                                    $("#LaborStr").css("color", "");
+                                    $("#Laborstatus").val("Y");
+                                    break;
+                                case "Heal":
+                                    $("#HealthStr").html($("slSubsidyIdentity", data).text());
+                                    $("#Health_CodeGuid").val($("slGuid", data).text());
+                                    $("#HealthStr").css("color", "");
+                                    $("#Healthstatus").val("Y");
+                                    break;
                             }
                         }
                         else {
@@ -130,6 +148,21 @@
                                     $("#PfStr").css("color", "red");
                                     $("#PFstatus").val("N");
                                     break;
+                                case "PLv":
+                                    $("#PLvStr").html("X");
+                                    $("#PLvStr").css("color", "red");
+                                    $("#PLVstatus").val("N");
+                                    break;
+                                case "LB":
+                                    $("#LaborStr").html("X");
+                                    $("#LaborStr").css("color", "red");
+                                    $("#Laborstatus").val("N");
+                                    break;
+                                case "Heal":
+                                    $("#HealthStr").html("X");
+                                    $("#HealthStr").css("color", "red");
+                                    $("#Healthstatus").val("N");
+                                    break;
                             }
                         }
                     }
@@ -152,6 +185,15 @@
                 case "PAbox":
                     link = "SearchWindow.aspx?v=Allowance";
                     break;
+                case "PLvbox":
+                    link = "SearchWindow.aspx?v=PLv";
+                    break;
+                case "Laborbox":
+                    link = "SearchWindow.aspx?v=LB";
+                    break;
+                case "Healthbox":
+                    link = "SearchWindow.aspx?v=Heal";
+                    break;
             }
             $.fancybox({
                 href: link,
@@ -164,31 +206,49 @@
         }
 
         //fancybox回傳
-        function setReturnValue(type, gv, str) {
+        function setReturnValue(type, gv, str, str2) {
             switch (type) {
                 case "Comp":
                     $("#pCompName").val(str);
                     $("#pComGuid").val(gv);
-                    $("#CompStr").html("");
+                    $("#CompStr").html(str2);
                     $("#Compstatus").val("Y");
                     break;
                 case "Dep":
                     $("#pDepName").val(str);
                     $("#pDep").val(gv);
-                    $("#DepStr").html("");
+                    $("#DepStr").html(str2);
                     $("#Depstatus").val("Y");
                     break;
                 case "Family":
                     $("#pf_Code").val(str);
                     $("#pf_CodeGuid").val(gv);
-                    $("#PfStr").html("");
+                    $("#PfStr").html(str2);
                     $("#PFstatus").val("Y");
                     break;
                 case "Allowance":
                     $("#pa_AllowanceCode").val(str);
                     $("#pa_CodeGuid").val(gv);
-                    $("#PaStr").html("");
+                    $("#PaStr").html(str2);
                     $("#PAstatus").val("Y");
+                    break;
+                case "PLv":
+                    $("#pInsuranceDes").val(str);
+                    $("#plv_CodeGuid").val(gv);
+                    $("#PLvStr").html(str2);
+                    $("#PLVstatus").val("Y");
+                    break;
+                case "LB":
+                    $("#pLaborID").val(str);
+                    $("#Labor_CodeGuid").val(gv);
+                    $("#LaborStr").html(str2);
+                    $("#Laborstatus").val("Y");
+                    break;
+                case "Heal":
+                    $("#pInsuranceID").val(str);
+                    $("#Health_CodeGuid").val(gv);
+                    $("#HealthStr").html(str2);
+                    $("#Healthstatus").val("Y");
                     break;
             }
         }
@@ -197,14 +257,15 @@
         function ClearInput() {
             $(".inputex").val("");
             $(".noSpan").html("無");
+            $(".showStr").html("");
             //radiobutton
             var optobj = $("input:radio");
             for (i = 0; i < optobj.length; i++) {
                 optobj[i].checked = false;
             }
-            //img
-            $(".imgtag").hide();
             getPerFamilyList();
+            getPerBuckleList();
+            getPerAllowanceList();
         }
 
         function feedbackFun(msg,ern) {
@@ -421,10 +482,19 @@
                                 $("#pPs").val($(this).children("perPs").text().trim());
                                 //保險
                                 $("#pHIClass").val($(this).children("perHIClass").text().trim());
-                                $("#pInsuranceDes").val($(this).children("perInsuranceDes").text().trim());
+                                $("#pInsuranceDes").val($(this).children("iiIdentityCode").text().trim());
+                                $("#plv_CodeGuid").val($(this).children("iiGuid").text().trim());
+                                $("#PLvStr").html("");
+                                $("#PLVstatus").val("Y");
                                 $("input[name='pGroupInsurance'][value='" + $(this).children("perGroupInsurance").text().trim() + "']").prop("checked", true);
-                                $("#pLaborID").val($(this).children("perLaborID").text().trim());
-                                $("#pInsuranceID").val($(this).children("perInsuranceID").text().trim());
+                                $("#pLaborID").val($(this).children("LCode").text().trim());
+                                $("#Labor_CodeGuid").val($(this).children("Lgv").text().trim());
+                                $("#LaborStr").html("");
+                                $("#Laborstatus").val("Y");
+                                $("#pInsuranceID").val($(this).children("HCode").text().trim());
+                                $("#Health_CodeGuid").val($(this).children("Hgv").text().trim());
+                                $("#HealthStr").html("");
+                                $("#Healthstatus").val("Y");
                                 //計薪
                                 $("#pSalaryClass").val($(this).children("perSalaryClass").text().trim());
                                 $("#pTaxable").val($(this).children("perTaxable").text().trim());
@@ -501,10 +571,14 @@
                 data: {
                     keyword: $("#keyword").val()
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
                 error: function (xhr) {
                     alert(xhr);
                 },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getPersonList Error");
                         return false;
@@ -534,8 +608,8 @@
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">男</td>';
                                 else
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">女</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentityCode").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentity").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perFirstDate").text() + '</td>';
                                 tabstr += '</tr>';
                             });
@@ -566,12 +640,18 @@
                         msg += "請選擇二代健保身分類別\n";
                     if ($("#pInsuranceDes").val().trim() == "")
                         msg += "請輸入投保身分\n";
+                    else if ($("#PLVstatus").val() == "N")
+                        msg += "找不到該投保身分，請重新確認\n";
                     if ($("input[name='pGroupInsurance']:checked").length == 0)
                         msg += "請選擇團保保險\n";
                     if ($("#pLaborID").val().trim() == "")
                         msg += "請輸入勞保補助身分\n";
+                    else if ($("#Laborstatus").val() == "N")
+                        msg += "找不到該勞保補助身分，請重新確認\n";
                     if ($("#pInsuranceID").val().trim() == "")
                         msg += "請輸入健保補助身分\n";
+                    else if ($("#Healthstatus").val() == "N")
+                        msg += "找不到該健保補助身分，請重新確認\n";
                 }
                 if (msg != "") {
                     alert(msg);
@@ -594,6 +674,20 @@
                 form.setAttribute("encoding", "multipart/form-data");
                 form.setAttribute("target", "postiframe");
                 form.submit();
+            });
+
+            $(document).on("change", "#pInsuranceDes,#pLaborID,#pInsuranceID", function () {
+                switch (this.id) {
+                    case "pInsuranceDes":
+                        checkData("PLv", this.value);
+                        break;
+                    case "pLaborID":
+                        checkData("LB", this.value);
+                        break;
+                    case "pInsuranceID":
+                        checkData("Heal", this.value);
+                        break;
+                }
             });
         });
     </script>
@@ -1353,14 +1447,14 @@
                                         <td class="width15">
                                             <input type="text" id="pCompName" name="pCompName" class="inputex width60" /><input type="hidden" id="pComGuid" name="pComGuid" />
                                             <img id="Cbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                            <span id="CompStr"></span>
+                                            <span id="CompStr" class="showStr"></span>
                                             <input id="Compstatus" type="hidden" />
                                         </td>
                                         <td style="width:8%" align="right"><div class="font-title titlebackicon" style="color:Red">部門</div></td>
                                         <td class="width15">
                                             <input type="text" id="pDepName" name="pDepName" class="inputex width60" /><input type="hidden" id="pDep" name="pDepGuid" />
                                             <img id="Dbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                            <span id="DepStr"></span>
+                                            <span id="DepStr" class="showStr"></span>
                                             <input id="Depstatus" type="hidden" />
                                         </td>
                                     </tr>
@@ -1452,17 +1546,32 @@
                                             <select id="pHIClass" name="pHIClass" class="inputex width95"></select>                                      
                                         </td>
                                         <td class="width15" align="right"><div class="font-title titlebackicon font-red">投保身分</div></td>
-                                        <td><input id="pInsuranceDes" name="pInsuranceDes" type="text" class="inputex width50" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
+                                        <td>
+                                            <input id="pInsuranceDes" name="pInsuranceDes" type="text" class="inputex width50" /><input type="hidden" id="plv_CodeGuid" name="plv_CodeGuid" />
+                                            <img id="PLvbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                            <span id="PLvStr" class="showStr"></span>
+                                            <input id="PLVstatus" type="hidden" />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon font-red">團保保險</div></td>
                                         <td><input type="radio" name="pGroupInsurance" value="Y" />參加<input type="radio" name="pGroupInsurance" value="N" />不參加</td>
                                         <td align="right" class="auto-style3"><div class="font-title titlebackicon font-red">勞保補助身分</div></td>
-                                        <td><input id="pLaborID" name="pLaborID" type="text" class="inputex width50" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
+                                        <td>
+                                            <input id="pLaborID" name="pLaborID" type="text" class="inputex width50" /><input type="hidden" id="Labor_CodeGuid" name="Labor_CodeGuid" />
+                                            <img id="Laborbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                            <span id="LaborStr" class="showStr"></span>
+                                            <input id="Laborstatus" type="hidden" />
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon font-red">健保補助身分</div></td>
-                                        <td><input id="pInsuranceID" name="pInsuranceID" type="text" class="inputex width50" /><img src="<%= ResolveUrl("~/images/btn-search.gif") %>" /></td>
+                                        <td>
+                                            <input id="pInsuranceID" name="pInsuranceID" type="text" class="inputex width50" /><input type="hidden" id="Health_CodeGuid" name="Health_CodeGuid" />
+                                            <img id="Healthbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                            <span id="HealthStr" class="showStr"></span>
+                                            <input id="Healthstatus" type="hidden" />
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -1544,7 +1653,7 @@
                                             <td>
                                                 <input id="pf_Code" name="pf_Code" type="text" class="inputex width50 pftxt" /><input type="hidden" id="pf_CodeGuid" name="pf_CodeGuid" />
                                                 <img id="PFbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                                <span id="PfStr"></span>
+                                                <span id="PfStr" class="showStr"></span>
                                                 <input id="PFstatus" type="hidden" />
                                             </td>
                                         </tr>  
@@ -1666,7 +1775,7 @@
                                             <td class="width15">
                                                 <input id="pa_AllowanceCode" name="pa_AllowanceCode" type="text" class="inputex width50 patxt" /><input type="hidden" id="pa_CodeGuid" name="pa_CodeGuid" />
                                                 <img id="PAbox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
-                                                <span id="PaStr"></span>
+                                                <span id="PaStr" class="showStr"></span>
                                                 <input type="hidden" id="PAstatus" />
                                             </td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red">金額</div></td>

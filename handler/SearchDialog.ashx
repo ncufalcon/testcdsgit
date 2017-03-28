@@ -40,6 +40,8 @@ public class SearchDialog : IHttpHandler {
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt2, "DepList", "dep_item");
                     break;
                 case "Family":
+                case "LB":
+                case "Heal":
                     Personnel_Db._KeyWord = SearchStr;
                     DataSet ds3 = Personnel_Db.getSubsidyLevel(pageStart.ToString(), pageEnd.ToString());
                     DataTable dt3 = ds3.Tables[1];
@@ -55,13 +57,21 @@ public class SearchDialog : IHttpHandler {
                     xmlStr = "<total>" + ds4.Tables[0].Rows[0]["total"].ToString() + "</total>";
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt4, "AList", "a_item");
                     break;
-                case "Personnel":
+                case "PLv":
                     Personnel_Db._KeyWord = SearchStr;
-                    DataSet ds5 = Personnel_Db.getPersonnel(pageStart.ToString(), pageEnd.ToString());
+                    DataSet ds5 = Personnel_Db.getInsuranceIdentity(pageStart.ToString(), pageEnd.ToString());
                     DataTable dt5 = ds5.Tables[1];
 
                     xmlStr = "<total>" + ds5.Tables[0].Rows[0]["total"].ToString() + "</total>";
-                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt5, "pList", "p_item");
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt5, "iList", "i_item");
+                    break;
+                case "Personnel":
+                    Personnel_Db._KeyWord = SearchStr;
+                    DataSet ds6 = Personnel_Db.getPersonnel(pageStart.ToString(), pageEnd.ToString());
+                    DataTable dt6 = ds6.Tables[1];
+
+                    xmlStr = "<total>" + ds6.Tables[0].Rows[0]["total"].ToString() + "</total>";
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt6, "pList", "p_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + xmlStr2 + "</root>";
