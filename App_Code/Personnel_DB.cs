@@ -647,6 +647,45 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         return ds;
     }
 
+    public DataSet getPersonnel(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_Person where perStatus<>'D' ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+          select ROW_NUMBER() over (order by perCreateDate) itemNo,perGuid,perNo,perName,comAbbreviate,cbName,code_desc
+        from sy_Person 
+        left join sy_Company on comGuid=perComGuid
+        left join sy_CodeBranches on cbGuid=perDep
+        left join sy_codetable on code_group='02' and code_value=perPosition
+        where perStatus<>'D' ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataSet getSubsidyLevel(string pStart, string pEnd)
     {
         SqlCommand oCmd = new SqlCommand();
