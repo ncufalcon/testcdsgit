@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="page-calendaradmin.aspx.cs" Inherits="webpage_page_Calendar" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <link href="../css/jquery.datetimepicker.css" rel="stylesheet" />
-    <script src="../js/jquery.datetimepicker.full.js"></script>
     <script type="text/javascript">
         $(function () {
             $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
