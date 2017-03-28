@@ -10,7 +10,7 @@
                 this.value = this.value.toUpperCase();
             });
         });
-
+        
         //DDL
         function getddl(gno, tagName) {
             $.ajax({

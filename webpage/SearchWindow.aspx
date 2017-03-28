@@ -12,7 +12,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             getData(0);
-
+            
             $(document).on("click", "#sarchTab tr", function () {
                 parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"));
                 parent.$.fancybox.close();
