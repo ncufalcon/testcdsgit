@@ -15,9 +15,7 @@ public class addPerson : IHttpHandler {
             string pNo = (context.Request.Form["pNo"] != null) ? context.Request.Form["pNo"].ToString() : "";
             string pName = (context.Request.Form["pName"] != null) ? context.Request.Form["pName"].ToString() : "";
             string pComGuid = (context.Request.Form["pComGuid"] != null) ? context.Request.Form["pComGuid"].ToString() : "";
-            string pCompName = (context.Request.Form["pCompName"] != null) ? context.Request.Form["pCompName"].ToString() : "";
-            string pDep = (context.Request.Form["pDep"] != null) ? context.Request.Form["pDep"].ToString() : "";
-            string pDepName = (context.Request.Form["pDepName"] != null) ? context.Request.Form["pDepName"].ToString() : "";
+            string pDepGuid = (context.Request.Form["pDepGuid"] != null) ? context.Request.Form["pDepGuid"].ToString() : "";
             string pSex = (context.Request.Form["pSex"] != null) ? context.Request.Form["pSex"].ToString() : "";
             string perMarriage = (context.Request.Form["perMarriage"] != null) ? context.Request.Form["perMarriage"].ToString() : "";
             string pPosition = (context.Request.Form["pPosition"] != null) ? context.Request.Form["pPosition"].ToString() : "";
@@ -55,6 +53,11 @@ public class addPerson : IHttpHandler {
             string pSyAccountName = (context.Request.Form["pSyAccountName"] != null) ? context.Request.Form["pSyAccountName"].ToString() : "";
             string pSyNumber = (context.Request.Form["pSyNumber"] != null) ? context.Request.Form["pSyNumber"].ToString() : "";
             string pSyAccount = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pSyAccount"].ToString() : "";
+            //法院執行命令
+            string pReferenceNumber = (context.Request.Form["pReferenceNumber"] != null) ? context.Request.Form["pReferenceNumber"].ToString() : "";
+            string pDetentionRatio = (context.Request.Form["pDetentionRatio"] != null) ? context.Request.Form["pDetentionRatio"].ToString() : "";
+            string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "";
+            string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "";
 
 
             switch (Mode)
@@ -79,9 +82,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perNo = pNo;
                     Personnel_Db._perName = pName;
                     Personnel_Db._perComGuid = pComGuid;
-                    Personnel_Db._perCompName = pCompName;
-                    Personnel_Db._perDep = pDep;
-                    Personnel_Db._perDepName = pDepName;
+                    Personnel_Db._perDep = pDepGuid;
                     Personnel_Db._perPosition = pPosition;
                     Personnel_Db._perTel = pTel;
                     Personnel_Db._perPhone = pPhone;
@@ -112,9 +113,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perNo = pNo;
                     Personnel_Db._perName = pName;
                     Personnel_Db._perComGuid = pComGuid;
-                    Personnel_Db._perCompName = pCompName;
-                    Personnel_Db._perDep = pDep;
-                    Personnel_Db._perDepName = pDepName;
+                    Personnel_Db._perDep = pDepGuid;
                     Personnel_Db._perPosition = pPosition;
                     Personnel_Db._perTel = pTel;
                     Personnel_Db._perPhone = pPhone;
@@ -153,12 +152,20 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perGuid = id;
                     Personnel_Db._perSalaryClass = pSalaryClass;
                     Personnel_Db._perTaxable = pTaxable;
-                    Personnel_Db._perBasicSalary = pBasicSalary;
-                    Personnel_Db._perAllowance = pAllowance;
+                    Personnel_Db._perBasicSalary = decimal.Parse(pBasicSalary);
+                    Personnel_Db._perAllowance = decimal.Parse(pAllowance);
                     Personnel_Db._perSyAccountName = pSyAccountName;
                     Personnel_Db._perSyNumber = pSyNumber;
                     Personnel_Db._perSyAccount = pSyAccount;
                     Personnel_Db.modSalary();
+                    break;
+                case "Buckle":
+                    Personnel_Db._perGuid = id;
+                    Personnel_Db._perReferenceNumber = pReferenceNumber;
+                    Personnel_Db._perDetentionRatio = decimal.Parse(pDetentionRatio);
+                    Personnel_Db._perMonthPayroll = decimal.Parse(pMonthPayroll);
+                    Personnel_Db._perYearEndBonuses = decimal.Parse(pYearEndBonuses);
+                    Personnel_Db.modBuckle();
                     break;
             }
 

@@ -17,13 +17,21 @@ public class checkData : IHttpHandler
             string xmlStr = "";
             switch (type)
             {
-                case "C":
+                case "Company":
                     DataTable dt = Personnel_Db.checkComp(str);
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "dataList", "data_item");
                     break;
-                case "D":
+                case "Dep":
                     DataTable dt2 = Personnel_Db.checkDep(str);
                     xmlStr = DataTableToXml.ConvertDatatableToXML(dt2, "dataList", "data_item");
+                    break;
+                case "PF":
+                    DataTable dt3 = Personnel_Db.checkPFamily(str);
+                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt3, "dataList", "data_item");
+                    break;
+                case "PA":
+                    DataTable dt4 = Personnel_Db.checkPAllowance(str);
+                    xmlStr = DataTableToXml.ConvertDatatableToXML(dt4, "dataList", "data_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + "</root>";
