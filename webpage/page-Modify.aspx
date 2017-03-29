@@ -25,8 +25,8 @@
             $("#txt_person_chkdate").val(today_ymd);
             $("#txt_person_chkpeople").val(now_user);
 
-            call_changedata();
-            call_personchangedata();
+            call_changedata();//撈異動項目下拉選單選項
+            call_personchangedata();//撈人事異動資料
 
             //人事異動 外面的查詢按鈕
             $("#btn_person_search").click(function () {
@@ -39,7 +39,10 @@
                 $("#btn_person_search").show();
                 $("div[name=div_person_data]").show();
                 $("#span_person_search").hide();
-                call_changedata();
+                call_personchangedata();
+                $("#search_person_date").val("");
+                $("#search_person_keyword").val("");
+                $("#search_person_status").val("");
             });
             //人事異動 新增按鈕
             $("#btn_person_add").click(function () {
@@ -50,39 +53,66 @@
                 $("#td_person_after").empty();
                 $("#txt_person_chkdate").val(today_ymd);
                 $("#txt_person_chkpeople").val(now_user);
+                $("#txt_person_cname").text("");
+                $("#txt_person_ps").val("");
+                $("input[name='txt_person_status']").removeAttr("checked");
             });
-
+            //人事異動 儲存按鈕
+            $("#btn_person_submit").click(function () {
+                mod_persondata();
+            });;
             //人事異動 異動項目下拉選單chaange
             $("#txt_person_change_pro").change(function () {
-                var str_sel_html = "";
-                var change_type = $(this).val();//01部門調動 02職務異動 03留職停薪 04離職
-                if (change_type == "01") {
-                    $("#td_person_before,#td_person_after").empty();
-                    //塞下拉選單 撈分店代碼檔
-                    $("#td_person_before").append("<select id='select_before_store'></select>");
-                    $("#td_person_after").append("<select id='select_after_store'></select>");
-                    call_storedata();
+                //$("#txt_person_cname").text("無資料");
+                //$("#txt_hidden_person_guid").val("");
+                if ($("#txt_person_cname").text() != "無資料" && $("#txt_hidden_person_guid").val() != "" && $("#txt_person_empno").val() != "") {
+                    var str_sel_html = "";
+                    var change_type = $(this).val();//01部門調動 02職務異動 03留職停薪 04離職
+                    if (change_type == "01") {
+                        $("#td_person_before,#td_person_after").empty();
+                        //塞下拉選單 撈分店代碼檔
+                        $("#td_person_before").append("<select id='select_before' disabled></select>");
+                        $("#td_person_after").append("<select id='select_after'></select>");
+                        call_storedata();
+                        load_thispeopledata($("#txt_person_empno").val());
+                    }
+                    if (change_type == "02") {
+                        $("#td_person_before,#td_person_after").empty();
+                        //塞下拉選單 撈職務代碼檔
+                        $("#td_person_before").append("<select id='select_before' disabled></select>");
+                        $("#td_person_after").append("<select id='select_after'></select>");
+                        call_prodata();
+                        load_thispeopledata($("#txt_person_empno").val());
+                    }
+                    if (change_type == "03" || change_type == "04" || change_type == "05") {
+                        $("#td_person_before,#td_person_after").empty();
+                        $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' />");
+                        $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
+                    }
+                } else {
+                    alert("請先輸入或挑選一位正確的人員");
                 }
-                if (change_type == "02") {
-                    $("#td_person_before,#td_person_after").empty();
-                    //塞下拉選單 撈職務代碼檔
-                    str_sel_html += "<select><option value=''>撈職務代碼檔</option></select>";
-                    $("#td_person_before,#td_person_after").append(str_sel_html);
-                }
-                if (change_type == "03") {
-                    $("#td_person_before,#td_person_after").empty();
-                    //塞下拉選單 撈職務代碼檔
-                    $("#td_person_before").append("<input type='text' id='txt_person_before' class='inputex width60' maxlength='50' />");
-                    $("#td_person_after").append("<input type='text' id='txt_person_before' class='inputex width60' maxlength='50' />");
-                }
-                if (change_type == "04") {
-                    $("#td_person_before,#td_person_after").empty();
-                    //塞下拉選單 撈職務代碼檔
-                    $("#td_person_before").append("<input type='text' id='txt_person_before' class='inputex width60' maxlength='50' />");
-                    $("#td_person_after").append("<input type='text' id='txt_person_before' class='inputex width60' maxlength='50' />");
-                }
+                
             });
-
+            //人事異動 tr 點擊事件
+            //$(document).on("click", "#div_person_list tbody tr td:not(:nth-child(1),:nth-child(2))", function () {
+            $(document).on("click", "#div_person_list tbody tr td:not(:nth-child(1))", function () {
+                $("#td_person_before,#td_person_after").empty();
+                $("#txt_person_empno").val("");
+                $("#txt_hidden_person_guid").val("");
+                $("#txt_person_cname").text("");
+                $("#txt_person_change_date").val("");
+                $("#txt_person_change_pro").val("");
+                $("#select_before").val("");
+                $("#select_after").val("");
+                $("#txt_person_chkdate").val(today_ymd);
+                $("#txt_person_chkpeople").val(now_user);
+                $("#input[name='txt_person_status']:checked").val();
+                $("#txt_person_ps").val("");
+                $("#span_person_Status").text("修改");
+                $("#hidden_pcguid").val($(this).closest('tr').attr("trguid"))//修改才會有
+                call_personchangedata_byguid();
+            });
             //撈人事異動的異動項目
             function call_changedata() {
                 $("#txt_person_change_pro").empty();
@@ -113,7 +143,6 @@
                     }
                 });//ajax end
             }
-
             //撈分店的下拉選單項目
             function call_storedata() {
                 $("#select_after_store").empty();
@@ -134,17 +163,54 @@
                         var str_html = "<option value=''>----請選擇----</option>";
                         if (response != "nodata") {
                             for (var i = 0; i < response.length; i++) {
-                                str_html += "<option value='" + response[i].cbGuid + "'>" + response[i].cbName + "</option>";
+                                var str_selected = "";
+                                if ($("#hidden_end").val() == response[i].cbGuid) {
+                                    str_selected = "selected";
+                                }
+                                str_html += "<option value='" + response[i].cbGuid + "' " + str_selected + ">" + response[i].cbName + "</option>";
                             }
                         }
-                        $("#select_after_store").append(str_html);
+                        $("#select_after").append(str_html);
                     },//success end
                     complete: function () {
                         $.unblockUI();
                     }
                 });//ajax end
             }
-
+            //撈職務的下拉選單項目
+            function call_prodata() {
+                $("#select_after_store").empty();
+                $.ajax({
+                    type: "POST",
+                    async: true, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/pageModify.ashx",
+                    data: {
+                        func: "load_prodata"
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    },
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (response) {
+                        var str_html = "<option value=''>----請選擇----</option>";
+                        if (response != "nodata") {
+                            for (var i = 0; i < response.length; i++) {
+                                var str_selected = "";
+                                if ($("#hidden_end").val() == response[i].code_value) {
+                                    str_selected = "selected";
+                                }
+                                str_html += "<option value='" + response[i].code_value + "' " + str_selected + ">" + response[i].code_desc + "</option>";
+                            }
+                        }
+                        $("#select_after").append(str_html);
+                    },//success end
+                    complete: function () {
+                        $.unblockUI();
+                    }
+                });//ajax end
+            }
             //撈人事異動資料
             function call_personchangedata() {
                 if (chk_date($("#search_person_date").val())) {
@@ -168,7 +234,43 @@
                         success: function (response) {
                             var str_html = "";
                             if (response != "nodata") {
-
+                                str_html += "<thead>";
+                                str_html += "<tr>";
+                                str_html += "<th nowrap='nowrap'>操作</th>";
+                                str_html += "<th nowrap='nowrap'>員工代號</th>";
+                                str_html += "<th nowrap='nowrap'>員工姓名</th>";
+                                str_html += "<th nowrap='nowrap'>異動日期</th>";
+                                str_html += "<th nowrap='nowrap'>異動項目名稱</th>";
+                                str_html += "<th nowrap='nowrap'>異動前</th>";
+                                str_html += "<th nowrap='nowrap'>異動後</th>";
+                                str_html += "<th nowrap='nowrap'>確認日</th>";
+                                str_html += "<th nowrap='nowrap'>確認者名稱</th>";
+                                str_html += "<th nowrap='nowrap'>狀態</th>";
+                                str_html += "<th nowrap='nowrap'>備註</th>";
+                                str_html += "</tr>";
+                                str_html += "</thead>";
+                                str_html += "<tbody>";
+                                for (var i = 0; i < response.length; i++) {
+                                    str_html += "<tr trguid='" + response[i].pcGuid + "'>";
+                                    str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='del_person_a' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcChangeDate + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].ChangeCName + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].begin_name + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].end_name + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenifyDate + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenify + "</td>";
+                                    if (response[i].pcStatus == "0") {
+                                        str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;color:red;'>待確認</td>";
+                                    } else {
+                                        str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>已確認</td>";
+                                    }
+                                    
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcPs + "</td>";
+                                    str_html += "</tr>";
+                                }
+                                str_html += "</tbody>";
                             } else {
                                 str_html += "<td colspan='6' nowrap='nowrap' style='cursor: pointer;'>查無資料</td>";
                             }
@@ -183,14 +285,147 @@
                 }
                 
             }
-
-            
+            //撈人事異動資料 by guid
+            function call_personchangedata_byguid() {
+                $.ajax({
+                    type: "POST",
+                    async: true, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/pageModify.ashx",
+                    data: {
+                        func: "load_personchangedata",
+                        str_search_person_guid: $("#hidden_pcguid").val()
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    },
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (response) {
+                        if (response != "nodata") {
+                            $("#txt_person_empno").val(response[0].perNo);
+                            $("#txt_hidden_person_guid").val(response[0].pcPerGuid);
+                            $("#txt_person_cname").text(response[0].perName);
+                            $("#txt_person_change_date").val(response[0].pcChangeDate);
+                            $("#txt_person_change_pro").val(response[0].pcChangeName);
+                            $("#hidden_end").val("");
+                            if (response[0].pcChangeName == "01") {
+                                $("#hidden_end").val(response[0].pcChangeEnd);
+                                $("#td_person_before").append("<select id='select_before' disabled></select>");
+                                $("#td_person_after").append("<select id='select_after'></select>");
+                                call_storedata();
+                                load_thispeopledata(response[0].perNo);
+                            }
+                            if (response[0].pcChangeName == "02") {
+                                $("#hidden_end").val(response[0].pcChangeEnd);
+                                $("#td_person_before").append("<select id='select_before' disabled></select>");
+                                $("#td_person_after").append("<select id='select_after'></select>");
+                                call_prodata();
+                                load_thispeopledata(response[0].perNo);
+                            }
+                            if (response[0].pcChangeName == "03" || response[0].pcChangeName == "04" || response[0].pcChangeName == "05") {
+                                $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' />");
+                                $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
+                                $("#select_before").val(response[0].pcChangeBegin);
+                                $("#select_after").val(response[0].pcChangeEnd);
+                            }
+                            //$("#select_before").val(response[0].perNo);
+                            //$("#select_after").val(response[0].perNo);
+                            $("#txt_person_chkdate").val(response[0].pcVenifyDate);
+                            $("#txt_person_chkpeople").val(response[0].pcVenify);
+                            $("input[name='txt_person_status'][value='" + response[0].pcStatus + "']").prop("checked", true);
+                            $("#txt_person_ps").val(response[0].pcPs);
+                        } else {
+                            alert("");
+                        }
+                        
+                    },//success end
+                    complete: function () {
+                        $.unblockUI();
+                    }
+                });//ajax end
+            }
+            //人事異動 新增/修改
+            function mod_persondata(){
+                if (chk_person_moddata()) {
+                    $.ajax({
+                        type: "POST",
+                        async: true, //在沒有返回值之前,不會執行下一步動作
+                        url: "../handler/pageModify.ashx",
+                        data: {
+                            func: "mode_persondata",
+                            mod_empno: $("#txt_person_empno").val(),
+                            mod_person_guid: $("#txt_hidden_person_guid").val(),
+                            mod_change_date: $("#txt_person_change_date").val(),
+                            mod_change_pro: $("#txt_person_change_pro").val(),
+                            mod_before: $("#select_before").val(),
+                            mod_after: $("#select_after").val(),
+                            mod_chkdate: $("#txt_person_chkdate").val(),
+                            mod_chkpeople: $("#txt_person_chkpeople").val(),
+                            mod_status: $("input[name='txt_person_status']:checked").val(),
+                            mod_ps: $("#txt_person_ps").val(),
+                            mod_addormod: $("#span_person_Status").text(),
+                            mod_hidden_pcguid: $("#hidden_pcguid").val()//修改才會有
+                        },
+                        error: function (xhr) {
+                            alert("error");
+                        },
+                        beforeSend: function () {
+                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                        },
+                        success: function (response) {
+                            if (response != "error") {
+                                if ($("#span_person_Status").text()=="新增") {
+                                    alert("新增成功");
+                                }else{
+                                    alert("修改成功");
+                                }
+                                $("#search_person_keyword").val("");
+                                $("#search_person_date").val("");
+                                $("input[name='search_person_status']").removeAttr("checked");
+                                call_personchangedata();
+                            }
+                        },//success end
+                        complete: function () {
+                            $.unblockUI();
+                        }
+                    });//ajax end
+                }
+            }
+            //dovument);
+            $(document).on("click", "a[name='del_person_a']", function () {
+                if (confirm("確定刪除?")) {
+                    $.ajax({
+                        type: "POST",
+                        async: true, //在沒有返回值之前,不會執行下一步動作
+                        url: "../handler/pageModify.ashx",
+                        data: {
+                            func: "del_personchangedata",
+                            del_guid: $(this).attr("aguid")
+                        },
+                        error: function (xhr) {
+                            alert("error");
+                        },
+                        beforeSend: function () {
+                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                        },
+                        success: function (response) {
+                            if(response!="error"){
+                                alert("刪除成功");
+                                call_personchangedata();
+                            }
+                        },//success end
+                        complete: function () {
+                            $.unblockUI();
+                        }
+                    });//ajax end
+                }
+            });
             //取得現在日期
             function get_datenow() {
                 var d = new Date();
                 var month = d.getMonth() + 1;
                 var day = d.getDate();
-
                 var output = d.getFullYear() + '/' +
                     (month < 10 ? '0' : '') + month + '/' +
                     (day < 10 ? '0' : '') + day;
@@ -240,18 +475,65 @@
                     success: function (response) {
                         var str_html = "";
                         if (response != "nodata") {
-
+                            if ($("#txt_person_change_pro").val()=="01") {
+                                $("#select_before").empty();
+                                $("#select_before").append("<option value='" + response[0].perDep + "'>" + response[0].cbName + "</option>");
+                            }
+                            if ($("#txt_person_change_pro").val() == "02") {
+                                $("#select_before").empty();
+                                $("#select_before").append("<option value='" + response[0].perPosition + "'>" + response[0].PositionName + "</option>");
+                            } else {
+                                $("#txt_person_empno").val(response[0].perNo);
+                                $("#txt_person_cname").text(response[0].perName);
+                                $("#txt_hidden_person_guid").val(response[0].perGuid);
+                            }
                         } else {
-                            str_html += "<td colspan='6' nowrap='nowrap' style='cursor: pointer;'>查無資料</td>";
+                            $("#txt_person_cname").text("無資料");
+                            $("#txt_hidden_person_guid").val("");
                         }
-                        $("#div_person_list").append(str_html);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
                     },//success end
                     complete: function () {
                         $.unblockUI();
                     }
                 });//ajax end
+            }
+            //檢查人事異動 新增/修改 欄位
+            function chk_person_moddata(){
+                var chk_empno = $("#txt_person_empno").val();
+                var chk_cname = $("#txt_person_cname").text();
+                var chk_person_guid = $("#txt_hidden_person_guid").val();
+                var chk_change_date = $("#txt_person_change_date").val();
+                var chk_change_pro = $("#txt_person_change_pro").val();
+                var chk_before = $("#select_before").val();
+                var chk_after = $("#select_after").val();
+                var chk_chkdate = $("#txt_person_chkdate").val();
+                var chk_chkpeople = $("#txt_person_chkpeople").val();
+                var chk_status = $("input[name='txt_person_status']:checked").val();
+                if (chk_empno == "" || chk_cname == "" || chk_person_guid == "" || chk_cname=="無資料") {
+                    alert("請輸入或挑選一個正確人員");
+                    return false;
+                }
+                if (chk_change_date=="") {
+                    alert("請輸入或挑選一個正確日期");
+                    return false;
+                }
+                if (chk_change_pro == "") {
+                    alert("請挑選一個異動項目");
+                    return false;
+                }
+                if (chk_change_pro != "" && (chk_change_pro == "01" || chk_change_pro == "02") && chk_after == "") {
+                    alert("請挑選一個異動後資料");
+                    return false;
+                }
+                if (chk_chkdate == "" || chk_chkpeople=="") {
+                    alert("請重新登入");
+                    return false;
+                }
+                if (chk_status == undefined) {
+                    alert("請選擇狀態");
+                    return false;
+                }
+                return true;
             }
         });
         //點放大鏡 查詢視窗
@@ -413,7 +695,8 @@
                     </div>
 
                 </div>
-                <input type="text" style="display:none;" id="hidden_person_guid" />
+                <input type="text" style="display:none;" id="hidden_pcguid" />
+                <input type="text" style="display:none;" id="hidden_end" />
                 <!-- tabs-1 -->
 
                 <div id="tabs-2">

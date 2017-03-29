@@ -15,6 +15,7 @@ public class sy_PersonChange
     #region 全私用
     string str_keyword = string.Empty;
     string str_date = string.Empty;
+    string str_status = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -24,6 +25,10 @@ public class sy_PersonChange
     public string _str_date
     {
         set { str_date = value; }
+    }
+    public string _str_status
+    {
+        set { str_status = value; }
     }
     #endregion
 
@@ -136,8 +141,15 @@ public class sy_PersonChange
         {
             thisConnection.Open();
             show_value.Append(@"  
-                select *
+                select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
+                        ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename
                 from sy_PersonChange
+                left join sy_Person on pcPerGuid = perGuid
+                left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
+                left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
+                left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
+                left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
+                left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
                 where pcStatus_d='A'
             ");
 
@@ -156,7 +168,7 @@ public class sy_PersonChange
                 show_value.Append(@" and pcGuid=@pcGuid  ");
                 thisCommand.Parameters.AddWithValue("@pcGuid", pcGuid);
             }
-            if (pcGuid != "")
+            if (pcStatus != "")
             {
                 show_value.Append(@" and pcStatus=@pcStatus  ");
                 thisCommand.Parameters.AddWithValue("@pcStatus", pcStatus);
@@ -198,8 +210,10 @@ public class sy_PersonChange
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select perGuid,perNo,perName,perComGuid,perCompName,perDep,perDepName,perPosition
+                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName
                 from sy_Person
+                left join sy_codetable on code_group = '02' and  perPosition = code_value
+                left join sy_CodeBranches on perDep = cbGuid
                 where perNo=@perNo
             ");
             thisCommand.Parameters.AddWithValue("@perNo", perNo);
@@ -228,4 +242,140 @@ public class sy_PersonChange
     }
     #endregion
 
+    #region 新增 sy_PersonChange
+    public void InsertPersonChange()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                insert into sy_PersonChange(pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,pcCreateId,pcCreateDate,pcStatus_d) 
+                values(@pcGuid,@pcPerGuid,@pcChangeDate,@pcChangeName,@pcChangeBegin,@pcChangeEnd,@pcVenifyDate,@pcVenify,@pcStatus,@pcPs,@pcCreateId,@pcCreateDate,'A') 
+            ");
+
+            thisCommand.Parameters.AddWithValue("@pcGuid", pcGuid);
+            thisCommand.Parameters.AddWithValue("@pcPerGuid", pcPerGuid);
+            thisCommand.Parameters.AddWithValue("@pcChangeDate", pcChangeDate);
+            thisCommand.Parameters.AddWithValue("@pcChangeName", pcChangeName);
+            thisCommand.Parameters.AddWithValue("@pcChangeBegin", pcChangeBegin);
+            thisCommand.Parameters.AddWithValue("@pcChangeEnd", pcChangeEnd);
+            thisCommand.Parameters.AddWithValue("@pcVenifyDate", pcVenifyDate);
+            thisCommand.Parameters.AddWithValue("@pcVenify", pcVenify);
+            thisCommand.Parameters.AddWithValue("@pcStatus", pcStatus);
+            thisCommand.Parameters.AddWithValue("@pcPs", pcPs);
+            thisCommand.Parameters.AddWithValue("@pcCreateId", pcCreateId);
+            thisCommand.Parameters.AddWithValue("@pcCreateDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 修改 sy_PersonChange
+    public void UpdatePersonChange()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_PersonChange set pcPerGuid=@pcPerGuid,pcChangeDate=@pcChangeDate,pcChangeName=@pcChangeName,pcChangeBegin=@pcChangeBegin,pcChangeEnd=@pcChangeEnd,pcVenifyDate=@pcVenifyDate,pcVenify=@pcVenify,pcStatus=@pcStatus,pcPs=@pcPs,pcModifyId=@pcModifyId,pcModifyDate=@pcModifyDate
+                where  pcGuid=@pcGuid               
+            ");
+
+            thisCommand.Parameters.AddWithValue("@pcGuid", pcGuid);
+            thisCommand.Parameters.AddWithValue("@pcPerGuid", pcPerGuid);
+            thisCommand.Parameters.AddWithValue("@pcChangeDate", pcChangeDate);
+            thisCommand.Parameters.AddWithValue("@pcChangeName", pcChangeName);
+            thisCommand.Parameters.AddWithValue("@pcChangeBegin", pcChangeBegin);
+            thisCommand.Parameters.AddWithValue("@pcChangeEnd", pcChangeEnd);
+            thisCommand.Parameters.AddWithValue("@pcVenifyDate", pcVenifyDate);
+            thisCommand.Parameters.AddWithValue("@pcVenify", pcVenify);
+            thisCommand.Parameters.AddWithValue("@pcStatus", pcStatus);
+            thisCommand.Parameters.AddWithValue("@pcPs", pcPs);
+            thisCommand.Parameters.AddWithValue("@pcModifyId", pcModifyId);
+            thisCommand.Parameters.AddWithValue("@pcModifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 刪除 sy_PersonChange 不是真的刪除 update set 
+    public void DeletePersonChange()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_PersonChange set pcStatus_d='D' where  pcGuid=@pcGuid               
+            ");
+
+            thisCommand.Parameters.AddWithValue("@pcGuid", pcGuid);
+            thisCommand.Parameters.AddWithValue("@pcModifyId", pcModifyId);
+            thisCommand.Parameters.AddWithValue("@pcModifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
 }
