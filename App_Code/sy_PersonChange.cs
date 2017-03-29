@@ -135,7 +135,7 @@ public class sy_PersonChange
         try
         {
             thisConnection.Open();
-            show_value.Append(@" 
+            show_value.Append(@"  
                 select *
                 from sy_PersonChange
                 where pcStatus_d='A'

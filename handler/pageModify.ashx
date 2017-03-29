@@ -5,7 +5,7 @@ using System.Web;
 using System.Data;
 using System.Collections.Generic;
 
-public class pageModify : IHttpHandler
+public class pageModify : IHttpHandler 
 {
     //codetable 欄位 代碼檔
     public class codeTooL

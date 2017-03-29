@@ -5,7 +5,7 @@
     <link href="<%= ResolveUrl("~/js/fancybox/jquery.fancybox.css?v=2.1.5") %>" rel="stylesheet" type="text/css"  />
     <script type="text/javascript">
         $(function () {
-            $(document).on("change", "#txt_person_empno", function () {
+            $(document).on("change", "#txt_person_empno", function () { 
                 //alert($(this).val());
                 load_thispeopledata($(this).val());
             });
