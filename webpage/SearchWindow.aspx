@@ -19,8 +19,17 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"));
                         parent.$.fancybox.close();
                         break;
-                    case "Personnel":
-                        parent.setReturnValue($(this).attr("gv"), $(this).attr("pno"), $(this).attr("pname"));
+                    case "LInsPerson":
+                    case "HInsPerson":
+                    case "PPInsPerson":
+                    case "PFInsPerson":
+                    case "PGInsPerson":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"));
+                        parent.$.fancybox.close();
+                        break;
+                    case "PFInsFname":
+                    case "PGInsFname":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
                 }
@@ -35,7 +44,8 @@
                 data: {
                     CurrentPage: p,
                     SearchStr: $("#SearchStr").val(),
-                    type: $.getParamValue('v')
+                    type: $.getParamValue('v'),
+                    perguid: $.getParamValue('pgv')
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -56,8 +66,8 @@
                                 tabstr += '<th nowrap="nowrap">工司名稱</th>';
                                 tabstr += '<th nowrap="nowrap">統一編號</th>';
                                 tabstr += '</tr>';
-                                if ($(data).find("comp_item").length > 0) {
-                                    $(data).find("comp_item").each(function (i) {
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
                                         tabstr += '<tr gv=' + $(this).children("comGuid").text() + ' str=' + $(this).children("comAbbreviate").text() + ' str2=' + $(this).children("comAbbreviate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comAbbreviate").text() + '</td>';
@@ -65,6 +75,8 @@
                                         tabstr += '</tr>';
                                     });
                                 }
+                                else
+                                    tabstr += '<tr><td colspan="4">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
@@ -74,8 +86,8 @@
                                 tabstr += '<th nowrap="nowrap">分店</th>';
                                 tabstr += '<th nowrap="nowrap">說明</th>';
                                 tabstr += '</tr>';
-                                if ($(data).find("dep_item").length > 0) {
-                                    $(data).find("dep_item").each(function (i) {
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
                                         tabstr += '<tr gv=' + $(this).children("cbGuid").text() + ' str=' + $(this).children("cbValue").text() + ' str2=' + $(this).children("cbName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbValue").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
@@ -83,45 +95,54 @@
                                         tabstr += '</tr>';
                                     });
                                 }
+                                else
+                                    tabstr += '<tr><td colspan="4">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
                             case "Family":
                             case "LB":
                             case "Heal":
+                            case "LaborSL":
+                            case "HealSL":
+                            case "PFInsSL":
                                 var tabstr = '<tr>';
                                 tabstr += '<th nowrap="nowrap">補助代碼</th>';
                                 tabstr += '<th nowrap="nowrap">補助身分說明</th>';
                                 tabstr += '</tr>';
-                                if ($(data).find("a_item").length > 0) {
-                                    $(data).find("a_item").each(function (i) {
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
                                         tabstr += '<tr gv=' + $(this).children("slGuid").text() + ' str=' + $(this).children("slSubsidyCode").text() + ' str2=' + $(this).children("slSubsidyIdentity").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyIdentity").text() + '</td>';
                                         tabstr += '</tr>';
                                     });
                                 }
+                                else
+                                    tabstr += '<tr><td colspan="2">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
                             case "Allowance":
                                 var tabstr = '<tr>';
-                                tabstr += '<th nowrap="nowrap">項目代碼</th>';		
+                                tabstr += '<th nowrap="nowrap">項目代碼</th>';
                                 tabstr += '<th nowrap="nowrap">項目名稱</th>';
                                 tabstr += '<th nowrap="nowrap">加/扣項</th>';
                                 tabstr += '</tr>';
-                                if ($(data).find("a_item").length > 0) {
-                                    $(data).find("a_item").each(function (i) {
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
                                         tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
-                                        if ($(this).children("siAdd").text()=="01")
+                                        if ($(this).children("siAdd").text() == "01")
                                             tabstr += '<td nowrap="nowrap" style="cursor: pointer;">加項</td>';
-                                       else
+                                        else
                                             tabstr += '<td nowrap="nowrap" style="cursor: pointer;">扣項</td>';
                                         tabstr += '</tr>';
                                     });
                                 }
+                                else
+                                    tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
@@ -138,8 +159,8 @@
                                 tabstr += '<th nowrap="nowrap">墊償基金</th>';
                                 tabstr += '<th nowrap="nowrap">健保</th>';
                                 tabstr += '</tr>';
-                                if ($(data).find("i_item").length > 0) {
-                                    $(data).find("i_item").each(function (i) {
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
                                         tabstr += '<tr gv=' + $(this).children("iiGuid").text() + ' str=' + $(this).children("iiIdentityCode").text() + ' str2=' + $(this).children("iiIdentity").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentityCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentity").text() + '</td>';
@@ -152,31 +173,91 @@
                                         tabstr += '</tr>';
                                     });
                                 }
+                                else
+                                    tabstr += '<tr><td colspan="8">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
                             case "Personnel":
-                                    var tabstr = '<tr>';
-                                    tabstr += '<th nowrap="nowrap">員工編號</th>';
-                                    tabstr += '<th nowrap="nowrap">員工姓名</th>';
-                                    tabstr += '<th nowrap="nowrap">公司別</th>';
-                                    tabstr += '<th nowrap="nowrap">部門</th>';
-                                    tabstr += '<th nowrap="nowrap">職務</th>';
+                            case "LInsPerson":
+                            case "HInsPerson":
+                            case "PPInsPerson":
+                            case "PFInsPerson":
+                            case "PGInsPerson":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">員工編號</th>';
+                                tabstr += '<th nowrap="nowrap">員工姓名</th>';
+                                tabstr += '<th nowrap="nowrap">公司別</th>';
+                                tabstr += '<th nowrap="nowrap">部門</th>';
+                                tabstr += '<th nowrap="nowrap">職務</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("perGuid").text() + ' str=' + $(this).children("perNo").text() + ' str2=' + $(this).children("perName").text() + ' str3=' + $(this).children("cbName").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comAbbreviate").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                else
+                                    tabstr += '<tr><td colspan="4">查詢無資料</td></tr>';
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
+                            case "PFInsFname":
+                            case "PGInsFname":
+                                var tabstr = '<tr>';
+                                if ($.getParamValue('pgv') == "") {
+                                    tabstr += '<td nowrap="nowrap">請先輸入員工代號！</td></tr>';
+                                }
+                                else {
+                                    tabstr += '<th nowrap="nowrap">眷屬姓名</th>';
+                                    tabstr += '<th nowrap="nowrap">眷屬身分證號</th>';
+                                    tabstr += '<th nowrap="nowrap">眷屬生日</th>';
+                                    tabstr += '<th nowrap="nowrap">稱謂</th>';
                                     tabstr += '</tr>';
-                                    if ($(data).find("p_item").length > 0) {
-                                        $(data).find("p_item").each(function (i) {
-                                            tabstr += '<tr gv=' + $(this).children("perGuid").text() + ' pno=' + $(this).children("perNo").text() + ' pname=' + $(this).children("perName").text() + '>';
-                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
-                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
-                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comAbbreviate").text() + '</td>';
-                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("cbName").text() + '</td>';
-                                            tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
-                                            tabstr += '</tr>';
+                                    if ($(data).find("data_item").length > 0) {
+                                        $(data).find("data_item").each(function (i) {
+                                            if ($(data).find("data_item").length == 1 && $(this).children("pfGuid").text().trim() == "")
+                                                tabstr += '<tr><td colspan="4">查詢無資料</td></tr>';
+                                            else {
+                                                tabstr += '<tr gv=' + $(this).children("pfGuid").text() + ' str=' + $(this).children("pfName").text() + ' str2=' + $(this).children("pfIDNumber").text() +
+                                                    ' str3=' + $(this).children("pfBirthday").text() + ' str4=' + $(this).children("pfTitle").text() + '>';
+                                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfName").text() + '</td>';
+                                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfIDNumber").text() + '</td>';
+                                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfBirthday").text() + '</td>';
+                                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfTitle").text() + '</td>';
+                                                tabstr += '</tr>';
+                                            }
                                         });
                                     }
-                                    $("#sarchTab").append(tabstr);
-                                    PageFun(p, $("total", data).text());
-                                    break;
+                                }
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
+                            case "PG_IC":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">保險代號</th>';
+                                tabstr += '<th nowrap="nowrap">保險項目名稱</th>';
+                                tabstr += '<th nowrap="nowrap">承保年齡上限</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("giGuid").text() + ' str=' + $(this).children("giInsuranceCode").text() + ' str2=' + $(this).children("giInsuranceName").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceCode").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceName").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giAge").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                else
+                                    tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
+                                $("#sarchTab").append(tabstr);
+                                PageFun(p, $("total", data).text());
+                                break;
                         }
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
