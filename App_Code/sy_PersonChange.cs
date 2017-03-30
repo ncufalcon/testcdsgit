@@ -155,13 +155,13 @@ public class sy_PersonChange
 
             if (str_keyword != "")
             {
-                show_value.Append(@" and upper(dayName) LIKE '%' + upper(@str_keyword) + '%'  ");
+                show_value.Append(@" and (upper(perNo) LIKE '%' + upper(@str_keyword) + '%' or upper(perName) LIKE '%' + upper(@str_keyword) + '%' )  ");
                 thisCommand.Parameters.AddWithValue("@str_keyword", str_keyword);
             }
-            if (str_date != "")
+            if (pcChangeDate != "")
             {
-                show_value.Append(@" and pcChangeDate=@dayDate  ");
-                thisCommand.Parameters.AddWithValue("@dayDate", str_date);
+                show_value.Append(@" and pcChangeDate=@pcChangeDate  ");
+                thisCommand.Parameters.AddWithValue("@pcChangeDate", pcChangeDate);
             }
             if (pcGuid != "")
             {
@@ -210,7 +210,7 @@ public class sy_PersonChange
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName
+                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName,perFirstDate
                 from sy_Person
                 left join sy_codetable on code_group = '02' and  perPosition = code_value
                 left join sy_CodeBranches on perDep = cbGuid

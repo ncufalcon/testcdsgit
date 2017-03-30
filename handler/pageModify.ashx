@@ -36,8 +36,8 @@ public class pageModify : IHttpHandler
         public string pcVenify { get; set; }//確認者
         public string pcStatus { get; set; }//狀態
         public string pcPs { get; set; }//備註
-        public string begin_name { get; set; }//備註
-        public string end_name { get; set; }//備註
+        public string begin_name { get; set; }//
+        public string end_name { get; set; }//
     }
     //sy_Person 欄位 人事資料
     public class pTooL
@@ -49,6 +49,7 @@ public class pageModify : IHttpHandler
         public string cbName { get; set; }//部門名稱
         public string perPosition { get; set; }//職務
         public string PositionName { get; set; }//職務名稱
+        public string perFirstDate { get; set; }//到職日期
     }
 
     CodeTable_DB code_db = new CodeTable_DB();
@@ -131,7 +132,7 @@ public class pageModify : IHttpHandler
                 string str_search_person_status = string.IsNullOrEmpty(context.Request.Form["str_person_status"]) ? "" : context.Request.Form["str_person_status"].ToString().Trim();
                 string str_search_person_guid = string.IsNullOrEmpty(context.Request.Form["str_search_person_guid"]) ? "" : context.Request.Form["str_search_person_guid"].ToString().Trim();
                 pc_db._str_keyword = str_search_person_keyword;
-                pc_db._pcChangeDate = str_search_person_status;
+                pc_db._pcChangeDate = str_search_erson_date;
                 pc_db._pcStatus = str_search_person_status;
                 pc_db._pcGuid = str_search_person_guid;
                 DataTable dt_personchange = pc_db.SelectPersonChange();
@@ -201,6 +202,8 @@ public class pageModify : IHttpHandler
                         e.cbName =  dt_thispeopledata.Rows[0]["cbName"].ToString().Trim();//部門名稱
                         e.perPosition =  dt_thispeopledata.Rows[0]["perPosition"].ToString().Trim();//職務
                         e.PositionName =  dt_thispeopledata.Rows[0]["PositionName"].ToString().Trim();//職務名稱
+                        e.PositionName =  dt_thispeopledata.Rows[0]["PositionName"].ToString().Trim();//職務名稱
+                        e.perFirstDate =  dt_thispeopledata.Rows[0]["perFirstDate"].ToString().Trim();//到職日期
                         pList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();

@@ -14,7 +14,7 @@
             $("#span_person_search").hide();
             //套用datetimepicker
             $.datetimepicker.setLocale('zh-TW');//設定為中文
-            $("#txt_person_change_date").datetimepicker({
+            $("#txt_person_change_date,#search_person_date").datetimepicker({
                 format: 'Y/m/d',//'Y-m-d H:i:s'
                 timepicker: false,    //false關閉時間選項 
                 defaultDate: false
@@ -85,9 +85,22 @@
                         load_thispeopledata($("#txt_person_empno").val());
                     }
                     if (change_type == "03" || change_type == "04" || change_type == "05") {
-                        $("#td_person_before,#td_person_after").empty();
-                        $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' />");
-                        $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
+                        if (change_type == "04") {
+                            $("#td_person_before,#td_person_after").empty();
+                            $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
+                            load_thispeopledata($("#txt_person_empno").val());
+                            $("#select_after").datetimepicker({
+                                format: 'Y/m/d',//'Y-m-d H:i:s'
+                                timepicker: false,    //false關閉時間選項 
+                                defaultDate: false
+                            });
+                        } else {
+                            $("#td_person_before,#td_person_after").empty();
+                            $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' />");
+                            $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
+                        }
+                        
+                        
                     }
                 } else {
                     alert("請先輸入或挑選一位正確的人員");
@@ -328,6 +341,13 @@
                                 $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
                                 $("#select_before").val(response[0].pcChangeBegin);
                                 $("#select_after").val(response[0].pcChangeEnd);
+                                if (response[0].pcChangeName == "04") {
+                                    $("#select_after").datetimepicker({
+                                        format: 'Y/m/d',//'Y-m-d H:i:s'
+                                        timepicker: false,    //false關閉時間選項 
+                                        defaultDate: false
+                                    });
+                                }
                             }
                             //$("#select_before").val(response[0].perNo);
                             //$("#select_after").val(response[0].perNo);
@@ -479,10 +499,15 @@
                                 $("#select_before").empty();
                                 $("#select_before").append("<option value='" + response[0].perDep + "'>" + response[0].cbName + "</option>");
                             }
-                            if ($("#txt_person_change_pro").val() == "02") {
+                            else if ($("#txt_person_change_pro").val() == "02") {
                                 $("#select_before").empty();
                                 $("#select_before").append("<option value='" + response[0].perPosition + "'>" + response[0].PositionName + "</option>");
-                            } else {
+                            }
+                            else if ($("#txt_person_change_pro").val() == "04") {
+                                $("#td_person_before").empty();
+                                $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' value='" + response[0].perFirstDate + "' readonly />");
+                            }
+                            else {
                                 $("#txt_person_empno").val(response[0].perNo);
                                 $("#txt_person_cname").text(response[0].perName);
                                 $("#txt_hidden_person_guid").val(response[0].perGuid);
@@ -586,7 +611,7 @@
                             <span id="span_person_search">
                                 關鍵字：<input id="search_person_keyword" />&nbsp;&nbsp;
                                 異動日期：<input id="search_person_date" maxlength="10" />
-                                狀態：<select id="search_person_status"><option value="">--請選擇--</option><option value="N">待確認</option><option value="Y">已確認</option></select>
+                                狀態：<select id="search_person_status"><option value="">--請選擇--</option><option value="0">待確認</option><option value="1">已確認</option></select>
                                 <a href="Javascript:void(0)" class="keybtn fancybox" id="btn_person_inner_search">查詢</a>
                             </span>
                             <a href="Javascript:void(0)" class="keybtn fancybox" id="btn_person_search">查詢</a>
