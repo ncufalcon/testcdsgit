@@ -291,7 +291,7 @@ left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
 where perStatus<>'D' ");
         if (KeyWord != "")
         {
-            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(perDepName) LIKE '%' + upper(@KeyWord) + '%')) ");
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
 
         oCmd.CommandText = sb.ToString();
@@ -536,11 +536,17 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
 	{
 		SqlCommand oCmd = new SqlCommand();
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-		oCmd.CommandText = @"update sy_Person set perStatus='D' where perGuid=@perGuid ";
+		oCmd.CommandText = @"update sy_Person set 
+perStatus='D',
+perModifyId=@perModifyId,
+perModifyDate=@perModifyDate
+where perGuid=@perGuid ";
 		oCmd.CommandType = CommandType.Text;
 		SqlDataAdapter oda = new SqlDataAdapter(oCmd);
 		oCmd.Parameters.AddWithValue("@perGuid", perGuid);
-		oCmd.Connection.Open();
+        oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
+        oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
+        oCmd.Connection.Open();
 		oCmd.ExecuteNonQuery();
 		oCmd.Connection.Close();
 	}
@@ -725,6 +731,45 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         return ds;
     }
 
+    public DataSet getFamilyList(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_Person where perStatus<>'D' and perGuid=@perGuid ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+          select ROW_NUMBER() over (order by perCreateDate) itemNo,
+        pfGuid,pfName,pfBirthday,pfTitle,pfIDNumber
+        from sy_Person 
+        left join sy_PersonFamily on pfPerGuid=perGuid and pfStatus<>'D'
+        where perStatus<>'D' and perGuid=@perGuid ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataSet getSubsidyLevel(string pStart, string pEnd)
     {
         SqlCommand oCmd = new SqlCommand();
@@ -756,6 +801,61 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@pStart", pStart);
         oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataSet getGroupInsList(string pStart, string pEnd)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT COUNT(*) total from sy_GroupInsurance where giStatus<>'D' ");
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(giInsuranceCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(giInsuranceName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@"select * from (
+           select ROW_NUMBER() over (order by giCreatDate) itemNo,
+        * from sy_GroupInsurance where giStatus<>'D' ");
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(giInsuranceCode) LIKE '%' + upper(@KeyWord) + '%') or (upper(giInsuranceName) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+
+        sb.Append(@")#tmp where itemNo between @pStart and @pEnd ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataSet ds = new DataSet();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pStart", pStart);
+        oCmd.Parameters.AddWithValue("@pEnd", pEnd);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkPerson(string ckStr)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_Person
+left join sy_CodeBranches on cbGuid=perDep
+where perNo=@ckStr and perStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
         oda.Fill(ds);
         return ds;
     }
@@ -850,7 +950,46 @@ SELECT * from sy_Person where perIDNumber=@ckID ");
         oda.Fill(ds);
         return ds;
     }
-    
+
+    public DataTable checkFamilyName(string ckStr,string perNo)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_Person
+left join sy_PersonFamily on pfPerGuid=perGuid and pfName=@ckStr
+where perNo=@perNo   and perStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
+        oCmd.Parameters.AddWithValue("@perNo", perNo);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkGroupIns(string ckStr)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_GroupInsurance where giInsuranceCode=@ckStr and giStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@ckStr", ckStr);
+        oda.Fill(ds);
+        return ds;
+    }
+
 
     public void modInsurance()
     {
