@@ -69,6 +69,7 @@ public class SearchDialog : IHttpHandler {
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt5, "dataList", "data_item");
                     break;
                 case "Personnel":
+                case "Personnel2":
                 case "LInsPerson":
                 case "HInsPerson":
                 case "PPInsPerson":

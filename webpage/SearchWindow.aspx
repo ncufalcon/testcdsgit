@@ -179,6 +179,7 @@
                                 PageFun(p, $("total", data).text());
                                 break;
                             case "Personnel":
+                            case "Personnel2":
                             case "LInsPerson":
                             case "HInsPerson":
                             case "PPInsPerson":
