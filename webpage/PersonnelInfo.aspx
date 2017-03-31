@@ -6,8 +6,22 @@
     <%--Common--%>
     <script type="text/javascript">
         $(document).ready(function () {
+            getddl("02", "#pPosition");
+
             $(document).on("keyup", "#pIDNumber,#pf_IDNumber", function () {
                 this.value = this.value.toUpperCase();
+            });
+
+            $(document).on("click", "#ImportBtn", function () {
+                $.fancybox({
+                    href: "PersonImport.aspx",
+                    type: "iframe",
+                    width: "430",
+                    height: "100",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic'
+                });
             });
 
             //datepicker
@@ -212,42 +226,49 @@
                     $("#pCompName").val(str);
                     $("#pComGuid").val(gv);
                     $("#CompStr").html(str2);
+                    $("#CompStr").css("color", "");
                     $("#Compstatus").val("Y");
                     break;
                 case "Dep":
                     $("#pDepName").val(str);
                     $("#pDep").val(gv);
                     $("#DepStr").html(str2);
+                    $("#DepStr").css("color", "");
                     $("#Depstatus").val("Y");
                     break;
                 case "Family":
                     $("#pf_Code").val(str);
                     $("#pf_CodeGuid").val(gv);
                     $("#PfStr").html(str2);
+                    $("#PfStr").css("color", "");
                     $("#PFstatus").val("Y");
                     break;
                 case "Allowance":
                     $("#pa_AllowanceCode").val(str);
                     $("#pa_CodeGuid").val(gv);
                     $("#PaStr").html(str2);
+                    $("#PaStr").css("color", "");
                     $("#PAstatus").val("Y");
                     break;
                 case "PLv":
                     $("#pInsuranceDes").val(str);
                     $("#plv_CodeGuid").val(gv);
                     $("#PLvStr").html(str2);
+                    $("#PLvStr").css("color", "");
                     $("#PLVstatus").val("Y");
                     break;
                 case "LB":
                     $("#pLaborID").val(str);
                     $("#Labor_CodeGuid").val(gv);
                     $("#LaborStr").html(str2);
+                    $("#LaborStr").css("color", "");
                     $("#Laborstatus").val("Y");
                     break;
                 case "Heal":
                     $("#pInsuranceID").val(str);
                     $("#Health_CodeGuid").val(gv);
                     $("#HealthStr").html(str2);
+                    $("#HealthStr").css("color", "");
                     $("#Healthstatus").val("Y");
                     break;
             }
@@ -310,7 +331,6 @@
     <%--基本資料--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            getddl("02", "#pPosition");
             getData();
 
             $("#PersonTab").tabs();
@@ -948,7 +968,6 @@
                         }
                         else
                             tabstr += "<tr><td colspan='8'>查詢無資料</td></tr>";
-                        tabstr += '</tbody>';
                         $("#pfTab").append(tabstr);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
@@ -1198,7 +1217,6 @@
                         }
                         else
                             tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
-                        tabstr += '</tbody>';
                         $("#pbTab").append(tabstr);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
@@ -1370,7 +1388,6 @@
                         }
                         else
                             tabstr += "<tr><td colspan='5'>查詢無資料</td></tr>";
-                        tabstr += '</tbody>';
                         $("#paTab").append(tabstr);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
@@ -1379,13 +1396,14 @@
             });
         }
     </script>
+    <%--datepicker--%>
     <style type="text/css">
         .ui-datepicker {
             background: #D4C8B9;
             border: 1px solid #000;
             color: #000;
         }
-</style>
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <input type="hidden" id="idtmp" name="idtmp" class="inputex" />
@@ -1398,7 +1416,7 @@
                         <div class="left font-light">首頁 / 人事資料管理 / <span class="font-black font-bold">基本資料管理</span></div>
                     </div>
                     <div class="twocol margin15T">
-                        <div class="left">資料管理:<a href="#" class="keybtn fancybox">匯入資料</a></div>
+                        <div class="left">資料管理:<a id="ImportBtn" href="javascript:void(0);" class="keybtn">匯入資料</a></div>
                         <div class="right">
                             <a href="javascript:void(0);" id="newPerBtn" class="keybtn">新增人員</a>
                             <a href="javascript:void(0);" id="searchPerBtn" sv="N" class="keybtn">查詢人員</a>
@@ -1406,11 +1424,11 @@
                     </div>
                 </div>
                 <br /><br />
+                <div id="searchDiv" class="fixwidth" style="display:none;">
+                    <span class="font-title">關鍵字：</span><input id="keyword" type="text" class="inputex" />
+                    <input type="button" value="查詢" class="keybtn" onclick="getData()" />
+                </div><br />
                 <div class="fixwidth">
-                    <div id="searchDiv" style="display:none;">
-                        <span class="font-title">關鍵字：</span><input id="keyword" type="text" class="inputex" />
-                        <input type="button" value="查詢" class="keybtn" onclick="getData()" />
-                    </div><br />
                     <div class="stripeMe fixTable" style="height:175px;">
                         <table id="perlist" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
                     </div><!-- overwidthblock -->
