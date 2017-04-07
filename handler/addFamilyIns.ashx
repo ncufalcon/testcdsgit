@@ -30,6 +30,7 @@ public class addFamilyIns : IHttpHandler {
                     FI_Db._pfiSubsidyLevel = pfi_SubsidyLevel;
                     FI_Db._pfiAreaPerson = pfi_AreaPerson;
                     FI_Db._pfiPs = pfi_Ps;
+                    FI_Db._pfiStatus = "A";
                     FI_Db.addFamilyIns();
                     break;
                 case "Modify":

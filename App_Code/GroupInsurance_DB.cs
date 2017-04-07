@@ -241,4 +241,21 @@ where  pgiStatus<>'D' and pgiGuid=@pgiGuid ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable checkPerGroupIns()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_PersonGroupInsurance where pgiPerGuid=@pgiPerGuid and pgiStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@pgiPerGuid", pgiPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }

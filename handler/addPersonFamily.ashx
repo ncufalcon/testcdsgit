@@ -6,6 +6,8 @@ using System.Data;
 
 public class addPersonFamily : IHttpHandler {
     PersonFamily_DB PF_Db = new PersonFamily_DB();
+    GroupInsurance_DB GI_Db = new GroupInsurance_DB();
+    FamilyInsurance_DB FI_Db = new FamilyInsurance_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -22,11 +24,11 @@ public class addPersonFamily : IHttpHandler {
             string pf_Title = (context.Request.Form["pf_Title"] != null) ? context.Request.Form["pf_Title"].ToString() : "";
             string pf_Birthday = (context.Request.Form["pf_Birthday"] != null) ? context.Request.Form["pf_Birthday"].ToString() : "";
 
-
+            string GuidStr = Guid.NewGuid().ToString();
             switch (Mode)
             {
                 case "New":
-                    PF_Db._pfGuid = Guid.NewGuid().ToString();
+                    PF_Db._pfGuid = GuidStr;
                     PF_Db._pfPerGuid = PerID;
                     PF_Db._pfName = pf_Name;
                     PF_Db._pfHealthInsurance = pf_HealthInsurance;
@@ -36,6 +38,24 @@ public class addPersonFamily : IHttpHandler {
                     PF_Db._pfTitle = pf_Title;
                     PF_Db._pfBirthday = pf_Birthday;
                     PF_Db.addPersonFamily();
+
+                    //眷屬健保
+                    FI_Db._pfiGuid = Guid.NewGuid().ToString();
+                    FI_Db._pfiPerGuid = PerID;
+                    FI_Db._pfiPfGuid = GuidStr;
+                    FI_Db._pfiChange = "01";
+                    FI_Db._pfiSubsidyLevel = pf_CodeGuid;
+                    FI_Db.addFamilyIns();
+                    //眷屬團保
+                    if (pf_GroupInsurance == "Y")
+                    {
+                        GI_Db._pgiGuid = Guid.NewGuid().ToString();
+                        GI_Db._pgiPerGuid = PerID;
+                        GI_Db._pgiPfGuid = GuidStr;
+                        GI_Db._pgiType = "02"; //身份
+                        GI_Db._pgiChange = "01"; //異動別
+                        GI_Db.addGroupInsurance();
+                    }
                     break;
                 case "Modify":
                     PF_Db._pfGuid = id;

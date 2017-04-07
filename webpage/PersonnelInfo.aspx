@@ -17,7 +17,7 @@
                     href: "PersonImport.aspx",
                     type: "iframe",
                     width: "430",
-                    height: "100",
+                    height: "70",
                     closeClick: false,
                     openEffect: 'elastic',
                     closeEffect: 'elastic'

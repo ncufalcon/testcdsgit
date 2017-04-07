@@ -64,7 +64,8 @@ public class Personnel_DB
     decimal perDetentionRatio;
     decimal perMonthPayroll;
     decimal perYearEndBonuses;
-	string perCreateId = string.Empty;
+    decimal perYears;
+    string perCreateId = string.Empty;
 	string perModifyId = string.Empty;
 	string perStatus = string.Empty;
 
@@ -255,6 +256,10 @@ public class Personnel_DB
 	public decimal _perYearEndBonuses
 	{
 		set { perYearEndBonuses = value; }
+	}
+	public decimal _perYears
+	{
+		set { perYears = value; }
 	}
 	public string _perCreateId
 	{
