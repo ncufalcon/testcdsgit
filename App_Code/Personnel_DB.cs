@@ -519,22 +519,25 @@ where perGuid=@perGuid
 
     public DataSet checkPerson(string ckNo,string ckID)
 	{
-		SqlCommand oCmd = new SqlCommand();
-		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+		SqlCommand oComd = new SqlCommand();
+        oComd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT * from sy_Person where perNo=@ckNo
-SELECT * from sy_Person where perIDNumber=@ckID ");
+		sb.Append(@"SELECT * from sy_Person with (nolock) where perNo=@ckNo
+SELECT * from sy_Person with (nolock) where perIDNumber=@ckID ");
 
-		oCmd.CommandText = sb.ToString();
-		oCmd.CommandType = CommandType.Text;
-		SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        oComd.CommandText = sb.ToString();
+        oComd.CommandType = CommandType.Text;
+		SqlDataAdapter oda = new SqlDataAdapter(oComd);
 		DataSet ds = new DataSet();
 
-		oCmd.Parameters.AddWithValue("@ckNo", ckNo);
-		oCmd.Parameters.AddWithValue("@ckID", ckID);
+        oComd.Parameters.AddWithValue("@ckNo", ckNo);
+        oComd.Parameters.AddWithValue("@ckID", ckID);
 		oda.Fill(ds);
-		return ds;
+        oda.Dispose();
+        oComd.Connection.Close();
+        oComd.Connection.Dispose();
+        return ds;
 	}
 
 	public void deletePerson()
