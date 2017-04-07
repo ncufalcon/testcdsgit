@@ -98,6 +98,7 @@
             <li><a href='page-nssadmin.html' target='_self' title="保險設定">保險設定</a></li>     
       </ul>
     </li>
+      <li><a href="../webpage/Page-ModifyPd.aspx" title="修改個人密碼">修改個人密碼</a></li>
     
   </ul>
   </div>

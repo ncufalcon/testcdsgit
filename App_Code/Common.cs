@@ -293,3 +293,81 @@ public class JavaScript
             objPage.ClientScript.RegisterClientScriptBlock(objPage.GetType(), "", strJS, false);
     }
 }
+
+
+
+
+
+#region 系統管理者登入使用
+/// <summary>
+/// MbrAccount 的摘要描述。
+/// </summary>
+public class Member
+{
+    /// <summary>
+    /// 進行帳號登入檢查，通過後會取得登入者資料並放入session:ds_CurrentUser
+    /// </summary>
+    /// <param name="id">帳號</param>
+    /// <param name="pd">密碼</param>
+    /// <returns></returns>
+    public MemberInfo mLogon(string id, string pd)
+    {
+        SqlConnection Sqlconn = new payroll_sqlconn().conn;
+        DataTable dt = new DataTable();
+        string sql = @"SELECT mbGuid
+      ,mbName
+      ,mbJobNumber
+      ,mbId
+      ,mbPassword
+      ,mbPs
+      ,mbCom
+      ,cmCompetence FROM sy_Member left join sy_MemberCom on mbCom=cmClass where mbId=@mbId and mbPassword=@mbPassword";
+
+        SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+        cmd.Parameters.AddWithValue("@mbId", id);
+        cmd.Parameters.AddWithValue("@mbPassword", pd);
+        try
+        {
+            cmd.Connection.Open();
+            new SqlDataAdapter(cmd).Fill(dt);
+        }
+        catch (Exception ex) { throw ex; }
+        finally { cmd.Connection.Close(); cmd.Dispose(); }
+        if (dt.Rows.Count > 0)
+            return new MemberInfo(dt);
+        else
+            return null;
+
+    }
+
+}
+/*-------------------------------------------------------------------------------------------------------------------------*/
+
+/// <summary>
+/// 廠商會員的摘要描述。
+/// </summary>
+public class MemberInfo
+{
+
+    public MemberInfo(DataTable dt)
+    {
+
+        USERINFO userinfo = new USERINFO();
+        LoginINFO Loginfo = new LoginINFO();
+
+        if (dt.Rows.Count > 0)
+        {
+            DataRow dr = dt.Rows[0];
+            Loginfo.MemberGuid = dr["mbGuid"].ToString();
+            Loginfo.MemberName = dr["mbName"].ToString();
+            Loginfo.MemberClass = dr["mbCom"].ToString();
+            Loginfo.MemberCompetence = dr["cmCompetence"].ToString();
+        }
+
+        USERINFO.SET_SESSION(Loginfo);
+
+    }
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+#endregion
