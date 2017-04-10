@@ -53,36 +53,40 @@
             <li><a href='PersonnelInfo.aspx' target='_self' title="基本資料管理">基本資料管理</a></li>
             <li><a href='Insurance.aspx' target='_self' title="保險管理">保險管理</a></li>
             <li><a href='page-Modify.aspx' target='_self' title="異動管理">異動管理</a></li>
-            <li><a href='page-WorkHours.html' target='_self' title="時數管理">時數管理</a></li>
         </ul>
     </li>
-    <li>
-        <a href='' target='_self' title="薪資管理">薪資管理</a>
-        <ul>
-            <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
-            <li><a href='page-Gifts.html' target='_self' title="禮金管理">禮金管理</a></li>
-            <li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>
-        </ul>
-        <!--<a href='page-dialog.html' target='_self' title="薪資管理">薪資管理</a>
-      <ul>
-          <li><a href='#' target='_self' title="加班費計算">加班費計算</a></li>
-          <li><a href='#' target='_self' title="勞健保比對">勞健保比對</a></li>
-          <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
-          <li><a href='page-Gifts.html' target='_self' title="禮金管理">禮金管理</a></li>
-          <li><a href='#' target='_self' title="獎金補貼管理">獎金補貼管理</a></li>
-          <li><a href='#' target='_self' title="薪資管理">薪資管理</a></li><li><a href='#' target='_self' title="扣繳管理">扣繳管理</a></li>
-    </ul>-->
-
-    </li>
-    <li><a href='page-Attendance.html' target='_self' title="出勤管理">出勤管理</a></li>
-   <li><a href='#' target='_self' title="報表輸出管理">報表輸出管理</a></li>
-    <li>
-    <a href='#' target='_self' title="統計查詢">統計查詢</a>
-    	<ul>
-        	<li><a href='#' target='_self' title="管理查詢">管理查詢</a></li>
-            <li><a href='#' target='_self' title="離職人員列表">統計表</a></li>
-      </ul>
-    </li>
+                        <li>
+                            <a href='' target='_self' title="薪資管理">薪資管理</a>
+                            <ul>
+                                <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
+                                <li><a href='page-Gifts.html' target='_self' title="年節禮金計算">年節禮金計算</a></li>
+                                <li><a href='page-SalaryHoliday.html' target='_self' title="給薪假計算">給薪假計算</a></li>
+                                <li><a href='page-Salary.html' target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
+                                <li><a href='page-Saveto.html' target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
+                                <li><a href='page-SalaryPrint.html' target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
+                                <li><a href='page-SalaryList.html' target='_self' title="薪資冊">薪資冊</a></li>
+                                 <li><a href='page-SalaryBar.html' target='_self' title="電子薪資條">電子薪資條</a></li>
+                                <!--<li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>-->
+                            </ul>
+                        </li>
+                           <li>
+                            <a href='Javascript:void(0)' target='_self' title="出勤管理">出勤管理</a>
+                            <ul>
+                                <!--<li><a href='page-Attendance.html' target='_self' title="出勤管理">出勤管理</a></li>-->
+                                <li><a href='page-WorkHours.html' target='_self' title="時數管理">時數管理</a></li>
+                                <li><a href='page-Seniority.html' target='_self' title="年資與特休天數計算">年資與特休天數計算</a></li>
+                                <li><a href='page-Attendance.html' target='_self' title="請假資料維護">請假資料維護</a></li>
+                                <li><a href="file/SA List 統計資料.xlsx" target='_self' title="月出勤報表">月出勤報表</a></li>
+                            </ul>
+                        </li>
+                        <li><a href='#' target='_self' title="報表輸出管理">報表輸出管理</a></li>
+                        <li>
+                            <a href='#' target='_self' title="統計查詢">統計查詢</a>
+                            <ul>
+                                <li><a href='#' target='_self' title="管理查詢">管理查詢</a></li>
+                                <li><a href='#' target='_self' title="離職人員列表">統計表</a></li>
+                            </ul>
+                        </li>
     <li><a href='#' target='_self' title="系統設定">系統設定</a>
     	<ul>
             <li><a href='../webpage/page-company.aspx' target='_self' title="公司資料設定">公司資料設定</a></li>
@@ -106,6 +110,11 @@
             </div><!-- basemenu -->
             
         </div><!-- WrapperHeader -->
+        <div class="fixwidth " >
+            <div style="text-align:right; float:right">
+                <span id="sp_MemberName" runat="server"></span>&nbsp;&nbsp;<asp:LinkButton ID="lkb_out" Font-Underline="false" runat="server" OnClick="lkb_out_Click">登出</asp:LinkButton>
+            </div>
+        </div>
         <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
         
         </asp:ContentPlaceHolder>

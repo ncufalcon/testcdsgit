@@ -5,8 +5,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
 
-                <div class="fixwidth">
-                <div class="twocol underlineT1 margin10T">
+                <div class="fixwidth " style="position:relative;">
+                <div class="twocol underlineT1 margin10T" >
                     <div class="left font-light">首頁 / <span class="font-black font-bold">修改個人密碼</span></div>
                 </div>
 

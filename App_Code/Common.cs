@@ -236,6 +236,15 @@ public class Common
         string root = ConfigurationManager.AppSettings["UploadFileRootDir"].ToString() + "LicFile\\" + id + "\\";
         return root;
     }
+
+
+    public void Logout()
+    {
+        HttpContext.Current.Session.Remove("MemberInfo_Guid");
+        HttpContext.Current.Session.Remove("MemberInfo_Name");
+        HttpContext.Current.Session.Remove("MemberInfo_Class");
+        HttpContext.Current.Session.Remove("MemberInfo_Competence");
+    }
 }
 
 public class JavaScript
