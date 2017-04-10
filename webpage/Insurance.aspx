@@ -1231,7 +1231,7 @@
                     $.ajax({
                         type: "POST",
                         async: false, //在沒有返回值之前,不會執行下一步動作
-                        url: "../handler/editPension.ashx",
+                        url: "../handler/editFamilyIns.ashx",
                         data: {
                             Mode: "D",
                             id: $(this).attr("aid")
@@ -1241,12 +1241,12 @@
                         },
                         success: function (data) {
                             if (data == "error") {
-                                alert("editPension Error");
+                                alert("editFamilyIns Error");
                                 return false;
                             }
 
                             if (data != null) {
-                                getPensionList();
+                                getFamilyInsList();
                             }
                         }
                     });

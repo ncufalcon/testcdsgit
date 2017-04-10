@@ -6,6 +6,9 @@ using System.Data;
 
 public class addPerson : IHttpHandler {
     Personnel_DB Personnel_Db = new Personnel_DB();
+    LaborHealth_DB LH_Db = new LaborHealth_DB();
+    PersonPension_DB PP_Db = new PersonPension_DB();
+    GroupInsurance_DB GI_Db = new GroupInsurance_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -147,6 +150,50 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perLaborID = pLaborID;
                     Personnel_Db._perInsuranceID = pInsuranceID;
                     Personnel_Db.modInsurance();
+
+                    //勞保
+                    LH_Db._plPerGuid = id;
+                    DataTable ldt = LH_Db.checkPerLabor();
+                    if (ldt.Rows.Count == 0)
+                    {
+                        LH_Db._plGuid = Guid.NewGuid().ToString();
+                        LH_Db._plPerGuid = id;
+                        LH_Db._plSubsidyLevel = pLaborID;
+                        LH_Db.addLabor();
+                    }
+                    //健保
+                    LH_Db._piPerGuid = id;
+                    DataTable hdt = LH_Db.checkPerHeal();
+                    if (hdt.Rows.Count == 0)
+                    {
+                        LH_Db._piGuid = Guid.NewGuid().ToString();
+                        LH_Db._piPerGuid = id;
+                        LH_Db._piSubsidyLevel = pInsuranceID;
+                        LH_Db.addHeal();
+                    }
+                    //勞退
+                    PP_Db._ppPerGuid = id;
+                    DataTable ppdt = PP_Db.checkPerPension();
+                    if (ppdt.Rows.Count == 0)
+                    {
+                        PP_Db._ppGuid = Guid.NewGuid().ToString();
+                        PP_Db._ppPerGuid = id;
+                        PP_Db.addPension();
+                    }
+                    //團保
+                    if (pGroupInsurance == "Y")
+                    {
+                        GI_Db._pgiPerGuid = id;
+                        DataTable pgidt = GI_Db.checkPerGroupIns();
+                        if (pgidt.Rows.Count == 0)
+                        {
+                            GI_Db._pgiGuid = Guid.NewGuid().ToString();
+                            GI_Db._pgiPerGuid = id;
+                            GI_Db._pgiType = "01"; //身份
+                            GI_Db._pgiChange = "01"; //異動別
+                            GI_Db.addGroupInsurance();
+                        }
+                    }
                     break;
                 case "Salary":
                     Personnel_Db._perGuid = id;

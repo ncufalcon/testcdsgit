@@ -310,6 +310,23 @@ where  plStatus<>'D' and plGuid=@plGuid  ");
         return ds;
     }
 
+    public DataTable checkPerLabor()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_PersonLabor where plPerGuid=@plPerGuid and plStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@plPerGuid", plPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataTable SelectHealList()
     {
         SqlCommand oCmd = new SqlCommand();
@@ -462,4 +479,20 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
         return ds;
     }
 
+    public DataTable checkPerHeal()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_PersonInsurance where piPerGuid=@piPerGuid and piStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@piPerGuid", piPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }

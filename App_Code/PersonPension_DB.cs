@@ -236,4 +236,21 @@ where  ppStatus<>'D' and ppGuid=@ppGuid  ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable checkPerPension()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_PersonPension where ppPerGuid=@ppPerGuid and ppStatus<>'D' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@ppPerGuid", ppPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }
