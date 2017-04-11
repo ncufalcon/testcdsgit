@@ -6,6 +6,7 @@ using System.Data;
 
 public class SearchDialog : IHttpHandler {
     Personnel_DB Personnel_Db = new Personnel_DB();
+    sy_SalaryItem_DB si_db = new sy_SalaryItem_DB();
     public void ProcessRequest(HttpContext context)
     {
         try
@@ -99,6 +100,15 @@ public class SearchDialog : IHttpHandler {
 
                     xmlStr = "<total>" + ds8.Tables[0].Rows[0]["total"].ToString() + "</total>";
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt8, "dataList", "data_item");
+                    break;
+                case "SiItem":
+                    si_db._str_keyword = SearchStr;
+                    si_db._str_perguid = pgid;
+                    //DataSet ds9 = si_db.SelectSalaryItemForWindow();
+                    DataTable dt9 = si_db.SelectSalaryItemForWindow();
+
+                    //xmlStr = "<total>" + ds9.Tables[0].Rows[0]["total"].ToString() + "</total>";
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt9, "dataList", "data_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + xmlStr2 + "</root>";

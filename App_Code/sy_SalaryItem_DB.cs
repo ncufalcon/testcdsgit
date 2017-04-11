@@ -21,11 +21,16 @@ public class sy_SalaryItem_DB
 
     #region 全私用
     string str_keyword = string.Empty;
+    string str_perguid = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
     {
         set { str_keyword = value; }
+    }
+    public string _str_perguid
+    {
+        set { str_perguid = value; }
     }
     #endregion
 
@@ -364,6 +369,57 @@ public class sy_SalaryItem_DB
                 thisCommand.Parameters.AddWithValue("@siGuid", siGuid);
             }
             
+            thisCommand.CommandType = CommandType.Text;
+            thisCommand.CommandText = show_value.ToString();
+            oda.SelectCommand = thisCommand;
+            oda.Fill(dt);
+        }
+        catch (Exception)
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        return dt;
+
+    }
+    #endregion
+
+    #region 撈 sy_SalaryItem for 開窗用
+    public DataTable SelectSalaryItemForWindow()
+    {
+        DataTable dt = new DataTable();
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            thisConnection.Open();
+            show_value.Append(@" 
+                select siGuid,siItemCode,siItemName from sy_SalaryItem where siStatus='A' and (siRef='底薪' or siRef='職能加給')
+                union 
+                select paAllowanceCode,
+                (select siItemCode from sy_SalaryItem where siGuid=paAllowanceCode) siItemCode,
+                (select siItemName from sy_SalaryItem where siGuid=paAllowanceCode) siItemName
+                from sv_PersonAllowance where paStatus='A' and paPerGuid=@str_perguid
+            ");
+
+            if (str_keyword != "")
+            {
+                show_value.Append(@" and (upper(siItemCode) LIKE '%' + upper(@str_keyword) + '%' or upper(siItemName) LIKE '%' + upper(@str_keyword) + '%' or upper(siAdd) LIKE '%' + upper(@str_keyword) + '%' or upper(siIncomeTax) LIKE '%' + upper(@str_keyword) + '%' )  ");
+                thisCommand.Parameters.AddWithValue("@str_keyword", str_keyword);
+            }
+            thisCommand.Parameters.AddWithValue("@str_perguid", str_perguid);
+
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;

@@ -16,6 +16,9 @@ public class sy_PersonChange
     string str_keyword = string.Empty;
     string str_date = string.Empty;
     string str_status = string.Empty;
+    string str_back_per_guid = string.Empty;
+    string str_creatid = string.Empty;
+    string str_perguid = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -29,6 +32,18 @@ public class sy_PersonChange
     public string _str_status
     {
         set { str_status = value; }
+    }
+    public string _str_back_per_guid
+    {
+        set { str_back_per_guid = value; }
+    }
+    public string _str_creatid
+    {
+        set { str_creatid = value; }
+    }
+    public string _str_perguid
+    {
+        set { str_perguid = value; }
     }
     #endregion
 
@@ -114,11 +129,26 @@ public class sy_PersonChange
 
     #region sy_Person 私用
     string perNo = string.Empty;
+    string perGuid = string.Empty;
+    string perDep = string.Empty;
+    string perPosition = string.Empty;
     #endregion
     #region sy_Person 公用
     public string _perNo
     {
         set { perNo = value; }
+    }
+    public string _perGuid
+    {
+        set { perGuid = value; }
+    }
+    public string _perDep
+    {
+        set { perDep = value; }
+    }
+    public string _perPosition
+    {
+        set { perPosition = value; }
     }
     #endregion
 
@@ -363,6 +393,188 @@ public class sy_PersonChange
             thisCommand.Connection.Open();
             thisCommand.ExecuteNonQuery();
             thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 更新人事資料 sy_Person. perDep
+    public void UpdatperDep()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person set perDep=@perDep
+                where  perGuid=@perGuid               
+            ");
+
+            thisCommand.Parameters.AddWithValue("@perGuid", perGuid);
+            thisCommand.Parameters.AddWithValue("@perDep", perDep);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 更新人事資料 sy_Person. perPosition
+    public void UpdatperPosition()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person set perPosition=@perPosition
+                where  perGuid=@perGuid              
+            ");
+
+            thisCommand.Parameters.AddWithValue("@perGuid", perGuid);
+            thisCommand.Parameters.AddWithValue("@perPosition", perPosition);
+            
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 退保 勞保 健保 團保 勞退 眷屬 
+    public void UpdatePersonLabor()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            //順序 勞保 健保 團保 勞退 眷屬
+            show_value.Append(@" 
+                declare @rowcounts int;
+                select @rowcounts=COUNT(*) 
+                from sy_PersonLabor 
+                where plPerGuid=@str_back_per_guid and plStatus='A' 
+                if @rowcounts>0
+                    begin
+                        insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
+	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,plPs,@str_creatid,'A'
+	                    from sy_PersonLabor 
+	                    where plPerGuid=@str_back_per_guid and plStatus='A' 
+	                    order by plCreateDate DESC
+                    end
+
+                set @rowcounts=0;
+                select @rowcounts=COUNT(*) 
+                from sy_PersonInsurance 
+                where piPerGuid=@str_back_per_guid and piStatus='A'
+                if @rowcounts>0
+                    begin
+                        insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus)
+                        select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'02',piInsurancePayroll,piPs,@str_creatid,'A'
+	                    from sy_PersonInsurance 
+	                    where piPerGuid=@str_back_per_guid and piStatus='A' 
+	                    order by piCreateDate DESC
+                    end
+
+                set @rowcounts=0;
+                select @rowcounts=COUNT(*) 
+                from sy_PersonGroupInsurance 
+                where pgiPerGuid=@str_back_per_guid and pgiStatus='A'
+                if @rowcounts>0
+                    begin
+                        insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
+                        select top 1 NEWID(),pgiPerGuid,pgiType,'02',@str_date,pgiInsuranceCode,pgiPs,@str_creatid,'A'
+	                    from sy_PersonGroupInsurance 
+	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' 
+	                    order by pgiCreateDate DESC
+                    end
+
+                set @rowcounts=0;
+                select @rowcounts=COUNT(*) 
+                from sy_PersonPension 
+                where ppPerGuid=@str_back_per_guid and ppStatus='A'
+                if @rowcounts>0
+                    begin
+                        insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
+                        select top 1 NEWID(),ppGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,@str_creatid,'A'
+	                    from sy_PersonPension 
+	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' 
+	                    order by ppCreateDate DESC
+                    end
+
+                set @rowcounts=0;
+                select @rowcounts=COUNT(*) 
+                from sy_PersonFamilyInsurance 
+                where pfiPerGuid=@str_back_per_guid and pfiStatus='A'
+                if @rowcounts>0
+                    begin
+                        insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus)
+                        select NEWID(),pfiPerGuid,pfiPfGuid,'02',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,@str_creatid,'A'
+	                    from sy_PersonFamilyInsurance 
+	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' 
+	                    order by pfiCreateDate DESC
+                    end
+                ");
+
+            thisCommand.Parameters.AddWithValue("@str_back_per_guid", str_back_per_guid);
+            thisCommand.Parameters.AddWithValue("@str_date", str_date);
+            thisCommand.Parameters.AddWithValue("@str_creatid", str_creatid);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+            
         }
         catch (Exception ex)
         {
