@@ -296,10 +296,16 @@ public class page_hourlyadmin : IHttpHandler {
                         {//修改
                             si_db._siGuid = mod_si_itemguid;
                             DataTable dt_refcom_mod = si_db.ChksiItemCodeRefcom();
-                            if (dt_refcom_add.Rows.Count > 0)
+                            if (mod_si_itemref!="" && dt_refcom_add.Rows.Count > 0)
                             {
-                                if (dt_refcom_mod.Rows.Count == 0) {
+                                if (dt_refcom_mod.Rows.Count == 0)
+                                {
                                     context.Response.Write("si_refcom_notonly_mod");
+                                }
+                                else {
+                                    si_db._siModifyId = "王胖爺";
+                                    si_db.UpdateSalaryItem();
+                                    context.Response.Write("ok");
                                 }
 
                             }
@@ -551,12 +557,12 @@ public class page_hourlyadmin : IHttpHandler {
                     ph_db._phPs = mod_ph_ps;
                     DataTable dt_chk_name = ph_db.SelectPayHolidayNAme();
                     if (dt_chk_name.Rows.Count > 0 && dt_chk_name.Rows[0]["phGuid"].ToString().Trim()!=mod_ph_guid) {
-                            context.Response.Write("notonly");
+                        context.Response.Write("notonly");
                     } else {
                         ph_db.UpdatePayHoliday();
                         context.Response.Write("ok");
                     }
-                    
+
                 }
                 catch (Exception ex) {
                     context.Response.Write("error");

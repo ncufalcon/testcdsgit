@@ -405,7 +405,7 @@ public class sy_SalaryItem_DB
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select siGuid,siItemCode,siItemName from sy_SalaryItem where siStatus='A' and (siRef='底薪' or siRef='職能加給')
+                select siGuid,siItemCode,siItemName from sy_SalaryItem where siStatus='A' and (siRef='01' or siRef='02')
                 union 
                 select paAllowanceCode,
                 (select siItemCode from sy_SalaryItem where siGuid=paAllowanceCode) siItemCode,
