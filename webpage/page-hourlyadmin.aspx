@@ -569,7 +569,7 @@
                             str_html += "<th class='width10' nowrap='nowrap'>項目代碼</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>項目名稱</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>加/扣項</th>";
-                            str_html += "<th class='width10' nowrap='nowrap'>計補充保費</th>";
+                            str_html += "<th class='width10' nowrap='nowrap'>計算補充保費</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>計投保薪資<br />(納入平均月薪)</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>計算職工福利金</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>所得稅</th>";
@@ -588,9 +588,21 @@
                                 else
                                     add_name = "減項";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + add_name + "</td>";
-                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siSupplementaryPremium + "</td>";
-                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siInsurance + "</td>";
-                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siBenefit + "</td>";
+                                if (response[i].siSupplementaryPremium == "Y") {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>是</td>";
+                                } else {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>否</td>";
+                                }
+                                if (response[i].siInsurance == "Y") {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>是</td>";
+                                } else {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>否</td>";
+                                }
+                                if (response[i].siBenefit == "Y") {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>是</td>";
+                                } else {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>否</td>";
+                                }
                                 if (response[i].siIncomeTax == "01")
                                     tax_name = "應稅";
                                 else if (response[i].siIncomeTax == "02")
@@ -1259,7 +1271,7 @@
                                                 <div class="font-title titlebackicon">計投保薪資(納入平均月薪計算)</div>
                                             </td>
                                             <td>
-                                                <input type="radio" name="txt_si_Insurance" checked="checked" value="是" />是&nbsp;&nbsp;<input type="radio" name="txt_si_Insurance" value="否" />否</td>
+                                                <input type="radio" name="txt_si_Insurance" checked="checked" value="Y" />是&nbsp;&nbsp;<input type="radio" name="txt_si_Insurance" value="N" />否</td>
                                             <td align="right">
                                                 <div class="font-title titlebackicon">加/扣項</div>
                                             </td>
@@ -1271,15 +1283,15 @@
                                                 <div class="font-title titlebackicon">計算職工福利金</div>
                                             </td>
                                             <td>
-                                                <input type="radio" name="txt_si_itembenefit" checked="checked" value="是" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itembenefit" value="否" />否</td>
+                                                <input type="radio" name="txt_si_itembenefit" checked="checked" value="Y" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itembenefit" value="N" />否</td>
                                             <td align="right">
                                                 <div class="font-title titlebackicon">對應欄位(在薪資異動使用)</div>
                                             </td>
                                             <td>
                                                 <select id="txt_si_itemref">
                                                     <option value="">--請選擇--</option>
-                                                    <option value="底薪">底薪</option>
-                                                    <option value="職能加給">職能加給</option>
+                                                    <option value="01">底薪</option>
+                                                    <option value="02">職能加給</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -1288,7 +1300,7 @@
                                                 <div class="font-title titlebackicon">計算補充保費</div>
                                             </td>
                                             <td>
-                                                <input type="radio" name="txt_si_itemsup" checked="checked" value="是" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itemsup" value="否" />否
+                                                <input type="radio" name="txt_si_itemsup" checked="checked" value="Y" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itemsup" value="N" />否
                                             </td>
                                             <td align="right">
                                                 <div class="font-title titlebackicon">對應欄位(在勞健保比對使用)</div>
