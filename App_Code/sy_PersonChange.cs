@@ -204,6 +204,8 @@ public class sy_PersonChange
                 thisCommand.Parameters.AddWithValue("@pcStatus", pcStatus);
             }
 
+            show_value.Append(@" order by pcStatus, pcCreateDate DESC  ");
+
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
@@ -240,7 +242,7 @@ public class sy_PersonChange
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName,perFirstDate
+                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName,perFirstDate,perBasicSalary,perAllowance
                 from sy_Person
                 left join sy_codetable on code_group = '02' and  perPosition = code_value
                 left join sy_CodeBranches on perDep = cbGuid

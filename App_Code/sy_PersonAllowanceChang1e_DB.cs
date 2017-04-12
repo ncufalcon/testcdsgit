@@ -23,6 +23,7 @@ public class sy_PersonAllowanceChang1e_DB
     string str_keyword = string.Empty;
     string str_date = string.Empty;
     string str_status = string.Empty;
+    int str_after;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -36,6 +37,10 @@ public class sy_PersonAllowanceChang1e_DB
     public string _str_status
     {
         set { str_status = value; }
+    }
+    public int _str_after
+    {
+        set { str_after = value; }
     }
     #endregion
 
@@ -118,7 +123,7 @@ public class sy_PersonAllowanceChang1e_DB
         set { pacModifyDate = value; }
     }
     #endregion
-
+    
     #region 撈 sy_PersonAllowanceChang1e 條件 keyword or date(yyyy/mm/dd) or GUID or 異動項目名稱 or 狀態(已未/確認)
     public DataTable SelectPersonAllowanceChang1e()
     {
@@ -132,7 +137,7 @@ public class sy_PersonAllowanceChang1e_DB
             thisConnection.Open();
             show_value.Append(@"  
                 select pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
-                        pacModifyId,pacModifyDate,pacStatus_d,perNo,perName,pacChange,siItemName
+                        pacModifyId,pacModifyDate,pacStatus_d,perNo,perName,pacChange,siItemName,siRef
                 from sy_PersonAllowanceChang1e
                 left join sy_Person on pacPerGuid = perGuid
                 left join sy_SalaryItem on pacChange = siGuid
@@ -159,7 +164,7 @@ public class sy_PersonAllowanceChang1e_DB
                 show_value.Append(@" and pacStatus=@pacStatus  ");
                 thisCommand.Parameters.AddWithValue("@pacStatus", str_status);
             }
-
+            show_value.Append(@" order by pacStatus, pacCreateDate DESC   ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
@@ -337,11 +342,140 @@ public class sy_PersonAllowanceChang1e_DB
         {
             show_value.Append(@" 
                 update sy_PersonAllowanceChang1e 
-                set pacStatus='1'
+                set pacStatus='1',pacModifyId=@pacModifyId,pacModifyDate=@pacModifyDate
                 where pacGuid=@pacGuid
             ");
 
             thisCommand.Parameters.AddWithValue("@pacGuid", pacGuid);
+            thisCommand.Parameters.AddWithValue("@pacModifyId", pacModifyId);
+            thisCommand.Parameters.AddWithValue("@pacModifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 底薪 已確認要更新 sy_Person.perBasicSalary 異動後金額
+    public void UpdatePersonBasicSalary()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person 
+                set perBasicSalary=@str_after,perModifyId=@perModifyId,perModifyDate=@perModifyDate
+                where perGuid=@perGuid
+            ");
+            
+            thisCommand.Parameters.AddWithValue("@perGuid", pacPerGuid);
+            thisCommand.Parameters.AddWithValue("@str_after", str_after);
+            thisCommand.Parameters.AddWithValue("@perModifyId", pacModifyId);
+            thisCommand.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 職能加給 已確認要更新 sy_Person.perAllowance 異動後金額
+    public void UpdatePersonAllowance()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person 
+                set perAllowance=@str_after,perModifyId=@perModifyId,perModifyDate=@perModifyDate
+                where perGuid=@perGuid
+            ");
+
+            thisCommand.Parameters.AddWithValue("@perGuid", pacPerGuid);
+            thisCommand.Parameters.AddWithValue("@str_after", str_after);
+            thisCommand.Parameters.AddWithValue("@perModifyId", pacModifyId);
+            thisCommand.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 個人津貼 已確認要更新 sy_Person.perBasicSalary 異動後金額
+    public void UpdatePersonAllowancepaCost()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sv_PersonAllowance 
+                set paCost=@str_after,paModifyId=@paModifyId,paModifyDate=@paModifyDate
+                where paPerGuid=@pacPerGuid and paAllowanceCode=@pacGuid
+            ");
+
+            thisCommand.Parameters.AddWithValue("@pacPerGuid", pacPerGuid);
+            thisCommand.Parameters.AddWithValue("@str_after", str_after);
+            thisCommand.Parameters.AddWithValue("@pacGuid", pacGuid);
+            thisCommand.Parameters.AddWithValue("@paModifyId", pacModifyId);
+            thisCommand.Parameters.AddWithValue("@paModifyDate", DateTime.Now);
 
             thisCommand.CommandText = show_value.ToString();
             thisCommand.CommandType = CommandType.Text;

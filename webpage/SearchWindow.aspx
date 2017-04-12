@@ -33,7 +33,7 @@
                         parent.$.fancybox.close();
                         break;
                     case "SiItem":
-                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"));
                         parent.$.fancybox.close();
                         break;
                 }
@@ -270,7 +270,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + ' str3=' + $(this).children("siRef").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
                                         tabstr += '</tr>';
