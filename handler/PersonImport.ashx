@@ -22,13 +22,6 @@ public class PersonImport : IHttpHandler {
         oCmd.Connection = oConn;
         SqlTransaction myTrans = oConn.BeginTransaction();
         oCmd.Transaction = myTrans;
-
-        SqlConnection oConn2 = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        oConn2.Open();
-        SqlCommand oCmd2 = new SqlCommand();
-        oCmd2.Connection = oConn2;
-        SqlTransaction myTrans2 = oConn2.BeginTransaction();
-        oCmd2.Transaction = myTrans2;
         try
         {
             for (int i = 0; i < uploadFiles.Count; i++)
