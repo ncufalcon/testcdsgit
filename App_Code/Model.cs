@@ -30,3 +30,30 @@ public class sy_Member
     public string mbCom { get; set; }
 
 }
+
+namespace payroll.model
+{
+    public class sy_PersonSingleAllowance
+    {
+        public string paGuid { get; set; }
+        public string paPerGuid { get; set; }
+        public string paAllowanceCode { get; set; }
+        public decimal paPrice { get; set; }
+        public decimal paQuantity { get; set; }
+        public decimal paCost { get; set; }
+        public string paDate { get; set; }
+        public string paCreateId { get; set; }
+        public string paModifyId { get; set; }
+        public DateTime paModifyDate { get; set; }
+        public string paStatus { get; set; }
+        public string perName { get; set; }
+        public string perNo { get; set; }
+        public string siItemCode { get; set; }
+        public string siItemName { get; set; }
+
+
+
+    }
+
+
+}

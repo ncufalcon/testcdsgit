@@ -204,7 +204,7 @@
                 
                 $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 if (txt_cbValue != '' && txt_cbName != '') {
-                    if (txt_cbValue.length == 3) {
+                    if (txt_cbValue.length < 10) {
                         var opt = {
                             url: '../handler/ashx_Regionadmin_SaveData.ashx',
                             v: 'cbGuid=' + GUID +
@@ -243,7 +243,7 @@
                         CmFmCommon.ajax(opt);
                         
                     } else {
-                        alert('代碼只允許三碼！');
+                        alert('代碼長度不得超過10碼！');
                         $.unblockUI();
                     }
                     

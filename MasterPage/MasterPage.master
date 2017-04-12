@@ -56,9 +56,9 @@
         </ul>
     </li>
                         <li>
-                            <a href='' target='_self' title="薪資管理">薪資管理</a>
+                            <a href="Javascript:void(0)" target="_self" title="薪資管理">薪資管理</a>
                             <ul>
-                                <li><a href='page-Allowance.html' target='_self' title="津貼管理">津貼管理</a></li>
+                                <li><a href="page-Allowance.aspx" target="_self" title="津貼管理">津貼管理</a></li>
                                 <li><a href='page-Gifts.html' target='_self' title="年節禮金計算">年節禮金計算</a></li>
                                 <li><a href='page-SalaryHoliday.html' target='_self' title="給薪假計算">給薪假計算</a></li>
                                 <li><a href='page-Salary.html' target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
