@@ -9,7 +9,9 @@
         }
     </style>
     <script type="text/javascript">
-        
+        //人事異動 一開始預設確認日是今天 確認者是操作者
+        var today_ymd = get_datenow();
+        var now_user = "<%=Session["MemberInfo_Name"] %>";;//目前還沒有登入這塊 先寫死
         $(function () {
             //人事異動 工號欄位 change事件
             $(document).on("change", "#txt_person_empno", function () {
@@ -37,9 +39,7 @@
                 timepicker: false,    //false關閉時間選項 
                 defaultDate: false
             });
-            //人事異動 一開始預設確認日是今天 確認者是操作者
-            var today_ymd = get_datenow();
-            var now_user = "<%=Session["MemberInfo_Name"] %>";;//目前還沒有登入這塊 先寫死
+            
             $("#txt_person_chkdate,#txt_pay_chkdate").val(today_ymd);
             $("#txt_person_chkpeople,#txt_pay_chkpeople").val(now_user);
 
