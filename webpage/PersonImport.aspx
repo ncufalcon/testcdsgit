@@ -11,8 +11,21 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#subbtn").click(function () {
+                if ($("input[name='dataFile']").val() == "") {
+                    alert("請選擇檔案");
+                    return false;
+                }
+
+                var exten = $("input[name='dataFile']").val().replace(/^.*\./, '');
+                var PassExten = ["xls", "xlsx"];
+                if ($.inArray(exten, PassExten) == -1) {
+                    alert("請上傳Excel檔");
+                    return false
+                }
+
                 $("#loadblock").show();
                 $("#fileblock").hide();
+               
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
                 var form = $("form")[0];
 

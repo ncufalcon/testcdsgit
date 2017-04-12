@@ -32,6 +32,10 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
+                    case "SiItem":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
+                        parent.$.fancybox.close();
+                        break;
                 }
             });
         });
@@ -258,6 +262,24 @@
                                     tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
+                                break;
+                            case "SiItem":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">項目代碼</th>';
+                                tabstr += '<th nowrap="nowrap">項目名稱</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                else
+                                    tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
+                                $("#sarchTab").append(tabstr);
+                                //PageFun(p, $("total", data).text());
                                 break;
                         }
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
