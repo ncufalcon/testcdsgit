@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <script type="text/javascript" src="<%= ResolveUrl("~/js/jquery-1.10.2.min.js") %>"></script>
-<script type="text/javascript" src="<%= ResolveUrl("~/js/jquery.blockUI.js") %>"></script>
+<script type="text/javascript" src="<%= ResolveUrl("~/js/downfile.js") %>"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <script type="text/javascript">
@@ -30,8 +30,14 @@
                 var form = $("form")[0];
 
                 form.appendChild(iframe[0]);
-
-                form.setAttribute("action", "../handler/PersonImport.ashx");
+                switch ($.getParamValue('tp')) {
+                    case "Person":
+                        form.setAttribute("action", "../handler/PersonImport.ashx");
+                        break;
+                    case "LH_Compare":
+                        form.setAttribute("action", "../handler/LHCompImport.ashx");
+                        break;
+                }
                 form.setAttribute("method", "post");
                 form.setAttribute("enctype", "multipart/form-data");
                 form.setAttribute("encoding", "multipart/form-data");

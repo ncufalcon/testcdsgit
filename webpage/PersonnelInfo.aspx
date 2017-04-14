@@ -14,13 +14,16 @@
 
             $(document).on("click", "#ImportBtn", function () {
                 $.fancybox({
-                    href: "PersonImport.aspx",
+                    href: "PersonImport.aspx?tp=Person",
                     type: "iframe",
-                    width: "430",
+                    width: "450",
                     height: "70",
                     closeClick: false,
                     openEffect: 'elastic',
-                    closeEffect: 'elastic'
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        getData();
+                    }
                 });
             });
 
