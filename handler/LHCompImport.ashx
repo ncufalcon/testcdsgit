@@ -55,7 +55,7 @@ public class LHCompImport : IHttpHandler {
                     if (rownum == "")
                         continue;
 
-                    string L_ID = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString() : "";
+                    string L_ID = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString().Trim() : "";
                     string L_Salary = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "0";
                     L_Salary = (L_Salary.ToString().Trim() != "") ? L_Salary.ToString() : "0";
                     string L_PersonPay = (Xls.GetCellValue(j, 9) != null) ? Xls.GetCellValue(j, 9).ToString() : "0";
@@ -98,8 +98,8 @@ L_Date
 
                 for (int j = 2; j <= Xls.GetRowCount(2) - 2; j++)
                 {
-                    string H_Date = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
-                    string H_ID = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "";
+                    string H_Date = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString().Trim() : "";
+                    string H_ID = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString().Trim() : "";
                     string H_Salary = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "0";
                     H_Salary = (H_Salary.ToString().Trim() != "") ? H_Salary.ToString() : "0";
                     string H_PersonPay = (Xls.GetCellValue(j, 19) != null) ? Xls.GetCellValue(j, 19).ToString() : "0";
@@ -142,8 +142,8 @@ H_Date
 
                 for (int j = 13; j <= Xls.GetRowCount(4) - 6; j++)
                 {
-                    string P_Date = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString() : "";
-                    string P_ID = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "";
+                    string P_Date = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString().Trim() : "";
+                    string P_ID = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString().Trim() : "";
                     string P_Salary = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "0";
                     P_Salary = (P_Salary.ToString().Trim() != "") ? P_Salary.ToString() : "0";
                     string P_PersonPay = (Xls.GetCellValue(j, 7) != null) ? Xls.GetCellValue(j, 7).ToString() : "0";
