@@ -158,7 +158,7 @@ ppStatus
         oCmd.Parameters.AddWithValue("@ppCreateId", ppCreateId);
         oCmd.Parameters.AddWithValue("@ppModifyId", ppModifyId);
         oCmd.Parameters.AddWithValue("@ppModifyDate", DateTime.Now);
-        oCmd.Parameters.AddWithValue("@ppStatus", ppStatus);
+        oCmd.Parameters.AddWithValue("@ppStatus", "A");
 
         oCmd.Connection.Open();
         oCmd.ExecuteNonQuery();

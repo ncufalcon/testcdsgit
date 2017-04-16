@@ -405,11 +405,12 @@ public class sy_SalaryItem_DB
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select siGuid,siItemCode,siItemName from sy_SalaryItem where siStatus='A' and (siRef='01' or siRef='02')
+                select siGuid,siItemCode,siItemName,siRef from sy_SalaryItem where siStatus='A' and (siRef='01' or siRef='02')
                 union 
                 select paAllowanceCode,
                 (select siItemCode from sy_SalaryItem where siGuid=paAllowanceCode) siItemCode,
-                (select siItemName from sy_SalaryItem where siGuid=paAllowanceCode) siItemName
+                (select siItemName from sy_SalaryItem where siGuid=paAllowanceCode) siItemName,
+                (select siRef from sy_SalaryItem where siGuid=paAllowanceCode) siRef
                 from sv_PersonAllowance where paStatus='A' and paPerGuid=@str_perguid
             ");
 

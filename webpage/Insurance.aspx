@@ -24,6 +24,21 @@
                     $(this).datepicker('option', 'dateFormat', 'yy/mm/dd');
                 }
             });
+
+            $(document).on("click", "#LH_CompBtn", function () {
+                $.fancybox({
+                    href: "PersonImport.aspx?tp=LH_Compare",
+                    type: "iframe",
+                    width: "450",
+                    height: "70",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        //getData();
+                    }
+                });
+            });
         });
 
         //DDL
@@ -1676,7 +1691,7 @@
                 <div class="twocol margin15T">
                     <div class="right">
                         <a href="javascript:void(0);" class="keybtn">執行保薪調整</a>
-                        <a href="javascript:void(0);" class="keybtn">勞健保比對</a>
+                        <a id="LH_CompBtn" href="javascript:void(0);" class="keybtn">勞健保比對</a>
                     </div>
                 </div>
                 <div class="statabs margin10T">
