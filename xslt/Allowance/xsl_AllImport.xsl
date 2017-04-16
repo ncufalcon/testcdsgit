@@ -23,9 +23,6 @@
           <th >
             津貼名稱
           </th>
-          <th >
-            加/扣別
-          </th>
           <th>
             金額
           </th >
@@ -37,31 +34,28 @@
       </thead>
       <tbody>
         <xsl:for-each select="dView">
-          <tr guid="{paGuid}">
+          <tr guid="{atGuid}">
             <td style="width:4%" align="center" nowrap="nowrap" class="font-normal">
-              <a href="Javascript:void(0)" guid="{paGuid}" onclick="JsEven.Del(this)">刪除</a>
+              <a href="Javascript:void(0)" guid="{atGuid}" onclick="JsEven.DelTemp(this)">刪除</a>
             </td>
-            <td style="text-align:left;width:4%" onclick="JsEven.view(this)" guid="{paGuid}">
-              <xsl:value-of select="perNo"/>
+            <td style="text-align:left;width:4%" >
+              <xsl:value-of select="atPerNo"/>
             </td>
-            <td style="text-align:left;width:5%" onclick="JsEven.view(this)" guid="{paGuid}">
+            <td style="text-align:left;width:5%" >
               <xsl:value-of select="perName"/>
             </td >
-            <td style="text-align:left;width:5%" onclick="JsEven.view(this)" guid="{paGuid}">
-              <xsl:value-of select="siItemCode"/>
+            <td style="text-align:left;width:5%" >
+              <xsl:value-of select="atItem"/>
             </td >
-            <td style="text-align:left;width:7%" onclick="JsEven.view(this)" guid="{paGuid}">
+            <td style="text-align:left;width:7%" >
               <xsl:value-of select="siItemName"/>
             </td>
-            <td style="text-align:center;width:5%" onclick="JsEven.view(this)" guid="{paGuid}">
-              <xsl:value-of select="siAddChi"/>
+            <td style="text-align:center;width:5%">
+              <xsl:value-of select="atCost"/>
             </td >
-            <td style="text-align:right;width:4%" onclick="JsEven.view(this)" guid="{paGuid}">
-              <xsl:value-of select="paCost"/>
+            <td style="text-align:center;width:6%">
+              <xsl:value-of select="atDate"/>
             </td>
-            <td style="text-align:center;width:6%" onclick="JsEven.view(this)" guid="{paGuid}">
-              <xsl:value-of select="paDate"/>
-            </td>      
           </tr>
         </xsl:for-each>
       </tbody>

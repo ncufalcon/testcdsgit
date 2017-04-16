@@ -285,6 +285,12 @@
 
 })(jQuery);
 
+
+
+
+
+
+
 /*  cellPos jQuery plugin
  ---------------------
  Get visual position of cell in HTML table (or its block like thead).
