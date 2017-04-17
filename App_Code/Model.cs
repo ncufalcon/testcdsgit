@@ -42,6 +42,7 @@ namespace payroll.model
         public decimal paQuantity { get; set; }
         public decimal paCost { get; set; }
         public string paDate { get; set; }
+        public string paPs { get; set; }
         public string paCreateId { get; set; }
         public string paModifyId { get; set; }
         public DateTime paModifyDate { get; set; }

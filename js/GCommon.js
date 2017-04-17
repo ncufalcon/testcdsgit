@@ -70,6 +70,16 @@ CommonEven = {
 
     CloseDailog: function (id) {
         $("#" + id).dialog("close");
+    },
+
+
+    goErrorPage: function () {
+        window.location = "../ErrorPage.aspx?err=par";
+    },
+
+
+    goLogin: function () {
+        window.location = "../Page_Login.aspx";
     }
 
 }

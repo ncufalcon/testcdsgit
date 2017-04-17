@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Net.Mail;
 using System.Data.OleDb;
+using System.Globalization;
 
 /// <summary>
 /// Common 的摘要描述
@@ -244,6 +245,238 @@ public class Common
         HttpContext.Current.Session.Remove("MemberInfo_Name");
         HttpContext.Current.Session.Remove("MemberInfo_Class");
         HttpContext.Current.Session.Remove("MemberInfo_Competence");
+    }
+
+    /// <summary>
+    /// 驗證字串null傳回""
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public string cSNull(string str)
+    {
+        str = (!string.IsNullOrEmpty(str)) ? str : "";
+        return str;
+    }
+
+    /// <summary>
+    /// 驗證數字null傳回0
+    /// </summary>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public decimal cDNull(decimal d)
+    {
+        d = (!string.IsNullOrEmpty(d.ToString())) ? d : 0;
+        return d;
+    }
+
+
+    #region 檢查有效日期 並回傳yyyy/MM/dd
+    /// <summary>
+    /// 檢查有效日期(錯誤時回傳訊息；否則，回傳空值。)
+    /// </summary>
+    /// <param name="inputDate">日期</param>
+    /// <returns>錯誤時回傳訊息；否則，回傳空值。</returns>
+    public string IsDateFormatRDate(string inputDate)
+    {
+        try
+        {
+            string msg = "";
+            if (inputDate != "")
+            {
+                if (inputDate.Length < 8 || inputDate.Length > 10)
+                {
+                    msg = "請輸入yyyy/MM/dd或yyyyMMdd的日期格式!";
+                }
+                else
+                {
+                    try
+                    {
+                        string[] DateTimeList = { "yyyy/M/d tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd HH:mm:ss",
+                                              "yyyy/MM/dd",
+                                              "yyyyMMdd"
+                                            };
+                        DateTime dt = DateTime.ParseExact(inputDate, DateTimeList, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                        msg = dt.ToString("yyyy/MM/dd");
+                    }
+                    catch
+                    {
+                        msg = "";
+                    }
+                }
+            }
+
+            return msg;
+
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
+    }
+    #endregion
+
+
+    #region 檢查有效日期
+    /// <summary>
+    /// 檢查有效日期(錯誤時回傳訊息；否則，回傳空值。)
+    /// </summary>
+    /// <param name="inputDate">日期</param>
+    /// <returns>錯誤時回傳訊息；否則，回傳空值。</returns>
+    public string IsDateFormat(string inputDate)
+    {
+        try
+        {
+            string msg = "";
+            if (inputDate != "")
+            {
+                if (inputDate.Length < 8 || inputDate.Length > 10)
+                {
+                    msg = "請輸入yyyy/MM/dd或yyyyMMdd的日期格式!";
+                }
+                else
+                {
+                    try
+                    {
+                        string[] DateTimeList = { "yyyy/M/d tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd HH:mm:ss",
+                                              "yyyy/MM/dd",
+                                              "yyyyMMdd"
+                                            };
+                        DateTime dt = DateTime.ParseExact(inputDate, DateTimeList, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                    }
+                    catch
+                    {
+                        msg = "請輸入有效日期!";
+                    }
+                }
+            }
+
+            return msg;
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("檢查日期(common.IsDateFormat)發生錯誤，錯誤訊息：" + ex.Message);
+        }
+    }
+    #endregion
+
+    #region 檢查起迄有效日期
+    /// <summary>
+    /// 檢查起迄有效日期(錯誤時回傳訊息；否則，回傳空值。)
+    /// </summary>
+    /// <param name="inputSDate">開始日期</param>
+    /// /// <param name="inputEDate">結束日期</param>
+    /// <returns>錯誤時回傳訊息；否則，回傳空值。</returns>
+    public string IsDateFormatSE(string inputSDate, string inputEDate)
+    {
+        try
+        {
+            string msg = "";
+            DateTime sdt = new DateTime();
+            DateTime edt = new DateTime();
+            if (inputSDate != "")
+            {
+                if (inputSDate.Length < 8 || inputSDate.Length > 15)
+                {
+                    msg = "開始日期，請輸入yyyy/MM/dd或yyyyMMdd的日期格式!\n";
+                }
+                else
+                {
+                    try
+                    {
+                        string[] DateTimeList = { "yyyy/M/d tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd HH:mm:ss",
+                                              "yyyyMMdd HHmm",
+                                              "yyyy/MM/dd",
+                                              "yyyyMMdd"
+                                            };
+                        sdt = DateTime.ParseExact(inputSDate, DateTimeList, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                    }
+                    catch
+                    {
+                        msg = "開始日期，請輸入有效日期!\n";
+                    }
+                }
+            }
+
+            if (inputEDate != "")
+            {
+                if (inputEDate.Length < 8 || inputEDate.Length > 15)
+                {
+                    msg += "結束日期，請輸入yyyy/MM/dd或yyyyMMdd的日期格式!";
+                }
+                else
+                {
+                    try
+                    {
+                        string[] DateTimeList = { "yyyy/M/d tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd tt hh:mm:ss",
+                                              "yyyy/MM/dd HH:mm:ss",
+                                              "yyyyMMdd HHmm",
+                                              "yyyy/MM/dd",
+                                              "yyyyMMdd"
+                                            };
+                        edt = DateTime.ParseExact(inputEDate, DateTimeList, CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces);
+                    }
+                    catch
+                    {
+                        msg += "結束日期，請輸入有效日期!";
+                    }
+                }
+            }
+
+            if (inputSDate != "" && inputEDate != "" && msg == "")
+            {
+                if (edt < sdt)
+                {
+                    msg = "開始時間不可大於或等於結束時間!";
+                }
+            }
+
+            return msg;
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("檢查起迄有效日期(common.IsDateFormat)發生錯誤，錯誤訊息：" + ex.Message);
+        }
+    }
+    #endregion
+
+
+    /// <summary>
+    /// 計算日期相差 返回相差時數(yyyyMMddHHmm)
+    /// </summary>
+    /// <param name="StartDate"></param>
+    /// <param name="EndDate"></param>
+    /// <returns></returns>
+    public string getDateDifference(string StartDate, string EndDate)
+    {
+        try
+        {
+            string Differe = "";
+
+            DateTime DateStart = DateTime.ParseExact(StartDate, "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.AllowWhiteSpaces);
+            DateTime DateEnd = DateTime.ParseExact(EndDate, "yyyyMMddHHmm", null, System.Globalization.DateTimeStyles.AllowWhiteSpaces);
+
+            TimeSpan Total = DateEnd.Subtract(DateStart); //日期相減
+            Differe = Total.Hours.ToString(); //共幾小時
+
+            return Differe;
+        }
+        catch
+        {
+            return "資料錯誤";
+        }
     }
 }
 

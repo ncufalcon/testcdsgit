@@ -13,7 +13,7 @@ namespace payroll
     {
         SqlConnection Sqlconn = new payroll_sqlconn().conn;
 
-
+        Common com = new Common();
         /// <summary>
         /// 查詢
         /// </summary>
@@ -50,35 +50,6 @@ namespace payroll
 
 
 
-
-        /// <summary>
-        /// 新增管理者
-        /// </summary>
-        public void InsFac()
-        {
-            string sql = @"insert tel_Fac(facEmpno, facNo, facStatus, facCallArea, facPS, facRegion, facCreateid)
-                              values(@facEmpno, @facNo, @facStatus, @facCallArea, @facPS, @facRegion, @facCreateid)";
-
-            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            //cmd.Parameters.AddWithValue("@facEmpno", facEmpno);
-            //cmd.Parameters.AddWithValue("@facNo", facNo);
-            //cmd.Parameters.AddWithValue("@facStatus", "A");
-            //cmd.Parameters.AddWithValue("@facCallArea", facCallArea);
-            //cmd.Parameters.AddWithValue("@facPS", facPS);
-            //cmd.Parameters.AddWithValue("@facRegion", facRegion);
-            //cmd.Parameters.AddWithValue("@facCreateid", facCreateid);
-            try
-            {
-
-                cmd.Connection.Open();
-                cmd.ExecuteNonQuery();
-
-            }
-            catch (Exception ex) { throw ex; }
-            finally { cmd.Connection.Close(); cmd.Dispose(); }
-        }
-
-
         /// <summary>
         /// 修改個人密碼
         /// </summary>
@@ -103,26 +74,6 @@ namespace payroll
 
         }
 
-        /// <summary>
-        /// 刪除管理者
-        /// </summary>
-        public void DelFac()
-        {
-            string sql = @"delete from tel_Fac where facGuid=@facGuid ";
-
-            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            //cmd.Parameters.AddWithValue("@facGuid", facGuid);
-
-            try
-            {
-                cmd.Connection.Open();
-                cmd.ExecuteNonQuery();
-
-            }
-            catch (Exception ex) { throw ex; }
-            finally { cmd.Connection.Close(); cmd.Dispose(); }
-
-        }
 
 
 
@@ -140,7 +91,7 @@ namespace payroll
         public DataTable SelPersonSingleAllowanceTop200()
         {
 
-            string sql = @"select top 200 * from v_PersonSingleAllowance where 1=1 and paStatus='A' order by paModifyDate";
+            string sql = @"select top 200 * from v_PersonSingleAllowance where 1=1 and paStatus='A' order by paCreateDate desc";
 
       
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
@@ -164,7 +115,7 @@ namespace payroll
         {
 
             string sql = @"SELECT * FROM v_PersonSingleAllowance where 1=1 and paStatus='A' ";
-
+            
             if (!string.IsNullOrEmpty(m.paGuid))
                 sql += "and paGuid=@paGuid ";
             if (!string.IsNullOrEmpty(m.paPerGuid))
@@ -182,16 +133,17 @@ namespace payroll
             if (!string.IsNullOrEmpty(m.siItemName))
                 sql += "and siItemName=@siItemName ";
 
-            sql += "order by paModifyDate";
+            sql += "order by paCreateDate desc";
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            cmd.Parameters.AddWithValue("@paGuid", m.paGuid);
-            cmd.Parameters.AddWithValue("@paPerGuid", m.paPerGuid);
-            cmd.Parameters.AddWithValue("@paAllowanceCode", m.paAllowanceCode);
-            cmd.Parameters.AddWithValue("@paDate", m.paDate);
-            cmd.Parameters.AddWithValue("@perName", m.perName);
-            cmd.Parameters.AddWithValue("@perNo", m.perNo);
-            cmd.Parameters.AddWithValue("@siItemCode", m.siItemCode);
-            cmd.Parameters.AddWithValue("@siItemName", m.siItemName);
+
+            cmd.Parameters.AddWithValue("@paGuid", com.cSNull(m.paGuid));
+            cmd.Parameters.AddWithValue("@paPerGuid", com.cSNull(m.paPerGuid));
+            cmd.Parameters.AddWithValue("@paAllowanceCode", com.cSNull(m.paAllowanceCode));
+            cmd.Parameters.AddWithValue("@paDate", com.cSNull(m.paDate));
+            cmd.Parameters.AddWithValue("@perName", com.cSNull(m.perName));
+            cmd.Parameters.AddWithValue("@perNo", com.cSNull(m.perNo));
+            cmd.Parameters.AddWithValue("@siItemCode", com.cSNull(m.siItemCode));
+            cmd.Parameters.AddWithValue("@siItemName", com.cSNull(m.siItemName));
             try
             {
                 cmd.Connection.Open();
@@ -211,17 +163,18 @@ namespace payroll
         /// </summary>
         public void InsPersonSingleAllowance(payroll.model.sy_PersonSingleAllowance p)
         {
-            string sql = @"insert sy_PersonSingleAllowance(paPerGuid, paAllowanceCode, paPrice, paQuantity, paCost, paDate, paCreateId)
-                              values(@paPerGuid, @paAllowanceCode, @paPrice, @paQuantity, @paCost, @paDate, @paCreateId)";
+            string sql = @"insert sy_PersonSingleAllowance(paPerGuid, paAllowanceCode, paPrice, paQuantity, paCost, paDate, paCreateId,paPs)
+                              values(@paPerGuid, @paAllowanceCode, @paPrice, @paQuantity, @paCost, @paDate, @paCreateId,@paPs)";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            cmd.Parameters.AddWithValue("@paPerGuid", p.paPerGuid);
+            cmd.Parameters.AddWithValue("@paPerGuid",p.paPerGuid);
             cmd.Parameters.AddWithValue("@paAllowanceCode", p.paAllowanceCode);
             cmd.Parameters.AddWithValue("@paPrice", p.paPrice);
             cmd.Parameters.AddWithValue("@paQuantity", p.paQuantity);
             cmd.Parameters.AddWithValue("@paCost", p.paCost);
             cmd.Parameters.AddWithValue("@paDate", p.paDate);
             cmd.Parameters.AddWithValue("@paCreateId", p.paCreateId);
+            cmd.Parameters.AddWithValue("@paPs", p.paPs);
             try
             {
 
@@ -250,6 +203,7 @@ namespace payroll
                            paModifyDate=@paModifyDate
                            where paGuid=@paGuid";
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@paGuid", p.paGuid);
             cmd.Parameters.AddWithValue("@paPerGuid", p.paPerGuid);
             cmd.Parameters.AddWithValue("@paAllowanceCode", p.paAllowanceCode);
             cmd.Parameters.AddWithValue("@paPrice", p.paPrice);
@@ -257,7 +211,7 @@ namespace payroll
             cmd.Parameters.AddWithValue("@paCost", p.paCost);
             cmd.Parameters.AddWithValue("@paDate", p.paDate);
             cmd.Parameters.AddWithValue("@paModifyId", p.paModifyId);
-            cmd.Parameters.AddWithValue("@paModifyDate", p.paModifyDate);
+            cmd.Parameters.AddWithValue("@paModifyDate", DateTime.Now);
 
             try
             {
@@ -276,14 +230,14 @@ namespace payroll
         public void DelPersonSingleAllowance(payroll.model.sy_PersonSingleAllowance p)
         {
             string sql = @"update sy_PersonSingleAllowance set 
-                           paStatus='D,
+                           paStatus='D',
                            paModifyId=@paModifyId,
                            paModifyDate=@paModifyDate
                            where paGuid=@paGuid";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@paModifyId", p.paModifyId);
-            cmd.Parameters.AddWithValue("@paModifyDate", p.paModifyDate);
+            cmd.Parameters.AddWithValue("@paModifyDate", DateTime.Now);
             cmd.Parameters.AddWithValue("@paGuid", p.paGuid);
             try
             {
@@ -296,5 +250,137 @@ namespace payroll
 
         }
 
+
+
+
+
+        /// <summary>
+        /// 新增津貼匯入資料至暫存table
+        /// </summary>
+        public void InsAllTemp(DataTable dt)
+        {
+            SqlCommand cmd = new SqlCommand();
+            try
+            {
+                cmd.Connection = Sqlconn;
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+
+                string sql = @"";
+
+                //新增Jumper
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+
+                    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+                            values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
+
+                
+                    cmd.CommandText = sql;
+                    cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
+                    cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
+                    cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
+                    cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
+                    cmd.ExecuteNonQuery();
+                }
+
+
+                //cmd.ExecuteNonQuery();
+                transaction.Commit();
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
+
+
+
+        /// <summary>
+        /// 刪除個人津貼暫存檔
+        /// </summary>
+        public void DelsyAllowanceTemp()
+        {
+            string sql = @"delete from sy_AllowanceTemp";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+        /// <summary>
+        /// 查詢個人津貼匯入暫存檔_AllowanceTemp
+        /// </summary>
+        public DataTable SelAllowanceTemp()
+        {
+
+            string sql = @"select * FROM v_AllowanceTemp ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+        /// <summary>
+        /// 刪除個人津貼暫存檔
+        /// </summary>
+        public void DelsyAllowanceTempOne(string guid)
+        {
+            string sql = @"delete from sy_AllowanceTemp where atGuid=@atGuid";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@atGuid", guid);
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+        /// <summary>
+        /// 將暫存檔資料匯入津貼sy_PersonSingleAllowance
+        /// </summary>
+        public void InsImportsyAllowance(string CreateId)
+        {
+            string sql = @"insert into sy_PersonSingleAllowance(paPerGuid,paAllowanceCode,paPrice ,paQuantity,paCost,paDate,paCreateId,paImport,paImportDate)
+                           SELECT perGuid,siGuid ,atCost,1,atCost,atDate,@paCreateId,'Y',CONVERT(varchar, getdate(), 111)  FROM v_AllowanceTemp";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@paCreateId", CreateId);
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
     }
 }
