@@ -165,13 +165,13 @@ public class LaborHealth_DB
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"SELECT top 200 plGuid,plPerGuid,perNo,perName,plSubsidyLevel,slSubsidyCode,plLaborNo,plChangeDate,plChange,code_desc,
-plLaborPayroll,plChangeDate,comLaborProtectionCode
+plLaborPayroll,plChangeDate,comLaborProtectionCode,plChangeDate
 from sy_PersonLabor
 left join sy_Person on perGuid=plPerGuid
 left join sy_SubsidyLevel on slGuid=plSubsidyLevel
 left join sy_codetable on code_group='11' and code_value=plChange
 left join sy_Company on comGuid=perComGuid
-where plStatus<>'D' ");
+where plStatus<>'D' order by sy_PersonLabor.plChangeDate desc ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
@@ -340,7 +340,7 @@ left join sy_Person on perGuid=piPerGuid
 left join sy_SubsidyLevel on slGuid=piSubsidyLevel
 left join sy_codetable on code_group='12' and code_value=piChange
 left join sy_Company on comGuid=perComGuid
-where piStatus<>'D' ");
+where piStatus<>'D' order by sy_PersonInsurance.piChangeDate desc ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");

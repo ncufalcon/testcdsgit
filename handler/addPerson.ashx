@@ -3,8 +3,9 @@
 using System;
 using System.Web;
 using System.Data;
+using System.Web.SessionState;
 
-public class addPerson : IHttpHandler {
+public class addPerson : IHttpHandler,IRequiresSessionState {
     Personnel_DB Personnel_Db = new Personnel_DB();
     LaborHealth_DB LH_Db = new LaborHealth_DB();
     PersonPension_DB PP_Db = new PersonPension_DB();
@@ -109,6 +110,8 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perResidentAddr = pResidentAddr;
                     Personnel_Db._perResPostalCode = pResPostalCode;
                     Personnel_Db._perPs = pPs;
+                    Personnel_Db._perCreateId = USERINFO.MemberGuid;
+                    Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.addPersonnelInfo();
                     break;
                 case "Modify":
@@ -140,6 +143,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perResidentAddr = pResidentAddr;
                     Personnel_Db._perResPostalCode = pResPostalCode;
                     Personnel_Db._perPs = pPs;
+                    Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modPersonnelInfo();
                     break;
                 case "Insurance":
@@ -149,6 +153,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perGroupInsurance = pGroupInsurance;
                     Personnel_Db._perLaborID = pLaborID;
                     Personnel_Db._perInsuranceID = pInsuranceID;
+                    Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modInsurance();
 
                     //勞保
@@ -159,6 +164,7 @@ public class addPerson : IHttpHandler {
                         LH_Db._plGuid = Guid.NewGuid().ToString();
                         LH_Db._plPerGuid = id;
                         LH_Db._plSubsidyLevel = pLaborID;
+                        LH_Db._plModifyId = USERINFO.MemberGuid;
                         LH_Db.addLabor();
                     }
                     //健保
@@ -169,6 +175,7 @@ public class addPerson : IHttpHandler {
                         LH_Db._piGuid = Guid.NewGuid().ToString();
                         LH_Db._piPerGuid = id;
                         LH_Db._piSubsidyLevel = pInsuranceID;
+                        LH_Db._piModifyId = USERINFO.MemberGuid;
                         LH_Db.addHeal();
                     }
                     //勞退
@@ -178,6 +185,7 @@ public class addPerson : IHttpHandler {
                     {
                         PP_Db._ppGuid = Guid.NewGuid().ToString();
                         PP_Db._ppPerGuid = id;
+                        PP_Db._ppModifyId = USERINFO.MemberGuid;
                         PP_Db.addPension();
                     }
                     //團保
@@ -191,6 +199,7 @@ public class addPerson : IHttpHandler {
                             GI_Db._pgiPerGuid = id;
                             GI_Db._pgiType = "01"; //身份
                             GI_Db._pgiChange = "01"; //異動別
+                            GI_Db._pgiModifyId = USERINFO.MemberGuid;
                             GI_Db.addGroupInsurance();
                         }
                     }
@@ -204,6 +213,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perSyAccountName = pSyAccountName;
                     Personnel_Db._perSyNumber = pSyNumber;
                     Personnel_Db._perSyAccount = pSyAccount;
+                    Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modSalary();
                     break;
                 case "Buckle":
@@ -212,6 +222,7 @@ public class addPerson : IHttpHandler {
                     Personnel_Db._perDetentionRatio = decimal.Parse(pDetentionRatio);
                     Personnel_Db._perMonthPayroll = decimal.Parse(pMonthPayroll);
                     Personnel_Db._perYearEndBonuses = decimal.Parse(pYearEndBonuses);
+                    Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modBuckle();
                     break;
             }

@@ -25,6 +25,7 @@
                 }
             });
 
+            //勞健保比對
             $(document).on("click", "#LH_CompBtn", function () {
                 $.fancybox({
                     href: "PersonImport.aspx?tp=LH_Compare",
@@ -485,6 +486,16 @@
                     $("#pg_eStatus").html("新增");
                     $("#pg_saveBtn").hide();
                     $("#pg_addBtn").show();
+                    getGroupInsList();
+                    break;
+                case "InsSalaryMod":
+                    alert("完成");
+                    $("#InsModifyTab").empty();
+                    $(".statabs").tabs({ active: 0 });
+                    getLaborList();
+                    getHealList();
+                    getPensionList();
+                    getFamilyInsList();
                     getGroupInsList();
                     break;
                 case "error":
@@ -1149,7 +1160,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppLarboRatio").text() + '%</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppEmployerRatio").text() + '%</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppPayPayroll").text() + '%</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppPayPayroll").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppChangeDate").text() + '</td>';
                                 tabstr += '</tr>';
                             });
@@ -1669,6 +1680,106 @@
             });
         }
     </script>
+    <%--保薪調整--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //保薪調整
+            $(document).on("click", "#InsModBtn", function () {
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/sp_payModify.ashx",
+                    data: {
+                        //Group: gno
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("sp_payModify Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            data = $.parseXML(data);
+                            $("#InsModifyTab").empty();
+                            var tabstr = '<thead><tr>';
+                            tabstr += '<th width="80" nowrap="nowrap" rowspan="2">操作</th>';
+                            tabstr += '<th nowrap="nowrap" rowspan="2">員工編號</th>';
+                            tabstr += '<th nowrap="nowrap" rowspan="2">姓名</th>';
+                            tabstr += '<th nowrap="nowrap" rowspan="2">平均月薪</th>';
+                            tabstr += '<th nowrap="nowrap" colspan="3">調整前級距金額</th>';
+                            tabstr += '<th nowrap="nowrap" colspan="3">調整後級距金額</th>';
+                            tabstr += '</tr><tr>';
+                            tabstr += '<th nowrap="nowrap">勞保</th>';
+                            tabstr += '<th nowrap="nowrap">健保</th>';
+                            tabstr += '<th nowrap="nowrap">勞退</th>';
+                            tabstr += '<th nowrap="nowrap">勞保</th>';
+                            tabstr += '<th nowrap="nowrap">健保</th>';
+                            tabstr += '<th nowrap="nowrap">勞退</th></tr></thead>';
+                            tabstr += '<tbody>';
+                            if ($(data).find("data_item").length > 0) {
+                                $(data).find("data_item").each(function (i) {
+                                    tabstr += '<tr aid=' + $(this).children("pPerGuid").text() + '>';
+                                    tabstr += '<td style="display:none">';
+                                    tabstr += '<input type="hidden" name="im_gv" value="' + $(this).children("pPerGuid").text() + '" />';
+                                    tabstr += '<input type="hidden" name="im_lSL" value="' + $(this).children("L_SL").text() + '" />';
+                                    tabstr += '<input type="hidden" name="im_hSL" value="' + $(this).children("H_SL").text() + '" />';
+                                    tabstr += '<input type="hidden" name="im_pay" value="' + $(this).children("pay_i1").text() + '" />';
+                                    tabstr += '<input type="hidden" name="bf_L" value="' + $(this).children("b_labor").text() + '" />';
+                                    tabstr += '<input type="hidden" name="bf_H" value="' + $(this).children("b_ganbor").text() + '" />';
+                                    tabstr += '<input type="hidden" name="bf_P" value="' + $(this).children("b_tahui").text() + '" />';
+                                    tabstr += '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_avg").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_labor").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_ganbor").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_tahui").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
+                                    tabstr += '</tr>';
+                                });
+                            }
+                            else
+                                tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
+                            tabstr += '</tbody>';
+                            $("#InsModifyTab").append(tabstr);
+                            $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                            $(".stripeMe tr:even").addClass("alt");
+                            $(".fixTable").tableHeadFixer();
+                        }
+                    }
+                });
+            });
+
+            //保薪調整 刪除
+            $(document).on("click", "a[name='IMdelbtn']", function () {
+                if (confirm('確定刪除 員工編號：' + $(this).attr("ano") + "？"))
+                    $(this).parent().parent().remove();
+            });
+
+            //執行保薪調整
+            $(document).on("click", "#start_im", function () {
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+
+                form.appendChild(iframe[0]);
+
+                form.setAttribute("action", "../handler/InsSalaryMod.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
+        });
+    </script>
     <%--datepicker--%>
     <style type="text/css">
         .ui-datepicker {
@@ -1690,7 +1801,6 @@
                 <!-- 詳細資料start -->
                 <div class="twocol margin15T">
                     <div class="right">
-                        <a href="javascript:void(0);" class="keybtn">執行保薪調整</a>
                         <a id="LH_CompBtn" href="javascript:void(0);" class="keybtn">勞健保比對</a>
                     </div>
                 </div>
@@ -1701,6 +1811,7 @@
                         <li><a href="#tabs-3">勞退</a></li> 
                         <li><a href="#tabs-4">眷屬健保</a></li>
                         <li><a href="#tabs-5">團保</a></li>  
+                        <li><a href="#tabs-6">保薪調整</a></li>  
                     </ul>
                     <div id="tabs-1">
                         <div class="twocol margin15T">
@@ -2061,10 +2172,22 @@
                                     <td align="right"><div class="font-title titlebackicon">備註</div></td>
                                     <td><input id="pgi_Ps" name="pgi_Ps" type="text" class="inputex width99" /></td>
                                 </tr>
-
                             </table>
                         </div>
-                    </div><!-- statabs -->
+                    </div><!-- tabs-5 -->
+                    <div id="tabs-6">
+                        <div class="twocol margin15T">
+                            <div class="right">
+                                <a id="InsModBtn" href="javascript:void(0);" class="keybtn">執行保薪調整</a>
+                                <a id="start_im" href="javascript:void(0);" class="keybtn">送出調整</a>
+                            </div>
+                        </div><br />
+                        <div class="tabfixwidth margin15T">
+                            <div class="stripeMe fixTable" style="max-height:400px;">
+                                <table id="InsModifyTab" width="98%" border="0" cellspacing="0" cellpadding="0"></table>
+                            </div><!-- overwidthblock -->
+                        </div>
+                    </div>
                 <!-- 詳細資料end -->
             </div><!-- fixwidth -->         
         </div><!-- WrapperMain -->

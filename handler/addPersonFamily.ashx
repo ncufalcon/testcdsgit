@@ -2,9 +2,10 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 
-public class addPersonFamily : IHttpHandler {
+public class addPersonFamily : IHttpHandler,IRequiresSessionState {
     PersonFamily_DB PF_Db = new PersonFamily_DB();
     GroupInsurance_DB GI_Db = new GroupInsurance_DB();
     FamilyInsurance_DB FI_Db = new FamilyInsurance_DB();
@@ -37,6 +38,8 @@ public class addPersonFamily : IHttpHandler {
                     PF_Db._pfCode = pf_CodeGuid;
                     PF_Db._pfTitle = pf_Title;
                     PF_Db._pfBirthday = pf_Birthday;
+                    PF_Db._pfCreateId = USERINFO.MemberGuid;
+                    PF_Db._pfModifyId = USERINFO.MemberGuid;
                     PF_Db.addPersonFamily();
 
                     //眷屬健保
@@ -45,6 +48,7 @@ public class addPersonFamily : IHttpHandler {
                     FI_Db._pfiPfGuid = GuidStr;
                     FI_Db._pfiChange = "01";
                     FI_Db._pfiSubsidyLevel = pf_CodeGuid;
+                    FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.addFamilyIns();
                     //眷屬團保
                     if (pf_GroupInsurance == "Y")
@@ -54,6 +58,7 @@ public class addPersonFamily : IHttpHandler {
                         GI_Db._pgiPfGuid = GuidStr;
                         GI_Db._pgiType = "02"; //身份
                         GI_Db._pgiChange = "01"; //異動別
+                        GI_Db._pgiModifyId = USERINFO.MemberGuid;
                         GI_Db.addGroupInsurance();
                     }
                     break;
@@ -66,6 +71,7 @@ public class addPersonFamily : IHttpHandler {
                     PF_Db._pfCode = pf_CodeGuid;
                     PF_Db._pfTitle = pf_Title;
                     PF_Db._pfBirthday = pf_Birthday;
+                    PF_Db._pfModifyId = USERINFO.MemberGuid;
                     PF_Db.modPersonFamily();
                     break;
             }

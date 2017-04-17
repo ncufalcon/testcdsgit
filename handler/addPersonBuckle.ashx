@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addPersonBuckle : IHttpHandler {
+public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
     PersonBuckle_DB PB_Db = new PersonBuckle_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -39,6 +40,8 @@ public class addPersonBuckle : IHttpHandler {
                     PB_Db._pbContractor = pb_Contractor;
                     PB_Db._pbTel = pb_Tel;
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
+                    PB_Db._pbCreateId = USERINFO.MemberGuid;
+                    PB_Db._pbModifyId = USERINFO.MemberGuid;
                     PB_Db.addPersonBuckle();
                     break;
                 case "Modify":
@@ -53,6 +56,7 @@ public class addPersonBuckle : IHttpHandler {
                     PB_Db._pbContractor = pb_Contractor;
                     PB_Db._pbTel = pb_Tel;
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
+                    PB_Db._pbModifyId = USERINFO.MemberGuid;
                     PB_Db.modPersonBuckle();
                     break;
             }

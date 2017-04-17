@@ -106,7 +106,7 @@ left join sy_Person on perGuid=pfiPerGuid
 left join sy_PersonFamily on pfGuid=pfiPfGuid
 left join sy_SubsidyLevel on slGuid=pfiSubsidyLevel
 left join sy_codetable on code_group='14' and code_value=pfiChange
-where pfiStatus<>'D' ");
+where pfiStatus<>'D' order by sy_PersonFamilyInsurance.pfiChangeDate desc ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");

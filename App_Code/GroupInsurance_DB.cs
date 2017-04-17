@@ -101,7 +101,7 @@ left join sy_Person on perGuid=pgiPerGuid
 left join sy_PersonFamily on pfGuid=pgiPfGuid
 left join sy_GroupInsurance on giGuid=pgiInsuranceCode
 left join sy_codetable on code_group='14' and code_value=pgiChange
-where pgiStatus<>'D' ");
+where pgiStatus<>'D' order by sy_PersonGroupInsurance.pgiChangeDate desc ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");

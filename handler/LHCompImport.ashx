@@ -8,6 +8,7 @@ using System.IO;
 using FlexCel.Core;
 using FlexCel.XlsAdapter;
 using System.Configuration;
+using System.Text;
 
 public class LHCompImport : IHttpHandler {
 
@@ -173,6 +174,26 @@ P_Date
                 myTrans.Commit();
 
                 File.Delete(context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(uploadFiles[0].FileName)));
+
+                SqlCommand oCmd2 = new SqlCommand();
+                oCmd2.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append(@"sp_payModify");
+                oCmd2.CommandTimeout = 120;
+                oCmd2.CommandText = sb.ToString();
+                oCmd2.CommandType = CommandType.StoredProcedure;
+                oCmd2.Connection.Open();
+
+                SqlDataAdapter oda = new SqlDataAdapter(oCmd2);
+                //oCmd.Parameters.AddWithValue("@voc_no", voc_no);
+                //oCmd.Parameters.AddWithValue("@Year", Year);
+                oCmd2.ExecuteNonQuery();
+                    
+                oCmd2.Connection.Close();
+                oCmd2.Connection.Dispose();
+                oCmd2.Dispose();
+
             }
         }
         catch (Exception ex)
@@ -186,9 +207,9 @@ P_Date
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','比對失敗，請聯絡系統管理員');</script>");
             else
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對完成');</script>");
         }
     }
 

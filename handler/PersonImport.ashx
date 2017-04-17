@@ -2,6 +2,7 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -9,7 +10,7 @@ using FlexCel.Core;
 using FlexCel.XlsAdapter;
 using System.Configuration;
 
-public class PersonImport : IHttpHandler {
+public class PersonImport : IHttpHandler,IRequiresSessionState {
     Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest(HttpContext context)
     {
@@ -38,8 +39,8 @@ public class PersonImport : IHttpHandler {
                     Directory.CreateDirectory(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\")));
                 }
                 aFile.SaveAs(context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(aFile.FileName)));
-                string fileSpec = context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(aFile.FileName));
-                Xls.Open(fileSpec);
+
+                Xls.Open(UpLoadPath);
                 Xls.ActiveSheet = 1;
 
                 //勞保
@@ -200,8 +201,8 @@ public class PersonImport : IHttpHandler {
                     oCmd.Parameters["@perSyNumber"].Value = perSyNumber;
                     oCmd.Parameters["@perSyAccount"].Value = perSyAccount;
                     oCmd.Parameters["@perYears"].Value = perYears;
-                    oCmd.Parameters["@perCreateId"].Value = "";
-                    oCmd.Parameters["@perModifyId"].Value = "";
+                    oCmd.Parameters["@perCreateId"].Value = USERINFO.MemberGuid;
+                    oCmd.Parameters["@perModifyId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@perModifyDate"].Value = DateTime.Now;
                     oCmd.Parameters["@perStatus"].Value = "A";
 
@@ -425,8 +426,8 @@ pgiStatus
                     oCmd.Parameters["@pfHealthInsurance"].Value = pfHealthInsurance;
                     oCmd.Parameters["@pfCode"].Value = pfCode;
                     oCmd.Parameters["@pfGroupInsurance"].Value = pfGroupInsurance;
-                    oCmd.Parameters["@pfCreateId"].Value = "";
-                    oCmd.Parameters["@pfModifyId"].Value = "";
+                    oCmd.Parameters["@pfCreateId"].Value = USERINFO.MemberGuid;
+                    oCmd.Parameters["@pfModifyId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@pfModifyDate"].Value = DateTime.Now;
                     oCmd.Parameters["@pfStatus"].Value = "A";
 

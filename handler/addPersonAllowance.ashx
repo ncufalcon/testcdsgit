@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addPersonAllowance : IHttpHandler {
+public class addPersonAllowance : IHttpHandler,IRequiresSessionState {
     PersonAllowance_DB PA_Db = new PersonAllowance_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -24,12 +25,15 @@ public class addPersonAllowance : IHttpHandler {
                     PA_Db._paPerGuid = PerID;
                     PA_Db._paAllowanceCode = pa_CodeGuid;
                     PA_Db._paCost = decimal.Parse(pa_Cost);
+                    PA_Db._paCreateId = USERINFO.MemberGuid;
+                    PA_Db._paModifyId = USERINFO.MemberGuid;
                     PA_Db.addPersonAllowance();
                     break;
                 case "Modify":
                     PA_Db._paGuid = id;
                     PA_Db._paAllowanceCode = pa_CodeGuid;
                     PA_Db._paCost = decimal.Parse(pa_Cost);
+                    PA_Db._paModifyId = USERINFO.MemberGuid;
                     PA_Db.modPersonAllowance();
                     break;
             }

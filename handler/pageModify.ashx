@@ -4,9 +4,8 @@ using System;
 using System.Web;
 using System.Data;
 using System.Collections.Generic;
-using System.Web.SessionState;
 
-public class pageModify : IHttpHandler, IRequiresSessionState
+public class pageModify : IHttpHandler
 {
     //codetable 欄位 代碼檔
     public class codeTooL
@@ -51,41 +50,13 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string perPosition { get; set; }//職務
         public string PositionName { get; set; }//職務名稱
         public string perFirstDate { get; set; }//到職日期
-        public string perBasicSalary { get; set; }//底薪
-        public string perAllowance { get; set; }//職能加給
-    }
-    //sy_PersonAllowanceChang1e 欄位 薪資異動資料
-    public class pacTooL
-    {
-        public string pacGuid { get; set; }
-        public string pacPerGuid { get; set; }
-        public string pacChangeDate { get; set; }
-        public string pacChangeBegin { get; set; }
-        public string pacChangeEnd { get; set; }
-        public string pacVenifyDate { get; set; }
-        public string pacVenify { get; set; }
-        public string pacStatus { get; set; }
-        public string pacPs { get; set; }
-        public string pacCreateId { get; set; }
-        public string pacCreateDate { get; set; }
-        public string pacModifyId { get; set; }
-        public string pacModifyDate { get; set; }
-        public string pacStatus_d { get; set; }
-        public string perNo { get; set; }
-        public string perName { get; set; }
-        public string siItemName { get; set; }
-        public string pacChange { get; set; }
-        public string siRef { get; set; }
     }
 
     CodeTable_DB code_db = new CodeTable_DB();
     Dal dal_db = new Dal();
     sy_PersonChange pc_db = new sy_PersonChange();
-    sy_PersonAllowanceChang1e_DB pac_db = new sy_PersonAllowanceChang1e_DB();
     public void ProcessRequest (HttpContext context)
     {
-        //string session_no = context.Session["MemberInfo_Guid"].ToString().Trim();
-        //string session_name = context.Session["MemberInfo_Name"].ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             //撈異動項目下拉選單資料
@@ -156,12 +127,12 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 break;
             //撈人事異動資料
             case "load_personchangedata":
-                string str_search_person_date = string.IsNullOrEmpty(context.Request.Form["str_person_date"]) ? "" : context.Request.Form["str_person_date"].ToString().Trim();
+                string str_search_erson_date = string.IsNullOrEmpty(context.Request.Form["str_person_date"]) ? "" : context.Request.Form["str_person_date"].ToString().Trim();
                 string str_search_person_keyword = string.IsNullOrEmpty(context.Request.Form["str_person_keyword"]) ? "" : context.Request.Form["str_person_keyword"].ToString().Trim();
                 string str_search_person_status = string.IsNullOrEmpty(context.Request.Form["str_person_status"]) ? "" : context.Request.Form["str_person_status"].ToString().Trim();
                 string str_search_person_guid = string.IsNullOrEmpty(context.Request.Form["str_search_person_guid"]) ? "" : context.Request.Form["str_search_person_guid"].ToString().Trim();
                 pc_db._str_keyword = str_search_person_keyword;
-                pc_db._pcChangeDate = str_search_person_date;
+                pc_db._pcChangeDate = str_search_erson_date;
                 pc_db._pcStatus = str_search_person_status;
                 pc_db._pcGuid = str_search_person_guid;
                 DataTable dt_personchange = pc_db.SelectPersonChange();
@@ -233,8 +204,6 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.PositionName =  dt_thispeopledata.Rows[0]["PositionName"].ToString().Trim();//職務名稱
                         e.PositionName =  dt_thispeopledata.Rows[0]["PositionName"].ToString().Trim();//職務名稱
                         e.perFirstDate =  dt_thispeopledata.Rows[0]["perFirstDate"].ToString().Trim();//到職日期
-                        e.perBasicSalary =  dt_thispeopledata.Rows[0]["perBasicSalary"].ToString().Trim();//底薪
-                        e.perAllowance =  dt_thispeopledata.Rows[0]["perAllowance"].ToString().Trim();//職能加給
                         pList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -269,16 +238,8 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     pc_db._pcChangeName = mod_change_pro;
                     pc_db._pcChangeBegin = mod_before;
                     pc_db._pcChangeEnd = mod_after;
-                    if (mod_status == "1")
-                    {
-                        pc_db._pcVenifyDate = mod_chkdate;
-                        pc_db._pcVenify = mod_chkpeople;
-                    }
-                    else {
-                        pc_db._pcVenifyDate = "";
-                        pc_db._pcVenify = "";
-                    }
-
+                    pc_db._pcVenifyDate = mod_chkdate;
+                    pc_db._pcVenify = mod_chkpeople;
                     pc_db._pcStatus = mod_status;
                     pc_db._pcPs = mod_ps;
                     pc_db._pcCreateId = mod_chkpeople;
@@ -289,31 +250,11 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     }
                     else
                     {//修改
-                        try
-                        {
-                            pc_db._pcGuid = mod_hidden_pcguid;
-                            pc_db._pcModifyId = mod_chkpeople;
-                            pc_db.UpdatePersonChange();
-                            pc_db._perGuid = mod_person_guid;
-                            if (mod_change_pro == "01" && mod_status == "1")
-                            {//部門調動已確認
-                             //更新人事資料 sy_Person. perDep
-                                pc_db._perDep = mod_after;
-                                pc_db.UpdatperDep();
-
-                            }
-                            if (mod_change_pro == "02" && mod_status == "1")
-                            {//職務調動已確認
-                             //更新人事資料 sy_Person. perPosition
-                                pc_db._perPosition = mod_after;
-                                pc_db.UpdatperPosition();
-                            }
-                            context.Response.Write("ok");
-                        }
-                        catch (Exception ex) { }
-
+                        pc_db._pcGuid = mod_hidden_pcguid;
+                        pc_db._pcModifyId = mod_chkpeople;
+                        pc_db.UpdatePersonChange();
                     }
-
+                    context.Response.Write("ok");
                 }catch {
                     context.Response.Write("error");
                 }
@@ -330,187 +271,6 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     context.Response.Write("error");
                 }
                 break;
-
-            //人事異動 離職(已確認) 退保動作
-            case "per_back":
-                string back_person_guid = string.IsNullOrEmpty(context.Request.Form["back_person_guid"]) ? "" : context.Request.Form["back_person_guid"].ToString().Trim();
-                string back_date = string.IsNullOrEmpty(context.Request.Form["back_date"]) ? "" : context.Request.Form["back_date"].ToString().Trim();
-                try {
-                    pc_db._str_creatid = "王胖爺";
-                    pc_db._str_date = back_date;
-                    pc_db._str_back_per_guid = back_person_guid;
-                    pc_db.UpdatePersonLabor();
-                    context.Response.Write("ok");
-                }
-                catch (Exception ex) {
-                    context.Response.Write("error");
-                }
-                break;
-
-            //撈薪資異動
-            case "load_paychangedata":
-                string str_search_pay_date = string.IsNullOrEmpty(context.Request.Form["str_pay_date"]) ? "" : context.Request.Form["str_pay_date"].ToString().Trim();
-                string str_search_pay_keyword = string.IsNullOrEmpty(context.Request.Form["str_pay_keyword"]) ? "" : context.Request.Form["str_pay_keyword"].ToString().Trim();
-                string str_search_pay_status = string.IsNullOrEmpty(context.Request.Form["str_pay_status"]) ? "" : context.Request.Form["str_pay_status"].ToString().Trim();
-                string str_search_pay_guid = string.IsNullOrEmpty(context.Request.Form["str_search_person_guid"]) ? "" : context.Request.Form["str_search_person_guid"].ToString().Trim();
-                pac_db._str_keyword = str_search_pay_keyword;
-                pac_db._str_date = str_search_pay_date;
-                pac_db._str_status = str_search_pay_status;
-                pac_db._pacGuid = str_search_pay_guid;
-                DataTable dt_pacdata = pac_db.SelectPersonAllowanceChang1e();
-                if (dt_pacdata.Rows.Count > 0)
-                {
-                    List<pacTooL> pacList = new List<pacTooL>();
-                    for (int i = 0; i < dt_pacdata.Rows.Count; i++)
-                    {
-                        pacTooL e = new pacTooL();
-                        e.pacGuid = dt_pacdata.Rows[i]["pacGuid"].ToString().Trim();
-                        e.pacPerGuid = dt_pacdata.Rows[i]["pacPerGuid"].ToString().Trim();
-                        e.pacChangeDate = dt_pacdata.Rows[i]["pacChangeDate"].ToString().Trim();
-                        e.pacChangeBegin = dt_pacdata.Rows[i]["pacChangeBegin"].ToString().Trim();
-                        e.pacChangeEnd = dt_pacdata.Rows[i]["pacChangeEnd"].ToString().Trim();
-                        e.pacVenifyDate = dt_pacdata.Rows[i]["pacVenifyDate"].ToString().Trim();
-                        e.pacVenify = dt_pacdata.Rows[i]["pacVenify"].ToString().Trim();
-                        e.pacStatus = dt_pacdata.Rows[i]["pacStatus"].ToString().Trim();
-                        e.pacPs = dt_pacdata.Rows[i]["pacPs"].ToString().Trim();
-                        e.pacStatus_d = dt_pacdata.Rows[i]["pacStatus_d"].ToString().Trim();
-                        e.perNo = dt_pacdata.Rows[i]["perNo"].ToString().Trim();
-                        e.perName = dt_pacdata.Rows[i]["perName"].ToString().Trim();
-                        e.siItemName = dt_pacdata.Rows[i]["siItemName"].ToString().Trim();
-                        e.pacChange = dt_pacdata.Rows[i]["pacChange"].ToString().Trim();
-                        e.siRef = dt_pacdata.Rows[i]["siRef"].ToString().Trim();
-                        pacList.Add(e);
-                    }
-                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-                    string ans = objSerializer.Serialize(pacList);  //new
-                    context.Response.ContentType = "application/json";
-                    context.Response.Write(ans);
-                }
-                else
-                {
-                    context.Response.Write("nodata");
-                }
-                break;
-            //薪資異動 新增/修改
-            case "mode_paydata":
-                string mod_pay_perguid = string.IsNullOrEmpty(context.Request.Form["mod_perguid"]) ? "" : context.Request.Form["mod_perguid"].ToString().Trim();
-                string mod_pay_changedate = string.IsNullOrEmpty(context.Request.Form["mod_changedate"]) ? "" : context.Request.Form["mod_changedate"].ToString().Trim();
-                string mod_pay_before = string.IsNullOrEmpty(context.Request.Form["mod_before"]) ? "" : context.Request.Form["mod_before"].ToString().Trim();
-                string mod_pay_after = string.IsNullOrEmpty(context.Request.Form["mod_after"]) ? "" : context.Request.Form["mod_after"].ToString().Trim();
-                string mod_pay_chkdate = string.IsNullOrEmpty(context.Request.Form["mod_chkdate"]) ? "" : context.Request.Form["mod_chkdate"].ToString().Trim();
-                string mod_pay_chkpeople = string.IsNullOrEmpty(context.Request.Form["mod_chkpeople"]) ? "" : context.Request.Form["mod_chkpeople"].ToString().Trim();
-                string mod_pay_ps = string.IsNullOrEmpty(context.Request.Form["mod_pay_ps"]) ? "" : context.Request.Form["mod_pay_ps"].ToString().Trim();
-                string mod_pay_type = string.IsNullOrEmpty(context.Request.Form["mod_pay_type"]) ? "" : context.Request.Form["mod_pay_type"].ToString().Trim();
-                string mod_pay_status = string.IsNullOrEmpty(context.Request.Form["mod_pay_status"]) ? "" : context.Request.Form["mod_pay_status"].ToString().Trim();
-                string mod_hidden_pacguid = string.IsNullOrEmpty(context.Request.Form["mod_hidden_pacguid"]) ? "" : context.Request.Form["mod_hidden_pacguid"].ToString().Trim();
-                string mod_siguid = string.IsNullOrEmpty(context.Request.Form["mod_siguid"]) ? "" : context.Request.Form["mod_siguid"].ToString().Trim();
-                string mod_hidden_refcode = string.IsNullOrEmpty(context.Request.Form["mod_hidden_refcode"]) ? "" : context.Request.Form["mod_hidden_refcode"].ToString().Trim();
-                try {
-                    pac_db._pacChange = "";
-                    pac_db._pacChangeDate = mod_pay_changedate;
-                    pac_db._pacPerGuid = mod_pay_perguid;
-                    pac_db._pacChangeBegin = mod_pay_before;
-                    pac_db._pacChangeEnd = mod_pay_after;
-                    if (mod_pay_status == "1")
-                    {
-                        pac_db._pacVenifyDate = mod_pay_chkdate;
-                        pac_db._pacVenify = "王胖爺";
-                    }
-                    else {
-                        pac_db._pacVenifyDate = "";
-                        pac_db._pacVenify = "";
-                    }
-                    pac_db._pacPs = mod_pay_ps;
-                    pac_db._pacStatus = mod_pay_status;
-                    pac_db._pacChange = mod_siguid;//異動項目GUID
-                    if (mod_pay_type=="新增") {
-                        pac_db._pacGuid = Guid.NewGuid().ToString();
-                        pac_db._pacCreateId = "王胖爺";
-                        pac_db.InsertPersonAllowanceChang1e();
-                    }
-                    if (mod_pay_type == "修改")
-                    {
-                        pac_db._pacGuid = mod_hidden_pacguid;
-                        pac_db._pacModifyId = "王胖爺";
-                        pac_db.UpdatePersonAllowanceChang1e();
-                    }
-                    if (mod_pay_status=="1") {//已確認要更新
-                        pac_db._str_after = Convert.ToInt32(mod_pay_after);
-                        if (mod_hidden_refcode == "01")
-                        {//底薪
-                            pac_db.UpdatePersonBasicSalary();
-                        }
-                        else if (mod_hidden_refcode == "02")
-                        {//職能加給
-                            pac_db.UpdatePersonAllowance();
-                        }
-                        else {
-                            pac_db.UpdatePersonAllowancepaCost();
-                        }
-                        //pac_db.UpdatePersonAllowancepaCost();//sv_PersonAllowance.paCost
-
-                    }
-                }
-                catch (Exception ex) { context.Response.Write("error"); }
-                break;
-            //刪除 薪資異動資料
-            case "del_paychangedata":
-                string del_pay_guid = string.IsNullOrEmpty(context.Request.Form["del_pay_guid"]) ? "" : context.Request.Form["del_pay_guid"].ToString().Trim();
-                try {
-                    pac_db._pacGuid = del_pay_guid;
-                    pac_db._pacModifyId = "王胖爺";
-                    pac_db.DeletePersonAllowanceChang1e();
-                }
-                catch (Exception ex) {
-                    context.Response.Write("error");
-                }
-                break;
-            //薪資異動 批次審核
-            case "manychk_paychangedata":
-                string str_payguid = string.IsNullOrEmpty(context.Request.Form["str_payguid"]) ? "" : context.Request.Form["str_payguid"].ToString().Trim();
-                string str_aftertmoney = string.IsNullOrEmpty(context.Request.Form["str_aftertmoney"]) ? "" : context.Request.Form["str_aftertmoney"].ToString().Trim();
-                string str_siRef = string.IsNullOrEmpty(context.Request.Form["str_siRef"]) ? "" : context.Request.Form["str_siRef"].ToString().Trim();
-                string str_perguid = string.IsNullOrEmpty(context.Request.Form["str_perguid"]) ? "" : context.Request.Form["str_perguid"].ToString().Trim();
-                string str_pacguid = string.IsNullOrEmpty(context.Request.Form["str_pacguid"]) ? "" : context.Request.Form["str_pacguid"].ToString().Trim();
-
-                string[] guid = str_payguid.Split(',');
-                string[] arr_afertmoney = str_aftertmoney.Split(',');
-                string[] arr_siRef = str_siRef.Split(',');
-                string[] arr_perguid = str_siRef.Split(',');
-                string[] arr_pacguid = str_siRef.Split(',');
-
-                int total_rows = guid.Length;
-                int count_rows = 0;
-                try {
-                    for (int i = 0; i < guid.Length; i++)
-                    {
-                        pac_db._pacGuid = guid[i].ToString().Trim();
-                        pac_db.UpdateStatus();
-                        pac_db._str_after = Convert.ToInt32(arr_afertmoney[i].ToString().Trim());//異動後金額
-                        pac_db._pacPerGuid = arr_perguid[i].ToString().Trim();//人員guid
-                        pac_db._pacModifyId = "王胖爺";
-                        if (arr_siRef[i].ToString().Trim() == "")//底薪
-                        {
-                            pac_db.UpdatePersonBasicSalary();
-                        }
-                        else if (arr_siRef[i].ToString().Trim() == "")//職能加給
-                        {
-                            pac_db.UpdatePersonAllowance();
-                        }
-                        else {//個人津貼
-                            pac_db._pacGuid = arr_pacguid[i].ToString().Trim();//人員guid
-                            pac_db.UpdatePersonAllowancepaCost();
-                        }
-                        count_rows++;
-                    }
-                    context.Response.Write(count_rows);
-                }
-                catch (Exception ex) {
-
-                }
-
-                break;
-
         }
     }
 

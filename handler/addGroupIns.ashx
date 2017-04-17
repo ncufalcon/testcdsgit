@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addGroupIns : IHttpHandler {
+public class addGroupIns : IHttpHandler,IRequiresSessionState {
     GroupInsurance_DB GI_Db = new GroupInsurance_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -30,6 +31,8 @@ public class addGroupIns : IHttpHandler {
                     GI_Db._pgiChangeDate = pgi_ChangeDate;
                     GI_Db._pgiInsuranceCode = pgi_InsuranceCode;
                     GI_Db._pgiPs = pgi_Ps;
+                    GI_Db._pgiCreateId = USERINFO.MemberGuid;
+                    GI_Db._pgiModifyId = USERINFO.MemberGuid;
                     GI_Db.addGroupInsurance();
                     break;
                 case "Modify":
@@ -41,6 +44,7 @@ public class addGroupIns : IHttpHandler {
                     GI_Db._pgiChangeDate = pgi_ChangeDate;
                     GI_Db._pgiInsuranceCode = pgi_InsuranceCode;
                     GI_Db._pgiPs = pgi_Ps;
+                    GI_Db._pgiModifyId = USERINFO.MemberGuid;
                     GI_Db.modGroupInsurance();
                     break;
             }

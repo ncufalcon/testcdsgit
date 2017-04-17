@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addPension : IHttpHandler {
+public class addPension : IHttpHandler,IRequiresSessionState {
     PersonPension_DB PP_Db = new PersonPension_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -30,6 +31,8 @@ public class addPension : IHttpHandler {
                     PP_Db._ppEmployerRatio = decimal.Parse(pp_EmployerRatio);
                     PP_Db._ppPayPayroll = decimal.Parse(pp_PayPayroll);
                     PP_Db._ppPs = pp_Ps;
+                    PP_Db._ppCreateId = USERINFO.MemberGuid;
+                    PP_Db._ppModifyId = USERINFO.MemberGuid;
                     PP_Db.addPension();
                     break;
                 case "Modify":
@@ -41,6 +44,7 @@ public class addPension : IHttpHandler {
                     PP_Db._ppEmployerRatio = decimal.Parse(pp_EmployerRatio);
                     PP_Db._ppPayPayroll = decimal.Parse(pp_PayPayroll);
                     PP_Db._ppPs = pp_Ps;
+                    PP_Db._ppModifyId = USERINFO.MemberGuid;
                     PP_Db.modPension();
                     break;
             }

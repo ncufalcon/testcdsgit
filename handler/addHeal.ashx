@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addHeal : IHttpHandler {
+public class addHeal : IHttpHandler,IRequiresSessionState {
     LaborHealth_DB LH_Db = new LaborHealth_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -28,6 +29,8 @@ public class addHeal : IHttpHandler {
                     LH_Db._piChange = pi_Change;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
                     LH_Db._piPs = pi_Ps;
+                    LH_Db._piCreateId = USERINFO.MemberGuid;
+                    LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.addHeal();
                     break;
                 case "Modify":
@@ -38,6 +41,7 @@ public class addHeal : IHttpHandler {
                     LH_Db._piChange = pi_Change;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
                     LH_Db._piPs = pi_Ps;
+                    LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.modHeal();
                     break;
             }

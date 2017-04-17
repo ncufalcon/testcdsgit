@@ -2,8 +2,9 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 
-public class addFamilyIns : IHttpHandler {
+public class addFamilyIns : IHttpHandler,IRequiresSessionState {
     FamilyInsurance_DB FI_Db = new FamilyInsurance_DB();
     public void ProcessRequest (HttpContext context) {
         try
@@ -31,6 +32,8 @@ public class addFamilyIns : IHttpHandler {
                     FI_Db._pfiAreaPerson = pfi_AreaPerson;
                     FI_Db._pfiPs = pfi_Ps;
                     FI_Db._pfiStatus = "A";
+                    FI_Db._pfiCreateId = USERINFO.MemberGuid;
+                    FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.addFamilyIns();
                     break;
                 case "Modify":
@@ -42,6 +45,7 @@ public class addFamilyIns : IHttpHandler {
                     FI_Db._pfiSubsidyLevel = pfi_SubsidyLevel;
                     FI_Db._pfiAreaPerson = pfi_AreaPerson;
                     FI_Db._pfiPs = pfi_Ps;
+                    FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.modFamilyIns();
                     break;
             }
