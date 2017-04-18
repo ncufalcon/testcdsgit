@@ -23,7 +23,10 @@
                     closeEffect: 'elastic',
                     afterClose: function () {
                         getData();
-                    }
+                    },
+                    helpers: {
+                    overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+                }
                 });
             });
 
