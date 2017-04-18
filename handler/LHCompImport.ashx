@@ -209,7 +209,7 @@ H_Date
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','比對失敗，請聯絡系統管理員');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對失敗，請聯絡系統管理員');</script>");
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對完成');</script>");
         }
