@@ -43,6 +43,39 @@
                     }
                 });
             });
+            
+            $(document).on("click", "#L_ExportBtn", function () {
+               var eType = $("input[name='rbLaborOut']:checked").val();
+               var eItem =$("#ddlLaborExport").val();
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/InsuranceExport.ashx",
+                    data: {
+                        category: "LH",
+                        type: eType,
+                        item: eItem
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../App_Themes/images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("InsuranceExport Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            location.href = "../DOWNLOAD.aspx?Flexcell=test.xls";
+                        }
+                        $.unblockUI();
+                    }
+                });
+            });
         });
 
         //DDL
@@ -457,7 +490,6 @@
                     $("#pl_eStatus").html("新增");
                     $("#pl_saveBtn").hide();
                     $("#pl_addBtn").show();
-                    getLaborList();
                     break;
                 case "H":
                     alert("完成");
@@ -465,7 +497,6 @@
                     $("#pi_eStatus").html("新增");
                     $("#pi_saveBtn").hide();
                     $("#pi_addBtn").show();
-                    getHealList();
                     break;
                 case "PP":
                     alert("完成");
@@ -473,7 +504,6 @@
                     $("#pp_eStatus").html("新增");
                     $("#pp_saveBtn").hide();
                     $("#pp_addBtn").show();
-                    getPensionList();
                     break;
                 case "PFI":
                     alert("完成");
@@ -481,7 +511,6 @@
                     $("#pf_eStatus").html("新增");
                     $("#pf_saveBtn").hide();
                     $("#pf_addBtn").show();
-                    getFamilyInsList();
                     break;
                 case "PGI":
                     alert("完成");
@@ -489,22 +518,21 @@
                     $("#pg_eStatus").html("新增");
                     $("#pg_saveBtn").hide();
                     $("#pg_addBtn").show();
-                    getGroupInsList();
                     break;
                 case "InsSalaryMod":
                     alert("完成");
                     $("#InsModifyTab").empty();
                     $(".statabs").tabs({ active: 0 });
-                    getLaborList();
-                    getHealList();
-                    getPensionList();
-                    getFamilyInsList();
-                    getGroupInsList();
                     break;
                 case "error":
                     alert(ern + " Error");
                     break;
             }
+            getLaborList();
+            getHealList();
+            getPensionList();
+            getFamilyInsList();
+            getGroupInsList();
         }
     </script>
     <%--勞保--%>
@@ -1823,12 +1851,12 @@
                                 <a id="LB_SearchBtn" href="javascript:void(0);" sv="N" class="keybtn">查詢</a>
                             </div>
                             <div>
-                                <a href="javascript:void(0);" class="keybtn fancybox">匯出</a>
-                                <input type="radio" name="LaborOut" />三合一<input type="radio" name="LaborOut" />二合一
-                                <select>
-                                    <option>加保</option>
-                                    <option>保薪調整</option>
-                                    <option>退保</option>
+                                <a href="javascript:void(0);" id="L_ExportBtn" class="keybtn">匯出</a>
+                                <input type="radio" name="rbLaborOut" value="3" checked="checked" />三合一<input type="radio" name="rbLaborOut" value="2" />二合一
+                                <select id="ddlLaborExport">
+                                    <option value="01">加保</option>
+                                    <option value="02">保薪調整</option>
+                                    <option value="03">退保</option>
                                 </select>
                             </div>
                         </div><br />
