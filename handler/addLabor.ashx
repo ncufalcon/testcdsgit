@@ -3,9 +3,11 @@
 using System;
 using System.Web;
 using System.Web.SessionState;
+using System.Data;
 
 public class addLabor : IHttpHandler,IRequiresSessionState {
     LaborHealth_DB LH_Db = new LaborHealth_DB();
+    Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -25,6 +27,7 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
                     LH_Db._plGuid = Guid.NewGuid().ToString();
                     LH_Db._plPerGuid = pl_No;
                     LH_Db._plSubsidyLevel = pl_SubsidyLevel;
+                    LH_Db._plLaborNo = getLH_Code(pl_No, "L");
                     LH_Db._plChangeDate = pl_ChangeDate;
                     LH_Db._plChange = pl_Change;
                     LH_Db._plLaborPayroll = decimal.Parse(pl_LaborPayroll);
@@ -37,6 +40,7 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
                     LH_Db._plGuid = id;
                     LH_Db._plPerGuid = pl_No;
                     LH_Db._plSubsidyLevel = pl_SubsidyLevel;
+                    LH_Db._plLaborNo = getLH_Code(pl_No, "L");
                     LH_Db._plChangeDate = pl_ChangeDate;
                     LH_Db._plChange = pl_Change;
                     LH_Db._plLaborPayroll = decimal.Parse(pl_LaborPayroll);
@@ -50,6 +54,20 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LB');</script>");
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addLabor');</script>"); }
+    }
+
+    private string getLH_Code(string perGuid, string type)
+    {
+        string codeStr = string.Empty;
+        DataTable dt = Personnel_Db.getLHcode(perGuid);
+        if (dt.Rows.Count > 0)
+        {
+            if (type == "L")
+                codeStr = dt.Rows[0]["comLaborProtectionCode"].ToString();
+            else
+                codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
+        }
+        return codeStr;
     }
 
     public bool IsReusable {

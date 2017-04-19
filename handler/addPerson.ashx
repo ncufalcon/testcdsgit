@@ -162,8 +162,11 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     if (ldt.Rows.Count == 0)
                     {
                         LH_Db._plGuid = Guid.NewGuid().ToString();
-                        LH_Db._plPerGuid = id;
                         LH_Db._plSubsidyLevel = pLaborID;
+                        LH_Db._plPerGuid = id;
+                        LH_Db._plLaborNo = getLH_Code(id, "L");
+                        LH_Db._plChange = "01";
+                        LH_Db._plChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
                         LH_Db._plModifyId = USERINFO.MemberGuid;
                         LH_Db.addLabor();
                     }
@@ -173,8 +176,11 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     if (hdt.Rows.Count == 0)
                     {
                         LH_Db._piGuid = Guid.NewGuid().ToString();
-                        LH_Db._piPerGuid = id;
                         LH_Db._piSubsidyLevel = pInsuranceID;
+                        LH_Db._piPerGuid = id;
+                        LH_Db._piCardNo = getLH_Code(id, "H");
+                        LH_Db._piChange = "01";
+                        LH_Db._piChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
                         LH_Db._piModifyId = USERINFO.MemberGuid;
                         LH_Db.addHeal();
                     }
@@ -231,6 +237,20 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun();</script>");
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addPerson');</script>"); }
+    }
+
+    private string getLH_Code(string perGuid,string type)
+    {
+        string codeStr = string.Empty;
+        DataTable dt = Personnel_Db.getLHcode(perGuid);
+        if (dt.Rows.Count > 0)
+        {
+            if (type == "L")
+                codeStr = dt.Rows[0]["comLaborProtectionCode"].ToString();
+            else
+                codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
+        }
+        return codeStr;
     }
 
     public bool IsReusable {

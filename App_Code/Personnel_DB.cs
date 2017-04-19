@@ -1090,4 +1090,23 @@ where perGuid=@perGuid
         oCmd.ExecuteNonQuery();
         oCmd.Connection.Close();
     }
+
+    public DataTable getLHcode(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select comLaborProtectionCode,comHealthInsuranceCode from sy_Company
+where comGuid=(select perComGuid from sy_Person where perGuid=@perGuid) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }
