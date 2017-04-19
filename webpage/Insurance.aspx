@@ -49,7 +49,7 @@
                var eItem =$("#ddlLaborExport").val();
                 $.ajax({
                     type: "POST",
-                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    async: true, //在沒有返回值之前,不會執行下一步動作
                     url: "../handler/InsuranceExport.ashx",
                     data: {
                         category: "LH",
@@ -66,13 +66,14 @@
                     success: function (data) {
                         if (data == "error") {
                             alert("InsuranceExport Error");
+                            $.unblockUI();
                             return false;
                         }
 
                         if (data != null) {
-                            location.href = "../DOWNLOAD.aspx?Flexcell=test.xls";
+                            location.href = "../DOWNLOAD.aspx?FlexCel=test.xls";
+                            $.unblockUI();
                         }
-                        $.unblockUI();
                     }
                 });
             });
@@ -742,7 +743,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comLaborProtectionCode").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plLaborNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plLaborPayroll").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plChangeDate").text() + '</td>';
@@ -753,8 +754,9 @@
                             tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#lb_tab").append(tabstr);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
+                        $("#lb_tab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#lb_tab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
                     }
                 }
             });
@@ -968,7 +970,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("comHealthInsuranceCode").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("piCardNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("piInsurancePayroll").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("piChangeDate").text() + '</td>';
@@ -979,8 +981,9 @@
                             tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#h_tab").append(tabstr);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
+                        $("#h_tab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#h_tab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
                     }
                 }
             });
@@ -1200,8 +1203,9 @@
                             tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#pp_tab").append(tabstr);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
+                        $("#pp_tab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#pp_tab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
                     }
                 }
             });
@@ -1444,8 +1448,9 @@
                             tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#pf_tab").append(tabstr);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
+                        $("#pf_tab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#pf_tab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
                     }
                 }
             });
@@ -1704,8 +1709,9 @@
                             tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#pg_tab").append(tabstr);
-                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                        $(".stripeMe tr:even").addClass("alt");
+                        $("#pg_tab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#pg_tab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
                     }
                 }
             });
@@ -1779,8 +1785,8 @@
                                 tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
                             tabstr += '</tbody>';
                             $("#InsModifyTab").append(tabstr);
-                            $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                            $(".stripeMe tr:even").addClass("alt");
+                            $("#InsModifyTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                            $("#InsModifyTab tr:even").addClass("alt");
                             $(".fixTable").tableHeadFixer();
                         }
                     }
