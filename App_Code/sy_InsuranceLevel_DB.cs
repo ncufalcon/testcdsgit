@@ -117,7 +117,7 @@ public class sy_InsuranceLevel_DB
             //    show_value.Append(@" and ilGuid=@ilGuid  ");
             //    thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
             //}
-            show_value.Append(@" order by ilItem1 ASC  ");
+            show_value.Append(@" order by ilItem3 ASC  ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
@@ -142,99 +142,6 @@ public class sy_InsuranceLevel_DB
     }
     #endregion
 
-    #region 新增 sy_InsuranceLevel
-    public void InsertInsuranceLevel()
-    {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                insert into sy_InsuranceLevel(ilGuid,ilItem1,ilItem2,ilItem3,ilItem4,ilEffectiveDate,ilCreatId,ilModifyId,ilModifyDate,slStatus) 
-                values(@ilGuid,@ilItem1,@ilItem2,@ilItem3,@ilItem4,@ilEffectiveDate,@ilCreatId,@ilModifyId,@ilModifyDate,'A') 
-            ");
-
-            thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
-            thisCommand.Parameters.AddWithValue("@ilItem1", ilItem1);
-            thisCommand.Parameters.AddWithValue("@ilItem2", ilItem2);
-            thisCommand.Parameters.AddWithValue("@ilItem3", ilItem3);
-            thisCommand.Parameters.AddWithValue("@ilItem4", ilItem4);
-            thisCommand.Parameters.AddWithValue("@ilEffectiveDate", ilEffectiveDate);
-            thisCommand.Parameters.AddWithValue("@ilCreatId", ilCreatId);
-            thisCommand.Parameters.AddWithValue("@ilModifyId", ilModifyDate);
-            thisCommand.Parameters.AddWithValue("@slModifyDate", DateTime.Now);
-
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
-    }
-    #endregion
-
-    #region 修改 sy_InsuranceLevel
-    public void UpdateInsuranceLevel()
-    {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                update sy_InsuranceLevel 
-                set ilItem1=@ilItem1,ilItem2=@ilItem2,ilItem3=@ilItem3,ilItem4=@ilItem4,
-                    ilEffectiveDate=@ilEffectiveDate,ilModifyId=@ilModifyId,slModifyDate=@slModifyDate
-                where ilGuid=@ilGuid
-            ");
-
-            thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
-            thisCommand.Parameters.AddWithValue("@ilItem1", ilItem1);
-            thisCommand.Parameters.AddWithValue("@ilItem2", ilItem2);
-            thisCommand.Parameters.AddWithValue("@ilItem3", ilItem3);
-            thisCommand.Parameters.AddWithValue("@ilItem4", ilItem4);
-            thisCommand.Parameters.AddWithValue("@ilEffectiveDate", ilEffectiveDate);
-            thisCommand.Parameters.AddWithValue("@ilModifyId", ilModifyDate);
-            thisCommand.Parameters.AddWithValue("@slModifyDate", DateTime.Now);
-
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
-    }
-    #endregion
-
     #region 刪除 sy_InsuranceLevel update giiStatus="D"
     public void DeleteInsuranceLevel()
     {
@@ -244,20 +151,24 @@ public class sy_InsuranceLevel_DB
         StringBuilder show_value = new StringBuilder();
         try
         {
-            show_value.Append(@" 
-                update sy_InsuranceLevel set ilStatus='D',ilModifyId=@ilModifyId,slModifyDate=@slModifyDate where ilGuid=@ilGuid
-            ");
+            if (ilEffectiveDate != "")
+            {
+                show_value.Append(@" 
+                    update sy_InsuranceLevel set ilStatus='D',ilModifyId=@ilModifyId,ilModifyDate=@ilModifyDate where ilEffectiveDate=@ilEffectiveDate
+                ");
 
-            thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
-            thisCommand.Parameters.AddWithValue("@ilModifyId", ilModifyDate);
-            thisCommand.Parameters.AddWithValue("@slModifyDate", DateTime.Now);
+                thisCommand.Parameters.AddWithValue("@ilEffectiveDate", ilEffectiveDate);
+                thisCommand.Parameters.AddWithValue("@ilModifyId", ilModifyId);
+                thisCommand.Parameters.AddWithValue("@ilModifyDate", DateTime.Now);
 
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
+                thisCommand.CommandText = show_value.ToString();
+                thisCommand.CommandType = CommandType.Text;
 
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
+                thisCommand.Connection.Open();
+                thisCommand.ExecuteNonQuery();
+                thisCommand.Connection.Close();
+            }
+            
         }
         catch (Exception ex)
         {
@@ -289,17 +200,7 @@ public class sy_InsuranceLevel_DB
             show_value.Append(@"  
                 select * from sy_InsuranceLevel where ilStatus='A'
             ");
-            if (ilItem1.ToString().Trim() != "")
-            {
-                show_value.Append(@" and ilItem1=@ilItem1  ");
-                thisCommand.Parameters.AddWithValue("@ilItem1", ilItem1);
-            }
-            if (ilGuid != "")
-            {
-                show_value.Append(@" and ilGuid=@ilGuid  ");
-                thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
-            }
-            if (ilGuid != "")
+            if (ilEffectiveDate != "")
             {
                 show_value.Append(@" and ilEffectiveDate=@ilEffectiveDate  ");
                 thisCommand.Parameters.AddWithValue("@ilEffectiveDate", ilEffectiveDate);
@@ -340,13 +241,9 @@ public class sy_InsuranceLevel_DB
         {
             thisConnection.Open();
             show_value.Append(@"  
-                select ilEffectiveDate from sy_InsuranceLevel group by ilEffectiveDate order by ilEffectiveDate DESC
+                select ilEffectiveDate from sy_InsuranceLevel where ilStatus='A' 
             ");
-            //if (ilGuid != "")
-            //{
-            //    show_value.Append(@" and ilGuid=@ilGuid  ");
-            //    thisCommand.Parameters.AddWithValue("@ilGuid", ilGuid);
-            //}
+            show_value.Append(@" group by ilEffectiveDate order by ilEffectiveDate DESC  ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
