@@ -100,7 +100,7 @@
             <li><a href='../webpage/page-regionadmin.aspx' target='_self' title="分店管理">分店管理</a></li>
             <li><a href='../webpage/page-calendaradmin.aspx' target='_self' title="行事曆設定">行事曆設定</a></li>
             <li><a href='../webpage/page-hourlyadmin.aspx' target='_self' title="薪資管理設定">薪資管理設定</a></li> 
-            <li><a href='page-nssadmin.html' target='_self' title="保險設定">保險設定</a></li>     
+            <li><a href='../webpage/page-nssadmin.aspx' target='_self' title="保險設定">保險設定</a></li>     
       </ul>
     </li>
       <li><a href="../webpage/Page-ModifyPd.aspx" title="修改個人密碼">修改個人密碼</a></li>
