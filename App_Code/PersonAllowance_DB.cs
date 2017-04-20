@@ -78,6 +78,8 @@ public class PersonAllowance_DB
 left join sy_SalaryItem on siGuid=paAllowanceCode
 where paStatus<>'D' and paPerGuid=@paPerGuid ");
 
+        sb.Append(@"order by paCreateDate desc ");
+
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);

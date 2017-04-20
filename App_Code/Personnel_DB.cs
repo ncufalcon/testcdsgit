@@ -298,6 +298,7 @@ where perStatus<>'D' ");
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        sb.Append(@"order by perFirstDate desc,perCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
 		oCmd.CommandType = CommandType.Text;

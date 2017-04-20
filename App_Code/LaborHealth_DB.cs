@@ -165,23 +165,28 @@ public class LaborHealth_DB
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"SELECT top 200 plGuid,plPerGuid,perNo,perName,plSubsidyLevel,slSubsidyCode,plLaborNo,plChangeDate,plChange,code_desc,
-plLaborPayroll,plChangeDate,comLaborProtectionCode,plChangeDate
+plLaborPayroll,plChangeDate,plChangeDate
 from sy_PersonLabor
 left join sy_Person on perGuid=plPerGuid
 left join sy_SubsidyLevel on slGuid=plSubsidyLevel
 left join sy_codetable on code_group='11' and code_value=plChange
-left join sy_Company on comGuid=perComGuid
-where plStatus<>'D' order by sy_PersonLabor.plChangeDate desc ");
+where plStatus<>'D' ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        if (plChange != "")
+        {
+            sb.Append(@"and plChange=@plChange ");
+        }
+        sb.Append(@"order by sy_PersonLabor.plChangeDate desc,plCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@plChange", plChange);
         oda.Fill(ds);
         return ds;
     }
@@ -334,23 +339,28 @@ where  plStatus<>'D' and plGuid=@plGuid  ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"SELECT top 200 piGuid,piPerGuid,perNo,perName,piSubsidyLevel,slSubsidyCode,piCardNo,piChangeDate,piChange,code_desc,piInsurancePayroll,
-piChangeDate,comHealthInsuranceCode
+piChangeDate
 from sy_PersonInsurance 
 left join sy_Person on perGuid=piPerGuid
 left join sy_SubsidyLevel on slGuid=piSubsidyLevel
 left join sy_codetable on code_group='12' and code_value=piChange
-left join sy_Company on comGuid=perComGuid
-where piStatus<>'D' order by sy_PersonInsurance.piChangeDate desc ");
+where piStatus<>'D' ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        if (piChange != "")
+        {
+            sb.Append(@"and piChange=@piChange ");
+        }
+        sb.Append(@"order by sy_PersonInsurance.piChangeDate desc,piCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@piChange", piChange);
         oda.Fill(ds);
         return ds;
     }
@@ -492,6 +502,36 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@piPerGuid", piPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable LH_3in1_add(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,plLaborNo,piCardNo
+,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate
+from sy_Person 
+left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
+left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid
+left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+where perGuid in (" + perGuid + @")
+union
+select perIDNumber,perName,perBirthday,'','',pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,''
+from sy_PersonFamily 
+left join sy_Person on perGuid=pfPerGuid
+left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
+where pfPerGuid in (" + perGuid + @") and pfStatus='A'
+order by perIDNumber,fID ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oda.Fill(ds);
         return ds;
     }
