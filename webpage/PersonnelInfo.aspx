@@ -25,8 +25,8 @@
                         getData();
                     },
                     helpers: {
-                    overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
-                }
+                        overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+                    }
                 });
             });
 

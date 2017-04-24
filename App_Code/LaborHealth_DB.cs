@@ -512,17 +512,19 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,plLaborNo,piCardNo
-,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID
+,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) InsLv
 from sy_Person 
-left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
+left join sy_Company on perComGuid=comGuid
 left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
 where perGuid in (" + perGuid + @")
 union
-select perIDNumber,perName,perBirthday,'','',pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,''
+select perIDNumber,perName,perBirthday,comLaborProtectionCode,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0
 from sy_PersonFamily 
-left join sy_Person on perGuid=pfPerGuid
+left join sy_Person on pfPerGuid=perGuid
+left join sy_Company on perComGuid=comGuid
 left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
 where pfPerGuid in (" + perGuid + @") and pfStatus='A'
 order by perIDNumber,fID ");
@@ -531,8 +533,93 @@ order by perIDNumber,fID ");
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
-        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable LH_3in1_out(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,
+plLaborNo,piCardNo,
+piChangeDate,
+plChangeDate
+from sy_Person 
+left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
+left join sy_PersonInsurance on piChange='02' and piStatus='A' and piPerGuid=perGuid
+where perGuid in ("+ perGuid + @")
+order by plChangeDate desc,plCreateDate desc ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable LH_2in1_add(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,
+plLaborNo,ppEmployerRatio,ppLarboRatio,ppChangeDate
+from sy_Person 
+left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
+left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+where perGuid in (" + perGuid + ") ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable LH_2in1_out(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,plLaborNo
+from sy_Person 
+left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
+where perGuid in (" + perGuid + ") ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable LH_3in1_mod(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"sp_payModify");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.StoredProcedure;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@pGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+   
 }

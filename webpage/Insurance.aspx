@@ -43,25 +43,67 @@
                     }
                 });
             });
-            
-            $(document).on("click", "#L_ExportBtn", function () {
-               var eType = $("input[name='rbLaborOut']:checked").val();
-               var eItem =$("#ddlLaborExport").val();
+
+            $(document).on("click", "#L_ExportBtn,#H_ExportBtn,#ppExportBtn,#PfiExportBtn", function () {
+                var eType, eItem, cate, ckname;
+                switch (this.id) {
+                    case "L_ExportBtn":
+                        cate = "LH";
+                        ckname = "lbck"
+                        eItem = $("#ddlLaborExport").val();
+                        eType = $("input[name='rbLaborOut']:checked").val();
+                        break;
+                    case "H_ExportBtn":
+                        cate = "LH";
+                        ckname = "hck";
+                        eItem = $("#ddlHealExport").val();
+                        eType = $("input[name='HealOut']:checked").val();
+                        break;
+                    case "ppExportBtn":
+                        cate = "Pension";
+                        ckname = "ppck";
+                        eItem = $("#ddlPensionExport").val();
+                        break;
+                    case "PfiExportBtn":
+                        cate = "PFI";
+                        ckname = "pfick";
+                        eItem = $("#ddlPfExport").val();
+                        eType = $("input[name='rbPFOut']:checked").val();
+                        break;
+                }
+
+                var perGuid = "";
+                $("input[name='" + ckname + "']:checked").each(function () {
+                    if (perGuid != "") perGuid += ",";
+                    perGuid += "'" + this.value + "'";
+                });
+
+                if (perGuid == "") {
+                    alert("請勾選要匯出的人員");
+                    return false;
+                }
+
+                if (eItem == "") {
+                    alert("請選擇匯出類別");
+                    return false;
+                }
+
                 $.ajax({
                     type: "POST",
                     async: true, //在沒有返回值之前,不會執行下一步動作
                     url: "../handler/InsuranceExport.ashx",
                     data: {
-                        category: "LH",
+                        category: cate,
                         type: eType,
-                        item: eItem
+                        item: eItem,
+                        perGuid: perGuid
                     },
                     error: function (xhr) {
                         alert(xhr);
                     },
 
                     beforeSend: function () {
-                        $.blockUI({ message: '<img src="../App_Themes/images/loading.gif" />處理中，請稍待...' });
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     },
                     success: function (data) {
                         if (data == "error") {
@@ -71,7 +113,7 @@
                         }
 
                         if (data != null) {
-                            location.href = "../DOWNLOAD.aspx?FlexCel=test.xls";
+                            location.href = "../DOWNLOAD.aspx?FlexCel=" + data;
                             $.unblockUI();
                         }
                     }
@@ -100,7 +142,7 @@
                     if (data != null) {
                         data = $.parseXML(data);
                         $(tagName).empty();
-                        var ddlstr = '<option value="">請選擇</option>';
+                        var ddlstr = '<option value="">--請選擇--</option>';
                         if ($(data).find("code").length > 0) {
                             $(data).find("code").each(function (i) {
                                 ddlstr += '<option value="' + $(this).attr("v") + '">' + $(this).attr("desc") + '</option>';
@@ -481,10 +523,12 @@
             }
             //checkbox
             $("input:checkbox").prop("checked", false);
+            //把匯出的radio加回去
+            $(".ep[value='3']").prop("checked", true);
         }
 
-        function feedbackFun(msg, ern) {
-            switch (msg) {
+        function feedbackFun(type, str) {
+            switch (type) {
                 case "LB":
                     alert("完成");
                     ClearInput();
@@ -526,7 +570,7 @@
                     $(".statabs").tabs({ active: 0 });
                     break;
                 case "error":
-                    alert(ern + " Error");
+                    alert(str + " Error");
                     break;
             }
             getLaborList();
@@ -710,7 +754,8 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getLaborList.ashx",
                 data: {
-                    keyword: $("#lb_keyword").val()
+                    keyword: $("#lb_keyword").val(),
+                    ddlLabor: $("#ddlLaborExport").val()
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -738,7 +783,7 @@
                         if ($(data).find("lb_item").length > 0) {
                             $(data).find("lb_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("plGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="lbck" type="checkbox" value="' + $(this).children("plGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="lbck" type="checkbox" value="' + $(this).children("plPerGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="lbdelbtn" aid=' + $(this).children("plGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -937,7 +982,8 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getHealList.ashx",
                 data: {
-                    keyword: $("#h_keyword").val()
+                    keyword: $("#h_keyword").val(),
+                    ddlHeal: $("#ddlHealExport").val()
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -965,7 +1011,7 @@
                         if ($(data).find("h_item").length > 0) {
                             $(data).find("h_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("piGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="hck" type="checkbox" value="' + $(this).children("piGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="hck" type="checkbox" value="' + $(this).children("piPerGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="hdelbtn" aid=' + $(this).children("piGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1159,7 +1205,8 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getPensionList.ashx",
                 data: {
-                    keyword: $("#pp_keyword").val()
+                    keyword: $("#pp_keyword").val(),
+                    ddlPension: $("#ddlPensionExport").val()
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -1187,7 +1234,7 @@
                         if ($(data).find("pp_item").length > 0) {
                             $(data).find("pp_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("ppGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="ppck" type="checkbox" value="' + $(this).children("ppGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="ppck" type="checkbox" value="' + $(this).children("ppPerGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="ppdelbtn" aid=' + $(this).children("ppGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1404,7 +1451,8 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getFamilyInsList.ashx",
                 data: {
-                    keyword: $("#pf_keyword").val()
+                    keyword: $("#pf_keyword").val(),
+                    ddlPfExport: $("#ddlPfExport").val()
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -1432,7 +1480,7 @@
                         if ($(data).find("pfi_item").length > 0) {
                             $(data).find("pfi_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("pfiGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="pfick" type="checkbox" value="' + $(this).children("pfiGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="pfick" type="checkbox" value="' + $(this).children("pfiPfGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pfidelbtn" aid=' + $(this).children("pfiGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1858,11 +1906,12 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="L_ExportBtn" class="keybtn">匯出</a>
-                                <input type="radio" name="rbLaborOut" value="3" checked="checked" />三合一<input type="radio" name="rbLaborOut" value="2" />二合一
-                                <select id="ddlLaborExport">
+                                <input type="radio" name="rbLaborOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="rbLaborOut" value="2" class="ep" />二合一
+                                <select id="ddlLaborExport" name="ddlLaborExport" onchange="getLaborList()">
+                                    <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
-                                    <option value="02">保薪調整</option>
-                                    <option value="03">退保</option>
+                                    <option value="02">退保</option>
+                                    <option value="03">保薪調整</option>
                                 </select>
                             </div>
                         </div><br />
@@ -1926,12 +1975,13 @@
                                 <a id="H_SearchBtn" href="javascript:void(0);" sv="N" class="keybtn">查詢</a>
                             </div>
                             <div>
-                                <a href="javascript:void(0);" class="keybtn">匯出</a>
-                                <input type="radio" name="HealOut" />三合一<input type="radio" name="HealOut" />二合一
-                                <select>
-                                    <option>加保</option>
-                                    <option>保薪調整</option>
-                                    <option>退保</option>
+                                <a href="javascript:void(0);" id="H_ExportBtn" class="keybtn">匯出</a>
+                                <input type="radio" name="HealOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="HealOut" value="2" class="ep" />二合一
+                                <select id="ddlHealExport" name="ddlHealExport" onchange="getHealList()">
+                                    <option value="">--請選擇--</option>
+                                    <option value="01">加保</option>
+                                    <option value="02">退保</option>
+                                    <option value="03">保薪調整</option>
                                 </select>
                             </div>
                         </div><br />
@@ -1995,11 +2045,12 @@
                                 <a id="PP_SearchBtn" href="javascript:void(0);" sv="N" class="keybtn">查詢</a>
                             </div>
                             <div>
-                                <a href="#searchblock" class="keybtn fancybox">匯出</a>
-                                <select>
-                                    <option>提繳</option>
-                                    <option>停繳</option>
-                                    <option>提繳工資調整</option>
+                                <a href="javascript:void(0);" id="ppExportBtn" class="keybtn fancybox">匯出</a>
+                                <select id="ddlPensionExport" name="ddlPensionExport" onchange="getPensionList()">
+                                    <option value="">--請選擇--</option>
+                                    <option value="01">提繳</option>
+                                    <option value="02">提繳工資調整</option>
+                                    <option value="03">停繳</option>
                                 </select>
                             </div>
                         </div><br />
@@ -2060,12 +2111,12 @@
                                 <a id="PF_SearchBtn" href="javascript:void(0);" sv="N" class="keybtn">查詢</a>
                             </div>
                             <div>
-                                <a href="#searchblock" class="keybtn fancybox">匯出</a>
-                                <input type="radio" name="PFOut" />三合一<input type="radio" name="PFOut" />二合一
-                                <select>
-                                    <option>加保</option>
-                                    <option>保薪調整</option>
-                                    <option>退保</option>
+                                <a href="javascript:void(0);" id="PfiExportBtn" class="keybtn">匯出</a>
+                                <input type="radio" name="rbPFOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="rbPFOut" value="2" class="ep" />二合一
+                                <select id="ddlPfExport" name="ddlPfExport" onchange="getFamilyInsList()">
+                                    <option value="">--請選擇--</option>
+                                    <option value="01">加保</option>
+                                    <option value="02">退保</option>
                                 </select>
                             </div>
                         </div><br />

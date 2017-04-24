@@ -10,9 +10,11 @@ public class getLaborList : IHttpHandler {
         try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string ddlLabor = (context.Request["ddlLabor"] != null) ? context.Request["ddlLabor"].ToString() : "";
 
             string xmlStr = "";
             LH_Db._KeyWord = keyword;
+            LH_Db._plChange = ddlLabor;
             DataTable dt = LH_Db.SelectLaborList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "lbList", "lb_item");
             xmlStr = "<root>" + xmlStr + "</root>";

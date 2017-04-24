@@ -24,9 +24,7 @@ public class sp_payModify : IHttpHandler {
             oCmd.Connection.Open();
 
             SqlDataAdapter oda = new SqlDataAdapter(oCmd);
-            //oCmd.Parameters.AddWithValue("@voc_no", voc_no);
-            //oCmd.Parameters.AddWithValue("@Year", Year);
-            //oCmd.ExecuteNonQuery();
+            oCmd.Parameters.AddWithValue("@pGuid", "");
 
             DataTable ds = new DataTable();
             oda.Fill(ds);

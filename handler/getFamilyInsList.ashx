@@ -10,9 +10,11 @@ public class getFamilyInsList : IHttpHandler {
         try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string ddlPfExport = (context.Request["ddlPfExport"] != null) ? context.Request["ddlPfExport"].ToString() : "";
 
             string xmlStr = "";
             FI_Db._KeyWord = keyword;
+            FI_Db._pfiChange = ddlPfExport;
             DataTable dt = FI_Db.SelectList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "pfiList", "pfi_item");
             xmlStr = "<root>" + xmlStr + "</root>";
