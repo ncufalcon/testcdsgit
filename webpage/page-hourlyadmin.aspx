@@ -23,6 +23,7 @@
                     case "li_3":
                         $("#hidden_si_itemguid").val("");
                         load_sidata();//撈薪資項目設定資料
+                        load_group16();
                         break;
                     case "li_4":
                         load_odata();//撈加班費資料
@@ -629,7 +630,7 @@
             }
             //薪資項目設定資料 新增/修改
             function mod_sidata() {
-                if ($("#hidden_si_itemguid").val() == "") {
+                if ($("#hidden_si_itemguid").val() == "" && $("#span_Status").text()=="修改") {
                     alert("請先選擇一個修改項目");
                     return;
                 }
@@ -673,6 +674,10 @@
                                 alert("已經指定過對應欄位(在勞健保比對使用)的項目，請勿重複指定");
                             } else if (response == "si_refcom_notonly_mod") {
                                 alert("已經指定過對應欄位(在勞健保比對使用)的項目，請勿重複指定");
+                            } else if (response == "siref_notonly_add") {
+                                alert("已經指定過對應欄位(在薪資異動使用)的項目，請勿重複指定");
+                            } else if (response == "siref_notonly_mod") {
+                                alert("已經指定過對應欄位(在薪資異動使用)的項目，請勿重複指定");
                             } else {
                                 if ($("#span_Status").text() == "新增") {
                                     alert("新增成功");
@@ -1091,6 +1096,40 @@
                 }
                 return true;
             }
+            //撈對應欄(異動用)位下拉選單
+            function load_group16() {
+                $("#txt_si_itemref").empty();
+                $.ajax({
+                    type: "POST",
+                    async: true, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/page-hourlyadmin.ashx",
+                    data: {
+                        func: "load_group16"
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    },
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (response) {
+                        var str_htl = '<option value="">--請選擇--</option>';
+                        if (response != "nodata") {
+                            for (var i = 0; i < response.length;i++){
+                                str_htl += '<option value="' + response[i].code_value + '">' + response[i].code_desc + '</option>';
+                            }
+                        }
+                        $("#txt_si_itemref").append(str_htl);
+                    },//success end
+                    complete: function () {
+                        $.unblockUI();
+                    }
+                });//ajax end
+            }
+                //<option value="">--請選擇--</option>
+                //<option value="01">底薪</option>
+                //<option value="02">職能加給</option>
+            
         });
     </script>
 </asp:Content>
@@ -1289,9 +1328,9 @@
                                             </td>
                                             <td>
                                                 <select id="txt_si_itemref">
-                                                    <option value="">--請選擇--</option>
+                                                    <%--<option value="">--請選擇--</option>
                                                     <option value="01">底薪</option>
-                                                    <option value="02">職能加給</option>
+                                                    <option value="02">職能加給</option>--%>
                                                 </select>
                                             </td>
                                         </tr>

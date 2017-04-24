@@ -91,6 +91,12 @@ public class page_hourlyadmin : IHttpHandler {
         public string phPs { get; set; }
         public string phStatus { get; set; }
     }
+    //codetable 欄位
+    public class codeTooL
+    {
+        public string code_value { get; set; }
+        public string code_desc { get; set; }
+    }
     sy_BasicSalary_DB bs_db = new sy_BasicSalary_DB();
     sy_SalaryFormula sf_db = new sy_SalaryFormula();
     sy_SalaryItem_DB si_db = new sy_SalaryItem_DB();
@@ -273,6 +279,7 @@ public class page_hourlyadmin : IHttpHandler {
 
                     DataTable dt_chkcode = si_db.ChksiItemCode();
                     DataTable dt_refcom_add = si_db.ChksiItemCodeRefcom();
+                    DataTable dt_ref_add = si_db.ChksiItemCodesiRef();
                     if (dt_chkcode.Rows.Count > 0 && mod_si_type == "新增")
                     {
                         context.Response.Write("notonly");
@@ -281,9 +288,11 @@ public class page_hourlyadmin : IHttpHandler {
                     {
                         if (mod_si_type == "新增")
                         {
-                            if (dt_refcom_add.Rows.Count > 0)
+                            if (dt_refcom_add.Rows.Count > 0 && mod_si_itemrefcom!="")
                             {
                                 context.Response.Write("si_refcom_notonly_add");
+                            } else if (dt_ref_add.Rows.Count > 0 && mod_si_type == "新增" && mod_si_itemref!="") {
+                                context.Response.Write("siref_notonly_add");
                             }
                             else {
                                 si_db._siGuid = Guid.NewGuid().ToString();
@@ -296,11 +305,14 @@ public class page_hourlyadmin : IHttpHandler {
                         {//修改
                             si_db._siGuid = mod_si_itemguid;
                             DataTable dt_refcom_mod = si_db.ChksiItemCodeRefcom();
-                            if (mod_si_itemref!="" && dt_refcom_add.Rows.Count > 0)
+                            DataTable dt_ref_mod = si_db.ChksiItemCodesiRef();
+                            if (mod_si_itemref != "" && dt_refcom_add.Rows.Count > 0 && mod_si_itemref!="")
                             {
-                                if (dt_refcom_mod.Rows.Count == 0)
+                                if (dt_refcom_mod.Rows.Count == 0 && mod_si_itemrefcom!="")
                                 {
                                     context.Response.Write("si_refcom_notonly_mod");
+                                } else if (dt_ref_mod.Rows.Count == 0 && mod_si_itemref!="") {
+                                        context.Response.Write("siref_notonly_mod");
                                 }
                                 else {
                                     si_db._siModifyId = "王胖爺";
@@ -566,6 +578,28 @@ public class page_hourlyadmin : IHttpHandler {
                 }
                 catch (Exception ex) {
                     context.Response.Write("error");
+                }
+                break;
+            //撈codetable group=16 對應欄位
+            case "load_group16":
+                DataTable dt_codegroup16 = code_db.getGroup("16");
+                if (dt_codegroup16.Rows.Count > 0)
+                {
+                    List<codeTooL> codeList = new List<codeTooL>();
+                    for (int i = 0; i < dt_codegroup16.Rows.Count; i++)
+                    {
+                        codeTooL e = new codeTooL();
+                        e.code_value = dt_codegroup16.Rows[i]["code_value"].ToString().Trim();
+                        e.code_desc = dt_codegroup16.Rows[i]["code_desc"].ToString().Trim();
+                        codeList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(codeList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else {
+                    context.Response.Write("nodata");
                 }
                 break;
         }
