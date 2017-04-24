@@ -104,12 +104,18 @@ where ppStatus<>'D' ");
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        if (ppChange != "")
+        {
+            sb.Append(@"and ppChange=@ppChange ");
+        }
+        sb.Append(@"order by sy_PersonPension.ppChangeDate desc,ppCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@ppChange", ppChange);
         oda.Fill(ds);
         return ds;
     }
