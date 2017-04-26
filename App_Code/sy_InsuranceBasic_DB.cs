@@ -220,7 +220,7 @@ public class sy_InsuranceBasic_DB
         {
             
             show_value.Append(@" 
-                update sy_InsuranceBasic set ibGuid=@ibGuid,ibLaborProtection1=@ibLaborProtection1,ibLaborProtection2=@ibLaborProtection2
+                update sy_InsuranceBasic set ibLaborProtection1=@ibLaborProtection1,ibLaborProtection2=@ibLaborProtection2
                     ,ibLaborProtection3=@ibLaborProtection3,ibLaborProtection4=@ibLaborProtection4,ibLaborProtection5=@ibLaborProtection5
                     ,ibLaborProtection6=@ibLaborProtection6,ibLaborProtection7=@ibLaborProtection7
                     ,ibHealthcare1=@ibHealthcare1,ibHealthcare2=@ibHealthcare2
