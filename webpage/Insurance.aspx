@@ -68,7 +68,6 @@
                         cate = "PFI";
                         ckname = "pfick";
                         eItem = $("#ddlPfExport").val();
-                        eType = $("input[name='rbPFOut']:checked").val();
                         break;
                 }
 
@@ -2112,11 +2111,9 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="PfiExportBtn" class="keybtn">匯出</a>
-                                <input type="radio" name="rbPFOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="rbPFOut" value="2" class="ep" />二合一
                                 <select id="ddlPfExport" name="ddlPfExport" onchange="getFamilyInsList()">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
-                                    <option value="02">退保</option>
                                 </select>
                             </div>
                         </div><br />

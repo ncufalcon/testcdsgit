@@ -145,7 +145,7 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 7, dt.Rows[i - 2]["perName"].ToString());
                                             Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
                                             Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 11,dt.Rows[i - 2]["pay_avg"].ToString());
+                                            Xls.SetCellValue(i, 11, dt.Rows[i - 2]["pay_avg"].ToString());
                                             Xls.SetCellValue(i, 12, dt.Rows[i - 2]["b_ganbor"].ToString());
                                             Xls.SetCellValue(i, 13, dt.Rows[i - 2]["pay_i4"].ToString());
                                         }
@@ -242,7 +242,7 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 5, dt.Rows[i - 2]["perName"].ToString());
                                             Xls.SetCellValue(i, 6, dt.Rows[i - 2]["perIDNumber"].ToString());
                                             Xls.SetCellValue(i, 8, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 9,dt.Rows[i - 2]["pay_avg"].ToString());
+                                            Xls.SetCellValue(i, 9, dt.Rows[i - 2]["pay_avg"].ToString());
                                         }
                                     }
                                 }
@@ -347,85 +347,46 @@ public class InsuranceExport : IHttpHandler {
             }
             else if (category == "PFI")
             {
-                if (type == "3")
+                switch (item)
                 {
-                    switch (item)
-                    {
-                        //眷屬三合一加保
-                        case "01":
-                            if (perGv != "")
+                    //眷屬三合一加保
+                    case "01":
+                        if (perGv != "")
+                        {
+                            fileSpec = context.Server.MapPath("~/Template/add_3in1.xls");
+                            using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
-                                fileSpec = context.Server.MapPath("~/Template/add_3in1.xls");
-                                using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
+                                Xls.Open(fileSpec);
+                                FileName += "眷屬加保三合一";
+                                dt = FI_Db.FamilyHeal_3in1_add(perGv);
+                                TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
+                                if (dt.Rows.Count > 0)
                                 {
-                                    Xls.Open(fileSpec);
-                                    FileName += "眷屬加保三合一";
-                                    dt = FI_Db.FamilyHeal_3in1_add(perGv);
-                                    TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
-                                    if (dt.Rows.Count > 0)
+                                    for (int i = 2; i < dt.Rows.Count + 2; i++)
                                     {
-                                        for (int i = 2; i < dt.Rows.Count + 2; i++)
-                                        {
-                                            Xls.SetCellValue(i, 1, "4");
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
-                                            Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanborID"].ToString());
-                                            Xls.SetCellValue(i, 5, "3");
-                                            Xls.SetCellValue(i, 6, "2");
-                                            Xls.SetCellValue(i, 20, "4");
-                                            Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
-                                            Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
-                                            Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 12, dt.Rows[i - 2]["InsLv"].ToString());
-                                            Xls.SetCellValue(i, 15, dt.Rows[i - 2]["pfIDNumber"].ToString());
-                                            Xls.SetCellValue(i, 16, dt.Rows[i - 2]["pfName"].ToString());
-                                            Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["pfBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["pfiChangeDate"].ToString()));
-                                        }
+                                        Xls.SetCellValue(i, 1, "4");
+                                        if (dt.Rows[i - 2]["LaborID"].ToString() != "")
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
+                                        if (dt.Rows[i - 2]["LaborID"].ToString() != "")
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
+                                        Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanborID"].ToString());
+                                        Xls.SetCellValue(i, 5, "3");
+                                        Xls.SetCellValue(i, 6, "2");
+                                        Xls.SetCellValue(i, 20, "4");
+                                        Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
+                                        Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
+                                        Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
+                                        Xls.SetCellValue(i, 12, dt.Rows[i - 2]["InsLv"].ToString());
+                                        Xls.SetCellValue(i, 15, dt.Rows[i - 2]["pfIDNumber"].ToString());
+                                        Xls.SetCellValue(i, 16, dt.Rows[i - 2]["pfName"].ToString());
+                                        Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["pfBirthday"].ToString()));
+                                        Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["pfiChangeDate"].ToString()));
                                     }
                                 }
                             }
-                            break;
-                        //三合一退保
-                        case "02":
-                            if (perGv != "")
-                            {
-                                fileSpec = context.Server.MapPath("~/Template/out_3in1.xls");
-                                using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
-                                {
-                                    Xls.Open(fileSpec);
-                                    FileName += "眷屬退保三合一";
-                                    dt = LH_Db.LH_3in1_out(perGv);
-                                    TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
-                                    if (dt.Rows.Count > 0)
-                                    {
-                                        for (int i = 2; i < dt.Rows.Count + 2; i++)
-                                        {
-                                            Xls.SetCellValue(i, 1, "2");
-                                            if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborCode"].ToString().Substring(0, (dt.Rows[i - 2]["LaborCode"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborCode"].ToString().Substring(dt.Rows[i - 2]["LaborCode"].ToString().Length - 1, 1));
-                                            Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanBorID"].ToString());
-                                            //Xls.SetCellValue(i, 5, "2");
-                                            Xls.SetCellValue(i, 6, "2");
-                                            Xls.SetCellValue(i, 7, "1");
-                                            //Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
-                                            Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
-                                            Xls.SetCellValue(i, 10, dt.Rows[i - 2]["perIDNumber"].ToString());
-                                            //Xls.SetCellValue(i, 11, dt.Rows[i - 2]["pPay"].ToString());
-                                            Xls.SetCellValue(i, 12, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 13, "1");
-                                            Xls.SetCellValue(i, 16, ROC_Date(dt.Rows[i - 2]["piChangeDate"].ToString()));
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                } //if type end
+                        }
+                        break;
+                }
             } //if category end
 
             string UpLoadPath = ConfigurationManager.AppSettings["UploadFileRootDir"];
