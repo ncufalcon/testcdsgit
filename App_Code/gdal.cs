@@ -19,7 +19,7 @@ namespace payroll
         /// </summary>
         public DataTable SelMember(sy_Member m)
         {
-            
+
             //string sql = @"select * from v_MbList where 1=1 ";
 
             string sql = @"SELECT mbGuid, mbName, mbJobNumber, mbId, mbPassword, mbPs, mbCom
@@ -93,7 +93,7 @@ namespace payroll
 
             string sql = @"select top 200 * from v_PersonSingleAllowance where 1=1 and paStatus='A' order by paCreateDate desc";
 
-      
+
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             try
             {
@@ -115,7 +115,7 @@ namespace payroll
         {
 
             string sql = @"SELECT * FROM v_PersonSingleAllowance where 1=1 and paStatus='A' ";
-            
+
             if (!string.IsNullOrEmpty(m.paGuid))
                 sql += "and paGuid=@paGuid ";
             if (!string.IsNullOrEmpty(m.paPerGuid))
@@ -132,6 +132,13 @@ namespace payroll
                 sql += "and siItemCode=@siItemCode ";
             if (!string.IsNullOrEmpty(m.siItemName))
                 sql += "and siItemName=@siItemName ";
+            if (!string.IsNullOrEmpty(m.paDateS) && !string.IsNullOrEmpty(m.paDateE))
+                sql += "and paDate between @paDateS and @paDateE ";
+            if (!string.IsNullOrEmpty(m.paDateS) && string.IsNullOrEmpty(m.paDateE))
+                sql += "and paDate >= @paDateS ";
+            if (string.IsNullOrEmpty(m.paDateS) && !string.IsNullOrEmpty(m.paDateE))
+                sql += "and paDate <= @paDateE ";
+
 
             sql += "order by paCreateDate desc";
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
@@ -140,6 +147,8 @@ namespace payroll
             cmd.Parameters.AddWithValue("@paPerGuid", com.cSNull(m.paPerGuid));
             cmd.Parameters.AddWithValue("@paAllowanceCode", com.cSNull(m.paAllowanceCode));
             cmd.Parameters.AddWithValue("@paDate", com.cSNull(m.paDate));
+            cmd.Parameters.AddWithValue("@paDateS", com.cSNull(m.paDateS));
+            cmd.Parameters.AddWithValue("@paDateE", com.cSNull(m.paDateE));
             cmd.Parameters.AddWithValue("@perName", com.cSNull(m.perName));
             cmd.Parameters.AddWithValue("@perNo", com.cSNull(m.perNo));
             cmd.Parameters.AddWithValue("@siItemCode", com.cSNull(m.siItemCode));
@@ -167,7 +176,7 @@ namespace payroll
                               values(@paPerGuid, @paAllowanceCode, @paPrice, @paQuantity, @paCost, @paDate, @paCreateId,@paPs)";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            cmd.Parameters.AddWithValue("@paPerGuid",p.paPerGuid);
+            cmd.Parameters.AddWithValue("@paPerGuid", p.paPerGuid);
             cmd.Parameters.AddWithValue("@paAllowanceCode", p.paAllowanceCode);
             cmd.Parameters.AddWithValue("@paPrice", p.paPrice);
             cmd.Parameters.AddWithValue("@paQuantity", p.paQuantity);
@@ -277,7 +286,7 @@ namespace payroll
                     sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
                             values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
 
-                
+
                     cmd.CommandText = sql;
                     cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
                     cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
@@ -377,6 +386,63 @@ namespace payroll
                 cmd.Connection.Open();
                 cmd.ExecuteNonQuery();
 
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+
+
+        /// <summary>
+        /// 呼叫sp pr_LeaveExport
+        /// </summary>
+        public DataTable Call_pr_LeaveExport(string sr_guid, string perNo, string company, string Dep, string Position)
+        {
+            string sql = @"pr_LeaveExport";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@sr_Guid", sr_guid);
+            cmd.Parameters.AddWithValue("@perNo", perNo);
+            cmd.Parameters.AddWithValue("@company", company);
+            cmd.Parameters.AddWithValue("@Dep", Dep);
+            cmd.Parameters.AddWithValue("@Position", Position);
+            try
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
+
+
+        /// <summary>
+        /// 查詢分店資訊
+        /// </summary>
+        public DataTable SelSy_SalaryRange(string str)
+        {
+
+            string sql = @"select * FROM sy_SalaryRange where sr_Status='A' ";
+
+            if (!string.IsNullOrEmpty(str))
+                sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
+
+            sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@str", str);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
             }
             catch (Exception ex) { throw ex; }
             finally { cmd.Connection.Close(); cmd.Dispose(); }

@@ -60,13 +60,14 @@
                                         <div class="font-title titlebackicon">員工編號</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_PerNo" autofocus="autofocus" class="inputex width80"  /><img src="../images/btn-search.gif" />
+                                        <input type="text" id="txt_PerNo" autofocus="autofocus" class="inputex width60"  />
+                                        <%--<img id="img_" src="../images/btn-search.gif"  onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>--%>
                                     </td>
                                     <td class="width15" align="right">
                                         <div class="font-title titlebackicon">姓名</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_PerName"  class="inputex width80" />
+                                        <input type="text" id="txt_PerName"  class="inputex width60" />
                                     </td>
                                 </tr>
 
@@ -75,13 +76,14 @@
                                         <div class="font-title titlebackicon">津貼代號</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_AllowanceCode" class="inputex width80"  /><img src="../images/btn-search.gif" />
+                                        <input type="text" id="txt_AllowanceCode" class="inputex width60"  />
+                                        <%--<img src="../images/btn-search.gif" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>--%>
                                     </td>
                                     <td class="width15" align="right">
                                         <div class="font-title titlebackicon">金額</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_Cost"  class="inputex width80" />
+                                        <input type="text" id="txt_Cost"  class="inputex width60" />
                                     </td>
                                 </tr>
 
@@ -91,8 +93,8 @@
                                         <div class="font-title titlebackicon">日期起迄</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_Date_s" class="inputex width80"  />~
-                                        <input type="text" id="txt_Date_e" class="inputex width80"  />
+                                        <input type="text" id="txt_Date_s" class="inputex width40"  />~
+                                        <input type="text" id="txt_Date_e" class="inputex width40"  />
                                     </td>
                                 </tr>
 
@@ -477,8 +479,8 @@
             },
 
             reSearch: function () {
-                document.getElementById(JsEven.id.div_Search).style.display = "block";
-                document.getElementById(JsEven.id.div_Data).style.display = "none";
+                document.getElementById(JsEven.Page2Id.div_Search).style.display = "block";
+                document.getElementById(JsEven.Page2Id.div_Data).style.display = "none";
             },
 
 

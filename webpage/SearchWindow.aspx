@@ -36,6 +36,10 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
+                    case "Branches":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
+                        parent.$.fancybox.close();
+                        break;
                 }
             });
         });
@@ -280,6 +284,27 @@
                                     tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 //PageFun(p, $("total", data).text());
+                                break;
+                            case "SalaryRange":
+                                var tabstr = '<tr>';
+                                tabstr += '<th nowrap="nowrap">年度</th>';
+                                tabstr += '<th nowrap="nowrap">週期起</th>';
+                                tabstr += '<th nowrap="nowrap">週期迄</th>';
+                                tabstr += '<th nowrap="nowrap">發薪日</th>';
+                                tabstr += '</tr>';
+                                if ($(data).find("data_item").length > 0) {
+                                    $(data).find("data_item").each(function (i) {
+                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_BeginDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + '>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Year").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_BeginDate").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Enddate").text() + '</td>';
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_SalaryDate").text() + '</td>';
+                                        tabstr += '</tr>';
+                                    });
+                                }
+                                else
+                                    tabstr += '<tr><td colspan="3">查詢無資料</td></tr>';
+                                $("#sarchTab").append(tabstr);
                                 break;
                         }
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });

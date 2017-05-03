@@ -7,6 +7,7 @@ using System.Data;
 public class SearchDialog : IHttpHandler {
     Personnel_DB Personnel_Db = new Personnel_DB();
     sy_SalaryItem_DB si_db = new sy_SalaryItem_DB();
+    payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
     {
         try
@@ -109,6 +110,10 @@ public class SearchDialog : IHttpHandler {
 
                     //xmlStr = "<total>" + ds9.Tables[0].Rows[0]["total"].ToString() + "</total>";
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt9, "dataList", "data_item");
+                    break;
+                case "SalaryRange":
+                    DataTable dt10 = dal.SelSy_SalaryRange(SearchStr);
+                    xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt10, "dataList", "data_item");
                     break;
             }
             xmlStr = "<root>" + xmlStr + xmlStr2 + "</root>";
