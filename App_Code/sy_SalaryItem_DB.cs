@@ -393,6 +393,51 @@ public class sy_SalaryItem_DB
     }
     #endregion
 
+    #region 撈 sy_SalaryItem 檢查 siRef 對應欄位(在薪資異動使用) 在這張表一種只能存在一個
+    public DataTable ChksiItemCodesiRef()
+    {
+        DataTable dt = new DataTable();
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            thisConnection.Open();
+            show_value.Append(@"  
+                select * from sy_SalaryItem where siStatus='A' and siRef=@siRef
+            ");
+            thisCommand.Parameters.AddWithValue("@siRef", siRef);
+            if (siGuid != "")
+            {
+                show_value.Append(@" and siGuid=@siGuid  ");
+                thisCommand.Parameters.AddWithValue("@siGuid", siGuid);
+            }
+
+            thisCommand.CommandType = CommandType.Text;
+            thisCommand.CommandText = show_value.ToString();
+            oda.SelectCommand = thisCommand;
+            oda.Fill(dt);
+        }
+        catch (Exception)
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        return dt;
+
+    }
+    #endregion
+
     #region 撈 sy_SalaryItem for 開窗用
     public DataTable SelectSalaryItemForWindow()
     {

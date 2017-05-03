@@ -10,9 +10,11 @@ public class getPensionList : IHttpHandler {
         try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string ddlPension = (context.Request["ddlPension"] != null) ? context.Request["ddlPension"].ToString() : "";
 
             string xmlStr = "";
             PP_Db._KeyWord = keyword;
+            PP_Db._ppChange = ddlPension;
             DataTable dt = PP_Db.SelectList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "ppList", "pp_item");
             xmlStr = "<root>" + xmlStr + "</root>";

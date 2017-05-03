@@ -10,9 +10,11 @@ public class getHealList : IHttpHandler {
         try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string ddlHeal = (context.Request["ddlHeal"] != null) ? context.Request["ddlHeal"].ToString() : "";
 
             string xmlStr = "";
             LH_Db._KeyWord = keyword;
+            LH_Db._piChange = ddlHeal;
             DataTable dt = LH_Db.SelectHealList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "hList", "h_item");
             xmlStr = "<root>" + xmlStr + "</root>";
@@ -20,7 +22,7 @@ public class getHealList : IHttpHandler {
         }
         catch (Exception ex) { context.Response.Write("error"); }
     }
- 
+
     public bool IsReusable {
         get {
             return false;

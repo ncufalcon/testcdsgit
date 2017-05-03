@@ -129,6 +129,7 @@ public class PersonBuckle_DB
         {
             sb.Append(@"and ((upper(pbCreditor) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        sb.Append(@"order by pbCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

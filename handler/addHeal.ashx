@@ -3,9 +3,11 @@
 using System;
 using System.Web;
 using System.Web.SessionState;
+using System.Data;
 
 public class addHeal : IHttpHandler,IRequiresSessionState {
     LaborHealth_DB LH_Db = new LaborHealth_DB();
+    Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -25,6 +27,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piGuid = Guid.NewGuid().ToString();
                     LH_Db._piPerGuid = pi_No;
                     LH_Db._piSubsidyLevel = pi_SubsidyLevel;
+                    LH_Db._piCardNo = getLH_Code(pi_No, "H");
                     LH_Db._piChangeDate = pi_ChangeDate;
                     LH_Db._piChange = pi_Change;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
@@ -37,6 +40,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piGuid = id;
                     LH_Db._piPerGuid = pi_No;
                     LH_Db._piSubsidyLevel = pi_SubsidyLevel;
+                    LH_Db._piCardNo = getLH_Code(pi_No, "H");
                     LH_Db._piChangeDate = pi_ChangeDate;
                     LH_Db._piChange = pi_Change;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
@@ -51,7 +55,21 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addHeal');</script>"); }
     }
- 
+
+    private string getLH_Code(string perGuid, string type)
+    {
+        string codeStr = string.Empty;
+        DataTable dt = Personnel_Db.getLHcode(perGuid);
+        if (dt.Rows.Count > 0)
+        {
+            if (type == "L")
+                codeStr = dt.Rows[0]["comLaborProtectionCode"].ToString();
+            else
+                codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
+        }
+        return codeStr;
+    }
+
     public bool IsReusable {
         get {
             return false;

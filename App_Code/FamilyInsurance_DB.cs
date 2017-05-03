@@ -106,17 +106,23 @@ left join sy_Person on perGuid=pfiPerGuid
 left join sy_PersonFamily on pfGuid=pfiPfGuid
 left join sy_SubsidyLevel on slGuid=pfiSubsidyLevel
 left join sy_codetable on code_group='14' and code_value=pfiChange
-where pfiStatus<>'D' order by sy_PersonFamilyInsurance.pfiChangeDate desc ");
+where pfiStatus<>'D' ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        if (pfiChange != "")
+        {
+            sb.Append(@"and pfiChange=@pfiChange ");
+        }
+            sb.Append(@"order by sy_PersonFamilyInsurance.pfiChangeDate desc,pfiCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pfiChange", pfiChange);
         oda.Fill(ds);
         return ds;
     }
@@ -251,5 +257,29 @@ where  pfiStatus<>'D' and pfiGuid=@pfiGuid  ");
         oda.Fill(ds);
         return ds;
     }
-    
+
+    public DataTable FamilyHeal_3in1_add(string pfGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) InsLv,
+pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate
+from sy_PersonFamily 
+left join sy_Person on pfPerGuid=perGuid
+left join sy_Company on perComGuid=comGuid
+left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
+where pfGuid in (" + pfGuid + @") and pfStatus='A'
+order by perIDNumber ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }

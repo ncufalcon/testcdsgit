@@ -60,7 +60,7 @@
                             <a href="Javascript:void(0)" target="_self" title="薪資管理">薪資管理</a>
                             <ul>
                                 <li><a href="page-Allowance.aspx" target="_self" title="津貼管理">津貼管理</a></li>
-                                <li><a href='page-Gifts.html' target='_self' title="年節禮金計算">年節禮金計算</a></li>
+                                <li><a href='page-Gifts.aspx' target='_self' title="年節禮金計算">年節禮金計算</a></li>
                                 <li><a href='page-SalaryHoliday.aspx' target='_self' title="給薪假計算">給薪假計算</a></li>
                                 <li><a href='page-Salary.html' target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
                                 <li><a href='page-Saveto.html' target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
@@ -100,7 +100,7 @@
             <li><a href='../webpage/page-regionadmin.aspx' target='_self' title="分店管理">分店管理</a></li>
             <li><a href='../webpage/page-calendaradmin.aspx' target='_self' title="行事曆設定">行事曆設定</a></li>
             <li><a href='../webpage/page-hourlyadmin.aspx' target='_self' title="薪資管理設定">薪資管理設定</a></li> 
-            <li><a href='page-nssadmin.html' target='_self' title="保險設定">保險設定</a></li>     
+            <li><a href='../webpage/page-nssadmin.aspx' target='_self' title="保險設定">保險設定</a></li>     
       </ul>
     </li>
       <li><a href="../webpage/Page-ModifyPd.aspx" title="修改個人密碼">修改個人密碼</a></li>

@@ -106,6 +106,7 @@ where pfStatus<>'D' and pfPerGuid=@pfPerGuid ");
         {
             sb.Append(@"and ((upper(pfName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        sb.Append(@"order by pfCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

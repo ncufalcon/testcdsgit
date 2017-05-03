@@ -31,6 +31,12 @@
                     alert("請選擇要匯入的檔案");
                     return;
                 }
+                var exten = $("input[name='dataFile']").val().replace(/^.*\./, '');
+                var PassExten = ["xls", "xlsx"];
+                if ($.inArray(exten, PassExten) == -1) {
+                    alert("請上傳Excel檔");
+                    return;
+                }
                 $("#loadblock").show();
                 $("#txtBlock").hide();
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');

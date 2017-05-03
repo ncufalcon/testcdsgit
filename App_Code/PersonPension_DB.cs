@@ -104,12 +104,18 @@ where ppStatus<>'D' ");
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+        if (ppChange != "")
+        {
+            sb.Append(@"and ppChange=@ppChange ");
+        }
+        sb.Append(@"order by sy_PersonPension.ppChangeDate desc,ppCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@ppChange", ppChange);
         oda.Fill(ds);
         return ds;
     }
@@ -250,6 +256,71 @@ where  ppStatus<>'D' and ppGuid=@ppGuid  ");
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@ppPerGuid", ppPerGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+
+    public DataTable pp_add(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborCode,ppEmployerRatio,ppLarboRatio,ppChangeDate,
+(select min(ilItem3) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel)) InsLv
+from sy_Person 
+left join sy_Company on comGuid=perComGuid
+left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+where perGuid in (" + perGuid + @") ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable pp_stop(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborCode,ppEmployerRatio,ppLarboRatio,ppChangeDate
+from sy_Person 
+left join sy_Company on comGuid=perComGuid
+left join sy_PersonPension on ppChange='03' and ppStatus='A' and ppPerGuid=perGuid
+where perGuid in (" + perGuid + @") ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable pp_mod(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborCode,ppPayPayroll
+from sy_Person 
+left join sy_Company on comGuid=perComGuid
+left join sy_PersonPension on ppChange='02' and ppStatus='A' and ppPerGuid=perGuid
+where perGuid in (" + perGuid + @") ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oda.Fill(ds);
         return ds;
     }

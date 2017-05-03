@@ -47,6 +47,7 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiPerGuid = PerID;
                     FI_Db._pfiPfGuid = GuidStr;
                     FI_Db._pfiChange = "01";
+                    FI_Db._pfiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
                     FI_Db._pfiSubsidyLevel = pf_CodeGuid;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.addFamilyIns();
@@ -58,6 +59,7 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
                         GI_Db._pgiPfGuid = GuidStr;
                         GI_Db._pgiType = "02"; //身份
                         GI_Db._pgiChange = "01"; //異動別
+                        GI_Db._pgiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
                         GI_Db._pgiModifyId = USERINFO.MemberGuid;
                         GI_Db.addGroupInsurance();
                     }
