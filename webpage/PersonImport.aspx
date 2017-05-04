@@ -10,6 +10,15 @@
     <title></title>
     <script type="text/javascript">
         $(document).ready(function () {
+            switch($.getParamValue('tp')) {
+                case "Person":
+                    $("#downSample").attr("href", "../Template/PersonnelInfo.xlsx");
+                    break;
+                case "LH_Compare":
+                    $("#downSample").attr("href", "../Template/LH_Compare.xlsx");
+                    break;
+            }
+
             $("#subbtn").click(function () {
                 if ($("input[name='dataFile']").val() == "") {
                     alert("請選擇檔案");
@@ -38,11 +47,11 @@
                         form.setAttribute("action", "../handler/LHCompImport.ashx");
                         break;
                 }
-                form.setAttribute("method", "post");
-                form.setAttribute("enctype", "multipart/form-data");
-                form.setAttribute("encoding", "multipart/form-data");
-                form.setAttribute("target", "postiframe");
-                form.submit();
+                //form.setAttribute("method", "post");
+                //form.setAttribute("enctype", "multipart/form-data");
+                //form.setAttribute("encoding", "multipart/form-data");
+                //form.setAttribute("target", "postiframe");
+                //form.submit();
             });
         });
 
@@ -53,10 +62,16 @@
     </script>
     <style>.keybtn{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; padding:5px 15px;*padding:5px;_padding:5px;color:#87712e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}</style>
 </head>
-<body style="height: 80px; line-height: 80px; text-align: center;">
+<body>
     <form id="form1" runat="server">
     <div id="fileblock">
-        請選擇檔案：<input type="file" id="dataFile" name="dataFile" />&nbsp;<input class="keybtn" id="subbtn" type="button" value="確認" />
+        <table width="100%">
+            <tr>
+                <td align="right">請選擇檔案：</td>
+                <td><input type="file" id="dataFile" name="dataFile" />&nbsp;<input class="keybtn" id="subbtn" type="button" value="確認" /></td>
+            </tr>
+            <tr><td></td><td><a id="downSample">範本下載</a></td></tr>
+        </table>
     </div>
     <div id="loadblock" style="display:none; text-align:center;"><img src="../images/loading.gif" />處理中，請稍待</div>
     </form>

@@ -11,7 +11,7 @@
             getddl("13", "#pp_Change");
             getddl("14", "#pfi_Change");
             getddl("14", "#pgi_Change");
- 
+
             //datepicker
             $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate").datepicker({
                 changeMonth: true,
@@ -31,7 +31,7 @@
                     href: "PersonImport.aspx?tp=LH_Compare",
                     type: "iframe",
                     width: "450",
-                    height: "70",
+                    minHeight: "50",
                     closeClick: false,
                     openEffect: 'elastic',
                     closeEffect: 'elastic',
