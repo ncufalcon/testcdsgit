@@ -39,6 +39,7 @@ public class sy_OverTime_DB
     Int32 oOffDayPay2;
     Int32 oOffDayPay3;
     Int32 oPublickHoliday;
+    Int32 oNationalHolidays;
     #endregion
     #region sy_OverTime 公用
     public string _oGuid
@@ -121,6 +122,10 @@ public class sy_OverTime_DB
     {
         set { oPublickHoliday = value; }
     }
+    public Int32 _oNationalHolidays
+    {
+        set { oNationalHolidays = value; }
+    }
     #endregion
 
     #region 撈 sy_OverTime
@@ -172,8 +177,8 @@ public class sy_OverTime_DB
         try
         {
             show_value.Append(@" 
-                insert into sy_OverTime (oGuid,oMale,oFemale,oFixed,oOverTime1,oOverTime2Start,oOverTime2End,oOverTime3,oOverTimePay1,oOverTimePay2,oOverTimePay3,oOffDay1,oOffDay2Start,oOffDay2End,oOffDay3Start,oOffDay3End,oOffDayPay1,oOffDayPay2,oOffDayPay3,oPublickHoliday) 
-                values(@oGuid,@oMale,@oFemale,@oFixed,@oOverTime1,@oOverTime2Start,@oOverTime2End,@oOverTime3,@oOverTimePay1,@oOverTimePay2,@oOverTimePay3,@oOffDay1,@oOffDay2Start,@oOffDay2End,@oOffDay3Start,@oOffDay3End,@oOffDayPay1,@oOffDayPay2,@oOffDayPay3,@oPublickHoliday) 
+                insert into sy_OverTime (oGuid,oMale,oFemale,oFixed,oOverTime1,oOverTime2Start,oOverTime2End,oOverTime3,oOverTimePay1,oOverTimePay2,oOverTimePay3,oOffDay1,oOffDay2Start,oOffDay2End,oOffDay3Start,oOffDay3End,oOffDayPay1,oOffDayPay2,oOffDayPay3,oPublickHoliday,oNationalHolidays) 
+                values(@oGuid,@oMale,@oFemale,@oFixed,@oOverTime1,@oOverTime2Start,@oOverTime2End,@oOverTime3,@oOverTimePay1,@oOverTimePay2,@oOverTimePay3,@oOffDay1,@oOffDay2Start,@oOffDay2End,@oOffDay3Start,@oOffDay3End,@oOffDayPay1,@oOffDayPay2,@oOffDayPay3,@oPublickHoliday,@oNationalHolidays) 
             ");
 
             thisCommand.Parameters.AddWithValue("@oGuid", oGuid);
@@ -196,6 +201,7 @@ public class sy_OverTime_DB
             thisCommand.Parameters.AddWithValue("@oOffDayPay2", oOffDayPay2);
             thisCommand.Parameters.AddWithValue("@oOffDayPay3", oOffDayPay3);
             thisCommand.Parameters.AddWithValue("@oPublickHoliday", oPublickHoliday);
+            thisCommand.Parameters.AddWithValue("@oNationalHolidays", oNationalHolidays);
 
             thisCommand.CommandText = show_value.ToString();
             thisCommand.CommandType = CommandType.Text;
@@ -235,6 +241,7 @@ public class sy_OverTime_DB
                 ,oOverTimePay1=@oOverTimePay1,oOverTimePay2=@oOverTimePay2,oOverTimePay3=@oOverTimePay3
                 ,oOffDay1=@oOffDay1,oOffDay2Start=@oOffDay2Start,oOffDay2End=@oOffDay2End,oOffDay3Start=@oOffDay3Start,oOffDay3End=@oOffDay3End
                 ,oOffDayPay1=@oOffDayPay1,oOffDayPay2=@oOffDayPay2,oOffDayPay3=@oOffDayPay3,oPublickHoliday=@oPublickHoliday
+                ,oNationalHolidays=@oNationalHolidays
                 where  oGuid=@oGuid               
             ");
 
@@ -258,6 +265,7 @@ public class sy_OverTime_DB
             thisCommand.Parameters.AddWithValue("@oOffDayPay2", oOffDayPay2);
             thisCommand.Parameters.AddWithValue("@oOffDayPay3", oOffDayPay3);
             thisCommand.Parameters.AddWithValue("@oPublickHoliday", oPublickHoliday);
+            thisCommand.Parameters.AddWithValue("@oNationalHolidays", oNationalHolidays);
 
             thisCommand.CommandText = show_value.ToString();
             thisCommand.CommandType = CommandType.Text;

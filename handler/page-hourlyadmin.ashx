@@ -62,6 +62,7 @@ public class page_hourlyadmin : IHttpHandler {
         public string oOffDayPay2 { get; set; }
         public string oOffDayPay3 { get; set; }
         public string oPublickHoliday { get; set; }
+        public string oNationalHolidays { get; set; }
     }
     //sy_TaxationItem sy_TaxationFormula 欄位
     public class tiTooL
@@ -378,6 +379,7 @@ public class page_hourlyadmin : IHttpHandler {
                         e.oOffDayPay2 = dt_odata.Rows[i]["oOffDayPay2"].ToString().Trim();
                         e.oOffDayPay3 = dt_odata.Rows[i]["oOffDayPay3"].ToString().Trim();
                         e.oPublickHoliday = dt_odata.Rows[i]["oPublickHoliday"].ToString().Trim();
+                        e.oNationalHolidays = dt_odata.Rows[i]["oNationalHolidays"].ToString().Trim();
                         oList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -412,6 +414,7 @@ public class page_hourlyadmin : IHttpHandler {
                 string mod_oOffDayPay2 = string.IsNullOrEmpty(context.Request.Form["mod_oOffDayPay2"]) ? "0" : context.Request.Form["mod_oOffDayPay2"].ToString().Trim();
                 string mod_oOffDayPay3 = string.IsNullOrEmpty(context.Request.Form["mod_oOffDayPay3"]) ? "0" : context.Request.Form["mod_oOffDayPay3"].ToString().Trim();
                 string mod_oPublickHoliday = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday"]) ? "0" : context.Request.Form["mod_oPublickHoliday"].ToString().Trim();
+                string mod_oNationalHolidays = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays"]) ? "0" : context.Request.Form["mod_oNationalHolidays"].ToString().Trim();
                 try {
                     o_db._oMale = Convert.ToInt32(mod_oMale);
                     o_db._oFemale = Convert.ToInt32(mod_oFemale);
@@ -432,6 +435,7 @@ public class page_hourlyadmin : IHttpHandler {
                     o_db._oOffDayPay2 = Convert.ToInt32(mod_oOffDayPay2);
                     o_db._oOffDayPay3 = Convert.ToInt32(mod_oOffDayPay3);
                     o_db._oPublickHoliday = Convert.ToInt32(mod_oPublickHoliday);
+                    o_db._oNationalHolidays = Convert.ToInt32(mod_oNationalHolidays);
                     if (mod_oGuid == "")
                     {
                         //新增

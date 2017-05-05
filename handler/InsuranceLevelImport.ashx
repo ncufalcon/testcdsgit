@@ -59,22 +59,32 @@ public class InsuranceLevelImport : IHttpHandler {
                 //寫入資料庫
                 for (int j = 2; j <= Xls.GetRowCount(1); j++)
                 {
-                    if (!DateTime.TryParse(Xls.GetCellValue(j, 5).ToString().Trim(), out dtDate) || Xls.GetCellValue(j, 5).ToString().Trim().Length != 10)
+                    string cl1 = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
+                    string cl2 = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString() : "";
+                    string cl3 = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString() : "";
+                    string cl4 = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "";
+                    string cl5 = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "";
+                    //第一個欄位沒東西就直接不做
+                    if (cl1.Trim()=="") {
+                        continue;
+                    }
+                    //判斷日期格式
+                    if (!DateTime.TryParse(cl5, out dtDate) || cl5.ToString().Trim().Length != 10)
                     {
                         //不是日期格式 或 日期格式有誤
                         error_date++;
                         continue;
                     } else {
                         //重複匯入
-                        DataRow[] rows = dt_chk_date.Select("ilEffectiveDate = '" + Xls.GetCellValue(j, 5).ToString().Trim() + "' ");
+                        DataRow[] rows = dt_chk_date.Select("ilEffectiveDate = '" + cl5.ToString().Trim() + "' ");
                         if (rows.Length>0) {
                             error_samdate++;
                             continue;
                         }
                     }
-                    if (Xls.GetCellValue(j, 1) != null && Xls.GetCellValue(j, 1).ToString().Trim() != "")
+                    if (cl1 != "")
                     {
-                        if (!int.TryParse(Xls.GetCellValue(j, 1).ToString().Trim(), out n))
+                        if (!int.TryParse(cl1.Trim(), out n))
                         {
                             //不是數字格式
                             error_num++;
@@ -82,27 +92,27 @@ public class InsuranceLevelImport : IHttpHandler {
                         }
 
                     }
-                    if (Xls.GetCellValue(j, 2) != null && Xls.GetCellValue(j, 2).ToString().Trim() != "")
+                    if (cl2.Trim() != "")
                     {
-                        if (!int.TryParse(Xls.GetCellValue(j, 2).ToString().Trim(), out n))
+                        if (!int.TryParse(cl2.Trim(), out n))
                         {
                             //不是數字格式
                             error_num++;
                             continue;
                         }
                     }
-                    if (Xls.GetCellValue(j, 3) != null && Xls.GetCellValue(j, 3).ToString().Trim() != "")
+                    if (cl3.Trim() != "")
                     {
-                        if (!int.TryParse(Xls.GetCellValue(j, 3).ToString().Trim(), out n))
+                        if (!int.TryParse(cl3.Trim(), out n))
                         {
                             //不是數字格式
                             error_num++;
                             continue;
                         }
                     }
-                    if (Xls.GetCellValue(j, 4) != null && Xls.GetCellValue(j, 4).ToString().Trim() != "")
+                    if (cl4.Trim() != "")
                     {
-                        if (!int.TryParse(Xls.GetCellValue(j, 4).ToString().Trim(), out n))
+                        if (!int.TryParse(cl4.Trim(), out n))
                         {
                             //不是數字格式
                             error_num++;
@@ -113,7 +123,7 @@ public class InsuranceLevelImport : IHttpHandler {
                     if (str_date == "") {
                         str_date = Xls.GetCellValue(j, 5).ToString().Trim();
                     }
-                    
+
 
                     oCmd.CommandText = @"
                         insert into sy_InsuranceLevel(ilGuid,ilItem1,ilItem2,ilItem3,ilItem4,ilEffectiveDate,ilCreatId,ilModifyId,ilModifyDate,ilStatus)
@@ -121,11 +131,11 @@ public class InsuranceLevelImport : IHttpHandler {
                     ";
 
                     oCmd.Parameters["@ilGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@ilItem1"].Value = (Xls.GetCellValue(j, 1)==null || Xls.GetCellValue(j, 1).ToString().Trim() == "") ? 0 : Convert.ToDecimal(Xls.GetCellValue(j, 1).ToString().Trim());
-                    oCmd.Parameters["@ilItem2"].Value = (Xls.GetCellValue(j, 2)==null || Xls.GetCellValue(j, 2).ToString().Trim() == "") ? 0 : Convert.ToDecimal(Xls.GetCellValue(j, 2).ToString().Trim());
-                    oCmd.Parameters["@ilItem3"].Value = (Xls.GetCellValue(j, 4)==null || Xls.GetCellValue(j, 4).ToString().Trim() == "") ? 0 : Convert.ToDecimal(Xls.GetCellValue(j, 4).ToString().Trim());
-                    oCmd.Parameters["@ilItem4"].Value = (Xls.GetCellValue(j, 3)==null || Xls.GetCellValue(j, 3).ToString().Trim() == "") ? 0 : Convert.ToDecimal(Xls.GetCellValue(j, 3).ToString().Trim());
-                    oCmd.Parameters["@ilEffectiveDate"].Value = Xls.GetCellValue(j, 5).ToString().Trim();
+                    oCmd.Parameters["@ilItem1"].Value = (cl1.Trim() == "") ? 0 : Convert.ToDecimal(cl1.Trim());
+                    oCmd.Parameters["@ilItem2"].Value = (cl2.Trim() == "") ? 0 : Convert.ToDecimal(cl2.Trim());
+                    oCmd.Parameters["@ilItem3"].Value = (cl4.Trim() == "") ? 0 : Convert.ToDecimal(cl4.Trim());
+                    oCmd.Parameters["@ilItem4"].Value = (cl3.Trim() == "") ? 0 : Convert.ToDecimal(cl3.Trim());
+                    oCmd.Parameters["@ilEffectiveDate"].Value = cl5.Trim();
                     oCmd.Parameters["@ilCreatId"].Value = "王胖爺";
                     oCmd.Parameters["@ilModifyId"].Value = "王胖爺";
                     oCmd.Parameters["@ilModifyDate"].Value = DateTime.Now;
