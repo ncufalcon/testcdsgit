@@ -286,6 +286,7 @@
                                 //PageFun(p, $("total", data).text());
                                 break;
                             case "SalaryRange":
+                            case "CityBankSR":
                                 var tabstr = '<tr>';
                                 tabstr += '<th nowrap="nowrap">年度</th>';
                                 tabstr += '<th nowrap="nowrap">週期起</th>';
@@ -294,7 +295,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_BeginDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_SalaryDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Year").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_BeginDate").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Enddate").text() + '</td>';

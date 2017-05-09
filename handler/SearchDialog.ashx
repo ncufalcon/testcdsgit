@@ -112,6 +112,7 @@ public class SearchDialog : IHttpHandler {
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt9, "dataList", "data_item");
                     break;
                 case "SalaryRange":
+                case "CityBankSR":
                     DataTable dt10 = dal.SelSy_SalaryRange(SearchStr);
                     xmlStr2 = DataTableToXml.ConvertDatatableToXML(dt10, "dataList", "data_item");
                     break;
