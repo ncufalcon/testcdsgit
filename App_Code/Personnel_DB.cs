@@ -1110,4 +1110,27 @@ where comGuid=(select perComGuid from sy_Person where perGuid=@perGuid) ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable mutiPersonnel()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+
+        sb.Append(@"select perGuid,perNo,perName,perComGuid,comName,perDep,cbName from sy_Person
+left join sy_Company on comGuid=perComGuid
+left join sy_CodeBranches on cbGuid=perDep
+where perStatus<>'D'
+order by perComGuid,perDep ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+
+        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oda.Fill(ds);
+        return ds;
+    }
 }
