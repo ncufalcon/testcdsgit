@@ -198,11 +198,11 @@ public class page_Attendance : IHttpHandler, IRequiresSessionState
                         lea_db._leaAskerName = "王胖爺";
                         lea_db._leaLeaveTypeId = Convert.ToInt32(mod_leave_type);
                         lea_db._leaAppilcantId = mod_empno;
-                        if (mod_leave_type2 == "")
+                        if (mod_leave_type2 == "" || mod_leave_type2_date=="0" || mod_leave_type2_date=="0.0" || mod_leave_type2_date=="")
                             lea_db._leaLeaveType2 = Convert.ToInt32("0");
                         else
                             lea_db._leaLeaveType2 = Convert.ToInt32(mod_leave_type2);
-                        if (mod_leave_type2_date == "")
+                        if (mod_leave_type2_date == "" || mod_leave_type2_date=="0" || mod_leave_type2_date=="0.0" || mod_leave_type2_date=="")
                             lea_db._leaDuration2 = Convert.ToDecimal("0");
                         else
                             lea_db._leaDuration2 = Convert.ToDecimal(mod_leave_type2_date);

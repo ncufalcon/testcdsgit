@@ -587,7 +587,7 @@ public class sy_Leave_DB
                 else
                 {
                     double days = Convert.ToDouble(str_days);
-                    DateTime dtime_this = Convert.ToDateTime(str_days);//.ToShortDateString()
+                    DateTime dtime_this = Convert.ToDateTime(leaStratFrom);//.ToShortDateString()
                                                                         //1.先insert 假別1 整天的進去
                     for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
                     {

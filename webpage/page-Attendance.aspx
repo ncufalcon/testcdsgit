@@ -541,11 +541,11 @@
                     return false;
                 }
             }
-            if (chk_leave_type_date2 != "" && chk_leave_type2 == "" && chk_num(chk_leave_type_date2)==true) {
+            if (chk_leave_type_date2 != "" && chk_leave_type_date2 != "0" && chk_leave_type_date2 != "0.0" && chk_leave_type2 == "" && chk_num(chk_leave_type_date2) == true) {
                 alert("請選擇假別2");
                 return false;
             }
-            if (chk_leave_type2 != "" && (isNaN(chk_leave_type_date2) || chk_leave_type_date2=="")) {
+            if (chk_leave_type2 != "" && chk_leave_type_date2!="" && isNaN(chk_leave_type_date2) && chk_leave_type_date2 != "0" && chk_leave_type_date2 != "0.0") {
                 alert("請輸入正確的假別2天數");
                 return false;
             } else {
