@@ -59,6 +59,7 @@
                     alert("請選擇一個計薪週期");
                     return;
                 }
+                $.fancybox.close();
                 //if (confirm("系統將刪除本系統" + start_d + "~" + end_d + "已匯入的請假紀錄，並重新匯入請假紀錄，是否繼續?")) {
                     $.ajax({
                         type: "POST",
