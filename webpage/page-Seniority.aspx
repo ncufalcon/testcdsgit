@@ -52,12 +52,17 @@
         function chk_data() {
             var chk_year = $("#txt_year").val();
             var chk_date = $("#txt_date").val();
+            var chk_empno = $("#tmpUID").val();
             if (chk_year == "") {
                 alert("請輸入計算年度");
                 return false;
             }
             if (chk_date == "") {
                 alert("請選擇年資認定截止日期");
+                return false;
+            }
+            if (chk_empno == "") {
+                alert("請挑選人員");
                 return false;
             }
             if (isNaN(chk_year)) {
