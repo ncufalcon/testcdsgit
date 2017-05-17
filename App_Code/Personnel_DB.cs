@@ -1118,7 +1118,7 @@ where comGuid=(select perComGuid from sy_Person where perGuid=@perGuid) ");
         StringBuilder sb = new StringBuilder();
 
 
-        sb.Append(@"select perGuid,perNo,perName,perComGuid,comName,perDep,cbName from sy_Person
+        sb.Append(@"select perGuid,perNo,perName,perComGuid,comAbbreviate,perDep,cbName from sy_Person
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
 where perStatus<>'D'
