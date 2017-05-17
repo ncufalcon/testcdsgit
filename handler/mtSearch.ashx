@@ -18,7 +18,7 @@ public class mtSearch : IHttpHandler {
                 {
                     if (i == 0)
                     {
-                        xmlStr = "<company id=\"" + dt.Rows[i]["perComGuid"].ToString() + "\" name=\"" + dt.Rows[i]["comName"].ToString() + "\">";
+                        xmlStr = "<company id=\"" + dt.Rows[i]["perComGuid"].ToString() + "\" name=\"" + dt.Rows[i]["comAbbreviate"].ToString() + "\">";
                         xmlStr += "<dep id=\"" + dt.Rows[i]["perDep"].ToString() + "\" name=\"" + dt.Rows[i]["cbName"].ToString() + "\">";
                         xmlStr += "<per id=\"" + dt.Rows[i]["perGuid"].ToString() + "\" no=\"" + dt.Rows[i]["perNo"].ToString() + "\" name=\"" + dt.Rows[i]["perName"].ToString() + "\" />";
                     }
@@ -40,7 +40,7 @@ public class mtSearch : IHttpHandler {
                         else
                         {
                             xmlStr += "</dep></company>";
-                            xmlStr += "<company id=\"" + dt.Rows[i]["perComGuid"].ToString() + "\" name=\"" + dt.Rows[i]["comName"].ToString() + "\">";
+                            xmlStr += "<company id=\"" + dt.Rows[i]["perComGuid"].ToString() + "\" name=\"" + dt.Rows[i]["comAbbreviate"].ToString() + "\">";
                             xmlStr += "<dep id=\"" + dt.Rows[i]["perDep"].ToString() + "\" name=\"" + dt.Rows[i]["cbName"].ToString() + "\">";
                             xmlStr += "<per id=\"" + dt.Rows[i]["perGuid"].ToString() + "\" no=\"" + dt.Rows[i]["perNo"].ToString() + "\" name=\"" + dt.Rows[i]["perName"].ToString() + "\" />";
                         }
