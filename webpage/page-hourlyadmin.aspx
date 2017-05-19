@@ -935,6 +935,7 @@
                             $("#txt_o_oOffDayPay2").val(response[0].oOffDayPay2);
                             $("#txt_o_oOffDayPay3").val(response[0].oOffDayPay3);
                             $("#txt_o_oPublickHoliday").val(response[0].oPublickHoliday);
+                            $("#txt_o_oNationalHolidays").val(response[0].oNationalHolidays);
                         } else {
                             $("#hidden_txt_o_oGuid").val("");
                             $("#txt_o_oMale").val("0");
@@ -956,6 +957,7 @@
                             $("#txt_o_oOffDayPay2").val("0");
                             $("#txt_o_oOffDayPay3").val("0");
                             $("#txt_o_oPublickHoliday").val("0");
+                            $("#txt_o_oNationalHolidays").val("0");
                         }
                     },//success end
                     complete: function () {
@@ -991,7 +993,8 @@
                             mod_oOffDayPay1: $("#txt_o_oOffDayPay1").val(),
                             mod_oOffDayPay2: $("#txt_o_oOffDayPay2").val(),
                             mod_oOffDayPay3: $("#txt_o_oOffDayPay3").val(),
-                            mod_oPublickHoliday: $("#txt_o_oPublickHoliday").val()
+                            mod_oPublickHoliday: $("#txt_o_oPublickHoliday").val(),
+                            mod_oNationalHolidays: $("#txt_o_oNationalHolidays").val()
                         },
                         error: function (xhr) {
                             alert("error");
@@ -1035,7 +1038,8 @@
                 var chk_oOffDayPay2 = $("#txt_o_oOffDayPay2").val();
                 var chk_oOffDayPay3 = $("#txt_o_oOffDayPay3").val();
                 var chk_oPublickHoliday = $("#txt_o_oPublickHoliday").val();
-                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oFixed) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End)||isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3) || isNaN(chk_oOffDay1) || isNaN(chk_oOffDay2Start) || isNaN(chk_oOffDay2End)||isNaN(chk_oOffDay3Start) || isNaN(chk_oOffDay3End) || isNaN(chk_oOffDayPay1) || isNaN(chk_oOffDayPay2) || isNaN(chk_oOffDayPay3) || isNaN(chk_oPublickHoliday))
+                var chk_o_oNationalHolidays = $("#txt_o_oNationalHolidays").val();
+                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oFixed) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End) || isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3) || isNaN(chk_oOffDay1) || isNaN(chk_oOffDay2Start) || isNaN(chk_oOffDay2End) || isNaN(chk_oOffDay3Start) || isNaN(chk_oOffDay3End) || isNaN(chk_oOffDayPay1) || isNaN(chk_oOffDayPay2) || isNaN(chk_oOffDayPay3) || isNaN(chk_oPublickHoliday) || isNaN(chk_o_oNationalHolidays))
                 {
                     alert("請勿輸入數字以外的東西");
                     return false;
@@ -1455,6 +1459,9 @@
 
                         <div class="div-line" style="margin-top: 20px; width: 450px">
                             <table class="table-margin">
+                                <tr>
+                                    <td colspan="2">例假日加班比率-假日<input type="text" value="200" class="width10" id="txt_o_oNationalHolidays" />%(每小時以(底薪+職能加給)X倍數計算)</td>
+                                </tr>
                                 <tr>
                                     <td colspan="2">國定假日加班加班比率-假日<input type="text" value="200" class="width10" id="txt_o_oPublickHoliday" />%(每小時以底薪X倍數計算)</td>
                                 </tr>
