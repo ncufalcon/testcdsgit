@@ -415,6 +415,10 @@ pgiStatus
                     string pfGroupInsurance = (Xls.GetCellValue(k, 7) != null) ? Xls.GetCellValue(k, 7).ToString() : "";
                     string pfHealthInsurance = (Xls.GetCellValue(k, 8) != null) ? Xls.GetCellValue(k, 8).ToString() : "";
 
+                    //判斷身分證字號是否為空
+                    if (pfIDNumber == "")
+                        continue;
+
                     //健保
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
