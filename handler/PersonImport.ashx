@@ -133,8 +133,8 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     string perInsuranceID = (Xls.GetCellValue(j, 32) != null) ? Xls.GetCellValue(j, 32).ToString() : "";
                     string perSalaryClass = (Xls.GetCellValue(j, 33) != null) ? Xls.GetCellValue(j, 33).ToString() : "";
                     string perTaxable = (Xls.GetCellValue(j, 34) != null) ? Xls.GetCellValue(j, 34).ToString() : "";
-                    string perBasicSalary = (Xls.GetCellValue(j, 35) != null) ? Xls.GetCellValue(j, 35).ToString() : "";
-                    string perAllowance = (Xls.GetCellValue(j, 36) != null) ? Xls.GetCellValue(j, 36).ToString() : "";
+                    string perBasicSalary = (Xls.GetCellValue(j, 35) != null) ? Xls.GetCellValue(j, 35).ToString() : "0";
+                    string perAllowance = (Xls.GetCellValue(j, 36) != null) ? Xls.GetCellValue(j, 36).ToString() : "0";
                     string perSyAccountName = (Xls.GetCellValue(j, 37) != null) ? Xls.GetCellValue(j, 37).ToString() : "";
                     string perSyNumber = (Xls.GetCellValue(j, 38) != null) ? Xls.GetCellValue(j, 38).ToString() : "";
                     string perSyAccount = (Xls.GetCellValue(j, 39) != null) ? Xls.GetCellValue(j, 39).ToString() : "";
@@ -151,6 +151,9 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     {
                         continue;
                     }
+                    //判斷身分證字號是否為空
+                    if (perIDNumber == "")
+                        continue;
 
                     //勞保
                     oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
