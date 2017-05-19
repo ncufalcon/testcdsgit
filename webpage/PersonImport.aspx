@@ -47,11 +47,11 @@
                         form.setAttribute("action", "../handler/LHCompImport.ashx");
                         break;
                 }
-                //form.setAttribute("method", "post");
-                //form.setAttribute("enctype", "multipart/form-data");
-                //form.setAttribute("encoding", "multipart/form-data");
-                //form.setAttribute("target", "postiframe");
-                //form.submit();
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
             });
         });
 
