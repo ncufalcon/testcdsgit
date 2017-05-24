@@ -302,83 +302,83 @@ perStatus
                     ) ";
 
                     //勞保
-                    //                    oCmd.CommandText += @"insert into sy_PersonLabor (
-                    //plGuid,
-                    //plPerGuid,
-                    //plSubsidyLevel,
-                    //plCreateId,
-                    //plModifyDate,
-                    //plModifyId,
-                    //plStatus
-                    //) values (
-                    //@plGuid,
-                    //@perGuid,
-                    //@perLaborID,
-                    //@perCreateId,
-                    //@perModifyDate,
-                    //@perModifyId,
-                    //@perStatus
-                    //) ";
+                    oCmd.CommandText += @"insert into sy_PersonLabor (
+                    plGuid,
+                    plPerGuid,
+                    plSubsidyLevel,
+                    plCreateId,
+                    plModifyDate,
+                    plModifyId,
+                    plStatus
+                    ) values (
+                    @plGuid,
+                    @perGuid,
+                    @perLaborID,
+                    @perCreateId,
+                    @perModifyDate,
+                    @perModifyId,
+                    @perStatus
+                    ) ";
 
-                    //                    //健保
-                    //                    oCmd.CommandText += @"insert into sy_PersonInsurance (
-                    //piGuid,
-                    //piPerGuid,
-                    //piSubsidyLevel,
-                    //piCreateId,
-                    //piModifyDate,
-                    //piModifyId,
-                    //piStatus
-                    //) values (
-                    //@piGuid,
-                    //@perGuid,
-                    //@perInsuranceDes,
-                    //@perCreateId,
-                    //@perModifyDate,
-                    //@perModifyId,
-                    //@perStatus
-                    //) ";
+                    //健保
+                    oCmd.CommandText += @"insert into sy_PersonInsurance (
+                    piGuid,
+                    piPerGuid,
+                    piSubsidyLevel,
+                    piCreateId,
+                    piModifyDate,
+                    piModifyId,
+                    piStatus
+                    ) values (
+                    @piGuid,
+                    @perGuid,
+                    @perInsuranceDes,
+                    @perCreateId,
+                    @perModifyDate,
+                    @perModifyId,
+                    @perStatus
+                    ) ";
 
-                    //                    //勞退
-                    //                    oCmd.CommandText += @"insert into sy_PersonPension (
-                    //ppGuid,
-                    //ppPerGuid,
-                    //ppCreateId,
-                    //ppModifyDate,
-                    //ppModifyId,
-                    //ppStatus
-                    //) values (
-                    //@ppGuid,
-                    //@perGuid,
-                    //@perCreateId,
-                    //@perModifyDate,
-                    //@perModifyId,
-                    //@perStatus
-                    //) ";
+                    //勞退
+                    oCmd.CommandText += @"insert into sy_PersonPension (
+                    ppGuid,
+                    ppPerGuid,
+                    ppCreateId,
+                    ppModifyDate,
+                    ppModifyId,
+                    ppStatus
+                    ) values (
+                    @ppGuid,
+                    @perGuid,
+                    @perCreateId,
+                    @perModifyDate,
+                    @perModifyId,
+                    @perStatus
+                    ) ";
 
-                    //                    //團保
-                    //                    if (perGroupInsurance == "Y")
-                    //                    {
-                    //                        oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
-                    //pgiGuid,
-                    //pgiPerGuid,
-                    //pgiType,
-                    //pgiChange,
-                    //pgiCreateId,
-                    //pgiModifyDate,
-                    //pgiModifyId,
-                    //pgiStatus
-                    //) values (
-                    //@pgiGuid,
-                    //@perGuid,
-                    //'01',
-                    //'01',
-                    //@perCreateId,
-                    //@perModifyDate,
-                    //@perModifyId,
-                    //@perStatus
-                    //) ";
-                    //                    }
+                    //團保
+                    if (perGroupInsurance == "Y")
+                    {
+                        oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
+                    pgiGuid,
+                    pgiPerGuid,
+                    pgiType,
+                    pgiChange,
+                    pgiCreateId,
+                    pgiModifyDate,
+                    pgiModifyId,
+                    pgiStatus
+                    ) values (
+                    @pgiGuid,
+                    @perGuid,
+                    '01',
+                    '01',
+                    @perCreateId,
+                    @perModifyDate,
+                    @perModifyId,
+                    @perStatus
+                    ) ";
+                    }
                     oCmd.ExecuteNonQuery();
                 }
 
