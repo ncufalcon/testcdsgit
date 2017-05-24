@@ -934,8 +934,36 @@
                             $("#txt_o_oOffDayPay1").val(response[0].oOffDayPay1);
                             $("#txt_o_oOffDayPay2").val(response[0].oOffDayPay2);
                             $("#txt_o_oOffDayPay3").val(response[0].oOffDayPay3);
-                            $("#txt_o_oPublickHoliday").val(response[0].oPublickHoliday);
-                            $("#txt_o_oNationalHolidays").val(response[0].oNationalHolidays);
+                            $("#txt_o_oPublickHoliday1").val(response[0].oPublickHoliday1);
+                            $("#txt_o_oPublickHoliday2Start").val(response[0].oPublickHoliday2Start);
+                            $("#txt_o_oPublickHoliday2End").val(response[0].oPublickHoliday2End);
+                            $("#txt_o_oPublickHoliday3Start").val(response[0].oPublickHoliday3Start);
+                            $("#txt_o_oPublickHoliday3End").val(response[0].oPublickHoliday3End);
+                            $("#txt_o_oPublickHoliday4").val(response[0].oPublickHoliday4);
+                            $("#txt_o_oPublickHolidayPay1").val(response[0].oPublickHolidayPay1);
+                            $("#txt_o_oPublickHolidayPay2").val(response[0].oPublickHolidayPay2);
+                            $("#txt_o_oPublickHolidayPay3").val(response[0].oPublickHolidayPay3);
+                            $("#txt_o_oPublickHolidayPay4").val(response[0].oPublickHolidayPay4);
+                            $("#txt_o_oNationalHolidays1").val(response[0].oNationalHolidays1);
+                            $("#txt_o_oNationalHolidays2Start").val(response[0].oNationalHolidays2Start);
+                            $("#txt_o_oNationalHolidays2End").val(response[0].oNationalHolidays2End);
+                            $("#txt_o_oNationalHolidays3Start").val(response[0].oNationalHolidays3Start);
+                            $("#txt_o_oNationalHolidays3End").val(response[0].oNationalHolidays3End);
+                            $("#txt_o_oNationalHolidays4").val(response[0].oNationalHolidays4);
+                            $("#txt_o_oNationalHolidaysPay1").val(response[0].oNationalHolidaysPay1);
+                            $("#txt_o_oNationalHolidaysPay2").val(response[0].oNationalHolidaysPay2);
+                            $("#txt_o_oNationalHolidaysPay3").val(response[0].oNationalHolidaysPay3);
+                            $("#txt_o_oNationalHolidaysPay4").val(response[0].oNationalHolidaysPay4);
+                            $("#txt_o_oSpecialHolidays1").val(response[0].oSpecialHolidays1);
+                            $("#txt_o_oSpecialHolidays2Start").val(response[0].oSpecialHolidays2Start);
+                            $("#txt_o_oSpecialHolidays2End").val(response[0].oSpecialHolidays2End);
+                            $("#txt_o_oSpecialHolidays3Start").val(response[0].oSpecialHolidays3Start);
+                            $("#txt_o_oSpecialHolidays3End").val(response[0].oSpecialHolidays3End);
+                            $("#txt_o_oSpecialHolidays4").val(response[0].oSpecialHolidays4);
+                            $("#txt_o_oSpecialHolidaysPay1").val(response[0].oSpecialHolidaysPay1);
+                            $("#txt_o_oSpecialHolidaysPay2").val(response[0].oSpecialHolidaysPay2);
+                            $("#txt_o_oSpecialHolidaysPay3").val(response[0].oSpecialHolidaysPay3);
+                            $("#txt_o_oSpecialHolidaysPay4").val(response[0].oSpecialHolidaysPay4);
                         } else {
                             $("#hidden_txt_o_oGuid").val("");
                             $("#txt_o_oMale").val("0");
@@ -956,8 +984,36 @@
                             $("#txt_o_oOffDayPay1").val("0");
                             $("#txt_o_oOffDayPay2").val("0");
                             $("#txt_o_oOffDayPay3").val("0");
-                            $("#txt_o_oPublickHoliday").val("0");
-                            $("#txt_o_oNationalHolidays").val("0");
+                            $("#txt_o_oPublickHoliday1").val("0");
+                            $("#txt_o_oPublickHoliday2Start").val("0");
+                            $("#txt_o_oPublickHoliday2End").val("0");
+                            $("#txt_o_oPublickHoliday3Start").val("0");
+                            $("#txt_o_oPublickHoliday3End").val("0");
+                            $("#txt_o_oPublickHoliday4").val("0");
+                            $("#txt_o_oPublickHolidayPay1").val("0");
+                            $("#txt_o_oPublickHolidayPay2").val("0");
+                            $("#txt_o_oPublickHolidayPay3").val("0");
+                            $("#txt_o_oPublickHolidayPay4").val("0");
+                            $("#txt_o_oNationalHolidays1").val("0");
+                            $("#txt_o_oNationalHolidays2Start").val("0");
+                            $("#txt_o_oNationalHolidays2End").val("0");
+                            $("#txt_o_oNationalHolidays3Start").val("0");
+                            $("#txt_o_oNationalHolidays3End").val("0");
+                            $("#txt_o_oNationalHolidays4").val("0");
+                            $("#txt_o_oNationalHolidaysPay1").val("0");
+                            $("#txt_o_oNationalHolidaysPay2").val("0");
+                            $("#txt_o_oNationalHolidaysPay3").val("0");
+                            $("#txt_o_oNationalHolidaysPay4").val("0");
+                            $("#txt_o_oSpecialHolidays1").val("0");
+                            $("#txt_o_oSpecialHolidays2Start").val("0");
+                            $("#txt_o_oSpecialHolidays2End").val("0");
+                            $("#txt_o_oSpecialHolidays3Start").val("0");
+                            $("#txt_o_oSpecialHolidays3End").val("0");
+                            $("#txt_o_oSpecialHolidays4").val("0");
+                            $("#txt_o_oSpecialHolidaysPay1").val("0");
+                            $("#txt_o_oSpecialHolidaysPay2").val("0");
+                            $("#txt_o_oSpecialHolidaysPay3").val("0");
+                            $("#txt_o_oSpecialHolidaysPay4").val("0");
                         }
                     },//success end
                     complete: function () {
@@ -993,8 +1049,36 @@
                             mod_oOffDayPay1: $("#txt_o_oOffDayPay1").val(),
                             mod_oOffDayPay2: $("#txt_o_oOffDayPay2").val(),
                             mod_oOffDayPay3: $("#txt_o_oOffDayPay3").val(),
-                            mod_oPublickHoliday: $("#txt_o_oPublickHoliday").val(),
-                            mod_oNationalHolidays: $("#txt_o_oNationalHolidays").val()
+                            mod_oPublickHoliday1: $("#txt_o_oPublickHoliday1").val(),
+                            mod_oPublickHoliday2Start: $("#txt_o_oPublickHoliday2Start").val(),
+                            mod_oPublickHoliday2End: $("#txt_o_oPublickHoliday2End").val(),
+                            mod_oPublickHoliday3Start: $("#txt_o_oPublickHoliday3Start").val(),
+                            mod_oPublickHoliday3End: $("#txt_o_oPublickHoliday3End").val(),
+                            mod_oPublickHoliday4: $("#txt_o_oPublickHoliday4").val(),
+                            mod_oPublickHolidayPay1: $("#txt_o_oPublickHolidayPay1").val(),
+                            mod_oPublickHolidayPay2: $("#txt_o_oPublickHolidayPay2").val(),
+                            mod_oPublickHolidayPay3: $("#txt_o_oPublickHolidayPay3").val(),
+                            mod_oPublickHolidayPay4: $("#txt_o_oPublickHolidayPay4").val(),
+                            mod_oNationalHolidays1: $("#txt_o_oNationalHolidays1").val(),
+                            mod_oNationalHolidays2Start: $("#txt_o_oNationalHolidays2Start").val(),
+                            mod_oNationalHolidays2End: $("#txt_o_oNationalHolidays2End").val(),
+                            mod_oNationalHolidays3Start: $("#txt_o_oNationalHolidays3Start").val(),
+                            mod_oNationalHolidays3End: $("#txt_o_oNationalHolidays3End").val(),
+                            mod_oNationalHolidays4: $("#txt_o_oNationalHolidays4").val(),
+                            mod_oNationalHolidaysPay1: $("#txt_o_oNationalHolidaysPay1").val(),
+                            mod_oNationalHolidaysPay2: $("#txt_o_oNationalHolidaysPay2").val(),
+                            mod_oNationalHolidaysPay3: $("#txt_o_oNationalHolidaysPay3").val(),
+                            mod_oNationalHolidaysPay4: $("#txt_o_oNationalHolidaysPay4").val(),
+                            mod_oSpecialHolidays1: $("#txt_o_oSpecialHolidays1").val(),
+                            mod_oSpecialHolidays2Start: $("#txt_o_oSpecialHolidays2Start").val(),
+                            mod_oSpecialHolidays2End: $("#txt_o_oSpecialHolidays2End").val(),
+                            mod_oSpecialHolidays3Start: $("#txt_o_oSpecialHolidays3Start").val(),
+                            mod_oSpecialHolidays3End: $("#txt_o_oSpecialHolidays3End").val(),
+                            mod_oSpecialHolidays4: $("#txt_o_oSpecialHolidays4").val(),
+                            mod_oSpecialHolidaysPay1: $("#txt_o_oSpecialHolidaysPay1").val(),
+                            mod_oSpecialHolidaysPay2: $("#txt_o_oSpecialHolidaysPay2").val(),
+                            mod_oSpecialHolidaysPay3: $("#txt_o_oSpecialHolidaysPay3").val(),
+                            mod_oSpecialHolidaysPay4: $("#txt_o_oSpecialHolidaysPay4").val()
                         },
                         error: function (xhr) {
                             alert("error");
@@ -1037,13 +1121,70 @@
                 var chk_oOffDayPay1 = $("#txt_o_oOffDayPay1").val();
                 var chk_oOffDayPay2 = $("#txt_o_oOffDayPay2").val();
                 var chk_oOffDayPay3 = $("#txt_o_oOffDayPay3").val();
-                var chk_oPublickHoliday = $("#txt_o_oPublickHoliday").val();
-                var chk_o_oNationalHolidays = $("#txt_o_oNationalHolidays").val();
-                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oFixed) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End) || isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3) || isNaN(chk_oOffDay1) || isNaN(chk_oOffDay2Start) || isNaN(chk_oOffDay2End) || isNaN(chk_oOffDay3Start) || isNaN(chk_oOffDay3End) || isNaN(chk_oOffDayPay1) || isNaN(chk_oOffDayPay2) || isNaN(chk_oOffDayPay3) || isNaN(chk_oPublickHoliday) || isNaN(chk_o_oNationalHolidays))
+                var chk_oPublickHoliday1 = $("#txt_o_oPublickHoliday1").val();
+                var chk_oPublickHoliday2Start = $("#txt_o_oPublickHoliday2Start").val();
+                var chk_oPublickHoliday2End = $("#txt_o_oPublickHoliday2End").val();
+                var chk_oPublickHoliday3Start = $("#txt_o_oPublickHoliday3Start").val();
+                var chk_oPublickHoliday3End = $("#txt_o_oPublickHoliday3End").val();
+                var chk_oPublickHoliday4 = $("#txt_o_oPublickHoliday4").val();
+                var chk_oPublickHolidayPay1 = $("#txt_o_oPublickHolidayPay1").val();
+                var chk_oPublickHolidayPay2 = $("#txt_o_oPublickHolidayPay2").val();
+                var chk_oPublickHolidayPay3 = $("#txt_o_oPublickHolidayPay3").val();
+                var chk_oPublickHolidayPay4 = $("#txt_o_oPublickHolidayPay4").val();
+                var chk_oNationalHolidays1 = $("#txt_o_oNationalHolidays1").val();
+                var chk_oNationalHolidays2Start = $("#txt_o_oNationalHolidays2Start").val();
+                var chk_oNationalHolidays2End = $("#txt_o_oNationalHolidays2End").val();
+                var chk_oNationalHolidays3Start = $("#txt_o_oNationalHolidays3Start").val();
+                var chk_oNationalHolidays3End = $("#txt_o_oNationalHolidays3End").val();
+                var chk_oNationalHolidays4 = $("#txt_o_oNationalHolidays4").val();
+                var chk_oNationalHolidaysPay1 = $("#txt_o_oNationalHolidaysPay1").val();
+                var chk_oNationalHolidaysPay2 = $("#txt_o_oNationalHolidaysPay2").val();
+                var chk_oNationalHolidaysPay3 = $("#txt_o_oNationalHolidaysPay3").val();
+                var chk_oNationalHolidaysPay4 = $("#txt_o_oNationalHolidaysPay4").val();
+                var chk_oSpecialHolidays1 = $("#txt_o_oSpecialHolidays1").val();
+                var chk_oSpecialHolidays2Start = $("#txt_o_oSpecialHolidays2Start").val();
+                var chk_oSpecialHolidays2End = $("#txt_o_oSpecialHolidays2End").val();
+                var chk_oSpecialHolidays3Start = $("#txt_o_oSpecialHolidays3Start").val();
+                var chk_oSpecialHolidays3End = $("#txt_o_oSpecialHolidays3End").val();
+                var chk_oSpecialHolidays4 = $("#txt_o_oSpecialHolidays4").val();
+                var chk_oSpecialHolidaysPay1 = $("#txt_o_oSpecialHolidaysPay1").val();
+                var chk_oSpecialHolidaysPay2 = $("#txt_o_oSpecialHolidaysPay2").val();
+                var chk_oSpecialHolidaysPay3 = $("#txt_o_oSpecialHolidaysPay3").val();
+                var chk_oSpecialHolidaysPay4 = $("#txt_o_oSpecialHolidaysPay4").val();
+                
+                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oFixed) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End) || isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3))
                 {
                     alert("請勿輸入數字以外的東西");
                     return false;
                 }
+                else if (isNaN(chk_oOffDay1) || isNaN(chk_oOffDay2Start) || isNaN(chk_oOffDay2End) || isNaN(chk_oOffDay3Start) || isNaN(chk_oOffDay3End) || isNaN(chk_oOffDayPay1) || isNaN(chk_oOffDayPay2) || isNaN(chk_oOffDayPay3) ) {
+                    alert("請勿輸入數字以外的東西");
+                    return false;
+                }
+                else if (isNaN(chk_oPublickHoliday1) || isNaN(chk_oPublickHoliday2Start) || isNaN(chk_oPublickHoliday2End) || isNaN(chk_oPublickHoliday3Start) || isNaN(chk_oPublickHoliday3End) || isNaN(chk_oPublickHoliday4)) {
+                    alert("請勿輸入數字以外的東西");
+                    return false;
+                }
+                else if (isNaN(chk_oPublickHolidayPay1) || isNaN(chk_oPublickHolidayPay2) || isNaN(chk_oPublickHolidayPay3) || isNaN(chk_oPublickHolidayPay4)) {
+                    alert("請勿輸入數字以外的東西");
+                    return false;
+                }
+                else if (isNaN(chk_oNationalHolidays1) || isNaN(chk_oNationalHolidays2Start) || isNaN(chk_oNationalHolidays2End) || isNaN(chk_oNationalHolidays3Start) || isNaN(chk_oNationalHolidays3End) || isNaN(chk_oNationalHolidays4)) {
+                    alert("請勿輸入數字以外的東西");
+                    return false;
+                }
+                else if (isNaN(chk_oNationalHolidaysPay1) || isNaN(chk_oNationalHolidaysPay2) || isNaN(chk_oNationalHolidaysPay3) || isNaN(chk_oNationalHolidaysPay4)) {
+                    alert("請勿輸入數字以外的東西");
+                    return false;
+                }
+                //else if (isNaN(chk_oSpecialHolidays1) || isNaN(chk_oSpecialHolidays2Start) || isNaN(chk_oSpecialHolidays2End) || isNaN(chk_oSpecialHolidays3Start) || isNaN(chk_oSpecialHolidays3End) || isNaN(chk_oSpecialHolidays4)) {
+                //    alert("請勿輸入數字以外的東西");
+                //    return false;
+                //}
+                //else if (isNaN(chk_oSpecialHolidaysPay1) || isNaN(chk_oSpecialHolidaysPay2) || isNaN(chk_oSpecialHolidaysPay3) || isNaN(chk_oSpecialHolidaysPay4)) {
+                //    alert("請勿輸入數字以外的東西");
+                //    return false;
+                //}
                 else {
                     return true;
                 }
@@ -1130,9 +1271,6 @@
                     }
                 });//ajax end
             }
-                //<option value="">--請選擇--</option>
-                //<option value="01">底薪</option>
-                //<option value="02">職能加給</option>
             
         });
     </script>
@@ -1398,10 +1536,10 @@
                         <div class="div-line" style="width: 450px">
                             <table class="table-margin">
                                 <tr>
-                                    <td colspan="2">&nbsp;&nbsp;男性為<input type="text" class="width10" value="46" id="txt_o_oMale" />小時</td>
+                                    <td colspan="2">&nbsp;&nbsp;男性為<input type="text" class="width10" value="" id="txt_o_oMale" />小時</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">&nbsp;&nbsp;女性為<input type="text" class="width10" value="46" id="txt_o_oFemale" />小時</td>
+                                    <td colspan="2">&nbsp;&nbsp;女性為<input type="text" class="width10" value="" id="txt_o_oFemale" />小時</td>
                                 </tr>
                             </table>
                         </div>
@@ -1409,7 +1547,7 @@
                         <div class="div-line" style="margin-top: 20px; width: 450px">
                             <table class="table-margin">
                                 <tr>
-                                    <td colspan="2">加班費如採固定金額時，每小時加班費為<input type="text" class="width10" value="100" id="txt_o_oFixed" />元</td>
+                                    <td colspan="2">加班費如採固定金額時，每小時加班費為<input type="text" class="width10" value="" id="txt_o_oFixed" />元</td>
                                 </tr>
                             </table>
                         </div>
@@ -1419,18 +1557,18 @@
                             <table class="table-margin">
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="2" class="width10" id="txt_o_oOverTime1" />小時以內</td>
-                                    <td>加班比率-1類<input type="text" value="133" class="width10" id="txt_o_oOverTimePay1" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOverTime1" maxlength="2" />小時以內</td>
+                                    <td>加班比率-1類<input type="text" value="" class="width25" id="txt_o_oOverTimePay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="2" class="width10" id="txt_o_oOverTime2Start" />至<input type="text" class="width10" value="4" id="txt_o_oOverTime2End" />小時</td>
-                                    <td>加班比率-2類<input type="text" class="width10" value="166" id="txt_o_oOverTimePay2" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOverTime2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oOverTime2End" maxlength="2" />小時</td>
+                                    <td>加班比率-2類<input type="text" class="width25" value="" id="txt_o_oOverTimePay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="4" class="width10" id="txt_o_oOverTime3" />小時以上</td>
-                                    <td>加班比率-3類<input type="text" value="200" class="width10" id="txt_o_oOverTimePay3" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOverTime3" maxlength="2" />小時以上</td>
+                                    <td>加班比率-3類<input type="text" value="" class="width25" id="txt_o_oOverTimePay3" maxlength="6" />%</td>
                                 </tr>
                             </table>
                         </div>
@@ -1438,26 +1576,103 @@
                         <div style="margin-top: 20px;" class="font-size2 font-bold">休息日加班費</div>
                         <div class="div-line" style="width: 450px">
                             <table class="table-margin">
-
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="2" class="width10" id="txt_o_oOffDay1" />小時以內</td>
-                                    <td>加給倍率<input type="text" value="134" class="width10" id="txt_o_oOffDayPay1" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOffDay1" maxlength="2" />小時以內</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oOffDayPay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="2" class="width10" id="txt_o_oOffDay2Start" />至<input type="text" class="width10" value="8" id="txt_o_oOffDay2End" />小時</td>
-                                    <td>加給倍率<input type="text" class="width10" value="167" id="txt_o_oOffDayPay2" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOffDay2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oOffDay2End" maxlength="2" />小時</td>
+                                    <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oOffDayPay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="9" class="width10" id="txt_o_oOffDay3Start" />至<input type="text" value="12" class="width10" id="txt_o_oOffDay3End" /></td>
-                                    <td>加給倍率<input type="text" value="267" class="width10" id="txt_o_oOffDayPay3" />%</td>
+                                        <input type="text" value="" class="width10" id="txt_o_oOffDay3Start" maxlength="2" /><!---->至<input type="text" value="0" class="width10" id="txt_o_oOffDay3End" maxlength="2" style="display:none;" /></td>
+                                    <td>加給倍率<input type="text" value="0" class="width25" id="txt_o_oOffDayPay3" maxlength="6" />%</td>
                                 </tr>
                             </table>
                         </div>
 
-                        <div class="div-line" style="margin-top: 20px; width: 450px">
+                        <div style="margin-top: 20px;" class="font-size2 font-bold">例假日加班費</div>
+                        <div class="div-line" style="width: 450px">
+                            <table class="table-margin">
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays1" maxlength="2" />小時以內</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay1" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oNationalHolidays2End" maxlength="2" />小時</td>
+                                    <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oNationalHolidaysPay2" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays3Start" maxlength="2" />至<input type="text" value="" class="width10" id="txt_o_oNationalHolidays3End" maxlength="2" /></td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay3" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays4" maxlength="2" />小時以上</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay4" maxlength="6" />%</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="margin-top: 20px;" class="font-size2 font-bold">國定假日加班費</div>
+                        <div class="div-line" style="width: 450px">
+                            <table class="table-margin">
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday1" maxlength="2" />小時以內</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay1" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oPublickHoliday2End" maxlength="2" />小時</td>
+                                    <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oPublickHolidayPay2" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday3Start" maxlength="2" />至<input type="text" value="" class="width10" id="txt_o_oPublickHoliday3End" maxlength="2" /></td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay3" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday4" maxlength="2" />小時以上</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay4" maxlength="6" />%</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!--<div style="margin-top: 20px;" class="font-size2 font-bold">特殊假日加班費</div>
+                        <div class="div-line" style="width: 450px">
+                            <table class="table-margin">
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oSpecialHolidays1" maxlength="2" />小時以內</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oSpecialHolidaysPay1" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oSpecialHolidays2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oSpecialHolidays2End" maxlength="2" />小時</td>
+                                    <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oSpecialHolidaysPay2" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" value="" class="width10" id="txt_o_oSpecialHolidays3Start" maxlength="2" />至<input type="text" value="" class="width10" id="txt_o_oSpecialHolidays3End" maxlength="2" /></td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oSpecialHolidaysPay3" maxlength="6" />%</td>
+                                </tr>
+                                <tr>
+                                    <td width="150px">
+                                        <input type="text" value="" class="width10" id="txt_o_oSpecialHolidays4" maxlength="2" />小時以上</td>
+                                    <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oSpecialHolidaysPay4" maxlength="6" />%</td>
+                                </tr>
+                            </table>
+                        </div>-->
+
+                        <!--<div class="div-line" style="margin-top: 20px; width: 450px">
                             <table class="table-margin">
                                 <tr>
                                     <td colspan="2">例假日加班比率-假日<input type="text" value="200" class="width10" id="txt_o_oNationalHolidays" />%(每小時以(底薪+職能加給)X倍數計算)</td>
@@ -1466,7 +1681,7 @@
                                     <td colspan="2">國定假日加班加班比率-假日<input type="text" value="200" class="width10" id="txt_o_oPublickHoliday" />%(每小時以底薪X倍數計算)</td>
                                 </tr>
                             </table>
-                        </div>
+                        </div>-->
                         <input type="text" value="9" style="display:none;" id="hidden_txt_o_oGuid" />
                     </div>
                     <!-- tabs-4 -->

@@ -549,6 +549,12 @@
                 $("#span_pay_Status").text("新增");
                 $("#txt_pay_cname").text("");
                 $("#hidden_pay_refcode").val("");
+                $("#PPbox").removeAttr('disabled');
+                $("#PCbox").removeAttr('disabled');
+                $("#txt_pay_empno").removeAttr('disabled'); 
+                $("input[name='txt_pay_status']").removeAttr('disabled');
+                $("#txt_pay_change_date").removeAttr('disabled');
+                $("#txt_pay_after").removeAttr('disabled');
             });
             //薪資異動 儲存按鈕
             $("#btn_pay_submit").click(function () {
@@ -559,6 +565,23 @@
             $(document).on("click", "#div_pay_list tbody tr td:not(:nth-child(1),:nth-child(2))", function () {
                 $("#hidden_pay_guid").val($(this).closest('tr').attr("trguid"));//修改才會有
                 $("#span_pay_Status").text("修改");
+                if ($(this).closest('tr').attr("trstat") == "0") {
+                    //未確認
+                    $("#PPbox").removeAttr('disabled');
+                    $("#PCbox").removeAttr('disabled');
+                    $("#txt_pay_empno").removeAttr('disabled');
+                    $("input[name='txt_pay_status']").removeAttr('disabled');
+                    $("#txt_pay_change_date").removeAttr('disabled');
+                    $("#txt_pay_after").removeAttr('disabled');
+                } else {
+                    //已確認
+                    $("#PPbox").attr("disabled", "disabled");
+                    $("#PCbox").attr("disabled", "disabled");
+                    $("#txt_pay_empno").attr("disabled", "disabled");
+                    $("input[name='txt_pay_status").attr("disabled", "disabled");
+                    $("#txt_pay_change_date").attr("disabled", "disabled");
+                    $("#txt_pay_after").attr("disabled", "disabled");
+                }
                 call_paychangedata_byguid();
             });
             //刪除 薪資異動資料
@@ -722,7 +745,7 @@
                             str_html += "</thead>";
                             str_html += "<tbody>";
                             for (var i = 0; i < response.length; i++) {
-                                str_html += "<tr trguid='" + response[i].pacGuid + "'>";
+                                str_html += "<tr trguid='" + response[i].pacGuid + "' trstat='" + response[i].pacStatus + "'>";
                                 if (response[i].pacStatus == "0") {
                                     str_html += "<td align='center' class='font-normal' nowrap='nowrap'><input type='checkbox' name='pay_box[]' guid='" + response[i].pacGuid + "' aftertmoney='" + response[i].pacChangeEnd + "' siRef='" + response[i].siRef + "' perguid='" + response[i].pacPerGuid + "' pacguid='" + response[i].pacGuid + "' /></td>";
                                 } else {
