@@ -61,8 +61,36 @@ public class page_hourlyadmin : IHttpHandler {
         public string oOffDayPay1 { get; set; }
         public string oOffDayPay2 { get; set; }
         public string oOffDayPay3 { get; set; }
-        public string oPublickHoliday { get; set; }
-        public string oNationalHolidays { get; set; }
+        public string oPublickHoliday1 { get; set; }
+        public string oPublickHoliday2Start { get; set; }
+        public string oPublickHoliday2End { get; set; }
+        public string oPublickHoliday3Start { get; set; }
+        public string oPublickHoliday3End { get; set; }
+        public string oPublickHoliday4 { get; set; }
+        public string oPublickHolidayPay1 { get; set; }
+        public string oPublickHolidayPay2 { get; set; }
+        public string oPublickHolidayPay3 { get; set; }
+        public string oPublickHolidayPay4 { get; set; }
+        public string oNationalHolidays1 { get; set; }
+        public string oNationalHolidays2Start { get; set; }
+        public string oNationalHolidays2End { get; set; }
+        public string oNationalHolidays3Start { get; set; }
+        public string oNationalHolidays3End { get; set; }
+        public string oNationalHolidays4 { get; set; }
+        public string oNationalHolidaysPay1 { get; set; }
+        public string oNationalHolidaysPay2 { get; set; }
+        public string oNationalHolidaysPay3 { get; set; }
+        public string oNationalHolidaysPay4 { get; set; }
+        public string oSpecialHolidays1 { get; set; }
+        public string oSpecialHolidays2Start { get; set; }
+        public string oSpecialHolidays2End { get; set; }
+        public string oSpecialHolidays3Start { get; set; }
+        public string oSpecialHolidays3End { get; set; }
+        public string oSpecialHolidays4 { get; set; }
+        public string oSpecialHolidaysPay1 { get; set; }
+        public string oSpecialHolidaysPay2 { get; set; }
+        public string oSpecialHolidaysPay3 { get; set; }
+        public string oSpecialHolidaysPay4 { get; set; }
     }
     //sy_TaxationItem sy_TaxationFormula 欄位
     public class tiTooL
@@ -71,16 +99,6 @@ public class page_hourlyadmin : IHttpHandler {
         public string tiItem { get; set; }
         public string tiFormula { get; set; }
         public string sfBasicSalary { get; set; }
-        //public string tfGuid { get; set; }
-        //public string tfTiGuid { get; set; }
-        //public string tfClass { get; set; }
-        //public string tfItem { get; set; }
-        //public string tfCalculation { get; set; }
-        //public string tfOrder { get; set; }
-        //public string tfCreateID { get; set; }
-        //public string tfCreateDate { get; set; }
-        //public string tfModifyID { get; set; }
-        //public string tfModifyDate { get; set; }
     }
     //sy_PayHoliday 欄位
     public class phTooL
@@ -307,13 +325,15 @@ public class page_hourlyadmin : IHttpHandler {
                             si_db._siGuid = mod_si_itemguid;
                             DataTable dt_refcom_mod = si_db.ChksiItemCodeRefcom();
                             DataTable dt_ref_mod = si_db.ChksiItemCodesiRef();
-                            if (mod_si_itemref != "" && dt_refcom_add.Rows.Count > 0 && mod_si_itemref!="")
-                            {
-                                if (dt_refcom_mod.Rows.Count == 0 && mod_si_itemrefcom!="")
+                            //兩種對應的有選了其中一個
+                            if ((mod_si_itemref != "" || mod_si_itemrefcom != "") && dt_refcom_add.Rows.Count > 0 )
+                            {   //有代碼 但代碼不是自己且也經有其他項目指定過
+                                if (dt_refcom_mod.Rows.Count == 0 && dt_refcom_add.Rows.Count>0 && mod_si_itemrefcom!="")
                                 {
                                     context.Response.Write("si_refcom_notonly_mod");
-                                } else if (dt_ref_mod.Rows.Count == 0 && mod_si_itemref!="") {
-                                        context.Response.Write("siref_notonly_mod");
+                                }//有代碼 但代碼不是自己且也經有其他項目指定過
+                                else if (dt_ref_mod.Rows.Count == 0 && dt_ref_add.Rows.Count>0 && mod_si_itemref!="") {
+                                    context.Response.Write("siref_notonly_mod");
                                 }
                                 else {
                                     si_db._siModifyId = "王胖爺";
@@ -327,6 +347,7 @@ public class page_hourlyadmin : IHttpHandler {
                                 si_db.UpdateSalaryItem();
                                 context.Response.Write("ok");
                             }
+
 
                         }
 
@@ -378,8 +399,36 @@ public class page_hourlyadmin : IHttpHandler {
                         e.oOffDayPay1 = dt_odata.Rows[i]["oOffDayPay1"].ToString().Trim();
                         e.oOffDayPay2 = dt_odata.Rows[i]["oOffDayPay2"].ToString().Trim();
                         e.oOffDayPay3 = dt_odata.Rows[i]["oOffDayPay3"].ToString().Trim();
-                        e.oPublickHoliday = dt_odata.Rows[i]["oPublickHoliday"].ToString().Trim();
-                        e.oNationalHolidays = dt_odata.Rows[i]["oNationalHolidays"].ToString().Trim();
+                        e.oPublickHoliday1 = dt_odata.Rows[i]["oPublickHoliday1"].ToString().Trim();
+                        e.oPublickHoliday2Start = dt_odata.Rows[i]["oPublickHoliday2Start"].ToString().Trim();
+                        e.oPublickHoliday2End = dt_odata.Rows[i]["oPublickHoliday2End"].ToString().Trim();
+                        e.oPublickHoliday3Start = dt_odata.Rows[i]["oPublickHoliday3Start"].ToString().Trim();
+                        e.oPublickHoliday3End = dt_odata.Rows[i]["oPublickHoliday3End"].ToString().Trim();
+                        e.oPublickHoliday4 = dt_odata.Rows[i]["oPublickHoliday4"].ToString().Trim();
+                        e.oPublickHolidayPay1 = dt_odata.Rows[i]["oPublickHolidayPay1"].ToString().Trim();
+                        e.oPublickHolidayPay2 = dt_odata.Rows[i]["oPublickHolidayPay2"].ToString().Trim();
+                        e.oPublickHolidayPay3 = dt_odata.Rows[i]["oPublickHolidayPay3"].ToString().Trim();
+                        e.oPublickHolidayPay4 = dt_odata.Rows[i]["oPublickHolidayPay4"].ToString().Trim();
+                        e.oNationalHolidays1 = dt_odata.Rows[i]["oNationalHolidays1"].ToString().Trim();
+                        e.oNationalHolidays2Start = dt_odata.Rows[i]["oNationalHolidays2Start"].ToString().Trim();
+                        e.oNationalHolidays2End = dt_odata.Rows[i]["oNationalHolidays2End"].ToString().Trim();
+                        e.oNationalHolidays3Start = dt_odata.Rows[i]["oNationalHolidays3Start"].ToString().Trim();
+                        e.oNationalHolidays3End = dt_odata.Rows[i]["oNationalHolidays3End"].ToString().Trim();
+                        e.oNationalHolidays4 = dt_odata.Rows[i]["oNationalHolidays4"].ToString().Trim();
+                        e.oNationalHolidaysPay1 = dt_odata.Rows[i]["oNationalHolidaysPay1"].ToString().Trim();
+                        e.oNationalHolidaysPay2 = dt_odata.Rows[i]["oNationalHolidaysPay2"].ToString().Trim();
+                        e.oNationalHolidaysPay3 = dt_odata.Rows[i]["oNationalHolidaysPay3"].ToString().Trim();
+                        e.oNationalHolidaysPay4 = dt_odata.Rows[i]["oNationalHolidaysPay4"].ToString().Trim();
+                        e.oSpecialHolidays1 = dt_odata.Rows[i]["oSpecialHolidays1"].ToString().Trim();
+                        e.oSpecialHolidays2Start = dt_odata.Rows[i]["oSpecialHolidays2Start"].ToString().Trim();
+                        e.oSpecialHolidays2End = dt_odata.Rows[i]["oSpecialHolidays2End"].ToString().Trim();
+                        e.oSpecialHolidays3Start = dt_odata.Rows[i]["oSpecialHolidays3Start"].ToString().Trim();
+                        e.oSpecialHolidays3End = dt_odata.Rows[i]["oSpecialHolidays3End"].ToString().Trim();
+                        e.oSpecialHolidays4 = dt_odata.Rows[i]["oSpecialHolidays4"].ToString().Trim();
+                        e.oSpecialHolidaysPay1 = dt_odata.Rows[i]["oSpecialHolidaysPay1"].ToString().Trim();
+                        e.oSpecialHolidaysPay2 = dt_odata.Rows[i]["oSpecialHolidaysPay2"].ToString().Trim();
+                        e.oSpecialHolidaysPay3 = dt_odata.Rows[i]["oSpecialHolidaysPay3"].ToString().Trim();
+                        e.oSpecialHolidaysPay4 = dt_odata.Rows[i]["oSpecialHolidaysPay4"].ToString().Trim();
                         oList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -413,8 +462,36 @@ public class page_hourlyadmin : IHttpHandler {
                 string mod_oOffDayPay1 = string.IsNullOrEmpty(context.Request.Form["mod_oOffDayPay1"]) ? "0" : context.Request.Form["mod_oOffDayPay1"].ToString().Trim();
                 string mod_oOffDayPay2 = string.IsNullOrEmpty(context.Request.Form["mod_oOffDayPay2"]) ? "0" : context.Request.Form["mod_oOffDayPay2"].ToString().Trim();
                 string mod_oOffDayPay3 = string.IsNullOrEmpty(context.Request.Form["mod_oOffDayPay3"]) ? "0" : context.Request.Form["mod_oOffDayPay3"].ToString().Trim();
-                string mod_oPublickHoliday = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday"]) ? "0" : context.Request.Form["mod_oPublickHoliday"].ToString().Trim();
-                string mod_oNationalHolidays = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays"]) ? "0" : context.Request.Form["mod_oNationalHolidays"].ToString().Trim();
+                string mod_oPublickHoliday1 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday1"]) ? "0" : context.Request.Form["mod_oPublickHoliday1"].ToString().Trim();
+                string mod_oPublickHoliday2Start = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday2Start"]) ? "0" : context.Request.Form["mod_oPublickHoliday2Start"].ToString().Trim();
+                string mod_oPublickHoliday2End = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday2End"]) ? "0" : context.Request.Form["mod_oPublickHoliday2End"].ToString().Trim();
+                string mod_oPublickHoliday3Start = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday3Start"]) ? "0" : context.Request.Form["mod_oPublickHoliday3Start"].ToString().Trim();
+                string mod_oPublickHoliday3End = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday3End"]) ? "0" : context.Request.Form["mod_oPublickHoliday3End"].ToString().Trim();
+                string mod_oPublickHoliday4 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHoliday4"]) ? "0" : context.Request.Form["mod_oPublickHoliday4"].ToString().Trim();
+                string mod_oPublickHolidayPay1 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHolidayPay1"]) ? "0" : context.Request.Form["mod_oPublickHolidayPay1"].ToString().Trim();
+                string mod_oPublickHolidayPay2 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHolidayPay2"]) ? "0" : context.Request.Form["mod_oPublickHolidayPay2"].ToString().Trim();
+                string mod_oPublickHolidayPay3 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHolidayPay3"]) ? "0" : context.Request.Form["mod_oPublickHolidayPay3"].ToString().Trim();
+                string mod_oPublickHolidayPay4 = string.IsNullOrEmpty(context.Request.Form["mod_oPublickHolidayPay4"]) ? "0" : context.Request.Form["mod_oPublickHolidayPay4"].ToString().Trim();
+                string mod_oNationalHolidays1 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays1"]) ? "0" : context.Request.Form["mod_oNationalHolidays1"].ToString().Trim();
+                string mod_oNationalHolidays2Start = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays2Start"]) ? "0" : context.Request.Form["mod_oNationalHolidays2Start"].ToString().Trim();
+                string mod_oNationalHolidays2End = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays2End"]) ? "0" : context.Request.Form["mod_oNationalHolidays2End"].ToString().Trim();
+                string mod_oNationalHolidays3Start = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays3Start"]) ? "0" : context.Request.Form["mod_oNationalHolidays3Start"].ToString().Trim();
+                string mod_oNationalHolidays3End = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays3End"]) ? "0" : context.Request.Form["mod_oNationalHolidays3End"].ToString().Trim();
+                string mod_oNationalHolidays4 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidays4"]) ? "0" : context.Request.Form["mod_oNationalHolidays4"].ToString().Trim();
+                string mod_oNationalHolidaysPay1 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidaysPay1"]) ? "0" : context.Request.Form["mod_oNationalHolidaysPay1"].ToString().Trim();
+                string mod_oNationalHolidaysPay2 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidaysPay2"]) ? "0" : context.Request.Form["mod_oNationalHolidaysPay2"].ToString().Trim();
+                string mod_oNationalHolidaysPay3 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidaysPay3"]) ? "0" : context.Request.Form["mod_oNationalHolidaysPay3"].ToString().Trim();
+                string mod_oNationalHolidaysPay4 = string.IsNullOrEmpty(context.Request.Form["mod_oNationalHolidaysPay4"]) ? "0" : context.Request.Form["mod_oNationalHolidaysPay4"].ToString().Trim();
+                string mod_oSpecialHolidays1 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays1"]) ? "0" : context.Request.Form["mod_oSpecialHolidays1"].ToString().Trim();
+                string mod_oSpecialHolidays2Start = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays2Start"]) ? "0" : context.Request.Form["mod_oSpecialHolidays2Start"].ToString().Trim();
+                string mod_oSpecialHolidays2End = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays2End"]) ? "0" : context.Request.Form["mod_oSpecialHolidays2End"].ToString().Trim();
+                string mod_oSpecialHolidays3Start = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays3Start"]) ? "0" : context.Request.Form["mod_oSpecialHolidays3Start"].ToString().Trim();
+                string mod_oSpecialHolidays3End = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays3End"]) ? "0" : context.Request.Form["mod_oSpecialHolidays3End"].ToString().Trim();
+                string mod_oSpecialHolidays4 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidays4"]) ? "0" : context.Request.Form["mod_oSpecialHolidays4"].ToString().Trim();
+                string mod_oSpecialHolidaysPay1 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidaysPay1"]) ? "0" : context.Request.Form["mod_oSpecialHolidaysPay1"].ToString().Trim();
+                string mod_oSpecialHolidaysPay2 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidaysPay2"]) ? "0" : context.Request.Form["mod_oSpecialHolidaysPay2"].ToString().Trim();
+                string mod_oSpecialHolidaysPay3 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidaysPay3"]) ? "0" : context.Request.Form["mod_oSpecialHolidaysPay3"].ToString().Trim();
+                string mod_oSpecialHolidaysPay4 = string.IsNullOrEmpty(context.Request.Form["mod_oSpecialHolidaysPay4"]) ? "0" : context.Request.Form["mod_oSpecialHolidaysPay4"].ToString().Trim();
                 try {
                     o_db._oMale = Convert.ToInt32(mod_oMale);
                     o_db._oFemale = Convert.ToInt32(mod_oFemale);
@@ -423,19 +500,47 @@ public class page_hourlyadmin : IHttpHandler {
                     o_db._oOverTime2Start = Convert.ToInt32(mod_oOverTime2Start);
                     o_db._oOverTime2End = Convert.ToInt32(mod_oOverTime2End);
                     o_db._oOverTime3 = Convert.ToInt32(mod_oOverTime3);
-                    o_db._oOverTimePay1 = Convert.ToInt32(mod_oOverTimePay1);
-                    o_db._oOverTimePay2 = Convert.ToInt32(mod_oOverTimePay2);
-                    o_db._oOverTimePay3 = Convert.ToInt32(mod_oOverTimePay3);
+                    o_db._oOverTimePay1 = Convert.ToDecimal(mod_oOverTimePay1);
+                    o_db._oOverTimePay2 = Convert.ToDecimal(mod_oOverTimePay2);
+                    o_db._oOverTimePay3 = Convert.ToDecimal(mod_oOverTimePay3);
                     o_db._oOffDay1 = Convert.ToInt32(mod_oOffDay1);
                     o_db._oOffDay2Start = Convert.ToInt32(mod_oOffDay2Start);
                     o_db._oOffDay2End = Convert.ToInt32(mod_oOffDay2End);
                     o_db._oOffDay3Start = Convert.ToInt32(mod_oOffDay3Start);
                     o_db._oOffDay3End = Convert.ToInt32(mod_oOffDay3End);
-                    o_db._oOffDayPay1 = Convert.ToInt32(mod_oOffDayPay1);
-                    o_db._oOffDayPay2 = Convert.ToInt32(mod_oOffDayPay2);
-                    o_db._oOffDayPay3 = Convert.ToInt32(mod_oOffDayPay3);
-                    o_db._oPublickHoliday = Convert.ToInt32(mod_oPublickHoliday);
-                    o_db._oNationalHolidays = Convert.ToInt32(mod_oNationalHolidays);
+                    o_db._oOffDayPay1 = Convert.ToDecimal(mod_oOffDayPay1);
+                    o_db._oOffDayPay2 = Convert.ToDecimal(mod_oOffDayPay2);
+                    o_db._oOffDayPay3 = Convert.ToDecimal(mod_oOffDayPay3);
+                    o_db._oPublickHoliday1 = Convert.ToInt32(mod_oPublickHoliday1);
+                    o_db._oPublickHoliday2Start = Convert.ToInt32(mod_oPublickHoliday2Start);
+                    o_db._oPublickHoliday2End = Convert.ToInt32(mod_oPublickHoliday2End);
+                    o_db._oPublickHoliday3Start = Convert.ToInt32(mod_oPublickHoliday3Start);
+                    o_db._oPublickHoliday3End = Convert.ToInt32(mod_oPublickHoliday3End);
+                    o_db._oPublickHoliday4 = Convert.ToInt32(mod_oPublickHoliday4);
+                    o_db._oPublickHolidayPay1 = Convert.ToDecimal(mod_oPublickHolidayPay1);
+                    o_db._oPublickHolidayPay2 = Convert.ToDecimal(mod_oPublickHolidayPay2);
+                    o_db._oPublickHolidayPay3 = Convert.ToDecimal(mod_oPublickHolidayPay3);
+                    o_db._oPublickHolidayPay4 = Convert.ToDecimal(mod_oPublickHolidayPay4);
+                    o_db._oNationalHolidays1 = Convert.ToInt32(mod_oNationalHolidays1);
+                    o_db._oNationalHolidays2Start = Convert.ToInt32(mod_oNationalHolidays2Start);
+                    o_db._oNationalHolidays2End = Convert.ToInt32(mod_oNationalHolidays2End);
+                    o_db._oNationalHolidays3Start = Convert.ToInt32(mod_oNationalHolidays3Start);
+                    o_db._oNationalHolidays3End = Convert.ToInt32(mod_oNationalHolidays3End);
+                    o_db._oNationalHolidays4 = Convert.ToInt32(mod_oNationalHolidays4);
+                    o_db._oNationalHolidaysPay1 = Convert.ToDecimal(mod_oNationalHolidaysPay1);
+                    o_db._oNationalHolidaysPay2 = Convert.ToDecimal(mod_oNationalHolidaysPay2);
+                    o_db._oNationalHolidaysPay3 = Convert.ToDecimal(mod_oNationalHolidaysPay3);
+                    o_db._oNationalHolidaysPay4 = Convert.ToDecimal(mod_oNationalHolidaysPay4);
+                    o_db._oSpecialHolidays1 = Convert.ToInt32(mod_oSpecialHolidays1);
+                    o_db._oSpecialHolidays2Start = Convert.ToInt32(mod_oSpecialHolidays2Start);
+                    o_db._oSpecialHolidays2End = Convert.ToInt32(mod_oSpecialHolidays2End);
+                    o_db._oSpecialHolidays3Start = Convert.ToInt32(mod_oSpecialHolidays3Start);
+                    o_db._oSpecialHolidays3End = Convert.ToInt32(mod_oSpecialHolidays3End);
+                    o_db._oSpecialHolidays4 = Convert.ToInt32(mod_oSpecialHolidays4);
+                    o_db._oSpecialHolidaysPay1 = Convert.ToDecimal(mod_oSpecialHolidaysPay1);
+                    o_db._oSpecialHolidaysPay2 = Convert.ToDecimal(mod_oSpecialHolidaysPay2);
+                    o_db._oSpecialHolidaysPay3 = Convert.ToDecimal(mod_oSpecialHolidaysPay3);
+                    o_db._oSpecialHolidaysPay4 = Convert.ToDecimal(mod_oSpecialHolidaysPay4);
                     if (mod_oGuid == "")
                     {
                         //新增
