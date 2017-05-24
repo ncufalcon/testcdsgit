@@ -419,6 +419,10 @@ pgiStatus
                     if (pfIDNumber == "")
                         continue;
 
+                    //無對應工號則不Insert
+                    if (getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid") == "")
+                        continue;
+
                     //健保
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
