@@ -167,7 +167,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@perGuid"].Value = Guid.NewGuid().ToString();
                     oCmd.Parameters["@perNo"].Value = perNo;
                     oCmd.Parameters["@perName"].Value = perName;
-                    oCmd.Parameters["@perComGuid"].Value = getCnValue("sy_Company", "comName", perComGuid, "comGuid");
+                    oCmd.Parameters["@perComGuid"].Value = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid");
                     oCmd.Parameters["@perDep"].Value = getCnValue("sy_CodeBranches", "cbValue", perDep, "cbGuid");
                     oCmd.Parameters["@perPosition"].Value = perPosition;
                     oCmd.Parameters["@perTel"].Value = perTel;
