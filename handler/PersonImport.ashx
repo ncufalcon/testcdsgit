@@ -91,7 +91,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@perSyAccountName", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perSyNumber", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perSyAccount", SqlDbType.NVarChar);
-                oCmd.Parameters.Add("@perYears", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@perYears", SqlDbType.Decimal);
                 oCmd.Parameters.Add("@perCreateId", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perModifyId", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perModifyDate", SqlDbType.DateTime);
@@ -108,7 +108,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     string perBirthday = (Xls.GetCellValue(j, 7) != null) ? Xls.GetCellValue(j, 7).ToString() : "";
                     string perSex = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString() : "";
                     string perMarriage = (Xls.GetCellValue(j, 9) != null) ? Xls.GetCellValue(j, 9).ToString() : "";
-                    string perYears = (Xls.GetCellValue(j, 10) != null) ? Xls.GetCellValue(j, 10).ToString() : "";
+                    string perYears = (Xls.GetCellValue(j, 10) != null) ? Xls.GetCellValue(j, 10).ToString() : "0";
                     string perFirstDate = (Xls.GetCellValue(j, 11) != null) ? Xls.GetCellValue(j, 11).ToString() : "";
                     string perLastDate = (Xls.GetCellValue(j, 12) != null) ? Xls.GetCellValue(j, 12).ToString() : "";
                     string perExaminationDate = (Xls.GetCellValue(j, 13) != null) ? Xls.GetCellValue(j, 13).ToString() : "";
@@ -203,7 +203,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@perSyAccountName"].Value = perSyAccountName;
                     oCmd.Parameters["@perSyNumber"].Value = perSyNumber;
                     oCmd.Parameters["@perSyAccount"].Value = perSyAccount;
-                    oCmd.Parameters["@perYears"].Value = perYears;
+                    oCmd.Parameters["@perYears"].Value = decimal.Parse(perYears);
                     oCmd.Parameters["@perCreateId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@perModifyId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@perModifyDate"].Value = DateTime.Now;
@@ -302,83 +302,83 @@ perStatus
                     ) ";
 
                     //勞保
-                    oCmd.CommandText += @"insert into sy_PersonLabor (
-plGuid,
-plPerGuid,
-plSubsidyLevel,
-plCreateId,
-plModifyDate,
-plModifyId,
-plStatus
-) values (
-@plGuid,
-@perGuid,
-@perLaborID,
-@perCreateId,
-@perModifyDate,
-@perModifyId,
-@perStatus
-) ";
+                    //                    oCmd.CommandText += @"insert into sy_PersonLabor (
+                    //plGuid,
+                    //plPerGuid,
+                    //plSubsidyLevel,
+                    //plCreateId,
+                    //plModifyDate,
+                    //plModifyId,
+                    //plStatus
+                    //) values (
+                    //@plGuid,
+                    //@perGuid,
+                    //@perLaborID,
+                    //@perCreateId,
+                    //@perModifyDate,
+                    //@perModifyId,
+                    //@perStatus
+                    //) ";
 
-                    //健保
-                    oCmd.CommandText += @"insert into sy_PersonInsurance (
-piGuid,
-piPerGuid,
-piSubsidyLevel,
-piCreateId,
-piModifyDate,
-piModifyId,
-piStatus
-) values (
-@piGuid,
-@perGuid,
-@perInsuranceDes,
-@perCreateId,
-@perModifyDate,
-@perModifyId,
-@perStatus
-) ";
+                    //                    //健保
+                    //                    oCmd.CommandText += @"insert into sy_PersonInsurance (
+                    //piGuid,
+                    //piPerGuid,
+                    //piSubsidyLevel,
+                    //piCreateId,
+                    //piModifyDate,
+                    //piModifyId,
+                    //piStatus
+                    //) values (
+                    //@piGuid,
+                    //@perGuid,
+                    //@perInsuranceDes,
+                    //@perCreateId,
+                    //@perModifyDate,
+                    //@perModifyId,
+                    //@perStatus
+                    //) ";
 
-                    //勞退
-                    oCmd.CommandText += @"insert into sy_PersonPension (
-ppGuid,
-ppPerGuid,
-ppCreateId,
-ppModifyDate,
-ppModifyId,
-ppStatus
-) values (
-@ppGuid,
-@perGuid,
-@perCreateId,
-@perModifyDate,
-@perModifyId,
-@perStatus
-) ";
+                    //                    //勞退
+                    //                    oCmd.CommandText += @"insert into sy_PersonPension (
+                    //ppGuid,
+                    //ppPerGuid,
+                    //ppCreateId,
+                    //ppModifyDate,
+                    //ppModifyId,
+                    //ppStatus
+                    //) values (
+                    //@ppGuid,
+                    //@perGuid,
+                    //@perCreateId,
+                    //@perModifyDate,
+                    //@perModifyId,
+                    //@perStatus
+                    //) ";
 
-                    //團保
-                    if (perGroupInsurance == "Y")
-                    {
-                        oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
-pgiGuid,
-pgiPerGuid,
-pgiType,
-pgiChange,
-pgiCreateId,
-pgiModifyDate,
-pgiModifyId,
-pgiStatus
-) values (
-@pgiGuid,
-@perGuid,
-'01',
-'01',
-@perCreateId,
-@perModifyDate,
-@perModifyId,
-@perStatus
-) ";
-                    }
+                    //                    //團保
+                    //                    if (perGroupInsurance == "Y")
+                    //                    {
+                    //                        oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
+                    //pgiGuid,
+                    //pgiPerGuid,
+                    //pgiType,
+                    //pgiChange,
+                    //pgiCreateId,
+                    //pgiModifyDate,
+                    //pgiModifyId,
+                    //pgiStatus
+                    //) values (
+                    //@pgiGuid,
+                    //@perGuid,
+                    //'01',
+                    //'01',
+                    //@perCreateId,
+                    //@perModifyDate,
+                    //@perModifyId,
+                    //@perStatus
+                    //) ";
+                    //                    }
                     oCmd.ExecuteNonQuery();
                 }
 
