@@ -15,6 +15,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest(HttpContext context)
     {
         bool status = true;
+        string exStr = string.Empty;
         HttpFileCollection uploadFiles = context.Request.Files;//檔案集合
 
         SqlConnection oConn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -427,7 +428,7 @@ perStatus
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
-
+                        
                     oCmd.Parameters["@pfGuid"].Value = Guid.NewGuid().ToString();
                     oCmd.Parameters["@pfPerGuid"].Value = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid");
                     oCmd.Parameters["@pfName"].Value = pfName;
@@ -476,51 +477,51 @@ perStatus
                     if (pfHealthInsurance == "Y")
                     {
                         oCmd.CommandText += @"insert into sy_PersonFamilyInsurance (
-pfiGuid,
-pfiPerGuid,
-pfiPfGuid,
-pfiChange,
-pfiSubsidyLevel,
-pfiCreateId,
-pfiModifyDate,
-pfiModifyId,
-pfiStatus
-) values (
-@pfiGuid,
-@pfPerGuid,
-@pfGuid,
-'01',
-@pfCode,
-@pfCreateId,
-@pfModifyId,
-@pfModifyDate,
-@pfStatus
-)  ";
+                    pfiGuid,
+                    pfiPerGuid,
+                    pfiPfGuid,
+                    pfiChange,
+                    pfiSubsidyLevel,
+                    pfiCreateId,
+                    pfiModifyDate,
+                    pfiModifyId,
+                    pfiStatus
+                    ) values (
+                    @pfiGuid,
+                    @pfPerGuid,
+                    @pfGuid,
+                    '01',
+                    @pfCode,
+                    @pfCreateId,
+                    @pfModifyId,
+                    @pfModifyDate,
+                    @pfStatus
+                    )  ";
                     }
                     //團保
                     if (pfGroupInsurance == "Y")
                     {
                         oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
-pgiGuid,
-pgiPerGuid,
-pgiPfGuid,
-pgiType,
-pgiChange,
-pgiCreateId,
-pgiModifyDate,
-pgiModifyId,
-pgiStatus
-) values (
-@pgiGuid,
-@pfPerGuid,
-@pfGuid,
-'02',
-'01',
-@pfCreateId,
-@pfModifyId,
-@pfModifyDate,
-@pfStatus
-) ";
+                    pgiGuid,
+                    pgiPerGuid,
+                    pgiPfGuid,
+                    pgiType,
+                    pgiChange,
+                    pgiCreateId,
+                    pgiModifyDate,
+                    pgiModifyId,
+                    pgiStatus
+                    ) values (
+                    @pgiGuid,
+                    @pfPerGuid,
+                    @pfGuid,
+                    '02',
+                    '01',
+                    @pfCreateId,
+                    @pfModifyDate,
+                    @pfModifyId,
+                    @pfStatus
+                    ) ";
                     }
                     oCmd.ExecuteNonQuery();
                 }
@@ -533,6 +534,7 @@ pgiStatus
         {
             status = false;
             myTrans.Rollback();
+            exStr = context.Server.UrlEncode(ex.Message);
         }
         finally
         {
@@ -540,7 +542,8 @@ pgiStatus
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
+                //context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + exStr + "');</script>");
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成');</script>");
         }
