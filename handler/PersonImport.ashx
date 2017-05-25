@@ -98,6 +98,10 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@perModifyDate", SqlDbType.DateTime);
                 oCmd.Parameters.Add("@perStatus", SqlDbType.NVarChar);
 
+                //勞健保卡號
+                oCmd.Parameters.Add("@LaborNo", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@HealNo", SqlDbType.NVarChar);
+
                 for (int j = 3; j <= Xls.GetRowCount(1); j++)
                 {
                     string perIDNumber = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
@@ -164,11 +168,15 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
+                    //勞健保卡號
+                    string CompanyGid = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid");
+                    oCmd.Parameters["@LaborNo"].Value =  getCnValue("sy_Company", "comGuid", CompanyGid, "comLaborProtectionCode");
+                    oCmd.Parameters["@HealNo"].Value = getCnValue("sy_Company", "comGuid", CompanyGid, "comHealthInsuranceCode");
 
                     oCmd.Parameters["@perGuid"].Value = Guid.NewGuid().ToString();
                     oCmd.Parameters["@perNo"].Value = perNo;
                     oCmd.Parameters["@perName"].Value = perName;
-                    oCmd.Parameters["@perComGuid"].Value = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid");
+                    oCmd.Parameters["@perComGuid"].Value = CompanyGid;
                     oCmd.Parameters["@perDep"].Value = getCnValue("sy_CodeBranches", "cbValue", perDep, "cbGuid");
                     oCmd.Parameters["@perPosition"].Value = perPosition;
                     oCmd.Parameters["@perTel"].Value = perTel;
@@ -307,6 +315,9 @@ perStatus
                     plGuid,
                     plPerGuid,
                     plSubsidyLevel,
+                    plLaborNo,
+                    plChangeDate,
+                    plChange,
                     plCreateId,
                     plModifyDate,
                     plModifyId,
@@ -315,6 +326,9 @@ perStatus
                     @plGuid,
                     @perGuid,
                     @perLaborID,
+                    @LaborNo,
+                    @perFirstDate,
+                    '01',
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -326,6 +340,9 @@ perStatus
                     piGuid,
                     piPerGuid,
                     piSubsidyLevel,
+                    piCardNo,
+                    piChangeDate,
+                    piChange,
                     piCreateId,
                     piModifyDate,
                     piModifyId,
@@ -333,7 +350,10 @@ perStatus
                     ) values (
                     @piGuid,
                     @perGuid,
-                    @perInsuranceDes,
+                    @perInsuranceID,
+                    @HealNo,
+                    @perFirstDate,
+                    '01',
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -344,6 +364,8 @@ perStatus
                     oCmd.CommandText += @"insert into sy_PersonPension (
                     ppGuid,
                     ppPerGuid,
+                    ppChange,
+                    ppChangeDate,
                     ppCreateId,
                     ppModifyDate,
                     ppModifyId,
@@ -351,6 +373,8 @@ perStatus
                     ) values (
                     @ppGuid,
                     @perGuid,
+                    '01',
+                    @perFirstDate,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -365,6 +389,7 @@ perStatus
                     pgiPerGuid,
                     pgiType,
                     pgiChange,
+                    pgiChangeDate,
                     pgiCreateId,
                     pgiModifyDate,
                     pgiModifyId,
@@ -374,6 +399,7 @@ perStatus
                     @perGuid,
                     '01',
                     '01',
+                    @perFirstDate,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -404,6 +430,8 @@ perStatus
                 oCmd.Parameters.Add("@pfModifyId", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@pfModifyDate", SqlDbType.DateTime);
                 oCmd.Parameters.Add("@pfStatus", SqlDbType.NVarChar);
+                //到職日
+                oCmd.Parameters.Add("@ChangeDate", SqlDbType.NVarChar);
 
                 for (int k = 3; k <= Xls.GetRowCount(2); k++)
                 {
@@ -428,9 +456,12 @@ perStatus
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
-                        
+                    //到職日
+                    string PersonGid = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid");
+                    oCmd.Parameters["@ChangeDate"].Value = getCnValue("sy_Person", "perGuid", PersonGid, "perFirstDate");
+
                     oCmd.Parameters["@pfGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@pfPerGuid"].Value = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid");
+                    oCmd.Parameters["@pfPerGuid"].Value = PersonGid;
                     oCmd.Parameters["@pfName"].Value = pfName;
                     oCmd.Parameters["@pfTitle"].Value = pfTitle;
                     oCmd.Parameters["@pfBirthday"].Value = pfBirthday;
@@ -481,6 +512,7 @@ perStatus
                     pfiPerGuid,
                     pfiPfGuid,
                     pfiChange,
+                    pfiChangeDate,
                     pfiSubsidyLevel,
                     pfiCreateId,
                     pfiModifyDate,
@@ -491,6 +523,7 @@ perStatus
                     @pfPerGuid,
                     @pfGuid,
                     '01',
+                    @ChangeDate,
                     @pfCode,
                     @pfCreateId,
                     @pfModifyId,
@@ -507,6 +540,7 @@ perStatus
                     pgiPfGuid,
                     pgiType,
                     pgiChange,
+                    pgiChangeDate,
                     pgiCreateId,
                     pgiModifyDate,
                     pgiModifyId,
@@ -517,6 +551,7 @@ perStatus
                     @pfGuid,
                     '02',
                     '01',
+                    @ChangeDate,
                     @pfCreateId,
                     @pfModifyDate,
                     @pfModifyId,
@@ -542,8 +577,7 @@ perStatus
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                //context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + exStr + "');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成');</script>");
         }
