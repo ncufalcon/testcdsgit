@@ -545,13 +545,14 @@ order by perIDNumber,fID ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,
-plLaborNo,piCardNo,
+comLaborProtectionCode,comHealthInsuranceCode,
 piChangeDate,
 plChangeDate
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
 left join sy_PersonInsurance on piChange='02' and piStatus='A' and piPerGuid=perGuid
-where perGuid in ("+ perGuid + @")
+left join sy_Company on comGuid=perComGuid
+where perGuid in (" + perGuid + @")
 order by plChangeDate desc,plCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();

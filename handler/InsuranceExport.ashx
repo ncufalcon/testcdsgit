@@ -101,11 +101,11 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "2");
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(0, (dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1, 1));
-                                            Xls.SetCellValue(i, 4, dt.Rows[i - 2]["piCardNo"].ToString());
+                                            if (dt.Rows[i - 2]["comLaborProtectionCode"].ToString() != "")
+                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Substring(0, (dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Length - 1)));
+                                            if (dt.Rows[i - 2]["comLaborProtectionCode"].ToString() != "")
+                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Substring(dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 4, dt.Rows[i - 2]["comHealthInsuranceCode"].ToString());
                                             //Xls.SetCellValue(i, 5, "2");
                                             Xls.SetCellValue(i, 6, "2");
                                             Xls.SetCellValue(i, 7, "1");
