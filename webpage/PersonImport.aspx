@@ -56,8 +56,17 @@
         });
 
         function feedbackFun(msg) {
-            alert(msg);
-            parent.$.fancybox.close();
+            switch ($.getParamValue('tp')) {
+                case "Person":
+                    $("#loadblock").hide();
+                    $("#consoleStr").show();
+                    $("#consoleStr").append(decodeURIComponent(msg) + '<div style="text-align:right;"><input type="button" value="關閉" class="keybtn" onclick="javascript:parent.$.fancybox.close();" /></div>');
+                    break;
+                case "LH_Compare":
+                    alert(msg);
+                    parent.$.fancybox.close();
+                    break;
+            }
         }
     </script>
     <style>.keybtn{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; padding:5px 15px;*padding:5px;_padding:5px;color:#87712e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}</style>
@@ -74,6 +83,7 @@
         </table>
     </div>
     <div id="loadblock" style="display:none; text-align:center;"><img src="../images/loading.gif" />處理中，請稍待</div>
+    <div id="consoleStr" style="display:none;"></div>
     </form>
 </body>
 </html>

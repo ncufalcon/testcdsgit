@@ -15,7 +15,9 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest(HttpContext context)
     {
         bool status = true;
-        string exStr = string.Empty;
+        string exStr = string.Empty; //錯誤訊息
+        int PerCount = 0; //人員計數
+        int FamilyCount = 0; //眷屬計數
         HttpFileCollection uploadFiles = context.Request.Files;//檔案集合
 
         SqlConnection oConn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -35,7 +37,8 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 //}
                 ExcelFile Xls = new XlsFile(true);
                 string UpLoadPath = context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(aFile.FileName));
-                if (!Directory.Exists(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\"))))//如果上傳路徑中沒有該目錄，則自動新增
+                //如果上傳路徑中沒有該目錄，則自動新增
+                if (!Directory.Exists(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\"))))
                 {
                     Directory.CreateDirectory(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\")));
                 }
@@ -46,10 +49,13 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
 
                 //勞保
                 oCmd.Parameters.Add("@plGuid", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@plLaborPayroll", SqlDbType.Decimal);
                 //健保
                 oCmd.Parameters.Add("@piGuid", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@piInsurancePayroll", SqlDbType.Decimal);
                 //勞退
                 oCmd.Parameters.Add("@ppGuid", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@ppPayPayroll", SqlDbType.Decimal);
                 //團保
                 oCmd.Parameters.Add("@pgiGuid", SqlDbType.NVarChar);
 
@@ -160,12 +166,17 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     if (perIDNumber == "")
                         continue;
 
+                    PerCount += 1;
+
                     //勞保
                     oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
+                    oCmd.Parameters["@plLaborPayroll"].Value = getMinLV("ilItem2");
                     //健保
                     oCmd.Parameters["@piGuid"].Value = Guid.NewGuid().ToString();
+                    oCmd.Parameters["@piInsurancePayroll"].Value = getMinLV("ilItem4");
                     //勞退
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
+                    oCmd.Parameters["@ppPayPayroll"].Value = getMinLV("ilItem3");
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //勞健保卡號
@@ -318,6 +329,7 @@ perStatus
                     plLaborNo,
                     plChangeDate,
                     plChange,
+                    plLaborPayroll,
                     plCreateId,
                     plModifyDate,
                     plModifyId,
@@ -329,6 +341,7 @@ perStatus
                     @LaborNo,
                     @perFirstDate,
                     '01',
+                    @plLaborPayroll,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -343,6 +356,7 @@ perStatus
                     piCardNo,
                     piChangeDate,
                     piChange,
+                    piInsurancePayroll,
                     piCreateId,
                     piModifyDate,
                     piModifyId,
@@ -354,6 +368,7 @@ perStatus
                     @HealNo,
                     @perFirstDate,
                     '01',
+                    @piInsurancePayroll,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -366,6 +381,7 @@ perStatus
                     ppPerGuid,
                     ppChange,
                     ppChangeDate,
+                    ppPayPayroll,
                     ppCreateId,
                     ppModifyDate,
                     ppModifyId,
@@ -375,6 +391,7 @@ perStatus
                     @perGuid,
                     '01',
                     @perFirstDate,
+                    @ppPayPayroll,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -387,6 +404,7 @@ perStatus
                         oCmd.CommandText += @"insert into sy_PersonGroupInsurance (
                     pgiGuid,
                     pgiPerGuid,
+                    pgiPfGuid,
                     pgiType,
                     pgiChange,
                     pgiChangeDate,
@@ -397,6 +415,7 @@ perStatus
                     ) values (
                     @pgiGuid,
                     @perGuid,
+                    '',
                     '01',
                     '01',
                     @perFirstDate,
@@ -452,6 +471,8 @@ perStatus
                     if (getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid") == "")
                         continue;
 
+                    FamilyCount += 1;
+
                     //健保
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
@@ -467,7 +488,7 @@ perStatus
                     oCmd.Parameters["@pfBirthday"].Value = pfBirthday;
                     oCmd.Parameters["@pfIDNumber"].Value = pfIDNumber;
                     oCmd.Parameters["@pfHealthInsurance"].Value = pfHealthInsurance;
-                    oCmd.Parameters["@pfCode"].Value = pfCode;
+                    oCmd.Parameters["@pfCode"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", pfCode, "slGuid");
                     oCmd.Parameters["@pfGroupInsurance"].Value = pfGroupInsurance;
                     oCmd.Parameters["@pfCreateId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@pfModifyId"].Value = USERINFO.MemberGuid;
@@ -531,6 +552,7 @@ perStatus
                     @pfStatus
                     )  ";
                     }
+
                     //團保
                     if (pfGroupInsurance == "Y")
                     {
@@ -569,7 +591,7 @@ perStatus
         {
             status = false;
             myTrans.Rollback();
-            exStr = context.Server.UrlEncode(ex.Message);
+            exStr = ex.Message;
         }
         finally
         {
@@ -577,9 +599,21 @@ perStatus
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗，請聯絡系統管理員');</script>");
+            {
+                string genStr = "Error：";
+                if (FamilyCount == 0)
+                    genStr += "人員資料第" + PerCount + "筆資料<br />";
+                else
+                    genStr += "眷屬資料第" + FamilyCount + "筆資料<br />";
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + genStr + context.Server.UrlEncode(exStr).Replace("+", " ") + "');</script>");
+            }
             else
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成');</script>");
+            {
+                string genStr = "資料匯入完成<br />";
+                genStr += "人員資料：" + PerCount + "筆<br />";
+                genStr += "眷屬資料：" + FamilyCount + "筆";
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + genStr + "');</script>");
+            }
         }
     }
 
@@ -607,6 +641,35 @@ perStatus
 
         if (ds.Rows.Count > 0)
             str = ds.Rows[0][reName].ToString();
+
+        return str;
+    }
+
+    /// <summary>
+    /// <para>ColunmName : 欄位名稱</para>
+    /// <para>ilItem1 : 月投保薪資</para>
+    /// <para>ilItem2 : 勞保</para>
+    /// <para>ilItem3 : 勞退</para>
+    /// <para>ilItem4 : 健保</para>
+    /// </summary>
+    private string getMinLV(string ColunmName)
+    {
+        string str = string.Empty;
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.Connection.Open();
+        oCmd.CommandText = "SELECT * from sy_InsuranceLevel with (nolock) order by ilItem3 "; //with (nolock) SqlTransaction不加會TimeOut
+
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oda.Fill(ds);
+        oda.Dispose();
+        oCmd.Connection.Close();
+        oCmd.Connection.Dispose();
+
+        if (ds.Rows.Count > 0)
+            str = ds.Rows[0][ColunmName].ToString();
 
         return str;
     }
