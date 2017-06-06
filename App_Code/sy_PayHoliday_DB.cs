@@ -38,6 +38,7 @@ public class sy_PayHoliday_DB
     string phCreatId = string.Empty;
     string phModifyId = string.Empty;
     string phStatus = string.Empty;
+    Decimal phDays;
     DateTime phCreatDate;
     DateTime phModifyDate;
     #endregion
@@ -73,6 +74,10 @@ public class sy_PayHoliday_DB
     public string _phStatus
     {
         set { phStatus = value; }
+    }
+    public Decimal _phDays
+    {
+        set { phDays = value; }
     }
     public DateTime _phCreatDate
     {
@@ -145,7 +150,7 @@ public class sy_PayHoliday_DB
         {
             show_value.Append(@" 
                 update sy_PayHoliday 
-                set phName=@phName,phBasic=@phBasic,phPs=@phPs,phModifyId=@phModifyId,phModifyDate=@phModifyDate
+                set phName=@phName,phBasic=@phBasic,phPs=@phPs,phModifyId=@phModifyId,phModifyDate=@phModifyDate,phDays=@phDays
                 where  phGuid=@phGuid               
             ");
 
@@ -153,6 +158,7 @@ public class sy_PayHoliday_DB
             thisCommand.Parameters.AddWithValue("@phName", phName);
             thisCommand.Parameters.AddWithValue("@phBasic", phBasic);
             thisCommand.Parameters.AddWithValue("@phPs", phPs);
+            thisCommand.Parameters.AddWithValue("@phDays", phDays);
             thisCommand.Parameters.AddWithValue("@phModifyId", phModifyId);
             thisCommand.Parameters.AddWithValue("@phModifyDate", DateTime.Now);
 

@@ -32,7 +32,7 @@ public class sy_GroupInsurance_DB
     #region sy_GroupInsurance私用
     string giGuid = string.Empty;
     string giInsuranceCode = string.Empty;
-    Decimal giInsuranceName;
+    string giInsuranceName = string.Empty;
     string giAge = string.Empty;
     string giPs = string.Empty;
     string giCreatId = string.Empty;
@@ -50,7 +50,7 @@ public class sy_GroupInsurance_DB
     {
         set { giInsuranceCode = value; }
     }
-    public Decimal _giInsuranceName
+    public string _giInsuranceName
     {
         set { giInsuranceName = value; }
     }
