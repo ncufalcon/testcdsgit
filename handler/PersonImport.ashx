@@ -547,8 +547,8 @@ perStatus
                     @ChangeDate,
                     @pfCode,
                     @pfCreateId,
-                    @pfModifyId,
                     @pfModifyDate,
+                    @pfModifyId,
                     @pfStatus
                     )  ";
                     }
@@ -602,9 +602,9 @@ perStatus
             {
                 string genStr = "Error：";
                 if (FamilyCount == 0)
-                    genStr += "人員資料第" + PerCount + "筆資料<br />";
+                    genStr += "人員資料第" + PerCount + "筆<br />";
                 else
-                    genStr += "眷屬資料第" + FamilyCount + "筆資料<br />";
+                    genStr += "眷屬資料第" + FamilyCount + "筆<br />";
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + genStr + context.Server.UrlEncode(exStr).Replace("+", " ") + "');</script>");
             }
             else
