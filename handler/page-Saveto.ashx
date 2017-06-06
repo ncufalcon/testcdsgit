@@ -26,13 +26,23 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                 try
                 {
                     string mod_guid = string.Empty;
-                    string[] split_str = str_perguid.Split(',');
-                    for (int i=0;i<split_str.Length;i++) {
-                        if (mod_guid != "") {
-                            mod_guid += ",";    
+                    if (str_perguid != "")
+                    {
+
+                        string[] split_str = str_perguid.Split(',');
+                        for (int i = 0; i < split_str.Length; i++)
+                        {
+                            if (mod_guid != "")
+                            {
+                                mod_guid += ",";
+                            }
+                            mod_guid += "'" + split_str[i] + "'";
                         }
-                        mod_guid += "'"+split_str[i]+"'";
                     }
+                    else {
+                        mod_guid = "";
+                    }
+
                     // 建立檔案串流（@ 可取消跳脫字元 escape sequence）
                     //fileSpec = context.Server.MapPath("~/Template/"+str_filename+".txt");
                     string UpLoadPath = ConfigurationManager.AppSettings["UploadFileRootDir"];
@@ -73,29 +83,55 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                             for (int i = 0; i < dt_a.Rows.Count; i++)
                             {
                                 string text = "";
-                                text += dt_a.Rows[i]["PAY"].ToString().Trim();
+                                text += dt_a.Rows[i]["PAY"].ToString().Trim();//付款方式
                                 text += "@";
                                 text += "TW";
                                 text += "@";
-                                text += dt_a.Rows[i]["comno"].ToString().Trim();
+                                text += dt_a.Rows[i]["comAccountNumber"].ToString().Trim();//扣款帳號 
                                 text += "@@";
-                                text += dt_a.Rows[i]["comAccountNumber"].ToString().Trim();
+                                //負數不需要帶值
+                                if (dt_a.Rows[i]["Paymoney"] != null && dt_a.Rows[i]["Paymoney"].ToString().Trim() != "")
+                                {
+                                    if (Convert.ToInt32(dt_a.Rows[i]["Paymoney"].ToString().Trim()) > 0)
+                                    {
+                                        text += dt_a.Rows[i]["Paymoney"].ToString().Trim();//付款金額 
+                                    }
+                                    else
+                                    {
+                                        text += "";//付款金額
+                                    }
+                                }
+                                else {
+                                    text += "";//付款金額
+                                }
                                 text += "@@";
-                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim();
+                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim();//交易日
                                 text += "@";
-                                text += dt_a.Rows[i]["perNo"].ToString().Trim();
+                                text += dt_a.Rows[i]["perNo"].ToString().Trim();//交易序號
                                 text += "@@@@@";
-                                text += dt_a.Rows[i]["Paymoney"].ToString().Trim();
+                                //text += dt_a.Rows[i]["comno"].ToString().Trim();//公司代碼
+                                text += str_comno;//公司代碼
                                 text += "@@@@@@@";
-                                text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
-                                text += "@";
-                                text += "AIP";
-                                text += "@@@@";
-                                text += dt_a.Rows[i]["syNumber"].ToString().Trim();
+                                text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();//受款人
+                                //text += "@";
+                                //text += "AIP";
+                                text += "@@@@@";
+                                text += dt_a.Rows[i]["perSyAccount"].ToString().Trim();//受款人帳號
                                 text += "@@@@@@@";
-                                text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
+                                text += dt_a.Rows[i]["syNumber"].ToString().Trim();//銀行代碼
+                                //text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
                                 text += "@@@@";
-                                text += "AIP";
+                                if (str_exporttype == "0")
+                                {
+                                    //薪資
+                                    text += "";
+                                }
+                                else {
+                                    //法扣
+                                    text += dt_a.Rows[i]["perName"].ToString().Trim() + dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"";
+                                }
+                                
+                                //text += "AIP";
                                 text += "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
                                 writer.WriteLine(text);
                             }

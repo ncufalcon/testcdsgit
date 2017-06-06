@@ -124,10 +124,14 @@
                 if (this_id == "1") {
                     $("#txt_pay_valset_taxpercent").val($("#txt_hidden_sf_str1").val());
                     $("#txt_hidden_sf_now").val("1");
+                    $("#td_name").empty();
+                    $("#td_name").append("基本工資");
                 }
                 if(this_id=="2"){
                     $("#txt_pay_valset_taxpercent").val($("#txt_hidden_sf_str2").val());
                     $("#txt_hidden_sf_now").val("2");
+                    $("#td_name").empty();
+                    $("#td_name").append("代扣福利金%數");
                 }
                 //call_personchangedata_byguid();
             });
@@ -220,7 +224,7 @@
                         str_html += '</thead>';
                         str_html += '<tbody>';
                         str_html += '<tr id="1">';
-                        str_html += '<td nowrap="nowrap">課稅所得</td>';
+                        str_html += '<td nowrap="nowrap">基本工資</td>';
                         str_html += '<td nowrap="nowrap">' + str_1 + '</td>';
                         str_html += '</tr>';
                         str_html += '<tr id="2">';
@@ -305,7 +309,9 @@
                             str_html += '<tbody>';
                             for(var i=0; i<response.length; i++){
                                 str_html += '<tr>';
-                                str_html += '<td nowrap="nowrap" style="width: 40%">' + response[i].tiItem + '(目前為' + response[i].sfBasicSalary + ')</td>';
+                                //20170525決定拿掉目前為XXXXX的字樣
+                                //str_html += '<td nowrap="nowrap" style="width: 40%">' + response[i].tiItem + '(目前為' + response[i].sfBasicSalary + ')</td>';
+                                str_html += '<td nowrap="nowrap" style="width: 40%">' + response[i].tiItem + '</td>';
                                 str_html += '<td nowrap="nowrap"><input type="text" class="inputex width80" value="' + response[i].tiFormula + '" id="str' + (i + 1) + '" maxlength="100" /></td>';
                                 str_html += '</tr>';
                             }
@@ -750,6 +756,7 @@
                 $("#hidden_ph_guid").val("");
                 $("#txt_ph_name").val("");
                 $("#txt_ph_ps").val("");
+                $("#mod_ph_days").val("");
             });
             //給薪假設定 修改按鈕
             $("#btn_ph").click(function () {
@@ -787,7 +794,17 @@
                                 str_html += "<tr trguid='" + response[i].phGuid + "'>";
                                 //str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='a_del_si' aguid='" + response[i].phGuid + "'>刪除</a></td>";
                                 str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>" + response[i].phName + "</td>";
-                                str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>" + response[i].phBasic + "</td>";
+                                if (response[i].phBasic=="01") {
+                                    str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>全薪</td>";
+                                }
+                                if (response[i].phBasic == "02") {
+                                    str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>半薪</td>";
+                                }
+                                if (response[i].phBasic == "03") {
+                                    str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>無薪</td>";
+                                } else {
+                                    str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'></td>";
+                                }
                                 str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>" + response[i].phPs + "</td>";
                                 str_html += "</tr>";
                             }
@@ -827,6 +844,7 @@
                         if (response != "nodata") {
                             $("#txt_ph_name").val(response[0].phName);
                             $("#txt_ph_ps").val(response[0].phPs);
+                            $("#txt_ph_days").val(response[0].phDays);
                             $("input[name='txt_ph_basic'][value='" + response[0].phBasic + "']").prop("checked", true);
                         } else {
                             
@@ -846,6 +864,7 @@
                 $("input[name='txt_ph_basic']").removeAttr("checked");
                 $("#txt_si_itemref").val("");
                 $("#hidden_ph_guid").val($(this).closest('tr').attr("trguid"))//修改才會有
+                $("#mod_ph_days").val("");
                 load_phdata_byguid();
             });
             //給薪假設定 修改
@@ -856,7 +875,12 @@
                     alert("請輸入給薪假名稱");
                 } else if ($("input[name='txt_ph_basic']:checked").val() == undefined) {
                     alert("請選擇計算基準");
-                } else {
+                } else if ($("#txt_ph_days").val()=="") {
+                    alert("請輸入給假天數");
+                } else if ($("#txt_ph_days").val() != "" && isNaN($("#txt_ph_days").val())) {
+                    alert("請給假天數只能輸入數字");
+                }
+                else {
                     $.ajax({
                         type: "POST",
                         async: true, //在沒有返回值之前,不會執行下一步動作
@@ -866,7 +890,8 @@
                             mod_ph_guid: $("#hidden_ph_guid").val(),
                             mod_ph_name: $("#txt_ph_name").val(),
                             mod_ph_ps: $("#txt_ph_ps").val(),
-                            mod_ph_basic: $("input[name='txt_ph_basic']:checked").val()
+                            mod_ph_basic: $("input[name='txt_ph_basic']:checked").val(),
+                            mod_ph_days: $("#txt_ph_days").val()
                         },
                         error: function (xhr) {
                             alert("error");
@@ -1354,7 +1379,7 @@
                                                 <td class="width15" align="right">
                                                     <div class="font-title titlebackicon">項目</div>
                                                 </td>
-                                                <td class="width20">課稅所得%數</td>
+                                                <td class="width20" id="td_name">課稅所得%數</td>
                                                 <td class="width15" align="right">
                                                     <div class="font-title titlebackicon">設定值</div>
                                                 </td>
@@ -1457,7 +1482,7 @@
                                                 <div class="font-title titlebackicon">加/扣項</div>
                                             </td>
                                             <td>
-                                                <input type="radio" checked="checked" name="txt_si_itemadd" value="01" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itemadd" value="02" />否</td>
+                                                <input type="radio" checked="checked" name="txt_si_itemadd" value="01" />加項&nbsp;&nbsp;<input type="radio" name="txt_si_itemadd" value="02" />扣項</td>
                                         </tr>
                                         <tr>
                                             <td align="right">
@@ -1725,9 +1750,17 @@
                                                 <input type="radio" name="txt_ph_basic" value="02" />半薪&nbsp;&nbsp;
                                                 <input type="radio" name="txt_ph_basic" value="03" />無薪&nbsp;&nbsp;</td>
                                             <td align="right">
-                                                <div class="font-title titlebackicon">備註</div>
+                                                <div class="font-title titlebackicon">給假天數</div>
                                             </td>
                                             <td>
+                                                <input type="text" class="inputex width45" id="txt_ph_days" maxlength="5" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">備註</div>
+                                            </td>
+                                            <td colspan="5">
                                                 <input type="text" class="inputex width100" id="txt_ph_ps" /></td>
                                         </tr>
                                     </table>

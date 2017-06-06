@@ -35,6 +35,8 @@ public class sy_InsuranceBasic_DB
     Decimal ibHealthcare4;
     Decimal ibHealthcare5;
     Decimal ibHealthcare6;
+    Decimal ibHealthcare6_up;
+    Decimal ibHealthcare6_down;
     string ibHealthcare7 = string.Empty;
     string ibModifyId = string.Empty;
     DateTime ibModifyDate;
@@ -95,6 +97,14 @@ public class sy_InsuranceBasic_DB
     public Decimal _ibHealthcare6
     {
         set { ibHealthcare6 = value; }
+    }
+    public Decimal _ibHealthcare6_up
+    {
+        set { ibHealthcare6_up = value; }
+    }
+    public Decimal _ibHealthcare6_down
+    {
+        set { ibHealthcare6_down = value; }
     }
     public string _ibHealthcare7
     {
@@ -163,10 +173,10 @@ public class sy_InsuranceBasic_DB
             show_value.Append(@" 
                 insert into sy_InsuranceBasic(ibGuid,ibLaborProtection1,ibLaborProtection2,ibLaborProtection3,ibLaborProtection4,ibLaborProtection5,ibLaborProtection6,
                         ibLaborProtection7,ibHealthcare1,ibHealthcare2,ibHealthcare3,ibHealthcare4,ibHealthcare5,
-                        ibHealthcare6,ibHealthcare7,ibModifyId,ibModifyDate)
+                        ibHealthcare6,ibHealthcare7,ibModifyId,ibModifyDate,ibHealthcare6_up,ibHealthcare6_down)
                 values (@ibGuid,@ibLaborProtection1,@ibLaborProtection2,@ibLaborProtection3,@ibLaborProtection4,@ibLaborProtection5,@ibLaborProtection6,
                         @ibLaborProtection7,@ibHealthcare1,@ibHealthcare2,@ibHealthcare3,@ibHealthcare4,@ibHealthcare5,
-                        @ibHealthcare6,@ibHealthcare7,@ibModifyId,@ibModifyDate )   
+                        @ibHealthcare6,@ibHealthcare7,@ibModifyId,@ibModifyDate,@ibHealthcare6_up,@ibHealthcare6_down )   
             ");
 
             thisCommand.Parameters.AddWithValue("@ibGuid", ibGuid);
@@ -183,6 +193,8 @@ public class sy_InsuranceBasic_DB
             thisCommand.Parameters.AddWithValue("@ibHealthcare4", ibHealthcare4);
             thisCommand.Parameters.AddWithValue("@ibHealthcare5", ibHealthcare5);
             thisCommand.Parameters.AddWithValue("@ibHealthcare6", ibHealthcare6);
+            thisCommand.Parameters.AddWithValue("@ibHealthcare6_up", ibHealthcare6_up);
+            thisCommand.Parameters.AddWithValue("@ibHealthcare6_down", ibHealthcare6_down);
             thisCommand.Parameters.AddWithValue("@ibHealthcare7", ibHealthcare7);
             thisCommand.Parameters.AddWithValue("@ibModifyId", ibModifyId);
             thisCommand.Parameters.AddWithValue("@ibModifyDate", DateTime.Now);
@@ -226,6 +238,7 @@ public class sy_InsuranceBasic_DB
                     ,ibHealthcare1=@ibHealthcare1,ibHealthcare2=@ibHealthcare2
                     ,ibHealthcare3=@ibHealthcare3,ibHealthcare4=@ibHealthcare4,ibHealthcare5=@ibHealthcare5
                     ,ibHealthcare6=@ibHealthcare6,ibHealthcare7=@ibHealthcare7
+                    ,ibHealthcare6_up=@ibHealthcare6_up,ibHealthcare6_down=@ibHealthcare6_down
                     ,ibModifyId=@ibModifyId,ibModifyDate=@ibModifyDate
                     where   ibGuid=@ibGuid
             ");
@@ -243,7 +256,10 @@ public class sy_InsuranceBasic_DB
             thisCommand.Parameters.AddWithValue("@ibHealthcare4", ibHealthcare4);
             thisCommand.Parameters.AddWithValue("@ibHealthcare5", ibHealthcare5);
             thisCommand.Parameters.AddWithValue("@ibHealthcare6", ibHealthcare6);
+            thisCommand.Parameters.AddWithValue("@ibHealthcare6_up", ibHealthcare6_up);
+            thisCommand.Parameters.AddWithValue("@ibHealthcare6_down", ibHealthcare6_down);
             thisCommand.Parameters.AddWithValue("@ibHealthcare7", ibHealthcare7);
+
             thisCommand.Parameters.AddWithValue("@ibModifyId", ibModifyId);
             thisCommand.Parameters.AddWithValue("@ibModifyDate", DateTime.Now);
 

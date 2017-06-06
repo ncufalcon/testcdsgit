@@ -372,6 +372,8 @@
                         $("#txt_ib_ibHealthcare4").val(response[0].ibHealthcare4);
                         $("#txt_ib_ibHealthcare5").val(response[0].ibHealthcare5);
                         $("#txt_ib_ibHealthcare6").val(response[0].ibHealthcare6);
+                        $("#txt_ib_ibHealthcare6_down").val(response[0].ibHealthcare6_down);
+                        $("#txt_ib_ibHealthcare6_up").val(response[0].ibHealthcare6_up);
                         $("input[name='txt_ib_ibLaborProtection7'][value='" + response[0].ibLaborProtection7 + "']").prop("checked", true);
                         $("input[name='txt_ib_ibHealthcare7'][value='" + response[0].ibHealthcare7 + "']").prop("checked", true);
                     }
@@ -414,6 +416,8 @@
                         mod_ibHealthcare4: $("#txt_ib_ibHealthcare4").val(),
                         mod_ibHealthcare5: $("#txt_ib_ibHealthcare5").val(),
                         mod_ibHealthcare6: $("#txt_ib_ibHealthcare6").val(),
+                        mod_ibHealthcare6_down: $("#txt_ib_ibHealthcare6_down").val(),
+                        mod_ibHealthcare6_up: $("#txt_ib_ibHealthcare6_up").val(),
                         mod_ibLaborProtection7: $("input[name='txt_ib_ibLaborProtection7']:checked").val(),
                         mod_ibHealthcare7: $("input[name='txt_ib_ibHealthcare7']:checked").val()
                     },
@@ -426,6 +430,8 @@
                     success: function (response) {
                         if (response != "error") {
                             alert("修改成功");
+                        } else {
+                            alert("修改失敗");
                         }
                     },//success end
                     complete: function () {
@@ -583,10 +589,11 @@
                 alert("保險代號只能輸入數字");
                 return false;
             }
-            if (isNaN(chk_gi_name)) {
-                alert("保險項目名稱只能輸入數字");
-                return false;
-            }
+            //20170525 word裡面說保險項目名稱會有文字
+            //if (isNaN(chk_gi_name)) {
+            //    alert("保險項目名稱只能輸入數字");
+            //    return false;
+            //}
             if (isNaN(chk_gi_age)) {
                 alert("承保年齡上限只能輸入數字");
                 return false;
@@ -1374,6 +1381,18 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibHealthcare6" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <div class="font-title titlebackicon">補充保費單次給付下限</div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="inputex width100" id="txt_ib_ibHealthcare6_down" /></td>
+                                                    <td align="right">
+                                                        <div class="font-title titlebackicon">補充保費單次給付上限</div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="inputex width100" id="txt_ib_ibHealthcare6_up" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">

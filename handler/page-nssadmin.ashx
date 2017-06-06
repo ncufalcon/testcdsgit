@@ -25,6 +25,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
         public string ibHealthcare4 { get; set; }
         public string ibHealthcare5 { get; set; }
         public string ibHealthcare6 { get; set; }
+        public string ibHealthcare6_up { get; set; }
+        public string ibHealthcare6_down { get; set; }
         public string ibHealthcare7 { get; set; }
     }
     //sy_GroupInsurance 欄位 團體保險資料
@@ -129,6 +131,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                         e.ibHealthcare4 = dt_ibdata.Rows[i]["ibHealthcare4"].ToString().Trim();
                         e.ibHealthcare5 = dt_ibdata.Rows[i]["ibHealthcare5"].ToString().Trim();
                         e.ibHealthcare6 = dt_ibdata.Rows[i]["ibHealthcare6"].ToString().Trim();
+                        e.ibHealthcare6_up = dt_ibdata.Rows[i]["ibHealthcare6_up"].ToString().Trim();
+                        e.ibHealthcare6_down = dt_ibdata.Rows[i]["ibHealthcare6_down"].ToString().Trim();
                         e.ibHealthcare7 = dt_ibdata.Rows[i]["ibHealthcare7"].ToString().Trim();
                         ibList.Add(e);
                     }
@@ -157,6 +161,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 string mod_ibHealthcare4 = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare4"]) ? "" : context.Request.Form["mod_ibHealthcare4"].ToString().Trim();
                 string mod_ibHealthcare5 = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare5"]) ? "" : context.Request.Form["mod_ibHealthcare5"].ToString().Trim();
                 string mod_ibHealthcare6 = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare6"]) ? "" : context.Request.Form["mod_ibHealthcare6"].ToString().Trim();
+                string mod_ibHealthcare6_up = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare6_up"]) ? "" : context.Request.Form["mod_ibHealthcare6_up"].ToString().Trim();
+                string mod_ibHealthcare6_down = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare6_down"]) ? "" : context.Request.Form["mod_ibHealthcare6_down"].ToString().Trim();
                 string mod_ibHealthcare7 = string.IsNullOrEmpty(context.Request.Form["mod_ibHealthcare7"]) ? "" : context.Request.Form["mod_ibHealthcare7"].ToString().Trim();
 
                 try {
@@ -173,6 +179,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     ib_db._ibHealthcare4 = (mod_ibHealthcare4 == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare4);
                     ib_db._ibHealthcare5 = (mod_ibHealthcare5 == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare5);
                     ib_db._ibHealthcare6 = (mod_ibHealthcare6 == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare6);
+                    ib_db._ibHealthcare6_up = (mod_ibHealthcare6_up == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare6_up);
+                    ib_db._ibHealthcare6_down = (mod_ibHealthcare6_down == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare6_down);
                     ib_db._ibHealthcare7 = mod_ibHealthcare7;
                     ib_db._ibModifyId = "王胖爺";
                     DataTable dt_chkibdata = ib_db.SelectInsuranceBasic();
@@ -235,7 +243,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 {
                     gi_db._giAge = mod_gi_age;
                     gi_db._giInsuranceCode = mod_gi_code;
-                    gi_db._giInsuranceName = Convert.ToDecimal(mod_gi_name);
+                    gi_db._giInsuranceName = mod_gi_name;
                     gi_db._giPs = mod_gi_ps;
                     gi_db._giCreatId = "王胖爺";
                     gi_db._giModifyId = "王胖爺";

@@ -23,8 +23,18 @@ public class InsuranceLevelImport : IHttpHandler {
         oCmd.Transaction = myTrans;
         string str_response = "";
         string str_date = "";
+        string now_rows = "";
+
+        //生效日期 201705改為手動輸入
+        string textdate = string.IsNullOrEmpty(context.Request.Form["textdate"]) ? "" : context.Request.Form["textdate"].ToString().Trim();
+
         try
         {
+            //如果日期是空或不是日期格式 就catch掉
+            str_response = "請輸入正確生效日期";
+            DateTime dtnow = DateTime.Parse(textdate);
+            str_response = "";
+
             for (int i = 0; i < uploadFiles.Count; i++)
             {
                 HttpPostedFile aFile = uploadFiles[i];
@@ -54,74 +64,81 @@ public class InsuranceLevelImport : IHttpHandler {
                 int error_date = 0;
                 int error_num = 0;
                 int error_samdate = 0;
+                int int_ilItem1 = 0;
                 sy_InsuranceLevel_DB il_db = new sy_InsuranceLevel_DB();
                 DataTable dt_chk_date = il_db.SelectInsuranceLevelDate();
                 //寫入資料庫
                 for (int j = 2; j <= Xls.GetRowCount(1); j++)
                 {
+                    now_rows = j.ToString();
                     string cl1 = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
                     string cl2 = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString() : "";
                     string cl3 = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString() : "";
-                    string cl4 = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "";
-                    string cl5 = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "";
-                    //第一個欄位沒東西就直接不做
-                    if (cl1.Trim()=="") {
-                        continue;
+                    //如果輸入的值不是空 但不是數字就catch掉
+                    if (cl1!="") {
+                        int int_cl1 = int.Parse(cl1);
                     }
+                    if (cl2!="") {
+                        int int_cl2 = int.Parse(cl2);
+                    }
+                    if (cl3!="") {
+                        int int_cl3 = int.Parse(cl2);
+                    }
+                    //string cl4 = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "";
+                    //string cl5 = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "";
                     //判斷日期格式
-                    if (!DateTime.TryParse(cl5, out dtDate) || cl5.ToString().Trim().Length != 10)
+                    if (!DateTime.TryParse(textdate, out dtDate) || textdate.ToString().Trim().Length != 10)
                     {
                         //不是日期格式 或 日期格式有誤
                         error_date++;
                         continue;
                     } else {
                         //重複匯入
-                        DataRow[] rows = dt_chk_date.Select("ilEffectiveDate = '" + cl5.ToString().Trim() + "' ");
+                        DataRow[] rows = dt_chk_date.Select("ilEffectiveDate = '" + textdate + "' ");
                         if (rows.Length>0) {
                             error_samdate++;
                             continue;
                         }
                     }
-                    if (cl1 != "")
+                    if (cl1 == "" && cl2 == "" && cl3 == "")
                     {
-                        if (!int.TryParse(cl1.Trim(), out n))
-                        {
-                            //不是數字格式
-                            error_num++;
-                            continue;
-                        }
+                        continue;
+                    }
+                    else {
+                        int_ilItem1 = int_ilItem1 + 1;
+                    }
+                    //if (cl1 != "")
+                    //{
+                    //    if (!int.TryParse(cl1.Trim(), out n))
+                    //    {
+                    //        //不是數字格式
+                    //        error_num++;
+                    //        continue;
+                    //    }
 
-                    }
-                    if (cl2.Trim() != "")
-                    {
-                        if (!int.TryParse(cl2.Trim(), out n))
-                        {
-                            //不是數字格式
-                            error_num++;
-                            continue;
-                        }
-                    }
-                    if (cl3.Trim() != "")
-                    {
-                        if (!int.TryParse(cl3.Trim(), out n))
-                        {
-                            //不是數字格式
-                            error_num++;
-                            continue;
-                        }
-                    }
-                    if (cl4.Trim() != "")
-                    {
-                        if (!int.TryParse(cl4.Trim(), out n))
-                        {
-                            //不是數字格式
-                            error_num++;
-                            continue;
-                        }
-                    }
+                    //}
+                    //if (cl2.Trim() != "")
+                    //{
+                    //    if (!int.TryParse(cl2.Trim(), out n))
+                    //    {
+                    //        //不是數字格式
+                    //        error_num++;
+                    //        continue;
+                    //    }
+                    //}
+                    //if (cl3.Trim() != "")
+                    //{
+                    //    if (!int.TryParse(cl3.Trim(), out n))
+                    //    {
+                    //        //不是數字格式
+                    //        error_num++;
+                    //        continue;
+                    //    }
+                    //}
 
-                    if (str_date == "") {
-                        str_date = Xls.GetCellValue(j, 5).ToString().Trim();
+                    if (str_date == "")
+                    {
+                        str_date = textdate;
                     }
 
 
@@ -131,11 +148,11 @@ public class InsuranceLevelImport : IHttpHandler {
                     ";
 
                     oCmd.Parameters["@ilGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@ilItem1"].Value = (cl1.Trim() == "") ? 0 : Convert.ToDecimal(cl1.Trim());
-                    oCmd.Parameters["@ilItem2"].Value = (cl2.Trim() == "") ? 0 : Convert.ToDecimal(cl2.Trim());
-                    oCmd.Parameters["@ilItem3"].Value = (cl4.Trim() == "") ? 0 : Convert.ToDecimal(cl4.Trim());
-                    oCmd.Parameters["@ilItem4"].Value = (cl3.Trim() == "") ? 0 : Convert.ToDecimal(cl3.Trim());
-                    oCmd.Parameters["@ilEffectiveDate"].Value = cl5.Trim();
+                    oCmd.Parameters["@ilItem1"].Value = int_ilItem1;//201705 決定不新增
+                    oCmd.Parameters["@ilItem2"].Value = (cl1.Trim() == "") ? 0 : Convert.ToDecimal(cl1.Trim());
+                    oCmd.Parameters["@ilItem3"].Value = (cl3.Trim() == "") ? 0 : Convert.ToDecimal(cl3.Trim());
+                    oCmd.Parameters["@ilItem4"].Value = (cl2.Trim() == "") ? 0 : Convert.ToDecimal(cl2.Trim());
+                    oCmd.Parameters["@ilEffectiveDate"].Value = textdate;
                     oCmd.Parameters["@ilCreatId"].Value = "王胖爺";
                     oCmd.Parameters["@ilModifyId"].Value = "王胖爺";
                     oCmd.Parameters["@ilModifyDate"].Value = DateTime.Now;
@@ -149,20 +166,22 @@ public class InsuranceLevelImport : IHttpHandler {
                     myTrans.Rollback();
                 }
                 else {
-                    if (error_date!=0) {
-                        str_response += "\\n請檢查日期格式是否為yyyy/mm/dd";
-                        myTrans.Rollback();
-                    }
-                    if (error_num != 0)
-                    {
-                        str_response += "\\n請檢查級距是否皆為數字";
-                        myTrans.Rollback();
-                    }
-                    if (error_date == 0 && error_num == 0)
-                    {
-                        myTrans.Commit();
-                    }
+                    //if (error_date!=0) {
+                    //    str_response += "\\n請檢查日期格式是否為yyyy/mm/dd";
+                    //    myTrans.Rollback();
+                    //}
+                    //if (error_num != 0)
+                    //{
+                    //    str_response += "\\n請檢查級距是否皆為數字";
+                    //    myTrans.Rollback();
+                    //}
+                    //if (error_date == 0 && error_num == 0)
+                    //{
+                    //    myTrans.Commit();
+                    //}
                 }
+                
+                myTrans.Commit();
 
 
                 File.Delete(context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(aFile.FileName)));
@@ -179,16 +198,19 @@ public class InsuranceLevelImport : IHttpHandler {
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false) {
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗請聯絡系統管理員,nodate');</script>");
-            }
-            else{
+                //context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('匯入失敗請聯絡系統管理員,nodate');</script>");
                 if (str_response != "")
                 {
-                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入失敗"+str_response+",nodate');</script>");
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入失敗，" + str_response + ",nodate');</script>");
                 }
-                else {
-                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成,"+str_date+"');</script>");
+                else
+                {
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入失敗，第" + now_rows + "筆資料錯誤,nodate');</script>");
                 }
+
+            }
+            else{
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('資料匯入完成,"+str_date+"');</script>");
             }
 
         }

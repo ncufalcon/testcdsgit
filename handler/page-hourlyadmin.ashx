@@ -109,6 +109,7 @@ public class page_hourlyadmin : IHttpHandler {
         public string phBasic { get; set; }
         public string phPs { get; set; }
         public string phStatus { get; set; }
+        public string phDays { get; set; }
     }
     //codetable 欄位
     public class codeTooL
@@ -652,6 +653,7 @@ public class page_hourlyadmin : IHttpHandler {
                         e.phBasic = dt_phdata.Rows[i]["phBasic"].ToString().Trim();
                         e.phPs = dt_phdata.Rows[i]["phPs"].ToString().Trim();
                         e.phStatus = dt_phdata.Rows[i]["phStatus"].ToString().Trim();
+                        e.phDays = dt_phdata.Rows[i]["phDays"].ToString().Trim();
                         phList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -670,12 +672,14 @@ public class page_hourlyadmin : IHttpHandler {
                 string mod_ph_name = string.IsNullOrEmpty(context.Request.Form["mod_ph_name"]) ? "" : context.Request.Form["mod_ph_name"].ToString().Trim();
                 string mod_ph_basic = string.IsNullOrEmpty(context.Request.Form["mod_ph_basic"]) ? "" : context.Request.Form["mod_ph_basic"].ToString().Trim();
                 string mod_ph_ps = string.IsNullOrEmpty(context.Request.Form["mod_ph_ps"]) ? "" : context.Request.Form["mod_ph_ps"].ToString().Trim();
+                string mod_ph_days = string.IsNullOrEmpty(context.Request.Form["mod_ph_days"]) ? "0" : context.Request.Form["mod_ph_days"].ToString().Trim();
                 //string mod_ph_type = string.IsNullOrEmpty(context.Request.Form["mod_ph_type"]) ? "" : context.Request.Form["mod_ph_type"].ToString().Trim();
                 try {
                     ph_db._phGuid = mod_ph_guid;
                     ph_db._phName = mod_ph_name;
                     ph_db._phBasic = mod_ph_basic;
                     ph_db._phPs = mod_ph_ps;
+                    ph_db._phDays = Convert.ToDecimal(mod_ph_days);
                     DataTable dt_chk_name = ph_db.SelectPayHolidayNAme();
                     if (dt_chk_name.Rows.Count > 0 && dt_chk_name.Rows[0]["phGuid"].ToString().Trim()!=mod_ph_guid) {
                         context.Response.Write("notonly");
