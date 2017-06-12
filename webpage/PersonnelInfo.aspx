@@ -586,6 +586,16 @@
                     $(this).attr("sv", "N");
                 }
             });
+
+            //表頭排序
+            $(document).on("click", "a[name='sortbtn']", function () {
+                $("#sortName").val($(this).attr("atp"));
+                if ($("#sortMethod").val() == "desc")
+                    $("#sortMethod").val("asc");
+                else
+                    $("#sortMethod").val("desc");
+                getData();
+            });
         });
         
         //人員列表
@@ -595,7 +605,9 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getPersonList.ashx",
                 data: {
-                    keyword: $("#keyword").val()
+                    keyword: $("#keyword").val(),
+                    sortMethod: $("#sortMethod").val(),
+                    sortName: $("#sortName").val()
                 },
                 beforeSend: function () {
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
@@ -613,16 +625,16 @@
                     if (data != null) {
                         data = $.parseXML(data);
                         $("#perlist").empty();
-                        var tabstr = '<thead>';
-                        tabstr += '<tr><th nowrap="nowrap">操作</th>';
-                        tabstr += '<th nowrap="nowrap">編號</th>';
-                        tabstr += '<th nowrap="nowrap">姓名</th>';
-                        tabstr += '<th nowrap="nowrap">所屬分店</th>';
-                        tabstr += '<th nowrap="nowrap">性別</th>';
-                        tabstr += '<th nowrap="nowrap">補助等級</th>';
-                        tabstr += '<th nowrap="nowrap">投保身分</th>';
-                        tabstr += '<th nowrap="nowrap">到職日</th></tr></thead>';
-                        tabstr += '<tbody>';
+                        var tabstr = '<thead><tr>';
+                        tabstr += '<th nowrap="nowrap">操作</th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perNo">編號</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perName">姓名</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="cbName">所屬分店</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perSex">性別</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentityCode">補助等級</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentity">投保身分</a></th>';
+                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perFirstDate">到職日</a></th>';
+                        tabstr += '</tr></thead><tbody>';
                         if ($(data).find("info_item").length > 0) {
                             $(data).find("info_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("perGuid").text() + '>';
@@ -1416,6 +1428,8 @@
     <input type="hidden" id="pfid" name="pfid" class="inputex" />
     <input type="hidden" id="pbid" name="pbid" class="inputex" />
     <input type="hidden" id="paid" name="paid" class="inputex" />
+    <input type="hidden" id="sortMethod" name="sortMethod" value="desc" />
+    <input type="hidden" id="sortName" name="sortName" />
     <div class="WrapperMain">
                 <div class="fixwidth">
                     <div class="twocol underlineT1 margin10T">

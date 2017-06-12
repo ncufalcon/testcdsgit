@@ -10,10 +10,12 @@ public class getPersonList : IHttpHandler {
         try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string sortMethod = (context.Request["sortMethod"] != null) ? context.Request["sortMethod"].ToString() : "";
+            string sortName = (context.Request["sortName"] != null) ? context.Request["sortName"].ToString() : "";
 
             string xmlStr = "";
             Personnel_Db._KeyWord = keyword;
-            DataTable dt = Personnel_Db.SelectList();
+            DataTable dt = Personnel_Db.SelectList(sortMethod,sortName);
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "infoList", "info_item");
             xmlStr = "<root>" + xmlStr + "</root>";
             context.Response.Write(xmlStr);

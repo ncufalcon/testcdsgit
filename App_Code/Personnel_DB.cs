@@ -65,6 +65,8 @@ public class Personnel_DB
     decimal perMonthPayroll;
     decimal perYearEndBonuses;
     decimal perYears;
+    decimal perAnnualLeave;
+    string perPensionIdentity = string.Empty;
     string perCreateId = string.Empty;
 	string perModifyId = string.Empty;
 	string perStatus = string.Empty;
@@ -261,6 +263,14 @@ public class Personnel_DB
 	{
 		set { perYears = value; }
 	}
+	public decimal _perAnnualLeave
+    {
+		set { perAnnualLeave = value; }
+	}
+	public string _perPensionIdentity
+    {
+		set { perPensionIdentity = value; }
+	}
 	public string _perCreateId
 	{
 		set { perCreateId = value; }
@@ -283,13 +293,13 @@ public class Personnel_DB
 	}
 	#endregion
 
-	public DataTable SelectList()
+	public DataTable SelectList(string sortMethod,string sortName)
 	{
 		SqlCommand oCmd = new SqlCommand();
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT top 200 * from sy_Person 
+		sb.Append(@"SELECT top 200 perGuid,perNo,perName,cbName,perSex,iiIdentityCode,iiIdentity,perFirstDate from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
 left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
@@ -298,7 +308,10 @@ where perStatus<>'D' ");
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
-        sb.Append(@"order by perFirstDate desc,perCreateDate desc ");
+        if (sortName == "")
+            sb.Append(@"order by perFirstDate desc,perCreateDate desc ");
+        else
+            sb.Append(@"order by " + sortName + " " + sortMethod + " ");
 
         oCmd.CommandText = sb.ToString();
 		oCmd.CommandType = CommandType.Text;
@@ -365,6 +378,8 @@ perPostalCode,
 perResidentAddr,
 perResPostalCode,
 perPs,
+perYears,
+perAnnualLeave,
 perCreateId,
 perModifyId,
 perModifyDate,
@@ -398,6 +413,8 @@ perStatus
 @perResidentAddr,
 @perResPostalCode,
 @perPs,
+@perYears,
+@perAnnualLeave,
 @perCreateId,
 @perModifyId,
 @perModifyDate,
@@ -433,7 +450,9 @@ perStatus
 		oCmd.Parameters.AddWithValue("@perResidentAddr", perResidentAddr);
 		oCmd.Parameters.AddWithValue("@perResPostalCode", perResPostalCode);
 		oCmd.Parameters.AddWithValue("@perPs", perPs);
-		oCmd.Parameters.AddWithValue("@perCreateId", perCreateId);
+		oCmd.Parameters.AddWithValue("@perYears", perYears);
+		oCmd.Parameters.AddWithValue("@perAnnualLeave", perAnnualLeave);
+        oCmd.Parameters.AddWithValue("@perCreateId", perCreateId);
 		oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
         oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
 		oCmd.Parameters.AddWithValue("@perStatus", "A");
@@ -475,6 +494,8 @@ perPostalCode=@perPostalCode,
 perResidentAddr=@perResidentAddr,
 perResPostalCode=@perResPostalCode,
 perPs=@perPs,
+perYears=@perYears,
+perAnnualLeave=@perAnnualLeave,
 perModifyId=@perModifyId,
 perModifyDate=@perModifyDate
 where perGuid=@perGuid
@@ -509,6 +530,8 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perResidentAddr", perResidentAddr);
         oCmd.Parameters.AddWithValue("@perResPostalCode", perResPostalCode);
         oCmd.Parameters.AddWithValue("@perPs", perPs);
+        oCmd.Parameters.AddWithValue("@perYears", perYears);
+        oCmd.Parameters.AddWithValue("@perAnnualLeave", perAnnualLeave);
         oCmd.Parameters.AddWithValue("@perCreateId", perCreateId);
         oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
         oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
@@ -524,7 +547,7 @@ where perGuid=@perGuid
         oComd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT * from sy_Person with (nolock) where perNo=@ckNo
+		sb.Append(@"SELECT * from sy_Person with (nolock) where perNo=@ckNo and perStatus='A'
 SELECT * from sy_Person with (nolock) where perIDNumber=@ckID ");
 
         oComd.CommandText = sb.ToString();
@@ -1010,6 +1033,7 @@ perInsuranceDes=@perInsuranceDes,
 perGroupInsurance=@perGroupInsurance,
 perLaborID=@perLaborID,
 perInsuranceID=@perInsuranceID,
+perPensionIdentity=@perPensionIdentity,
 perModifyId=@perModifyId,
 perModifyDate=@perModifyDate
 where perGuid=@perGuid
@@ -1022,6 +1046,7 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perGroupInsurance", perGroupInsurance);
         oCmd.Parameters.AddWithValue("@perLaborID", perLaborID);
         oCmd.Parameters.AddWithValue("@perInsuranceID", perInsuranceID);
+        oCmd.Parameters.AddWithValue("@perPensionIdentity", perPensionIdentity);
         oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
         oCmd.Parameters.AddWithValue("@perModifyDate", DateTime.Now);
 
