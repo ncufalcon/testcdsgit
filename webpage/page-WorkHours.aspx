@@ -150,10 +150,10 @@
                         str_html += '<th width="60" nowrap="nowrap">操作</th>';
                         str_html += '<th nowrap="nowrap" width="60">員工編號</th>';
                         str_html += '<th nowrap="nowrap" width="150">姓名</th>';
-                        str_html += '<th nowrap="nowrap" width="25">加扣別</th>';
+                        str_html += '<th nowrap="nowrap" width="40">加扣別</th>';
                         str_html += '<th nowrap="nowrap" width="80">日期</th>';
-                        str_html += '<th nowrap="nowrap" width="15">出勤天數</th>';
-                        str_html += '<th nowrap="nowrap" width="25">出勤時數</th>';
+                        str_html += '<th nowrap="nowrap" width="55">出勤天數</th>';
+                        str_html += '<th nowrap="nowrap" width="55">出勤時數</th>';
                         str_html += '<th nowrap="nowrap">備註</th>';
                         str_html += '</tr>';
                         str_html += '</thead>';
