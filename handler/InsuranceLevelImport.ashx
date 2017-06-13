@@ -71,9 +71,9 @@ public class InsuranceLevelImport : IHttpHandler {
                 for (int j = 2; j <= Xls.GetRowCount(1); j++)
                 {
                     now_rows = j.ToString();
-                    string cl1 = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
-                    string cl2 = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString() : "";
-                    string cl3 = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString() : "";
+                    string cl1 = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString().Trim() : "";
+                    string cl2 = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString().Trim() : "";
+                    string cl3 = (Xls.GetCellValue(j, 3) != null) ? Xls.GetCellValue(j, 3).ToString().Trim() : "";
                     //如果輸入的值不是空 但不是數字就catch掉
                     if (cl1!="") {
                         int int_cl1 = int.Parse(cl1);
@@ -82,10 +82,9 @@ public class InsuranceLevelImport : IHttpHandler {
                         int int_cl2 = int.Parse(cl2);
                     }
                     if (cl3!="") {
-                        int int_cl3 = int.Parse(cl2);
+                        int int_cl3 = int.Parse(cl3);
                     }
-                    //string cl4 = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "";
-                    //string cl5 = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "";
+                    
                     //判斷日期格式
                     if (!DateTime.TryParse(textdate, out dtDate) || textdate.ToString().Trim().Length != 10)
                     {
@@ -116,26 +115,6 @@ public class InsuranceLevelImport : IHttpHandler {
                     //        continue;
                     //    }
 
-                    //}
-                    //if (cl2.Trim() != "")
-                    //{
-                    //    if (!int.TryParse(cl2.Trim(), out n))
-                    //    {
-                    //        //不是數字格式
-                    //        error_num++;
-                    //        continue;
-                    //    }
-                    //}
-                    //if (cl3.Trim() != "")
-                    //{
-                    //    if (!int.TryParse(cl3.Trim(), out n))
-                    //    {
-                    //        //不是數字格式
-                    //        error_num++;
-                    //        continue;
-                    //    }
-                    //}
-
                     if (str_date == "")
                     {
                         str_date = textdate;
@@ -164,21 +143,6 @@ public class InsuranceLevelImport : IHttpHandler {
                 {
                     str_response += "重複匯入資料";
                     myTrans.Rollback();
-                }
-                else {
-                    //if (error_date!=0) {
-                    //    str_response += "\\n請檢查日期格式是否為yyyy/mm/dd";
-                    //    myTrans.Rollback();
-                    //}
-                    //if (error_num != 0)
-                    //{
-                    //    str_response += "\\n請檢查級距是否皆為數字";
-                    //    myTrans.Rollback();
-                    //}
-                    //if (error_date == 0 && error_num == 0)
-                    //{
-                    //    myTrans.Commit();
-                    //}
                 }
                 
                 myTrans.Commit();
