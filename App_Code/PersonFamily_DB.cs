@@ -101,6 +101,7 @@ public class PersonFamily_DB
 
         sb.Append(@"SELECT * from sy_PersonFamily
 left join sy_SubsidyLevel on slGuid=pfCode
+left join sy_codetable on code_group='17' and code_value=pfTitle
 where pfStatus<>'D' and pfPerGuid=@pfPerGuid ");
         if (KeyWord != "")
         {
@@ -124,7 +125,9 @@ where pfStatus<>'D' and pfPerGuid=@pfPerGuid ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT * from sy_PersonFamily where pfGuid=@pfGuid ");
+        sb.Append(@"SELECT * from sy_PersonFamily
+left join sy_SubsidyLevel on slGuid=pfCode
+where pfGuid=@pfGuid ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

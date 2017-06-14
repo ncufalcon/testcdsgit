@@ -18,6 +18,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
             string pi_SubsidyLevel = (context.Request.Form["pi_SLGuid"] != null) ? context.Request.Form["pi_SLGuid"].ToString() : "";
             string pi_ChangeDate = (context.Request.Form["pi_ChangeDate"] != null) ? context.Request.Form["pi_ChangeDate"].ToString() : "";
             string pi_Change = (context.Request.Form["pi_Change"] != null) ? context.Request.Form["pi_Change"].ToString() : "";
+            string pi_DropOutReason = (context.Request.Form["pi_DropOutReason"] != null) ? context.Request.Form["pi_DropOutReason"].ToString() : "";
             string pi_InsurancePayroll = (context.Request.Form["pi_InsurancePayroll"] != null) ? context.Request.Form["pi_InsurancePayroll"].ToString() : "";
             string pi_Ps = (context.Request.Form["pi_Ps"] != null) ? context.Request.Form["pi_Ps"].ToString() : "";
 
@@ -30,6 +31,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piCardNo = getLH_Code(pi_No, "H");
                     LH_Db._piChangeDate = pi_ChangeDate;
                     LH_Db._piChange = pi_Change;
+                    LH_Db._piDropOutReason = pi_DropOutReason;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
                     LH_Db._piPs = pi_Ps;
                     LH_Db._piCreateId = USERINFO.MemberGuid;
@@ -43,6 +45,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piCardNo = getLH_Code(pi_No, "H");
                     LH_Db._piChangeDate = pi_ChangeDate;
                     LH_Db._piChange = pi_Change;
+                    LH_Db._piDropOutReason = pi_DropOutReason;
                     LH_Db._piInsurancePayroll = decimal.Parse(pi_InsurancePayroll);
                     LH_Db._piPs = pi_Ps;
                     LH_Db._piModifyId = USERINFO.MemberGuid;

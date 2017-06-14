@@ -94,6 +94,7 @@ public class LaborHealth_DB
     string piCardNo = string.Empty;
     string piChangeDate = string.Empty;
     string piChange = string.Empty;
+    string piDropOutReason = string.Empty;
     decimal piInsurancePayroll;
     string piPs = string.Empty;
     string piCreateId = string.Empty;
@@ -127,6 +128,10 @@ public class LaborHealth_DB
     public string _piChange
     {
         set { piChange = value; }
+    }
+    public string _piDropOutReason
+    {
+        set { piDropOutReason = value; }
     }
     public decimal _piInsurancePayroll
     {
@@ -376,6 +381,7 @@ piSubsidyLevel,
 piCardNo,
 piChangeDate,
 piChange,
+piDropOutReason,
 piInsurancePayroll,
 piPs,
 piCreateId,
@@ -389,6 +395,7 @@ piStatus
 @piCardNo,
 @piChangeDate,
 @piChange,
+@piDropOutReason,
 @piInsurancePayroll,
 @piPs,
 @piCreateId,
@@ -404,6 +411,7 @@ piStatus
         oCmd.Parameters.AddWithValue("@piCardNo", piCardNo);
         oCmd.Parameters.AddWithValue("@piChangeDate", piChangeDate);
         oCmd.Parameters.AddWithValue("@piChange", piChange);
+        oCmd.Parameters.AddWithValue("@piDropOutReason", piDropOutReason);
         oCmd.Parameters.AddWithValue("@piInsurancePayroll", piInsurancePayroll);
         oCmd.Parameters.AddWithValue("@piPs", piPs);
         oCmd.Parameters.AddWithValue("@piCreateId", piCreateId);
@@ -426,6 +434,7 @@ piSubsidyLevel=@piSubsidyLevel,
 piCardNo=@piCardNo,
 piChangeDate=@piChangeDate,
 piChange=@piChange,
+piDropOutReason=@piDropOutReason,
 piInsurancePayroll=@piInsurancePayroll,
 piPs=@piPs,
 piModifyId=@piModifyId,
@@ -440,6 +449,7 @@ where piGuid=@piGuid
         oCmd.Parameters.AddWithValue("@piCardNo", piCardNo);
         oCmd.Parameters.AddWithValue("@piChangeDate", piChangeDate);
         oCmd.Parameters.AddWithValue("@piChange", piChange);
+        oCmd.Parameters.AddWithValue("@piDropOutReason", piDropOutReason);
         oCmd.Parameters.AddWithValue("@piInsurancePayroll", piInsurancePayroll);
         oCmd.Parameters.AddWithValue("@piPs", piPs);
         oCmd.Parameters.AddWithValue("@piModifyId", piModifyId);
@@ -512,16 +522,19 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID
 ,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate,
-(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) InsLv
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
+iiIdentityCode,perPensionIdentity
 from sy_Person 
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + @")
 union
-select perIDNumber,perName,perBirthday,comLaborProtectionCode,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0
+select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0,0,'',''
 from sy_PersonFamily 
 left join sy_Person on pfPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
@@ -547,11 +560,14 @@ order by perIDNumber,fID ");
         sb.Append(@"select perIDNumber,perName,perBirthday,
 comLaborProtectionCode,comHealthInsuranceCode,
 piChangeDate,
+piDropOutReason,
+code_desc DORStr,
 plChangeDate
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
 left join sy_PersonInsurance on piChange='02' and piStatus='A' and piPerGuid=perGuid
 left join sy_Company on comGuid=perComGuid
+left join sy_codetable on code_group='20' and code_value=piDropOutReason
 where perGuid in (" + perGuid + @")
 order by plChangeDate desc,plCreateDate desc ");
 
@@ -570,11 +586,13 @@ order by plChangeDate desc,plCreateDate desc ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,
-plLaborNo,ppEmployerRatio,ppLarboRatio,ppChangeDate
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,perPensionIdentity,
+plLaborNo,ppEmployerRatio,ppLarboRatio,ppChangeDate,iiIdentityCode,
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv
 from sy_Person 
 left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + ") ");
 
         oCmd.CommandText = sb.ToString();
@@ -606,21 +624,59 @@ where perGuid in (" + perGuid + ") ");
         return ds;
     }
 
-    public DataTable LH_3in1_mod(string perGuid)
+    public DataSet LH_3in1_mod(string perGuid)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"sp_payModify");
+        sb.Append(@"
+declare @day_1 nvarchar(6);
+declare @day_2 nvarchar(6);
+declare @day_3 nvarchar(6);
+select @day_1=(select CONVERT(varchar(6),DATEADD(MONTH, -1,GETDATE()),112));
+select @day_2=(select CONVERT(varchar(6),DATEADD(MONTH, -2,GETDATE()),112));
+select @day_3=(select CONVERT(varchar(6),DATEADD(MONTH, -3,GETDATE()),112));
+--撈出連續三個月都有資料的人類guid
+select perGuid 
+into #tmp_perguid
+from 
+(
+	select perGuid,COUNT(perName) as row_count from sy_PaySalaryDetail
+	left join sy_PaySalaryMain on psmGuid=pPsmGuid
+	left join sy_Person on perGuid=pPerGuid
+	where psmYear in (@day_1,@day_2,@day_3) and pStatus='A'
+	group by perGuid
+)#tmp
+where row_count=3
+
+--撈出主檔guid
+select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtectionCode LaborID 
+from sy_PaySalaryDetail
+left join sy_PaySalaryMain on psmGuid=pPsmGuid
+left join sy_Person on perGuid=pPerGuid
+left join sy_Company on comGuid=perComGuid
+where psmYear in (@day_1,@day_2,@day_3) and perGuid in (select perGuid from #tmp_perguid) and pStatus='A' ");
+
+        if (perGuid != "")
+            sb.Append(@"and perGuid in (" + perGuid + ")");
+
+        sb.Append(@"group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtectionCode
+
+select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate from sy_PersonInsurance 
+where piPerGuid in (select perGuid from #tmp_perguid) and (piChange='01' or piChange='03')  and piStatus='A'
+order by piChangeDate desc,piCreateDate desc
+
+drop table #tmp_perguid 
+");
 
         oCmd.CommandText = sb.ToString();
-        oCmd.CommandType = CommandType.StoredProcedure;
+        oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
-        DataTable ds = new DataTable();
-        oCmd.Parameters.AddWithValue("@pGuid", perGuid);
+        DataSet ds = new DataSet();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oda.Fill(ds);
         return ds;
     }
-   
+
 }

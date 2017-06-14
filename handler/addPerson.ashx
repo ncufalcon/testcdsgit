@@ -43,12 +43,17 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             string pContactTel = (context.Request.Form["pContactTel"] != null) ? context.Request.Form["pContactTel"].ToString() : "";
             string pRel = (context.Request.Form["pRel"] != null) ? context.Request.Form["pRel"].ToString() : "";
             string pPs = (context.Request.Form["pPs"] != null) ? context.Request.Form["pPs"].ToString() : "";
+            string pYears = (context.Request.Form["pYears"] != null) ? context.Request.Form["pYears"].ToString() : "0";
+            pYears = (pYears == "") ? "0" : pYears;
+            string pAnnualLeave = (context.Request.Form["pAnnualLeave"] != null) ? context.Request.Form["pAnnualLeave"].ToString() : "0";
+            pAnnualLeave = (pAnnualLeave == "") ? "0" : pAnnualLeave;
             //保險
             string pHIClass = (context.Request.Form["pHIClass"] != null) ? context.Request.Form["pHIClass"].ToString() : "";
             string pInsuranceDes = (context.Request.Form["plv_CodeGuid"] != null) ? context.Request.Form["plv_CodeGuid"].ToString() : "";
             string pGroupInsurance = (context.Request.Form["pGroupInsurance"] != null) ? context.Request.Form["pGroupInsurance"].ToString() : "";
             string pLaborID = (context.Request.Form["Labor_CodeGuid"] != null) ? context.Request.Form["Labor_CodeGuid"].ToString() : "";
             string pInsuranceID = (context.Request.Form["Health_CodeGuid"] != null) ? context.Request.Form["Health_CodeGuid"].ToString() : "";
+            string pp_Identity = (context.Request.Form["pp_Identity"] != null) ? context.Request.Form["pp_Identity"].ToString() : "";
             //計薪
             string pSalaryClass = (context.Request.Form["pSalaryClass"] != null) ? context.Request.Form["pSalaryClass"].ToString() : "";
             string pTaxable = (context.Request.Form["pTaxable"] != null) ? context.Request.Form["pTaxable"].ToString() : "";
@@ -110,6 +115,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perResidentAddr = pResidentAddr;
                     Personnel_Db._perResPostalCode = pResPostalCode;
                     Personnel_Db._perPs = pPs;
+                    Personnel_Db._perYears = decimal.Parse(pYears);
+                    Personnel_Db._perAnnualLeave = decimal.Parse(pAnnualLeave);
                     Personnel_Db._perCreateId = USERINFO.MemberGuid;
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.addPersonnelInfo();
@@ -143,6 +150,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perResidentAddr = pResidentAddr;
                     Personnel_Db._perResPostalCode = pResPostalCode;
                     Personnel_Db._perPs = pPs;
+                    Personnel_Db._perYears = decimal.Parse(pYears);
+                    Personnel_Db._perAnnualLeave = decimal.Parse(pAnnualLeave);
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modPersonnelInfo();
                     break;
@@ -153,6 +162,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perGroupInsurance = pGroupInsurance;
                     Personnel_Db._perLaborID = pLaborID;
                     Personnel_Db._perInsuranceID = pInsuranceID;
+                    Personnel_Db._perPensionIdentity = pp_Identity;
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modInsurance();
 
@@ -192,6 +202,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         PP_Db._ppGuid = Guid.NewGuid().ToString();
                         PP_Db._ppPerGuid = id;
                         PP_Db._ppModifyId = USERINFO.MemberGuid;
+                        PP_Db._ppIdentity = pp_Identity;
                         PP_Db.addPension();
                     }
                     //團保

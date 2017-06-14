@@ -15,6 +15,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
             string pfi_No = (context.Request.Form["pf_NoGuid"] != null) ? context.Request.Form["pf_NoGuid"].ToString() : "";
             string pfi_PfGuid = (context.Request.Form["pf_PfGuid"] != null) ? context.Request.Form["pf_PfGuid"].ToString() : "";
             string pfi_Change = (context.Request.Form["pfi_Change"] != null) ? context.Request.Form["pfi_Change"].ToString() : "";
+            string pfi_DropOutReason = (context.Request.Form["pfi_DropOutReason"] != null) ? context.Request.Form["pfi_DropOutReason"].ToString() : "";
             string pfi_ChangeDate = (context.Request.Form["pfi_ChangeDate"] != null) ? context.Request.Form["pfi_ChangeDate"].ToString() : "";
             string pfi_SubsidyLevel = (context.Request.Form["pf_SLGuid"] != null) ? context.Request.Form["pf_SLGuid"].ToString() : "";
             string pfi_AreaPerson = (context.Request.Form["pfi_AreaPerson"] != null) ? context.Request.Form["pfi_AreaPerson"].ToString() : "";
@@ -27,6 +28,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiPerGuid = pfi_No;
                     FI_Db._pfiPfGuid = pfi_PfGuid;
                     FI_Db._pfiChange = pfi_Change;
+                    FI_Db._pfiDropOutReason = pfi_DropOutReason;
                     FI_Db._pfiChangeDate = pfi_ChangeDate;
                     FI_Db._pfiSubsidyLevel = pfi_SubsidyLevel;
                     FI_Db._pfiAreaPerson = pfi_AreaPerson;
@@ -41,6 +43,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiPerGuid = pfi_No;
                     FI_Db._pfiPfGuid = pfi_PfGuid;
                     FI_Db._pfiChange = pfi_Change;
+                    FI_Db._pfiDropOutReason = pfi_DropOutReason;
                     FI_Db._pfiChangeDate = pfi_ChangeDate;
                     FI_Db._pfiSubsidyLevel = pfi_SubsidyLevel;
                     FI_Db._pfiAreaPerson = pfi_AreaPerson;

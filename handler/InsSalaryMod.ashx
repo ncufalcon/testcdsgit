@@ -12,21 +12,30 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
         bool status = true;
+        string exStr = string.Empty;
         string IM_Guid = (context.Request.Form["im_gv"] != null) ? context.Request.Form["im_gv"].ToString() : "";
-        string IM_LevelCost = (context.Request.Form["im_pay"] != null) ? context.Request.Form["im_pay"].ToString() : "";
         string L_SL = (context.Request.Form["im_lSL"] != null) ? context.Request.Form["im_lSL"].ToString() : "";
         string H_SL = (context.Request.Form["im_hSL"] != null) ? context.Request.Form["im_hSL"].ToString() : "";
         string bf_L = (context.Request.Form["bf_L"] != null) ? context.Request.Form["bf_L"].ToString() : "";
         string bf_H = (context.Request.Form["bf_H"] != null) ? context.Request.Form["bf_H"].ToString() : "";
         string bf_P = (context.Request.Form["bf_P"] != null) ? context.Request.Form["bf_P"].ToString() : "";
+        string af_L = (context.Request.Form["af_L"] != null) ? context.Request.Form["af_L"].ToString() : "";
+        string af_H = (context.Request.Form["af_H"] != null) ? context.Request.Form["af_H"].ToString() : "";
+        string af_P = (context.Request.Form["af_P"] != null) ? context.Request.Form["af_P"].ToString() : "";
+        string labor_id = (context.Request.Form["labor_id"] != null) ? context.Request.Form["labor_id"].ToString() : "";
+        string ganbor_id = (context.Request.Form["ganbor_id"] != null) ? context.Request.Form["ganbor_id"].ToString() : "";
         string[] Gid = IM_Guid.Split(','); //Person Guid
-        string[] LevelCost = IM_LevelCost.Split(','); //投保級距
         string[] L_SLAry = L_SL.Split(','); //前次異動勞保補助等級
         string[] H_SLAry = H_SL.Split(','); //前次異動健保補助等級
         string[] bf_Lary = bf_L.Split(','); //前次異動勞保級距
         string[] bf_Hary = bf_H.Split(','); //前次異動勞保級距
         string[] bf_Pary= bf_P.Split(','); //前次異動勞退級距
-
+        string[] af_Lary = af_L.Split(','); //本次異動勞保級距
+        string[] af_Hary = af_H.Split(','); //本次異動勞保級距
+        string[] af_Pary= af_P.Split(','); //本次異動勞退級距
+        string[] LaborIDary= labor_id.Split(','); //勞保卡號
+        string[] GanborIDary= ganbor_id.Split(','); //健保卡號
+        string LCstr = string.Empty;
         SqlConnection oConn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oConn.Open();
         SqlCommand oCmd = new SqlCommand();
@@ -39,6 +48,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@plGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plPerGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plSubsidyLevel", SqlDbType.NVarChar);
+            oCmd.Parameters.Add("@plLaborNo", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plChangeDate", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plChange", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plLaborPayroll", SqlDbType.Decimal);
@@ -50,6 +60,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@piGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piPerGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piSubsidyLevel", SqlDbType.NVarChar);
+            oCmd.Parameters.Add("@piCardNo", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piChangeDate", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piChange", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piInsurancePayroll", SqlDbType.Decimal);
@@ -76,9 +87,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
                 oCmd.Parameters["@plPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@plSubsidyLevel"].Value = L_SLAry[i];
+                oCmd.Parameters["@plLaborNo"].Value = LaborIDary[i];
                 oCmd.Parameters["@plChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
                 oCmd.Parameters["@plChange"].Value = "03";
-                oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(LevelCost[i].ToString());
+                oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(af_Lary[i].ToString());
                 oCmd.Parameters["@plCreateId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@plModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@plModifyDate"].Value = DateTime.Now;
@@ -90,6 +102,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                     plGuid,
                     plPerGuid,
                     plSubsidyLevel,
+                    plLaborNo,
                     plChangeDate,
                     plChange,
                     plLaborPayroll,
@@ -101,6 +114,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                     @plGuid,
                     @plPerGuid,
                     @plSubsidyLevel,
+                    @plLaborNo,
                     @plChangeDate,
                     @plChange,
                     @plLaborPayroll,
@@ -114,9 +128,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@piGuid"].Value = Guid.NewGuid().ToString();
                 oCmd.Parameters["@piPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@piSubsidyLevel"].Value = H_SLAry[i];
+                oCmd.Parameters["@piCardNo"].Value = GanborIDary[i];
                 oCmd.Parameters["@piChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
                 oCmd.Parameters["@piChange"].Value = "03";
-                oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(LevelCost[i].ToString());
+                oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(af_Hary[i].ToString());
                 oCmd.Parameters["@piCreateId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@piModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@piModifyDate"].Value = DateTime.Now;
@@ -128,6 +143,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                     piGuid,
                     piPerGuid,
                     piSubsidyLevel,
+                    piCardNo,
                     piChangeDate,
                     piChange,
                     piInsurancePayroll,
@@ -139,6 +155,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                     @piGuid,
                     @piPerGuid,
                     @piSubsidyLevel,
+                    @piCardNo,
                     @piChangeDate,
                     @piChange,
                     @piInsurancePayroll,
@@ -153,7 +170,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@ppPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@ppChange"].Value = "02";
                 oCmd.Parameters["@ppChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
-                oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(LevelCost[i].ToString());
+                oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(af_Pary[i].ToString());
                 oCmd.Parameters["@ppLarboRatio"].Value = decimal.Parse("6");
                 oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse("6");
                 oCmd.Parameters["@ppCreateId"].Value = USERINFO.MemberGuid;
@@ -198,6 +215,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         {
             status = false;
             myTrans.Rollback();
+            exStr = ex.Message;
         }
         finally
         {
@@ -205,7 +223,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','InsSalaryMod');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('exMsg','" + context.Server.UrlEncode(exStr).Replace("+", " ") + "');</script>");
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('InsSalaryMod');</script>");
         }

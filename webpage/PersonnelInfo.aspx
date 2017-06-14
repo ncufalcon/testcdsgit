@@ -7,6 +7,8 @@
     <script type="text/javascript">
         $(document).ready(function () {
             getddl("02", "#pPosition");
+            getddl("17", "#pf_Title");
+            getddl("18", "#pp_Identity");
 
             $(document).on("keyup", "#pIDNumber,#pf_IDNumber", function () {
                 this.value = this.value.toUpperCase();
@@ -17,7 +19,7 @@
                     href: "PersonImport.aspx?tp=Person",
                     type: "iframe",
                     width: "450",
-                    minHeight: "100",
+                    minHeight: "150",
                     closeClick: false,
                     openEffect: 'elastic',
                     closeEffect: 'elastic',
@@ -506,6 +508,8 @@
                                 $("#pContactTel").val($(this).children("perContactTel").text().trim());
                                 $("#pRel").val($(this).children("perRel").text().trim());
                                 $("#pPs").val($(this).children("perPs").text().trim());
+                                $("#pYears").val($(this).children("perYears").text().trim());
+                                $("#pAnnualLeave").val($(this).children("perAnnualLeave").text().trim());
                                 //保險
                                 $("#pHIClass").val($(this).children("perHIClass").text().trim());
                                 $("#pInsuranceDes").val($(this).children("iiIdentityCode").text().trim());
@@ -521,6 +525,7 @@
                                 $("#Health_CodeGuid").val($(this).children("Hgv").text().trim());
                                 $("#HealthStr").html("");
                                 $("#Healthstatus").val("Y");
+                                $("#pp_Identity").val($(this).children("perPensionIdentity").text().trim());
                                 //計薪
                                 $("#pSalaryClass").val($(this).children("perSalaryClass").text().trim());
                                 $("#pTaxable").val($(this).children("perTaxable").text().trim());
@@ -586,6 +591,7 @@
                     $(this).attr("sv", "N");
                 }
             });
+
 
             //表頭排序
             $(document).on("click", "a[name='sortbtn']", function () {
@@ -809,7 +815,7 @@
                     else if ($("#PFstatus").val() == "N")
                         msg += "找不到該補助代號，請重新確認\n";
                     if ($("#pf_Title").val().trim() == "")
-                        msg += "請輸入稱謂\n";
+                        msg += "請選擇稱謂\n";
                     if ($("#pf_Birthday").val().trim() == "")
                         msg += "請輸入生日\n";
                     else if ($("#pf_Birthday").val() != "" && $("#pf_Birthday").val().substring(4, 5) != "/" && $("#pf_Birthday").val().substring(7, 8) != "/")
@@ -907,7 +913,10 @@
                                 $("input[name='pf_HealthInsurance'][value='" + $(this).children("pfHealthInsurance").text().trim() + "']").prop("checked", true);
                                 $("input[name='pf_GroupInsurance'][value='" + $(this).children("pfGroupInsurance").text().trim() + "']").prop("checked", true);
                                 $("#pf_IDNumber").val($(this).children("pfIDNumber").text().trim());
-                                $("#pf_Code").val($(this).children("pfCode").text().trim());
+                                $("#pf_Code").val($(this).children("slSubsidyCode").text().trim());
+                                $("#pf_CodeGuid").val($(this).children("slSubsidyCode").text().trim());
+                                $("#PfStr").html("");
+                                $("#PFstatus").val("Y");
                                 $("#pf_Title").val($(this).children("pfTitle").text().trim());
                                 $("#pf_Birthday").val($(this).children("pfBirthday").text().trim());
                             });
@@ -969,7 +978,7 @@
                                 tabstr += '<tr aid=' + $(this).children("pfGuid").text() + '>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pfdelbtn" aid=' + $(this).children("pfGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfName").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfTitle").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfBirthday").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfIDNumber").text() + '</td>';
                                 if ($(this).children("pfHealthInsurance").text() == "Y")
@@ -1529,6 +1538,10 @@
                                         <td><input type="text" id="pContractDeadline" name="pContractDeadline" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">居留證到期日</div></td>
                                         <td><input type="text" id="pResidentPermitDate" name="pResidentPermitDate" class="inputex width100" /></td>
+                                        <td align="right"><div class="font-title titlebackicon">年資</div></td>
+                                        <td ><input type="text" id="pYears" name="pYears" class="inputex width100" /></td>
+                                        <td align="right"><div class="font-title titlebackicon">特休天數</div></td>
+                                        <td ><input type="text" id="pAnnualLeave" name="pAnnualLeave" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">電話</div></td>
@@ -1610,6 +1623,8 @@
                                             <span id="HealthStr" class="showStr"></span>
                                             <input id="Healthstatus" type="hidden" />
                                         </td>
+                                        <td align="right"><div class="font-title titlebackicon">提繳身分別</div></td>
+                                        <td><select id="pp_Identity" name="pp_Identity" class="inputex width80"></select></td>
                                     </tr>
                                 </table>
                             </div>
@@ -1697,7 +1712,7 @@
                                         </tr>  
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">稱謂</div></td>
-                                            <td><input id="pf_Title" name="pf_Title" type="text" class="inputex width100 pftxt" /></td>
+                                            <td><select id="pf_Title" name="pf_Title" class="inputex width95"></select></td>
                                             <td align="right"><div class="font-title titlebackicon" style="color:Red">生日</div></td>
                                             <td><input id="pf_Birthday" name="pf_Birthday" type="text" class="inputex width100 pftxt" /></td>
                                         </tr>                                     

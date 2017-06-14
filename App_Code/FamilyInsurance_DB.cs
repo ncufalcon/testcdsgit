@@ -22,6 +22,7 @@ public class FamilyInsurance_DB
     string pfiPerGuid = string.Empty;
     string pfiPfGuid = string.Empty;
     string pfiChange = string.Empty;
+    string pfiDropOutReason = string.Empty;
     string pfiChangeDate = string.Empty;
     string pfiSubsidyLevel = string.Empty;
     string pfiCardNo = string.Empty;
@@ -50,6 +51,10 @@ public class FamilyInsurance_DB
     public string _pfiChange
     {
         set { pfiChange = value; }
+    }
+    public string _pfiDropOutReason
+    {
+        set { pfiDropOutReason = value; }
     }
     public string _pfiChangeDate
     {
@@ -136,6 +141,7 @@ pfiGuid,
 pfiPerGuid,
 pfiPfGuid,
 pfiChange,
+pfiDropOutReason,
 pfiChangeDate,
 pfiSubsidyLevel,
 pfiCardNo,
@@ -150,6 +156,7 @@ pfiStatus
 @pfiPerGuid,
 @pfiPfGuid,
 @pfiChange,
+@pfiDropOutReason,
 @pfiChangeDate,
 @pfiSubsidyLevel,
 @pfiCardNo,
@@ -166,6 +173,7 @@ pfiStatus
         oCmd.Parameters.AddWithValue("@pfiPerGuid", pfiPerGuid);
         oCmd.Parameters.AddWithValue("@pfiPfGuid", pfiPfGuid);
         oCmd.Parameters.AddWithValue("@pfiChange", pfiChange);
+        oCmd.Parameters.AddWithValue("@pfiDropOutReason", pfiDropOutReason);
         oCmd.Parameters.AddWithValue("@pfiChangeDate", pfiChangeDate);
         oCmd.Parameters.AddWithValue("@pfiSubsidyLevel", pfiSubsidyLevel);
         oCmd.Parameters.AddWithValue("@pfiCardNo", pfiCardNo);
@@ -189,6 +197,7 @@ pfiStatus
 pfiPerGuid=@pfiPerGuid,
 pfiPfGuid=@pfiPfGuid,
 pfiChange=@pfiChange,
+pfiDropOutReason=@pfiDropOutReason,
 pfiChangeDate=@pfiChangeDate,
 pfiSubsidyLevel=@pfiSubsidyLevel,
 pfiCardNo=@pfiCardNo,
@@ -204,6 +213,7 @@ where pfiGuid=@pfiGuid
         oCmd.Parameters.AddWithValue("@pfiPerGuid", pfiPerGuid);
         oCmd.Parameters.AddWithValue("@pfiPfGuid", pfiPfGuid);
         oCmd.Parameters.AddWithValue("@pfiChange", pfiChange);
+        oCmd.Parameters.AddWithValue("@pfiDropOutReason", pfiDropOutReason);
         oCmd.Parameters.AddWithValue("@pfiChangeDate", pfiChangeDate);
         oCmd.Parameters.AddWithValue("@pfiSubsidyLevel", pfiSubsidyLevel);
         oCmd.Parameters.AddWithValue("@pfiCardNo", pfiCardNo);
@@ -264,13 +274,16 @@ where  pfiStatus<>'D' and pfiGuid=@pfiGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID,
-(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) InsLv,
-pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID,perPensionIdentity,
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
+pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,ppEmployerRatio,ppLarboRatio,ppChangeDate
 from sy_PersonFamily 
 left join sy_Person on pfPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
+left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where pfGuid in (" + pfGuid + @") and pfStatus='A'
 order by perIDNumber ");
 

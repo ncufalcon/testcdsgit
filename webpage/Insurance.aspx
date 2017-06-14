@@ -10,7 +10,31 @@
             getddl("12", "#pi_Change");
             getddl("13", "#pp_Change");
             getddl("14", "#pfi_Change");
-            getddl("14", "#pgi_Change");
+            getddl("19", "#pgi_Change");
+
+            //click tabs to load data
+            var TabsAry = ["#tabs-1"];
+            $(document).on("click", "a[name='aTab']", function () {
+                //紀錄已選過的tab,未postback切換tab時不會刷新
+                if ($.inArray($(this).attr("href"), TabsAry) < 0) {
+                    TabsAry.push($(this).attr("href"));
+
+                    switch ($(this).attr("href")) {
+                        case "#tabs-2":
+                            getHealList();
+                            break;
+                        case "#tabs-3":
+                            getPensionList();
+                            break;
+                        case "#tabs-4":
+                            getFamilyInsList();
+                            break;
+                        case "#tabs-5":
+                            getGroupInsList();
+                            break;
+                    }
+                }
+            });
 
             //datepicker
             $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate").datepicker({
@@ -105,14 +129,14 @@
                         $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     },
                     success: function (data) {
-                        if (data == "error") {
-                            alert("InsuranceExport Error");
+                        var reStr = data.split(',');
+                        if (reStr[0] == "error") {
+                            alert(decodeURIComponent(reStr[1]));
                             $.unblockUI();
                             return false;
                         }
-
-                        if (data != null) {
-                            location.href = "../DOWNLOAD.aspx?FlexCel=" + data;
+                        else {
+                            location.href = "../DOWNLOAD.aspx?FlexCel=" + reStr[1];
                             $.unblockUI();
                         }
                     }
@@ -525,7 +549,7 @@
             //把匯出的radio加回去
             $(".ep[value='3']").prop("checked", true);
         }
-
+     
         function feedbackFun(type, str) {
             switch (type) {
                 case "LB":
@@ -534,6 +558,7 @@
                     $("#pl_eStatus").html("新增");
                     $("#pl_saveBtn").hide();
                     $("#pl_addBtn").show();
+                    getLaborList();
                     break;
                 case "H":
                     alert("完成");
@@ -541,6 +566,7 @@
                     $("#pi_eStatus").html("新增");
                     $("#pi_saveBtn").hide();
                     $("#pi_addBtn").show();
+                    getHealList();
                     break;
                 case "PP":
                     alert("完成");
@@ -548,6 +574,7 @@
                     $("#pp_eStatus").html("新增");
                     $("#pp_saveBtn").hide();
                     $("#pp_addBtn").show();
+                    getPensionList();
                     break;
                 case "PFI":
                     alert("完成");
@@ -555,6 +582,7 @@
                     $("#pf_eStatus").html("新增");
                     $("#pf_saveBtn").hide();
                     $("#pf_addBtn").show();
+                    getFamilyInsList();
                     break;
                 case "PGI":
                     alert("完成");
@@ -562,6 +590,7 @@
                     $("#pg_eStatus").html("新增");
                     $("#pg_saveBtn").hide();
                     $("#pg_addBtn").show();
+                    getGroupInsList();
                     break;
                 case "InsSalaryMod":
                     alert("完成");
@@ -571,12 +600,10 @@
                 case "error":
                     alert(str + " Error");
                     break;
+                case "exMsg":
+                    alert("Error: " + decodeURIComponent(str));
+                    break;
             }
-            getLaborList();
-            getHealList();
-            getPensionList();
-            getFamilyInsList();
-            getGroupInsList();
         }
     </script>
     <%--勞保--%>
@@ -809,13 +836,12 @@
     <%--健保--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            getHealList();
-
             //新增健保
             $(document).on("click", "#newHbtn", function () {
                 $("#pi_eStatus").html("新增");
                 $("#pi_saveBtn").hide();
                 $("#pi_addBtn").show();
+                $(".dor").hide();
                 ClearInput();
             });
 
@@ -829,6 +855,21 @@
                     $("input[name='hck']").each(function () {
                         $(this).prop("checked", false);
                     });
+                }
+            });
+
+            //退保原因說明別
+            $(".dor").hide();
+            $(document).on("change", "#pi_Change", function () {
+                $(".dor").hide();
+                if ($(this).val() == "02") {
+                    $(".dor").show();
+                    getddl("20", "#pi_DropOutReason");
+                }
+
+                if ($(this).val() == "07") {
+                    $(".dor").show();
+                    getddl("21", "#pi_DropOutReason");
                 }
             });
 
@@ -967,6 +1008,21 @@
                                 $("#pi_Change").val($(this).children("piChange").text().trim());
                                 $("#pi_InsurancePayroll").val($(this).children("piInsurancePayroll").text().trim());
                                 $("#pi_Ps").val($(this).children("piPs").text().trim());
+                                if ($(this).children("piChange").text().trim() != "02" && $(this).children("piChange").text().trim() != "07")
+                                    $(".dor").hide();
+                                else {
+                                    $(".dor").show();
+                                    if ($(this).children("piChange").text().trim() == "02") {
+                                        $(".dor").show();
+                                        getddl("20", "#pi_DropOutReason");
+                                    }
+
+                                    if ($(this).children("piChange").text().trim() == "07") {
+                                        $(".dor").show();
+                                        getddl("21", "#pi_DropOutReason");
+                                    }
+                                    $("#pi_DropOutReason").val($(this).children("piDropOutReason").text().trim());
+                                }
                             });
                         }
                     }
@@ -1037,8 +1093,6 @@
     <%--勞退--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            getPensionList();
-
             //新增勞退
             $(document).on("click", "#newPPbtn", function () {
                 $("#pp_eStatus").html("新增");
@@ -1208,7 +1262,7 @@
                     ddlPension: $("#ddlPensionExport").val()
                 },
                 error: function (xhr) {
-                    alert(xhr);
+                    console.log(xhr.responseText);
                 },
                 success: function (data) {
                     if (data == "error") {
@@ -1238,8 +1292,14 @@
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppLarboRatio").text() + '%</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppEmployerRatio").text() + '%</td>';
+                                if ($(this).children("ppLarboRatio").text().trim() == "")
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">0%</td>';
+                                else
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppLarboRatio").text() + '%</td>';
+                                if ($(this).children("ppEmployerRatio").text().trim() == "")
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">0%</td>';
+                                else
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppEmployerRatio").text() + '%</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppPayPayroll").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("ppChangeDate").text() + '</td>';
                                 tabstr += '</tr>';
@@ -1260,26 +1320,41 @@
     <%--眷屬健保--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            getFamilyInsList();
-
             //新增眷屬健保
             $(document).on("click", "#newPFbtn", function () {
                 $("#pf_eStatus").html("新增");
                 $("#pf_saveBtn").hide();
                 $("#pf_addBtn").show();
+                $(".dor").hide();
                 ClearInput();
             });
 
             //checkbox check all
-            $(document).on("click", "input[name='pp_checkall']", function () {
-                if ($("input[name='pp_checkall']").prop("checked")) {
-                    $("input[name='ppck']").each(function () {
+            $(document).on("click", "input[name='pfi_checkall']", function () {
+                if ($("input[name='pfi_checkall']").prop("checked")) {
+                    $("input[name='pfick']").each(function () {
                         $(this).prop("checked", true);
                     });
                 } else {
-                    $("input[name='ppck']").each(function () {
+                    $("input[name='pfick']").each(function () {
                         $(this).prop("checked", false);
                     });
+                }
+            });
+
+
+            //退保原因說明別
+            $(".dor").hide();
+            $(document).on("change", "#pi_Change", function () {
+                $(".dor").hide();
+                if ($(this).val() == "02") {
+                    $(".dor").show();
+                    getddl("20", "#pfi_DropOutReason");
+                }
+
+                if ($(this).val() == "03") {
+                    $(".dor").show();
+                    getddl("21", "#pfi_DropOutReason");
                 }
             });
 
@@ -1436,6 +1511,21 @@
                                 if ($(this).children("pfiAreaPerson").text().trim() == "Y")
                                     $("input[name='pfi_AreaPerson']").prop('checked', true);
                                 $("#pfi_Ps").val($(this).children("pfiPs").text().trim());
+                                if ($(this).children("pfiChange").text().trim() != "02" && $(this).children("pfiChange").text().trim() != "03")
+                                    $(".dor").hide();
+                                else {
+                                    $(".dor").show();
+                                    if ($(this).children("pfiChange").text().trim() == "02") {
+                                        $(".dor").show();
+                                        getddl("20", "#pfi_DropOutReason");
+                                    }
+
+                                    if ($(this).children("pfiChange").text().trim() == "03") {
+                                        $(".dor").show();
+                                        getddl("21", "#pfi_DropOutReason");
+                                    }
+                                    $("#pfi_DropOutReason").val($(this).children("pfiDropOutReason").text().trim());
+                                }
                             });
                         }
                     }
@@ -1466,7 +1556,7 @@
                         data = $.parseXML(data);
                         $("#pf_tab").empty();
                         var tabstr = '<thead><tr>';
-                        tabstr += '<th nowrap="nowrap"><input name="pp_checkall" type="checkbox" /></th>';
+                        tabstr += '<th nowrap="nowrap"><input name="pfi_checkall" type="checkbox" /></th>';
                         tabstr += '<th width="80" nowrap="nowrap">操作</th>';
                         tabstr += '<th nowrap="nowrap" >員工代號</th>';
                         tabstr += '<th nowrap="nowrap" >姓名</th>';
@@ -1506,8 +1596,6 @@
     <%--團保--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            getGroupInsList();
-
             //新增團保
             $(document).on("click", "#newPGbtn", function () {
                 $("#pg_eStatus").html("新增");
@@ -1517,13 +1605,13 @@
             });
 
             //checkbox check all
-            $(document).on("click", "input[name='pp_checkall']", function () {
-                if ($("input[name='pg_checkall']").prop("checked")) {
-                    $("input[name='pgck']").each(function () {
+            $(document).on("click", "input[name='pgi_checkall']", function () {
+                if ($("input[name='pgi_checkall']").prop("checked")) {
+                    $("input[name='pgick']").each(function () {
                         $(this).prop("checked", true);
                     });
                 } else {
-                    $("input[name='pgck']").each(function () {
+                    $("input[name='pgick']").each(function () {
                         $(this).prop("checked", false);
                     });
                 }
@@ -1724,7 +1812,7 @@
                         data = $.parseXML(data);
                         $("#pg_tab").empty();
                         var tabstr = '<thead><tr>';
-                        tabstr += '<th nowrap="nowrap"><input name="pp_checkall" type="checkbox" /></th>';
+                        tabstr += '<th nowrap="nowrap"><input name="pgi_checkall" type="checkbox" /></th>';
                         tabstr += '<th width="80" nowrap="nowrap">操作</th>';
                         tabstr += '<th nowrap="nowrap" >員工代號</th>';
                         tabstr += '<th nowrap="nowrap" >姓名</th>';
@@ -1737,7 +1825,7 @@
                         if ($(data).find("pgi_item").length > 0) {
                             $(data).find("pgi_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("pgiGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="pfick" type="checkbox" value="' + $(this).children("pgiGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="pgick" type="checkbox" value="' + $(this).children("pgiGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pgdelbtn" aid=' + $(this).children("pgiGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1810,10 +1898,14 @@
                                     tabstr += '<input type="hidden" name="im_gv" value="' + $(this).children("pPerGuid").text() + '" />';
                                     tabstr += '<input type="hidden" name="im_lSL" value="' + $(this).children("L_SL").text() + '" />';
                                     tabstr += '<input type="hidden" name="im_hSL" value="' + $(this).children("H_SL").text() + '" />';
-                                    tabstr += '<input type="hidden" name="im_pay" value="' + $(this).children("pay_i1").text() + '" />';
                                     tabstr += '<input type="hidden" name="bf_L" value="' + $(this).children("b_labor").text() + '" />';
                                     tabstr += '<input type="hidden" name="bf_H" value="' + $(this).children("b_ganbor").text() + '" />';
                                     tabstr += '<input type="hidden" name="bf_P" value="' + $(this).children("b_tahui").text() + '" />';
+                                    tabstr += '<input type="hidden" name="af_L" value="' + $(this).children("pay_i2").text() + '" />';
+                                    tabstr += '<input type="hidden" name="af_H" value="' + $(this).children("pay_i3").text() + '" />';
+                                    tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i4").text() + '" />';
+                                    tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
+                                    tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
                                     tabstr += '</td>';
                                     tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
                                     tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
@@ -1822,14 +1914,14 @@
                                     tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_labor").text() + '</td>';
                                     tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_ganbor").text() + '</td>';
                                     tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_tahui").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i1").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i2").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i3").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i4").text() + '</td>';
                                     tabstr += '</tr>';
                                 });
                             }
                             else
-                                tabstr += "<tr><td colspan='9'>查詢無資料</td></tr>";
+                                tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
                             tabstr += '</tbody>';
                             $("#InsModifyTab").append(tabstr);
                             $("#InsModifyTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
@@ -1890,12 +1982,12 @@
                 </div>
                 <div class="statabs margin10T">
                     <ul>
-                        <li><a href="#tabs-1">勞保</a></li>
-                        <li><a href="#tabs-2">健保</a></li>
-                        <li><a href="#tabs-3">勞退</a></li> 
-                        <li><a href="#tabs-4">眷屬健保</a></li>
-                        <li><a href="#tabs-5">團保</a></li>  
-                        <li><a href="#tabs-6">保薪調整</a></li>  
+                        <li><a href="#tabs-1" name="aTab">勞保</a></li>
+                        <li><a href="#tabs-2" name="aTab">健保</a></li>
+                        <li><a href="#tabs-3" name="aTab">勞退</a></li> 
+                        <li><a href="#tabs-4" name="aTab">眷屬健保</a></li>
+                        <li><a href="#tabs-5" name="aTab">團保</a></li>  
+                        <li><a href="#tabs-6" name="aTab">保薪調整</a></li>  
                     </ul>
                     <div id="tabs-1">
                         <div class="twocol margin15T">
@@ -2027,12 +2119,14 @@
                                     <td><input id="pi_ChangeDate" name="pi_ChangeDate" type="text" class="inputex width95" /></td>
                                     <td align="right"><div class="font-title titlebackicon" style="color:Red">異動別</div></td>
                                     <td><select id="pi_Change" name="pi_Change" class="inputex"></select></td>
-                                    <td align="right"><div class="font-title titlebackicon" style="color:Red">健保投保薪資</div></td>
-                                    <td><input id="pi_InsurancePayroll" name="pi_InsurancePayroll" type="text" class="inputex width95" /></td>
+                                    <td align="right" class="dor"><div class="font-title titlebackicon">退保原因說明別</div></td>
+                                    <td class="dor"><select id="pi_DropOutReason" name="pi_DropOutReason" class="inputex"></select></td>
                                 </tr>
                                 <tr>
+                                    <td align="right"><div class="font-title titlebackicon" style="color:Red">健保投保薪資</div></td>
+                                    <td><input id="pi_InsurancePayroll" name="pi_InsurancePayroll" type="text" class="inputex width95" /></td>
                                     <td align="right"><div class="font-title titlebackicon">備註</div></td>
-                                    <td colspan="5"><input id="pi_Ps" name="pi_Ps" type="text" class="inputex width99" /></td>
+                                    <td colspan="3"><input id="pi_Ps" name="pi_Ps" type="text" class="inputex width99" /></td>
                                 </tr>
                             </table>
                         </div>
@@ -2155,6 +2249,10 @@
                                     <td><input name="pfi_AreaPerson" type="checkbox" value="Y" /></td>
                                     <td align="right"><div class="font-title titlebackicon" style="color:Red">異動別</div></td>
                                     <td><select id="pfi_Change" name="pfi_Change" class="inputex"></select></td>
+                                    <td align="right" class="dor"><div class="font-title titlebackicon">退保原因說明別</div></td>
+                                    <td class="dor"><select id="pfi_DropOutReason" name="pfi_DropOutReason" class="inputex"></select></td>
+                                </tr>
+                                <tr>
                                     <td align="right"><div class="font-title titlebackicon font-red">補助代號</div></td>
                                     <td>
                                         <input id="pfi_SubsidyLevel" name="pfi_SubsidyLevel" type="text" class="inputex width70" /><input id="pf_SLGuid" name="pf_SLGuid" type="hidden" />
@@ -2162,8 +2260,6 @@
                                         <span id="pf_SLName" class="showStr"></span>
                                         <input id="pf_SLStatus" name="pf_SLStatus" type="hidden" />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td align="right"><div class="font-title titlebackicon font-red" >眷屬姓名</div></td>
                                     <td>
                                         <input id="pfi_FName" name="pfi_FName" type="text" class="inputex width60" /><input id="pf_PfGuid" name="pf_PfGuid" type="hidden" />
@@ -2173,10 +2269,10 @@
                                     </td>
                                     <td align="right"><div class="font-title titlebackicon" >眷屬身分證號</div></td>
                                     <td><span id="pfi_IDNum" class="showStr"></span></td>
-                                    <td align="right"><div class="font-title titlebackicon" >生日</div></td>
-                                    <td><span id="pfi_Birth" class="showStr"></span></td>
                                 </tr>
                                 <tr>
+                                    <td align="right"><div class="font-title titlebackicon" >生日</div></td>
+                                    <td><span id="pfi_Birth" class="showStr"></span></td>
                                     <td align="right"><div class="font-title titlebackicon">關係稱謂</div></td>
                                     <td><span id="pfi_Title" class="showStr"></span></td>
                                     <td align="right"><div class="font-title titlebackicon">備註</div></td>
