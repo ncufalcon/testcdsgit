@@ -555,10 +555,10 @@
                 if ($("input[name='pContract']:checked").length > 0 && $("#pFirstDate").val() != "") {
                     if ($("#pFirstDate").val().substring(4, 5) == "/" && $("#pFirstDate").val().substring(7, 8) == "/") {
                         var sday = new Date($("#pFirstDate").val());
-                        if ($("input[name='pContract']:checked").val() == "01")
-                            sday = new Date(sday.getFullYear(), sday.getMonth() + 1, sday.getDate());
-                        else
-                            sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate());
+                        //if ($("input[name='pContract']:checked").val() == "01")
+                        //    sday = new Date(sday.getFullYear(), sday.getMonth() + 1, sday.getDate());
+                        //else
+                        sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate());
                         $("#pContractDeadline").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
                     }
                 }
@@ -1164,6 +1164,7 @@
                                 $("#pbid").val($(this).children("pbGuid").text().trim());
                                 $("#pb_Creditor").val($(this).children("pbCreditor").text().trim());
                                 $("#pb_CreditorCost").val($(this).children("pbCreditorCost").text().trim());
+                                $("#pb_Ratio").val($(this).children("pbRatio").text().trim());
                                 $("#pb_Issued").val($(this).children("pbIssued").text().trim());
                                 $("#pb_IntoNumber").val($(this).children("pbIntoNumber").text().trim());
                                 $("#pb_IntoAccount").val($(this).children("pbIntoAccount").text().trim());
@@ -1229,7 +1230,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditorCost").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbRatio").text().trim()+'</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
                                 if ($(this).children("pbPayment").text() == "01")
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
@@ -1748,7 +1749,6 @@
                             <div class="twocol margin10B">
                                 <div class="right">
                                     <a href="javascript:void(0);" onclick="PbNewClick()" class="keybtn">新增法院強制扣繳來源</a>
-                                    <a href="javascript:void(0);" class="keybtn">重新計算分配比例</a>
                                 </div>
                             </div>
                             <div class="stripeMe font-normal">
@@ -1772,14 +1772,16 @@
                                             <td class="width15"><input id="pb_Creditor" name="pb_Creditor" type="text" class="inputex width100 pbtxt" /></td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >債權金額</div></td>
                                             <td class="width15"><input id="pb_CreditorCost" name="pb_CreditorCost" type="text" class="inputex width100 pbtxt" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >執行命令發文日期</div></td>
-                                            <td class="width15"><input id="pb_Issued" name="pb_Issued" type="text" class="inputex width100 pbtxt" /></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >移轉比例</div></td>
+                                            <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt num" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon font-red">解款行代號</div></td>
                                             <td><input id="pb_IntoNumber" name="pb_IntoNumber" type="text" class="inputex width100 pbtxt" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">收款人帳號</div></td>
                                             <td><input id="pb_IntoAccount" name="pb_IntoAccount" type="text" class="inputex width100 pbtxt" /></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >執行命令發文日期</div></td>
+                                            <td class="width15"><input id="pb_Issued" name="pb_Issued" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon font-red">戶名</div></td>

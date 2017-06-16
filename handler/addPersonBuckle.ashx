@@ -15,6 +15,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
             //眷屬資料
             string pb_Creditor = (context.Request.Form["pb_Creditor"] != null) ? context.Request.Form["pb_Creditor"].ToString() : "";
             string pb_CreditorCost = (context.Request.Form["pb_CreditorCost"] != null) ? context.Request.Form["pb_CreditorCost"].ToString() : "";
+            string pb_Ratio = (context.Request.Form["pb_Ratio"] != null) ? context.Request.Form["pb_Ratio"].ToString() : "";
             string pb_Issued = (context.Request.Form["pb_Issued"] != null) ? context.Request.Form["pb_Issued"].ToString() : "";
             string pb_IntoNumber = (context.Request.Form["pb_IntoNumber"] != null) ? context.Request.Form["pb_IntoNumber"].ToString() : "";
             string pb_IntoAccount = (context.Request.Form["pb_IntoAccount"] != null) ? context.Request.Form["pb_IntoAccount"].ToString() : "";
@@ -32,6 +33,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbPerGuid = PerID;
                     PB_Db._pbCreditor = pb_Creditor;
                     PB_Db._pbCreditorCost = decimal.Parse(pb_CreditorCost);
+                    PB_Db._pbRatio = pb_Ratio;
                     PB_Db._pbIssued = pb_Issued;
                     PB_Db._pbIntoNumber = pb_IntoNumber;
                     PB_Db._pbIntoAccount = pb_IntoAccount;
@@ -48,6 +50,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbGuid = id;
                     PB_Db._pbCreditor = pb_Creditor;
                     PB_Db._pbCreditorCost = decimal.Parse(pb_CreditorCost);
+                    PB_Db._pbRatio = pb_Ratio;
                     PB_Db._pbIssued = pb_Issued;
                     PB_Db._pbIntoNumber = pb_IntoNumber;
                     PB_Db._pbIntoAccount = pb_IntoAccount;
