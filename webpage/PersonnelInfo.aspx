@@ -1230,7 +1230,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditorCost").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbRatio").text().trim()+'</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbRatio").text().trim()+'%</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
                                 if ($(this).children("pbPayment").text() == "01")
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
