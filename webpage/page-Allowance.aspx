@@ -37,9 +37,6 @@
                            </td>
                        </tr>
                    </table>
-
-                        
-                    
                 </div>
 <%--                        <asp:FileUpload ID="file_upload" runat="server" />
                         <asp:LinkButton ID="lbtn_Import" runat="server" OnClick="btnb_Click" CssClass="keybtn">匯入</asp:LinkButton>--%>
@@ -105,10 +102,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                         <div id="div_Data" >
                         <div class="twocol margin15T">
                             <div class="right">
@@ -118,7 +111,6 @@
                         </div>
                         <div class="tabfixwidth" style="margin-top:20px;"">
                             <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px">
- 
                             </div><!-- overwidthblock -->
                         </div><!-- fixwidth -->
                         <div class="tabfixwidth" style="margin-top:20px;">
