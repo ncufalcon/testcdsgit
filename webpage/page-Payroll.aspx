@@ -10,58 +10,65 @@
                 <div class="twocol underlineT1 margin10T">
                     <div class="left font-light">首頁 / 薪資管理 / <span class="font-black font-bold">薪資管理</span></div>
                 </div>
-                <div class="twocol margin15T">
+<%--                <div class="twocol margin15T">
                     <div class="right">
                         <a href="" class="keybtn">計算薪資</a>
                         <a href="" class="keybtn">查詢</a>
                     </div>
-                </div>
+                </div>--%>
             </div>
             <br /><br />
             <div class="fixwidth">
 
-        <div class="tabfixwidth gentable font-normal" id="div_Search" style="display:none">
+        <div class=" gentable font-normal " id="div_Search" style="display:none; height:200px">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="width15" align="right">
                                         <div class="font-title titlebackicon">員工編號</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_PerNo" autofocus="autofocus" class="inputex width60"  />
-                                        <%--<img id="img_" src="../images/btn-search.gif"  onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>--%>
+                                        <input type="text" id="txt_PerNo_S" autofocus="autofocus" class="inputex width60"  />                                       
                                     </td>
                                     <td class="width15" align="right">
                                         <div class="font-title titlebackicon">姓名</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_PerName"  class="inputex width60" />
+                                        <input type="text" id="txt_PerName_S"  class="inputex width60" />
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td class="width15" align="right">
-                                        <div class="font-title titlebackicon">津貼代號</div>
+                                        <div class="font-title titlebackicon">公司名稱</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_AllowanceCode" class="inputex width60"  />
-                                        <%--<img src="../images/btn-search.gif" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>--%>
+                                        <input type="text" id="txt_Comp_S" class="inputex width60"  />
                                     </td>
                                     <td class="width15" align="right">
-                                        <div class="font-title titlebackicon">金額</div>
+                                        <div class="font-title titlebackicon">部門</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_Cost"  class="inputex width60" />
+                                        <input type="text" id="txt_Dep_S"  class="inputex width60" />
                                     </td>
                                 </tr>
 
                                 
                                 <tr>
                                     <td class="width15" align="right">
-                                        <div class="font-title titlebackicon">日期起迄</div>
+                                        <div class="font-title titlebackicon">計薪週期</div>
                                     </td>
                                     <td class="width35">
-                                        <input type="text" id="txt_Date_s" class="inputex width40"  />~
-                                        <input type="text" id="txt_Date_e" class="inputex width40"  />
+                                         <table>
+                                             <tr>
+                                                 <td style="width:150px">日期起:<span id="sp_sDate"></span></td>
+                                                 <td style="width:150px">日期迄:<span id="sp_eDate"></span></td>
+                                                 <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+                                                     <input id="txt_SalaryRang_S" type="hidden" />
+                                                 </td>
+                                             </tr>
+                                         </table>  
+<%--                                        <span id="sp_SalaryRang"></span>
+                                        <input type="hidden" id="txt_SalaryRang_S" class="inputex width40"  />--%>
                                     </td>
                                 </tr>
 
@@ -73,131 +80,17 @@
                             </div>
                         </div>
 
-        <div class="stripeMe fixTable" style="height:175px;" id="div_Data">
-<%--           <div class="right">
-               <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
-               <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Ins();">新增</a>
-           </div>--%>
+        <div class="stripeMe fixTable" id="div_Data">
+                    <div class="twocol margin15T">
+                            <div class="right">
+                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
+                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Ins();">新增</a>
+                            </div>
+                        </div>
 
-           <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px">
+           <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px;margin-top:20px;">
            </div>
-
-                <%--<table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <thead>
-                            <tr>
-                                <th nowrap="nowrap">員工編號</th>
-                                <th nowrap="nowrap">姓名</th>
-                                <th nowrap="nowrap">發薪年月</th>
-                                <th nowrap="nowrap">申報公司</th>
-                                <th nowrap="nowrap">部門</th>
-                                <th nowrap="nowrap">出勤天數</th>
-                                <th nowrap="nowrap">出勤時數</th>
-                                <th nowrap="nowrap">實付金額</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2017/01</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/12</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/11</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/10</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2017/01</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/09</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/08</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/07</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/06</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                            <tr>
-                                <td nowrap="nowrap">000001</td>
-                                <td nowrap="nowrap">黃榮廣</td>
-                                <td nowrap="nowrap">2016/05</td>
-                                <td nowrap="nowrap">CDST</td>
-                                <td nowrap="nowrap">中壢店</td>
-                                <td nowrap="nowrap">26</td>
-                                <td nowrap="nowrap">193</td>
-                                <td nowrap="nowrap">27000</td>
-                            </tr>
-                        </tbody>
-                    </table>--%>
+          
        </div><!-- overwidthblock -->
 
 
@@ -209,9 +102,9 @@
                 <!-- 詳細資料start -->
                 <div class="statabs margin10T">
                     <ul>
-                        <li><a href="#tabs-1">第一頁</a></li>
-                        <li><a href="#tabs-2">第二頁</a></li>
-                        <li><a href="#tabs-3">第三頁</a></li>
+                        <li><a href="#tabs-1">計薪資料一</a></li>
+                        <li><a href="#tabs-2">計薪資料二</a></li>
+                        <li><a href="#tabs-3" onclick="JsEven.BuckleList()">法扣</a></li>
                     </ul>
                     <div id="tabs-1">
                         <div class="gentable">
@@ -222,9 +115,9 @@
                                     <td class="width10" align="right"><div class="font-title titlebackicon">姓名</div></td>
                                     <td class="width15" id="td_PerName"></td>
                                     <td class="width10" align="right"><div class="font-title titlebackicon">申報公司</div></td>
-                                    <td class="width15" id="PerCom"></td>
+                                    <td class="width15" id="td_PerCom"></td>
                                     <td class="width10" align="right"><div class="font-title titlebackicon">部門</div></td>
-                                    <td class="width15" id="PerDep"></td>
+                                    <td class="width15" id="td_PerDep"></td>
                                 </tr>
                                 </table><br /><br />
                                 <table width="98%" border="0" cellspacing="0" cellpadding="0">
@@ -378,29 +271,10 @@
                                         <td><input type="text" class="inputex width95" id="txt_pIntertemporal" /></td>
                                     </tr>
                                 </table>
-                        </div>
-                        <div class="stripeMe font-normal">
-                            <table width="100%" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <th nowrap="nowrap">津貼扣款代號</th>
-                                    <th nowrap="nowrap">津貼扣款名稱</th>
-                                    <th nowrap="nowrap">加扣別</th>
-                                    <th nowrap="nowrap">金額</th>
-                                </tr>
-                                <tr>
-                                    <td nowrap="nowrap">0001</td>
-                                    <td nowrap="nowrap">捐款</td>
-                                    <td nowrap="nowrap">扣</td>
-                                    <td nowrap="nowrap">1000</td>
-                                </tr>
-                                <tr>
-                                    <td nowrap="nowrap">0002</td>
-                                    <td nowrap="nowrap">年節禮金</td>
-                                    <td nowrap="nowrap">加</td>
-                                    <td nowrap="nowrap">1000</td>
-                                </tr>
-
-                            </table>
+                        </div><br /><br />
+                        <hr />
+                         <span class="font-size3 font-bold ">個人津貼</span>
+                        <div class="stripeMe font-normal" id="div_All" >
                         </div>
                     </div><!-- tabs-1 -->
                     <div id="tabs-2">
@@ -410,12 +284,12 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
 
                                 <tr>
-                                    <td align="right"><div class="font-title titlebackicon">扣稅所得</div></td>
-                                    <td><input type="text" class="inputex width60" id="txt_pTaxDeduction" /></td>
                                     <td align="right"><div class="font-title titlebackicon">實付金額</div></td>
                                     <td><input type="text" class="inputex width60" id="txt_pPay"/></td>
                                     <td align="right"><div class="font-title titlebackicon">課稅所得</div></td>
                                     <td><input type="text" class="inputex width60" id="txt_pTaxation"/></td>
+                                    <td align="right">&nbsp;</td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">補充保費</div></td>
@@ -482,7 +356,8 @@
 
 
 
-            <input id="hid_Guid" type="hidden" />
+    <input id="hid_perGuid" type="hidden" />
+    <input id="hid_pPsmGuid" type="hidden" />
     <input id="hid_EditType" type="hidden" />
 
     <script type="text/javascript">
@@ -492,15 +367,27 @@
 
             Id:{
                 div_Search: 'div_Search',
-
+                div_Data: 'div_Data',
+                txt_PerNo_S:'txt_PerNo_S',
+                txt_PerName_S: 'txt_PerName_S',
+                txt_Comp_S: 'txt_Comp_S',
+                txt_Dep_S: 'txt_Dep_S',
+                txt_SalaryRang_S: 'txt_SalaryRang_S',
+                hid_perGuid: 'hid_perGuid',
+                hid_pPsmGuid: 'hid_pPsmGuid',
+                hid_EditType: 'hid_EditType',
+                div_MList: 'div_MList',
+                sp_sDate: 'sp_sDate',
+                sp_eDate: 'sp_eDate'
             },
 
             Page1Id: {
+                div_All:'div_All',
                 //人員資料
                 td_PerNo: 'td_PerNo',
                 td_PerName: 'td_PerName',
-                PerCom: 'td_PerCom',
-                PerDep: 'td_PerDep',
+                td_PerCom: 'td_PerCom',
+                td_PerDep: 'td_PerDep',
 
                 //加班類別
                 txt_pWeekdayTime1: 'txt_pWeekdayTime1',                                        
@@ -512,28 +399,28 @@
 
                 txt_pHolidayTime1: 'txt_pHolidayTime1',
                 txt_pHolidaySalary1:'txt_pHolidaySalary1',
-                txt_pHolidayTime1: 'txt_pHolidayTime2',
-                txt_pHolidaySalary1:'txt_pHolidaySalary2',
-                txt_pHolidayTime1: 'txt_pHolidayTime3',
-                txt_pHolidaySalary1:'txt_pHolidaySalary3',
-                txt_pHolidayTime1: 'txt_pHolidayTime4',
-                txt_pHolidaySalary1: 'txt_pHolidaySalary4',
+                txt_pHolidayTime2: 'txt_pHolidayTime2',
+                txt_pHolidaySalary2:'txt_pHolidaySalary2',
+                txt_pHolidayTime3: 'txt_pHolidayTime3',
+                txt_pHolidaySalary3:'txt_pHolidaySalary3',
+                txt_pHolidayTime4: 'txt_pHolidayTime4',
+                txt_pHolidaySalary4: 'txt_pHolidaySalary4',
 
                 txt_pOffDayTime1:'txt_pOffDayTime1',
                 txt_pOffDaySalary1:'txt_pOffDaySalary1',
-                txt_pOffDayTime1:'txt_pOffDayTime2',
-                txt_pOffDaySalary1:'txt_pOffDaySalary2',
-                txt_pOffDayTime1:'txt_pOffDayTime3',
-                txt_pOffDaySalary1:'txt_pOffDaySalary3',
+                txt_pOffDayTime2:'txt_pOffDayTime2',
+                txt_pOffDaySalary2:'txt_pOffDaySalary2',
+                txt_pOffDayTime3:'txt_pOffDayTime3',
+                txt_pOffDaySalary3:'txt_pOffDaySalary3',
 
                 txt_pNationalholidaysTime1:'txt_pNationalholidaysTime1',
                 txt_pNationalholidaysSalary1:'txt_pNationalholidaysSalary1',
-                txt_pNationalholidaysTime1:'txt_pNationalholidaysTime2',
-                txt_pNationalholidaysSalary1:'txt_pNationalholidaysSalary2',
-                txt_pNationalholidaysTime1:'txt_pNationalholidaysTime3',
-                txt_pNationalholidaysSalary1:'txt_pNationalholidaysSalary3',
-                txt_pNationalholidaysTime1:'txt_pNationalholidaysTime4',
-                txt_pNationalholidaysSalary1:'txt_pNationalholidaysSalary4',
+                txt_pNationalholidaysTime2:'txt_pNationalholidaysTime2',
+                txt_pNationalholidaysSalary2:'txt_pNationalholidaysSalary2',
+                txt_pNationalholidaysTime3:'txt_pNationalholidaysTime3',
+                txt_pNationalholidaysSalary3:'txt_pNationalholidaysSalary3',
+                txt_pNationalholidaysTime4:'txt_pNationalholidaysTime4',
+                txt_pNationalholidaysSalary4:'txt_pNationalholidaysSalary4',
 
                 //給薪假
                 txt_pAnnualLeaveTimes:'txt_pAnnualLeaveTimes',
@@ -547,39 +434,37 @@
                 txt_pMaternityLeaveTimes:'txt_pMaternityLeaveTimes',
                 txt_pMaternityLeaveSalary:'txt_pMaternityLeaveSalary',
                                    
-                pHolidayDutyFree:'pHolidayDutyFree',
-                pHolidayTaxation: 'pHolidayTaxation',
-                pNationalholidaysTaxation: 'pNationalholidaysTaxation',
-                pNationalholidaysDutyFree: 'pNationalholidaysDutyFree',
-                pHolidaySumDutyFree: 'pHolidaySumDutyFree',
-                pHolidaySumTaxation: 'pHolidaySumTaxation',
+                txt_pHolidayDutyFree: 'txt_pHolidayDutyFree',
+                txt_pHolidayTaxation: 'txt_pHolidayTaxation',
+                txt_pNationalholidaysTaxation: 'txt_pNationalholidaysTaxation',
+                txt_pNationalholidaysDutyFree: 'txt_pNationalholidaysDutyFree',
+                txt_pHolidaySumDutyFree: 'txt_pHolidaySumDutyFree',
+                txt_pHolidaySumTaxation: 'txt_pHolidaySumTaxation',
 
                 //出勤
-                pAttendanceDays: 'pAttendanceDays',
-                pAttendanceTimes: 'pAttendanceTimes',
+                txt_pAttendanceDays: 'txt_pAttendanceDays',
+                txt_pAttendanceTimes: 'txt_pAttendanceTimes',
 
-                pPayLeave: 'pPayLeave',
-                pOverTimeDutyfree: 'pOverTimeDutyfree',
-                pOverTimeTaxation: 'pOverTimeTaxation',
-                pIntertemporal: 'pIntertemporal',
+                txt_pPayLeave: 'txt_pPayLeave',
+                txt_pOverTimeDutyfree: 'txt_pOverTimeDutyfree',
+                txt_pOverTimeTaxation: 'txt_pOverTimeTaxation',
+                txt_pIntertemporal: 'txt_pIntertemporal',
 
 
 
 
             },
 
-            Page2Id: {
-                
-                pTaxDeduction: 'pTaxDeduction',
-                pPay: 'pPay',
-                pTaxation: 'pTaxation',
-                pPremium: 'pPremium',
-                pPersonInsurance: 'pPersonInsurance',
-                pPersonLabor: 'pPersonLabor',
-                pPersonPension: 'pPersonPension',
-                pCompanyPension: 'pCompanyPension',
-                pPersonPensionSum: 'pPersonPensionSum',
-                pCompanyPensionSum: 'pCompanyPensionSum',
+            Page2Id: {                
+                txt_pPay: 'txt_pPay',
+                txt_pTaxation: 'txt_pTaxation',
+                txt_pPremium: 'txt_pPremium',
+                txt_pPersonInsurance: 'txt_pPersonInsurance',
+                txt_pPersonLabor: 'txt_pPersonLabor',
+                txt_pPersonPension: 'txt_pPersonPension',
+                txt_pCompanyPension: 'txt_pCompanyPension',
+                txt_pPersonPensionSum: 'txt_pPersonPensionSum',
+                txt_pCompanyPensionSum: 'txt_pCompanyPensionSum',
             },
             Page3Id: {
                 div_Buckle: 'div_Buckle'
@@ -591,28 +476,27 @@
 
             List: function () {
                 // typ ='Y' 第一次進入畫面 top200
-                var PerNo = $('#' + this.Page2Id.txt_PerNo).val();
-                var PerName = $('#' + this.Page2Id.txt_PerName).val();
-                var Code = $('#' + this.Page2Id.txt_AllowanceCode).val()
-                var Cost = $('#' + this.Page2Id.txt_Cost).val();
-                var DateS = $('#' + this.Page2Id.txt_Date_s).val();
-                var DateE = $('#' + this.Page2Id.txt_Date_e).val();
+                var PerNo = $('#' + this.Id.txt_PerNo_S).val();
+                var PerName = $('#' + this.Id.txt_PerName_S).val();
+                var Com = $('#' + this.Id.txt_Comp_S).val()
+                var Dep = $('#' + this.Id.txt_Dep_S).val();
+                var rangDate = $('#' + this.Id.txt_SalaryRang_S).val();
                 var typ = "";
 
 
-                if (PerNo == "" && PerName == "" && Code == "" && Cost == "" && DateS == "" && DateE == "") {
+                if (PerNo == "" && PerName == "" && Com == "" && Dep == "" && rangDate == "" ) {
                     typ = "Y";
                 }
 
 
                 $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 var opt = {
-                    url: '../handler/Allowance/ashx_AllList.ashx',
+                    url: '../handler/Payroll/ashx_PayList.ashx',
                     v: 'PerNo=' + PerNo +
                        '&PerName=' + PerName +
-                       '&Code=' + Code +
-                       '&Cost=' + Cost +
-                       '&DateS=' + DateS + '&DateE=' + DateE + '&typ=' + typ,
+                       '&Company=' + Com +
+                       '&Dep=' + Dep +
+                       '&SalaryRang=' + rangDate + '&typ=' + typ,
                     type: 'xml',
                     success: function (xmldoc) {
 
@@ -621,22 +505,26 @@
                             case "DangerWord":
                                 CommonEven.goErrorPage();
                                 break;
+                            case "Timeout":
+                                alert('登入逾時');
+                                CommonEven.goLogin();
+                                break;
                             case "error":
                                 alert('資料發生錯誤，請聯絡管理者');
                                 break;
                             default:
-                                var div = document.getElementById(JsEven.Page2Id.div_MList);
+                                var div = document.getElementById(JsEven.Id.div_MList);
                                 var dList = xmldoc.getElementsByTagName('dList');
                                 var dView = xmldoc.getElementsByTagName('dView');
 
                                 if (dView.length != 0) {
-                                    CmFmCommon.Xsl(xmldoc, '../xslt/Allowance/xsl_AllList.xsl', div);
+                                    CmFmCommon.Xsl(xmldoc, '../xslt/PayRoll/xsl_Payroll.xsl', div);
                                     LicEven.tblClass();
 
                                 } else { div.innerHTML = '目前無任何資料'; }
 
-                                document.getElementById(JsEven.Page2Id.div_Search).style.display = "none";
-                                document.getElementById(JsEven.Page2Id.div_Data).style.display = "block";
+                                document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                                document.getElementById(JsEven.Id.div_Data).style.display = "block";
                                 //tableHeadFixer();
                                 //$.fn.tableHeadFixer($('.table'));
                                 break;
@@ -647,33 +535,182 @@
                 CmFmCommon.ajax(opt);
             },
 
+            AllList: function (perGuid, pPsmGuid) {
+
+
+                var opt = {
+                    url: '../handler/Payroll/ashx_AllList.ashx',
+                    v: 'psaPerGuid=' + perGuid +
+                       '&psaPsmGuid=' + pPsmGuid,
+                    type: 'xml',
+                    success: function (xmldoc) {
+
+                        var msg = CommonEven.XmlNodeGetValue(xmldoc, "dList");
+                        switch (msg) {
+                            case "DangerWord":
+                                CommonEven.goErrorPage();
+                                break;
+                            case "Timeout":
+                                alert('登入逾時');
+                                CommonEven.goLogin();
+                                break;
+                            case "error":
+                                alert('資料發生錯誤，請聯絡管理者');
+                                break;
+                            default:
+                                var div = document.getElementById(JsEven.Page1Id.div_All);
+                                var dList = xmldoc.getElementsByTagName('dList');
+                                var dView = xmldoc.getElementsByTagName('dView');
+
+                                if (dView.length != 0) {
+                                    CmFmCommon.Xsl(xmldoc, '../xslt/PayRoll/xsl_Allowance.xsl', div);
+                                    LicEven.tblClass();
+
+                                } else { div.innerHTML = '目前無任何資料'; }
+
+                                document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                                document.getElementById(JsEven.Id.div_Data).style.display = "block";
+                                //tableHeadFixer();
+                                //$.fn.tableHeadFixer($('.table'));
+                                break;
+                        }
+                    }
+                }
+                CmFmCommon.ajax(opt);
+            },
+
+
+            BuckleList: function () {
+
+                var perGuid = $('#' + this.Id.hid_perGuid).val();
+                var pPsmGuid = $('#' + this.Id.hid_pPsmGuid).val();
+
+                if (perGuid != '' && pPsmGuid != '') {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    var opt = {
+                        url: '../handler/Payroll/ashx_BuckleList.ashx',
+                        v: 'psbPerGuid=' + perGuid +
+                           '&psbPsmGuid=' + pPsmGuid,
+                        type: 'xml',
+                        success: function (xmldoc) {
+
+                            var msg = CommonEven.XmlNodeGetValue(xmldoc, "dList");
+                            switch (msg) {
+                                case "DangerWord":
+                                    CommonEven.goErrorPage();
+                                    break;
+                                case "Timeout":
+                                    alert('登入逾時');
+                                    CommonEven.goLogin();
+                                    break;
+                                case "error":
+                                    alert('資料發生錯誤，請聯絡管理者');
+                                    break;
+                                default:
+                                    var div = document.getElementById(JsEven.Page3Id.div_Buckle);
+                                    var dList = xmldoc.getElementsByTagName('dList');
+                                    var dView = xmldoc.getElementsByTagName('dView');
+
+                                    if (dView.length != 0) {
+                                        CmFmCommon.Xsl(xmldoc, '../xslt/PayRoll/xsl_Buckle.xsl', div);
+                                        LicEven.tblClass();
+
+                                    } else { div.innerHTML = '目前無任何資料'; }
+                                    break;
+                            }
+                            $.unblockUI();
+                        }
+                    }
+                    CmFmCommon.ajax(opt);
+                }
+            },
+
+
             view: function (a) {
                 var guid = a.getAttribute('guid');
                 $.ajax({
                     type: "POST",
-                    url: '../handler/Allowance/ashx_AllView.ashx',
+                    url: '../handler/Payroll/ashx_SelPayroll.ashx',
                     data: 'guid=' + guid,
                     dataType: 'xml',  //xml, json, script, text, html
                     success: function (xmldoc) {
                         var CView = xmldoc.getElementsByTagName('dView');
                         if (CView.length == 1) {
                             var e = CView[0];
-                            $('#' + JsEven.Page2Id.txt_PerNo_m).val(CommonEven.XmlNodeGetValue(e, "perNo"));
-                            $('#' + JsEven.Page2Id.sp_PerName_m).html(CommonEven.XmlNodeGetValue(e, "perName"));
-                            $('#' + JsEven.Page2Id.hid_PerGuid_m).val(CommonEven.XmlNodeGetValue(e, "paPerGuid"));
-                            $('#' + JsEven.Page2Id.hid_Guid).val(CommonEven.XmlNodeGetValue(e, "paGuid"));
+                            var perGuid = CommonEven.XmlNodeGetValue(e, "pPerGuid");
+                            var pPsmGuid = CommonEven.XmlNodeGetValue(e, "pPsmGuid");
 
-                            $('#' + JsEven.Page2Id.txt_AllowanceCode_m).val(CommonEven.XmlNodeGetValue(e, "siItemCode"));
-                            $('#' + JsEven.Page2Id.sp_CodeName_m).html(CommonEven.XmlNodeGetValue(e, "siItemName"));
-                            $('#' + JsEven.Page2Id.hid_CodeGuid_m).val(CommonEven.XmlNodeGetValue(e, "paAllowanceCode"));
+                            $('#' + JsEven.Id.hid_perGuid).val(perGuid);
+                            $('#' + JsEven.Id.hid_pPsmGuid).val(pPsmGuid);
+                            $('#' + JsEven.Id.hid_EditType).val("Edit");
 
-                            $('#' + JsEven.Page2Id.txt_Pric_m).val(CommonEven.XmlNodeGetValue(e, "paPrice"));
-                            $('#' + JsEven.Page2Id.txt_Quantity_m).val(CommonEven.XmlNodeGetValue(e, "paQuantity"));
-                            $('#' + JsEven.Page2Id.txt_Ps_m).val(CommonEven.XmlNodeGetValue(e, "paPs"));
-                            $('#' + JsEven.Page2Id.txt_Cost_m).val(CommonEven.XmlNodeGetValue(e, "paCost"));
-                            $('#' + JsEven.Page2Id.txt_Date_m).val(CommonEven.XmlNodeGetValue(e, "paDate"));
-                            $('#' + JsEven.Page2Id.sp_Status).html("修改");
-                            $('#' + JsEven.Page2Id.hid_EditType).val("Up");
+
+                            $('#' + JsEven.Page1Id.td_PerNo).html(CommonEven.XmlNodeGetValue(e, "pPerNo"));
+                            $('#' + JsEven.Page1Id.td_PerName).html(CommonEven.XmlNodeGetValue(e, "pPerName"));
+                            $('#' + JsEven.Page1Id.td_PerCom).html(CommonEven.XmlNodeGetValue(e, "pPerCompanyName"));
+                            $('#' + JsEven.Page1Id.td_PerDep).html(CommonEven.XmlNodeGetValue(e, "pPerDep"));
+
+                            $('#' + JsEven.Page1Id.txt_pWeekdayTime1).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime1"));
+                            $('#' + JsEven.Page1Id.txt_pWeekdayTime2).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime2"));
+                            $('#' + JsEven.Page1Id.txt_pWeekdayTime3).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime3"));
+                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary1).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary1"));
+                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary2).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary2"));
+                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary3).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary3"));                            
+                            $('#' + JsEven.Page1Id.txt_pOffDayTime1).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime1"));
+                            $('#' + JsEven.Page1Id.txt_pOffDayTime2).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime2"));
+                            $('#' + JsEven.Page1Id.txt_pOffDayTime3).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime3"));
+                            $('#' + JsEven.Page1Id.txt_pOffDaySalary1).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary1"));
+                            $('#' + JsEven.Page1Id.txt_pOffDaySalary2).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary2"));
+                            $('#' + JsEven.Page1Id.txt_pOffDaySalary3).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary3"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayTime1).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime1"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayTime2).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime2"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayTime3).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime3"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayTime4).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime4"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySalary1).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary1"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySalary2).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary2"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySalary3).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary3"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySalary4).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary4"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime1"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime2"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime3"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime4"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary1"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary2"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary3"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary4"));                            
+                            $('#' + JsEven.Page1Id.txt_pAnnualLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pAnnualLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pMarriageLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMarriageLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pMarriageLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMarriageLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pSickLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pSickLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pSickLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pSickLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pFuneralLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pFuneralLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pFuneralLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pFuneralLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pMaternityLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pMaternityLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidayDutyFree"));
+                            $('#' + JsEven.Page1Id.txt_pHolidayTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidayTaxation"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTaxation).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTaxation"));
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysDutyFree).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysDutyFree"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySumDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidaySumDutyFree"));
+                            $('#' + JsEven.Page1Id.txt_pHolidaySumTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidaySumTaxation"));
+                            $('#' + JsEven.Page1Id.txt_pAttendanceDays).val(CommonEven.XmlNodeGetValue(e, "pAttendanceDays"));
+                            $('#' + JsEven.Page1Id.txt_pAttendanceTimes).val(CommonEven.XmlNodeGetValue(e, "pAttendanceTimes"));
+                            //$('#' + JsEven.Page1Id.txt_pPayLeave).val(CommonEven.XmlNodeGetValue(e, "pPayLeave"));
+                            $('#' + JsEven.Page1Id.txt_pOverTimeDutyfree).val(CommonEven.XmlNodeGetValue(e, "pOverTimeDutyfree"));
+                            $('#' + JsEven.Page1Id.txt_pOverTimeTaxation).val(CommonEven.XmlNodeGetValue(e, "pOverTimeTaxation"));
+                            $('#' + JsEven.Page1Id.txt_pIntertemporal).val(CommonEven.XmlNodeGetValue(e, "pIntertemporal"));
+
+                            $('#' + JsEven.Page2Id.txt_pPay).val(CommonEven.XmlNodeGetValue(e, "pPay"));
+                            $('#' + JsEven.Page2Id.txt_pTaxation).val(CommonEven.XmlNodeGetValue(e, "pTaxation"));
+                            $('#' + JsEven.Page2Id.txt_pPremium).val(CommonEven.XmlNodeGetValue(e, "pPremium"));
+                            $('#' + JsEven.Page2Id.txt_pPersonInsurance).val(CommonEven.XmlNodeGetValue(e, "pPersonInsurance"));
+                            $('#' + JsEven.Page2Id.txt_pPersonLabor).val(CommonEven.XmlNodeGetValue(e, "pPersonLabor"));
+                            $('#' + JsEven.Page2Id.txt_pPersonPension).val(CommonEven.XmlNodeGetValue(e, "pPersonPension"));
+                            $('#' + JsEven.Page2Id.txt_pCompanyPension).val(CommonEven.XmlNodeGetValue(e, "pCompanyPension"));
+                            $('#' + JsEven.Page2Id.txt_pPersonPensionSum).val(CommonEven.XmlNodeGetValue(e, "pPersonPensionSum"));
+                            $('#' + JsEven.Page2Id.txt_pCompanyPensionSum).val(CommonEven.XmlNodeGetValue(e, "pCompanyPensionSum"));
+                            JsEven.AllList(perGuid, pPsmGuid);
                         }
                         else {
                             alert('資料發生錯誤')
@@ -687,12 +724,19 @@
             },
 
 
+
+
+
+
+
+
+
             Del: function (a) {
                 if (confirm('刪除後無法回復，您確定要刪除嗎?')) {
                     var guid = a.getAttribute('Guid');
                     $.ajax({
                         type: "POST",
-                        url: '../handler/Allowance/ashx_AllEdit.ashx',
+                        url: '',
                         data: 'guid=' + guid + '&typ=Del',
                         dataType: 'text',  //xml, json, script, text, html
                         success: function (msg) {
@@ -790,11 +834,7 @@
 
             },
 
-            Ins: function () {
-                LicEven.ClearInput(this.Page2Id.tb_Edit);
-                $('#' + this.Page2Id.sp_Status).val("新增");
-                $('#' + this.Page2Id.hid_EditType).val("Ins");
-            },
+
 
 
             countCost: function () {
@@ -831,8 +871,8 @@
             },
 
             reSearch: function () {
-                document.getElementById(JsEven.Page2Id.div_Search).style.display = "block";
-                document.getElementById(JsEven.Page2Id.div_Data).style.display = "none";
+                document.getElementById(JsEven.Id.div_Search).style.display = "block";
+                document.getElementById(JsEven.Id.div_Data).style.display = "none";
             },
 
 
@@ -988,29 +1028,69 @@
                 });
             
 
-        }
+            },
+            //查詢視窗
+            openfancybox: function (item) {
+                switch ($(item).attr("id")) {
+                    case "img_Company":
+                        link = "SearchWindow.aspx?v=Comp";
+                        break;
+                    case "img_Dep":
+                        link = "SearchWindow.aspx?v=Dep";
+                        break;
+                    case "img_Person":
+                        link = "SearchWindow.aspx?v=Personnel";
+                        break;
+                    case "img_SalaryRange":
+                        link = "SearchWindow.aspx?v=SalaryRange";
+                        break;
+                }
+                $.fancybox({
+                    href: link,
+                    type: "iframe",
+                    minHeight: "400",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic'
+                });
+            },
             
 
         }
 
 
-        function setReturnValue(v, gv, no, name) {
-            switch (v) {
-                case "Personnel":
-                    $("#" + JsEven.Page2Id.txt_PerNo_m).val(no);
-                    $("#" + JsEven.Page2Id.sp_PerName_m).html(name);
-                    $("#" + JsEven.Page2Id.hid_PerGuid_m).val(gv);
+        //fancybox回傳
+        function setReturnValue(type, gv, str, str2) {
+            switch (type) {
+                case "Comp":
+                    $("#" + JsEven.id.txt_CompanyNo).val(str);
+                    $("#" + JsEven.id.hid_CGuid).val(gv);
+                    $("#" + JsEven.id.sp_CName).html(str2);
+                    $("#" + JsEven.id.sp_CName).css("color", "");
+                    $("#" + JsEven.id.hid_CStatus).val("Y");
                     break;
-                case "Allowance":
-                    $("#" + JsEven.Page2Id.txt_AllowanceCode_m).val(no);
-                    $("#" + JsEven.Page2Id.sp_CodeName_m).html(name);
-                    $("#" + JsEven.Page2Id.hid_CodeGuid_m).val(gv);
+                case "Dep":
+                    $("#" + JsEven.id.txt_Dep).val(str);
+                    $("#" + JsEven.id.hid_DepGuid).val(gv);
+                    $("#" + JsEven.id.sp_DepName).html(str2);
+                    $("#" + JsEven.id.sp_DepName).css("color", "");
+                    $("#" + JsEven.id.hid_Depstatus).val("Y");
+                    break;
+                case "Personnel":
+                    $("#" + JsEven.id.txt_PerNo).val(str);
+                    $("#" + JsEven.id.sp_PerName).html(str2);
+                    $("#" + JsEven.id.hid_PerGuid).val(str);
+                    break;
+                case "SalaryRange":
+                    $("#" + JsEven.Id.sp_sDate).html(str);
+                    $("#" + JsEven.Id.sp_eDate).html(str2);
+                    $("#" + JsEven.Id.txt_SalaryRang_S).val(gv);
                     break;
             }
         }
 
         document.body.onload = function () {
-            //JsEven.Inin();
+            JsEven.Inin();
             $("#" + JsEven.Page2Id.hid_EditType).val("Ins");
             $("#" + JsEven.Page2Id.txt_Date_m + ",#" + JsEven.Page2Id.txt_Date_s + ",#" + JsEven.Page2Id.txt_Date_e).datepicker({
                 changeMonth: true,
