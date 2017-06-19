@@ -212,6 +212,7 @@
                             $("#div_holiday_list").append(str_html);
                             $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                             $(".stripeMe tr:even").addClass("alt");
+                            $(".fixTable").tableHeadFixer();
                             $("#span_search").hide();
                             $("#btn_holiday_search").show();
                             $("div[name=div_holiday_data]").show();
@@ -346,6 +347,7 @@
                             $("#div_sr_list").append(str_html);
                             $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                             $(".stripeMe tr:even").addClass("alt");
+                            $(".fixTable").tableHeadFixer();
                             $("#span_sr_search").hide();
                             $("#btn_sr_search").show();
                             $("div[name=div_sr_data]").show();

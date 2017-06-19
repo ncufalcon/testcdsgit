@@ -5,6 +5,10 @@ using System.Web;
 using System.Data;
 using System.Collections.Generic;
 using System.Web.SessionState;
+using System.Text;
+using System.Configuration;
+using System.Data.SqlClient;
+
 
 public class page_WorkHours : IHttpHandler, IRequiresSessionState
 {
@@ -40,6 +44,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
         public string aStatus { get; set; }//
         public string perNo { get; set; }//
         public string perName { get; set; }//
+        public string cbName { get; set; }//
     }
     //人員資料
     public class perTooL
@@ -60,6 +65,21 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
         public string phName { get; set; }//
         public string leaRemark { get; set; }//
     }
+
+    //原始時數資料
+    public class ahTooL
+    {
+        public string ah_guid { get; set; }//
+        public string ah_perGuid { get; set; }//
+        public string ah_perNo { get; set; }//
+        public string ah_AttendanceDate { get; set; }//
+        public string ah_Times { get; set; }//
+        public string ah_Remark { get; set; }//
+        public string ah_Itme { get; set; }//
+        public string perGuid { get; set; }//
+        public string perName { get; set; }//
+    }
+
     sy_Attendance_DB at_db = new sy_Attendance_DB();
     public void ProcessRequest(HttpContext context)
     {
@@ -111,6 +131,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                             e.aStatus = dt.Rows[i]["aStatus"].ToString().Trim();//
                             e.perNo = dt.Rows[i]["perNo"].ToString().Trim();//
                             e.perName = dt.Rows[i]["perName"].ToString().Trim();//
+                            e.cbName = dt.Rows[i]["cbName"].ToString().Trim();//
                             eList.Add(e);
                         }
                         System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -128,93 +149,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     context.Response.Write("error");
                 }
                 break;
-            //刪除
-            case "del_hours":
-                string del_guid = string.IsNullOrEmpty(context.Request.Form["del_guid"]) ? "" : context.Request.Form["del_guid"].ToString().Trim();
-                try
-                {
-                    at_db._aGuid = del_guid;
-                    at_db.DeleteAttendance();
-                    context.Response.Write("OK");
-                }
-                catch (Exception ex){
-                    context.Response.Write("error");
-                }
-                break;
 
-            //新增/修改
-            case "mod_hours":
-                string mod_aGuid = string.IsNullOrEmpty(context.Request.Form["mod_aGuid"]) ? "" : context.Request.Form["mod_aGuid"].ToString().Trim();
-                string mod_aperGuid = string.IsNullOrEmpty(context.Request.Form["mod_aperGuid"]) ? "" : context.Request.Form["mod_aperGuid"].ToString().Trim();
-                string mod_aAttendanceDate = string.IsNullOrEmpty(context.Request.Form["mod_aAttendanceDate"]) ? "" : context.Request.Form["mod_aAttendanceDate"].ToString().Trim();
-                string mod_aDays = string.IsNullOrEmpty(context.Request.Form["mod_aDays"]) ? "0" : context.Request.Form["mod_aDays"].ToString().Trim();
-                string mod_aTimes = string.IsNullOrEmpty(context.Request.Form["mod_aTimes"]) ? "0" : context.Request.Form["mod_aTimes"].ToString().Trim();
-                string mod_aLeave = string.IsNullOrEmpty(context.Request.Form["mod_aLeave"]) ? "0" : context.Request.Form["mod_aLeave"].ToString().Trim();
-                string mod_aGeneralOverTime1 = string.IsNullOrEmpty(context.Request.Form["mod_aGeneralOverTime1"]) ? "0" : context.Request.Form["mod_aGeneralOverTime1"].ToString().Trim();
-                string mod_aGeneralOverTime2 = string.IsNullOrEmpty(context.Request.Form["mod_aGeneralOverTime2"]) ? "0" : context.Request.Form["mod_aGeneralOverTime2"].ToString().Trim();
-                string mod_aGeneralOverTime3 = string.IsNullOrEmpty(context.Request.Form["mod_aGeneralOverTime3"]) ? "0" : context.Request.Form["mod_aGeneralOverTime3"].ToString().Trim();
-                string mod_aOffDayOverTime1 = string.IsNullOrEmpty(context.Request.Form["mod_aOffDayOverTime1"]) ? "0" : context.Request.Form["mod_aOffDayOverTime1"].ToString().Trim();
-                string mod_aOffDayOverTime2 = string.IsNullOrEmpty(context.Request.Form["mod_aOffDayOverTime2"]) ? "0" : context.Request.Form["mod_aOffDayOverTime2"].ToString().Trim();
-                string mod_aOffDayOverTime3 = string.IsNullOrEmpty(context.Request.Form["mod_aOffDayOverTime3"]) ? "0" : context.Request.Form["mod_aOffDayOverTime3"].ToString().Trim();
-                string mod_aHolidayOverTimes = string.IsNullOrEmpty(context.Request.Form["mod_aHolidayOverTimes"]) ? "0" : context.Request.Form["mod_aHolidayOverTimes"].ToString().Trim();
-                string mod_aHolidayOverTime1 = string.IsNullOrEmpty(context.Request.Form["mod_aHolidayOverTime1"]) ? "0" : context.Request.Form["mod_aHolidayOverTime1"].ToString().Trim();
-                string mod_aHolidayOverTime2 = string.IsNullOrEmpty(context.Request.Form["mod_aHolidayOverTime2"]) ? "0" : context.Request.Form["mod_aHolidayOverTime2"].ToString().Trim();
-                string mod_aHolidayOverTime3 = string.IsNullOrEmpty(context.Request.Form["mod_aHolidayOverTime3"]) ? "0" : context.Request.Form["mod_aHolidayOverTime3"].ToString().Trim();
-                string mod_aNationalholidays = string.IsNullOrEmpty(context.Request.Form["mod_aNationalholidays"]) ? "0" : context.Request.Form["mod_aNationalholidays"].ToString().Trim();
-                string mod_aNationalholidays1 = string.IsNullOrEmpty(context.Request.Form["mod_aNationalholidays1"]) ? "0" : context.Request.Form["mod_aNationalholidays1"].ToString().Trim();
-                string mod_aNationalholidays2 = string.IsNullOrEmpty(context.Request.Form["mod_aNationalholidays2"]) ? "0" : context.Request.Form["mod_aNationalholidays2"].ToString().Trim();
-                string mod_aNationalholidays3 = string.IsNullOrEmpty(context.Request.Form["mod_aNationalholidays3"]) ? "0" : context.Request.Form["mod_aNationalholidays3"].ToString().Trim();
-                string mod_aSpecialholiday = string.IsNullOrEmpty(context.Request.Form["mod_aSpecialholiday"]) ? "0" : context.Request.Form["mod_aSpecialholiday"].ToString().Trim();
-                string mod_aSpecialholiday1 = string.IsNullOrEmpty(context.Request.Form["mod_aSpecialholiday1"]) ? "0" : context.Request.Form["mod_aSpecialholiday1"].ToString().Trim();
-                string mod_aSpecialholiday2 = string.IsNullOrEmpty(context.Request.Form["mod_aSpecialholiday2"]) ? "0" : context.Request.Form["mod_aSpecialholiday2"].ToString().Trim();
-                string mod_aSpecialholiday3 = string.IsNullOrEmpty(context.Request.Form["mod_aSpecialholiday3"]) ? "0" : context.Request.Form["mod_aSpecialholiday3"].ToString().Trim();
-                string mod_aRemark = string.IsNullOrEmpty(context.Request.Form["mod_aRemark"]) ? "" : context.Request.Form["mod_aRemark"].ToString().Trim();
-                string mod_aItme = string.IsNullOrEmpty(context.Request.Form["mod_aItme"]) ? "" : context.Request.Form["mod_aItme"].ToString().Trim();
-                string mod_type = string.IsNullOrEmpty(context.Request.Form["mod_type"]) ? "" : context.Request.Form["mod_type"].ToString().Trim();
-
-                try
-                {
-                    at_db._aperGuid = mod_aperGuid;
-                    at_db._aAttendanceDate = mod_aAttendanceDate;
-                    at_db._aDays = Convert.ToInt32(mod_aDays);
-                    at_db._aTimes = Convert.ToDecimal(mod_aTimes);
-                    at_db._aLeave = Convert.ToDecimal(mod_aLeave);
-                    at_db._aGeneralOverTime1 = Convert.ToDecimal(mod_aGeneralOverTime1);
-                    at_db._aGeneralOverTime2 = Convert.ToDecimal(mod_aGeneralOverTime2);
-                    at_db._aGeneralOverTime3 = Convert.ToDecimal(mod_aGeneralOverTime3);
-                    at_db._aOffDayOverTime1 = Convert.ToDecimal(mod_aOffDayOverTime1);
-                    at_db._aOffDayOverTime2 = Convert.ToDecimal(mod_aOffDayOverTime2);
-                    at_db._aOffDayOverTime3 = Convert.ToDecimal(mod_aOffDayOverTime3);
-                    at_db._aHolidayOverTimes = Convert.ToDecimal(mod_aHolidayOverTimes);
-                    at_db._aHolidayOverTime1 = Convert.ToDecimal(mod_aHolidayOverTime1);
-                    at_db._aHolidayOverTime2 = Convert.ToDecimal(mod_aHolidayOverTime2);
-                    at_db._aHolidayOverTime3 = Convert.ToDecimal(mod_aHolidayOverTime3);
-                    at_db._aNationalholidays = Convert.ToDecimal(mod_aNationalholidays);
-                    at_db._aNationalholidays1 = Convert.ToDecimal(mod_aNationalholidays1);
-                    at_db._aNationalholidays2 = Convert.ToDecimal(mod_aNationalholidays2);
-                    at_db._aNationalholidays3 = Convert.ToDecimal(mod_aNationalholidays3);
-                    at_db._aSpecialholiday = Convert.ToDecimal(mod_aSpecialholiday);
-                    at_db._aSpecialholiday1 = Convert.ToDecimal(mod_aSpecialholiday1);
-                    at_db._aSpecialholiday2 = Convert.ToDecimal(mod_aSpecialholiday2);
-                    at_db._aSpecialholiday3 = Convert.ToDecimal(mod_aSpecialholiday3);
-                    at_db._aRemark = mod_aRemark;
-                    at_db._aItme = mod_aItme;
-                    at_db._aModdifyId = "王胖爺";
-                    if (mod_type=="新增") {
-                        at_db._aGuid = Guid.NewGuid().ToString();
-                        at_db._aCreateId = "王胖爺";
-                        at_db.InsertAttendance();
-                    }
-                    if (mod_type=="修改") {
-                        at_db._aGuid = mod_aGuid;
-                        at_db.UpdateAttendance();
-                    }
-                    context.Response.Write("OK");
-                }
-                catch (Exception ex){
-                    context.Response.Write("error");
-                }
-                break;
 
             //撈人員資料
             case "load_person":
@@ -302,6 +237,171 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     }
                 }
                 catch (Exception ex) {
+                    context.Response.Write("error");
+                }
+                break;
+
+            //撈原始時數資料
+            case "load_oldhours":
+                string old_dates = string.IsNullOrEmpty(context.Request.Form["str_dates"]) ? "" : context.Request.Form["str_dates"].ToString().Trim();
+                string old_datee = string.IsNullOrEmpty(context.Request.Form["str_datee"]) ? "" : context.Request.Form["str_datee"].ToString().Trim();
+                string old_keyword = string.IsNullOrEmpty(context.Request.Form["str_keywords"]) ? "" : context.Request.Form["str_keywords"].ToString().Trim();
+                string old_ahguid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
+                try
+                {
+                    at_db._str_keyword = old_keyword;
+                    at_db._str_dates = old_dates;
+                    at_db._str_datee = old_datee;
+                    at_db._ah_guid = old_ahguid;
+                    DataTable dt = at_db.SelectAttendanceHours();
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<ahTooL> eList = new List<ahTooL>();
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            ahTooL e = new ahTooL();
+                            e.ah_guid = dt.Rows[i]["ah_guid"].ToString().Trim();//
+                            e.ah_perGuid = dt.Rows[i]["ah_perGuid"].ToString().Trim();//
+                            e.ah_perNo = dt.Rows[i]["ah_perNo"].ToString().Trim();//
+                            e.ah_AttendanceDate = dt.Rows[i]["ah_AttendanceDate"].ToString().Trim();//
+                            e.ah_Times = dt.Rows[i]["ah_Times"].ToString().Trim();//
+                            e.ah_Remark = dt.Rows[i]["ah_Remark"].ToString().Trim();//
+                            e.ah_Itme = dt.Rows[i]["ah_Itme"].ToString().Trim();//
+                            e.perGuid = dt.Rows[i]["perGuid"].ToString().Trim();//
+                            e.perName = dt.Rows[i]["perName"].ToString().Trim();//
+                            eList.Add(e);
+                        }
+                        System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        //加了下面這行才不會超過預設json的最大長度
+                        objSerializer.MaxJsonLength = 2147483644;
+                        string ans = objSerializer.Serialize(eList);  //new
+                        context.Response.ContentType = "application/json";
+                        context.Response.Write(ans);
+                    }
+                    else {
+                        context.Response.Write("nodata");
+                    }
+                }
+                catch (Exception ex){
+                    context.Response.Write("error");
+                }
+                break;
+            //刪除 原始時數資料
+            case "del_hours":
+                string del_guid = string.IsNullOrEmpty(context.Request.Form["del_guid"]) ? "" : context.Request.Form["del_guid"].ToString().Trim();
+                try
+                {
+                    at_db._ah_guid = del_guid;
+                    at_db.DeleteAttendanceHours();
+                    context.Response.Write("OK");
+                }
+                catch (Exception ex){
+                    context.Response.Write("error");
+                }
+                break;
+
+            //新增/修改
+            case "mod_hours":
+                string mod_aGuid = string.IsNullOrEmpty(context.Request.Form["mod_aGuid"]) ? "" : context.Request.Form["mod_aGuid"].ToString().Trim();
+                string mod_aperGuid = string.IsNullOrEmpty(context.Request.Form["mod_aperGuid"]) ? "" : context.Request.Form["mod_aperGuid"].ToString().Trim();
+                string mod_aAttendanceDate = string.IsNullOrEmpty(context.Request.Form["mod_aAttendanceDate"]) ? "" : context.Request.Form["mod_aAttendanceDate"].ToString().Trim();
+                string mod_aTimes = string.IsNullOrEmpty(context.Request.Form["mod_aTimes"]) ? "0" : context.Request.Form["mod_aTimes"].ToString().Trim();
+                string mod_aRemark = string.IsNullOrEmpty(context.Request.Form["mod_aRemark"]) ? "" : context.Request.Form["mod_aRemark"].ToString().Trim();
+                string mod_aItme = string.IsNullOrEmpty(context.Request.Form["mod_aItme"]) ? "" : context.Request.Form["mod_aItme"].ToString().Trim();
+                string mod_type = string.IsNullOrEmpty(context.Request.Form["mod_type"]) ? "" : context.Request.Form["mod_type"].ToString().Trim();
+
+                try
+                {
+                    at_db._ah_perGuid = mod_aperGuid;
+                    at_db._ah_AttendanceDate = mod_aAttendanceDate;
+                    at_db._ah_Times = Convert.ToDecimal(mod_aTimes);
+                    at_db._ah_Remark = mod_aRemark;
+                    at_db._ah_Itme = mod_aItme;
+                    at_db._ah_ModdifyId = "王胖爺";
+                    if (mod_type=="新增") {
+                        at_db._ah_guid = Guid.NewGuid().ToString();
+                        at_db._ah_CreateId = "王胖爺";
+                        at_db.InsertAttendanceHours();
+                    }
+                    if (mod_type=="修改") {
+                        at_db._ah_guid = mod_aGuid;
+                        at_db.UpdateAttendanceHours();
+                    }
+                    context.Response.Write("OK");
+                }
+                catch (Exception ex){
+                    context.Response.Write("error");
+                }
+                break;
+            //計算工時
+            case "hours_go":
+                string go_ranges = string.IsNullOrEmpty(context.Request.Form["str_ranges"]) ? "" : context.Request.Form["str_ranges"].ToString().Trim();
+                string go_rangee = string.IsNullOrEmpty(context.Request.Form["str_rangee"]) ? "" : context.Request.Form["str_rangee"].ToString().Trim();
+                string str_userid = "Wang";
+                try {
+                    //跑工時計算SP
+                    SqlCommand oCmd2 = new SqlCommand();
+                    oCmd2.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(@"sp_workhours");
+                    oCmd2.CommandTimeout = 120;
+                    oCmd2.CommandText = sb.ToString();
+                    oCmd2.CommandType = CommandType.StoredProcedure;
+                    oCmd2.Connection.Open();
+                    SqlDataAdapter oda = new SqlDataAdapter(oCmd2);
+                    oCmd2.Parameters.AddWithValue("@create_id", str_userid);
+                    oCmd2.Parameters.AddWithValue("@ranges", go_ranges);
+                    oCmd2.Parameters.AddWithValue("@rangee", go_rangee);
+                    oCmd2.ExecuteNonQuery();
+                    oCmd2.Connection.Close();
+                    oCmd2.Connection.Dispose();
+                    oCmd2.Dispose();
+                    context.Response.Write("ok");
+                }
+                catch (Exception ex) {
+                    context.Response.Write("error");
+                }
+                break;
+            //撈原始工時資料 by  perGuid date
+            case "load_historyhours":
+                string history_pguid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
+                string history_date = string.IsNullOrEmpty(context.Request.Form["str_date"]) ? "" : context.Request.Form["str_date"].ToString().Trim();
+                try
+                {
+                    at_db._ah_perGuid = history_pguid;
+                    at_db._ah_AttendanceDate = history_date;
+                    DataTable dt = at_db.SelectAttendanceHours();
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<ahTooL> eList = new List<ahTooL>();
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            ahTooL e = new ahTooL();
+                            e.ah_guid = dt.Rows[i]["ah_guid"].ToString().Trim();//
+                            e.ah_perGuid = dt.Rows[i]["ah_perGuid"].ToString().Trim();//
+                            e.ah_perNo = dt.Rows[i]["ah_perNo"].ToString().Trim();//
+                            e.ah_AttendanceDate = dt.Rows[i]["ah_AttendanceDate"].ToString().Trim();//
+                            e.ah_Times = dt.Rows[i]["ah_Times"].ToString().Trim();//
+                            e.ah_Remark = dt.Rows[i]["ah_Remark"].ToString().Trim();//
+                            e.ah_Itme = dt.Rows[i]["ah_Itme"].ToString().Trim();//
+                            e.perGuid = dt.Rows[i]["perGuid"].ToString().Trim();//
+                            e.perName = dt.Rows[i]["perName"].ToString().Trim();//
+                            eList.Add(e);
+                        }
+                        System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        //加了下面這行才不會超過預設json的最大長度
+                        objSerializer.MaxJsonLength = 2147483644;
+                        string ans = objSerializer.Serialize(eList);  //new
+                        context.Response.ContentType = "application/json";
+                        context.Response.Write(ans);
+                    }
+                    else
+                    {
+                        context.Response.Write("nodata");
+                    }
+                }
+                catch (Exception ex)
+                {
                     context.Response.Write("error");
                 }
                 break;

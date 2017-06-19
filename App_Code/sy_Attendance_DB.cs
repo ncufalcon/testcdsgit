@@ -17,6 +17,8 @@ public class sy_Attendance_DB
     string str_dates = string.Empty;
     string str_datee = string.Empty;
     string str_perno = string.Empty;
+    string dates = string.Empty;
+    string datee = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -34,6 +36,14 @@ public class sy_Attendance_DB
     public string _str_perno
     {
         set { str_perno = value; }
+    }
+    public string _dates
+    {
+        set { dates = value; }
+    }
+    public string _datee
+    {
+        set { datee = value; }
     }
     #endregion
 
@@ -196,6 +206,84 @@ public class sy_Attendance_DB
         set { aModdifyDate = value; }
     }
     #endregion
+
+    #region sy_Attendance_hours 私用
+    string ah_guid = string.Empty;
+    string ah_perGuid = string.Empty;
+    string ah_perNo = string.Empty;
+    string ah_AttendanceDate = string.Empty;
+    decimal ah_Times;
+    string ah_Remark = string.Empty;
+    string ah_Itme = string.Empty;
+    string ah_Status = string.Empty;
+    string ah_CreateId = string.Empty;
+    string ah_ModdifyId = string.Empty;
+    DateTime ah_CreateDate;
+    DateTime ah_ModdifyDate;
+    #endregion
+    #region sy_Attendance_hours 公用
+    public string _ah_guid
+    {
+        set
+        { ah_guid = value; }
+    }
+    public string _ah_perGuid
+    {
+        set
+        { ah_perGuid = value; }
+    }
+    public string _ah_perNo
+    {
+        set
+        { ah_perNo = value; }
+    }
+    public string _ah_AttendanceDate
+    {
+        set
+        { ah_AttendanceDate = value; }
+    }
+    public decimal _ah_Times
+    {
+        set
+        { ah_Times = value; }
+    }
+    public string _ah_Remark
+    {
+        set
+        { ah_Remark = value; }
+    }
+    public string _ah_Itme
+    {
+        set
+        { ah_Itme = value; }
+    }
+    public string _ah_Status
+    {
+        set
+        { ah_Status = value; }
+    }
+    public string _ah_CreateId
+    {
+        set
+        { ah_CreateId = value; }
+    }
+    public string _ah_ModdifyId
+    {
+        set
+        { ah_ModdifyId = value; }
+    }
+    public DateTime _ah_CreateDate
+    {
+        set
+        { ah_CreateDate = value; }
+    }
+    public DateTime _ah_ModdifyDate
+    {
+        set
+        { ah_ModdifyDate = value; }
+    }
+    #endregion
+
     public sy_Attendance_DB()
     {
         //
@@ -219,8 +307,9 @@ public class sy_Attendance_DB
                 show_value.Append(@"  
                     select top 100 aGuid,aperGuid,aAttendanceDate,aDays,aTimes,aLeave,aGeneralOverTime1,aGeneralOverTime2,aGeneralOverTime3,aOffDayOverTime1,aOffDayOverTime2,aOffDayOverTime3
                         ,aHolidayOverTimes,aHolidayOverTime1,aHolidayOverTime2,aHolidayOverTime3,aNationalholidays,aNationalholidays1,aNationalholidays2,aNationalholidays3,aNationalholidays
-                        ,aSpecialholiday,aSpecialholiday1,aSpecialholiday2,aSpecialholiday3,aRemark,aItme,aStatus,aCreateId,aCreateDate,aModdifyId,aModdifyDate,perNo,perName
+                        ,aSpecialholiday,aSpecialholiday1,aSpecialholiday2,aSpecialholiday3,aRemark,aItme,aStatus,aCreateId,aCreateDate,aModdifyId,aModdifyDate,perNo,perName,cbName
                     from sy_Attendance left join sy_Person on aperGuid=perGuid
+                    left join sy_CodeBranches on perDep=cbGuid
                     where aStatus='A'
                 ");
             }
@@ -228,13 +317,14 @@ public class sy_Attendance_DB
                 show_value.Append(@"  
                     select aGuid,aperGuid,aAttendanceDate,aDays,aTimes,aLeave,aGeneralOverTime1,aGeneralOverTime2,aGeneralOverTime3,aOffDayOverTime1,aOffDayOverTime2,aOffDayOverTime3
                         ,aHolidayOverTimes,aHolidayOverTime1,aHolidayOverTime2,aHolidayOverTime3,aNationalholidays,aNationalholidays1,aNationalholidays2,aNationalholidays3,aNationalholidays
-                        ,aSpecialholiday,aSpecialholiday1,aSpecialholiday2,aSpecialholiday3,aRemark,aItme,aStatus,aCreateId,aCreateDate,aModdifyId,aModdifyDate,perNo,perName
+                        ,aSpecialholiday,aSpecialholiday1,aSpecialholiday2,aSpecialholiday3,aRemark,aItme,aStatus,aCreateId,aCreateDate,aModdifyId,aModdifyDate,perNo,perName,cbName
                     from sy_Attendance left join sy_Person on aperGuid=perGuid
+                    left join sy_CodeBranches on perDep=cbGuid
                     where aStatus='A'
                 ");
                 if (str_keyword != "")
                 {
-                    show_value.Append(@" and (upper(aAttendanceDate) LIKE '%' + upper(@str_keyword) + '%' or upper(perNo) LIKE '%' + upper(@str_keyword) + '%' or upper(perName) LIKE '%' + upper(@str_keyword) + '%' )  ");
+                    show_value.Append(@" and ( upper(perNo) LIKE '%' + upper(@str_keyword) + '%' or upper(perName) LIKE '%' + upper(@str_keyword) + '%' )  ");
                     thisCommand.Parameters.AddWithValue("@str_keyword", str_keyword);
                 }
                 if (aGuid != "")
@@ -288,194 +378,7 @@ public class sy_Attendance_DB
 
     }
     #endregion
-
-    #region 刪除 sy_Attendance update status="D"
-    public void DeleteAttendance()
-    {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                update sy_Attendance set aStatus='D'  where aGuid=@aGuid               
-            ");
-
-            thisCommand.Parameters.AddWithValue("@aGuid", aGuid);
-
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
-    }
-    #endregion
-
-    #region 新增 sy_Attendance
-    public void InsertAttendance()
-    {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                insert into sy_Attendance 
-                (
-                    aGuid,aperGuid,aAttendanceDate,aDays,aTimes,aLeave,aGeneralOverTime1,aGeneralOverTime2,aGeneralOverTime3,aOffDayOverTime1,aOffDayOverTime2,aOffDayOverTime3
-                    ,aHolidayOverTimes,aHolidayOverTime1,aHolidayOverTime2,aHolidayOverTime3,aNationalholidays,aNationalholidays1,aNationalholidays2,aNationalholidays3
-                    ,aSpecialholiday,aSpecialholiday1,aSpecialholiday2,aSpecialholiday3,aRemark,aItme,aStatus,aCreateId,aCreateDate,aModdifyId,aModdifyDate
-                ) 
-                values
-                (
-                    @aGuid,@aperGuid,@aAttendanceDate,@aDays,@aTimes,@aLeave,@aGeneralOverTime1,@aGeneralOverTime2,@aGeneralOverTime3,@aOffDayOverTime1,@aOffDayOverTime2,@aOffDayOverTime3
-                    ,@aHolidayOverTimes,@aHolidayOverTime1,@aHolidayOverTime2,@aHolidayOverTime3,@aNationalholidays,@aNationalholidays1,@aNationalholidays2,@aNationalholidays3
-                    ,@aSpecialholiday,@aSpecialholiday1,@aSpecialholiday2,@aSpecialholiday3,@aRemark,@aItme,'A',@aCreateId,@aCreateDate,@aModdifyId,@aModdifyDate
-                ) 
-            ");
-            thisCommand.Parameters.AddWithValue("@aGuid", aGuid);
-            thisCommand.Parameters.AddWithValue("@aperGuid", aperGuid );
-            thisCommand.Parameters.AddWithValue("@aAttendanceDate",aAttendanceDate );
-            thisCommand.Parameters.AddWithValue("@aDays",aDays );
-            thisCommand.Parameters.AddWithValue("@aTimes",aTimes );
-            thisCommand.Parameters.AddWithValue("@aLeave",aLeave );
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime1",aGeneralOverTime1 );
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime2",aGeneralOverTime2 );
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime3",aGeneralOverTime3 );
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime1",aOffDayOverTime1 );
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime2",aOffDayOverTime2 );
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime3",aOffDayOverTime3 );
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTimes",aHolidayOverTimes );
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime1",aHolidayOverTime1 );
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime2",aHolidayOverTime2 );
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime3",aHolidayOverTime3 );
-            thisCommand.Parameters.AddWithValue("@aNationalholidays",aNationalholidays );
-            thisCommand.Parameters.AddWithValue("@aNationalholidays1",aNationalholidays1 );
-            thisCommand.Parameters.AddWithValue("@aNationalholidays2",aNationalholidays2 );
-            thisCommand.Parameters.AddWithValue("@aNationalholidays3",aNationalholidays3 );
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday",aSpecialholiday );
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday1",aSpecialholiday1 );
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday2",aSpecialholiday2 );
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday3",aSpecialholiday3 );
-            thisCommand.Parameters.AddWithValue("@aRemark",aRemark );
-            thisCommand.Parameters.AddWithValue("@aItme",aItme );
-            thisCommand.Parameters.AddWithValue("@aCreateId", aCreateId);
-            thisCommand.Parameters.AddWithValue("@aModdifyId", aModdifyId);
-            thisCommand.Parameters.AddWithValue("@aCreateDate", DateTime.Now);
-            thisCommand.Parameters.AddWithValue("@aModdifyDate", DateTime.Now);
-
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
-    }
-    #endregion
-
-    #region 修改 sy_Attendance
-    public void UpdateAttendance()
-    {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                update sy_Attendance set
-                    aperGuid=@aperGuid,aAttendanceDate=@aAttendanceDate,aDays=@aDays,aTimes=@aTimes,aLeave=@aLeave
-                    ,aGeneralOverTime1=@aGeneralOverTime1,aGeneralOverTime2=@aGeneralOverTime2,aGeneralOverTime3=@aGeneralOverTime3
-                    ,aOffDayOverTime1=@aOffDayOverTime1,aOffDayOverTime2=@aOffDayOverTime2,aOffDayOverTime3=@aOffDayOverTime3
-                    ,aHolidayOverTimes=@aHolidayOverTimes,aHolidayOverTime1=@aHolidayOverTime1
-                    ,aHolidayOverTime2=@aHolidayOverTime2,aHolidayOverTime3=@aHolidayOverTime3
-                    ,aNationalholidays=@aNationalholidays,aNationalholidays1=@aNationalholidays1
-                    ,aNationalholidays2=@aNationalholidays2,aNationalholidays3=@aNationalholidays3
-                    ,aSpecialholiday=@aSpecialholiday,aSpecialholiday1=@aSpecialholiday1
-                    ,aSpecialholiday2=@aSpecialholiday2,aSpecialholiday3=@aSpecialholiday3
-                    ,aRemark=@aRemark,aItme=@aItme,aModdifyId=@aModdifyId,aModdifyDate=@aModdifyDate
-                where aGuid=@aGuid
-            ");
-            thisCommand.Parameters.AddWithValue("@aGuid", aGuid);
-            thisCommand.Parameters.AddWithValue("@aperGuid", aperGuid);
-            thisCommand.Parameters.AddWithValue("@aAttendanceDate", aAttendanceDate);
-            thisCommand.Parameters.AddWithValue("@aDays", aDays);
-            thisCommand.Parameters.AddWithValue("@aTimes", aTimes);
-            thisCommand.Parameters.AddWithValue("@aLeave", aLeave);
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime1", aGeneralOverTime1);
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime2", aGeneralOverTime2);
-            thisCommand.Parameters.AddWithValue("@aGeneralOverTime3", aGeneralOverTime3);
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime1", aOffDayOverTime1);
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime2", aOffDayOverTime2);
-            thisCommand.Parameters.AddWithValue("@aOffDayOverTime3", aOffDayOverTime3);
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTimes", aHolidayOverTimes);
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime1", aHolidayOverTime1);
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime2", aHolidayOverTime2);
-            thisCommand.Parameters.AddWithValue("@aHolidayOverTime3", aHolidayOverTime3);
-            thisCommand.Parameters.AddWithValue("@aNationalholidays", aNationalholidays);
-            thisCommand.Parameters.AddWithValue("@aNationalholidays1", aNationalholidays1);
-            thisCommand.Parameters.AddWithValue("@aNationalholidays2", aNationalholidays2);
-            thisCommand.Parameters.AddWithValue("@aNationalholidays3", aNationalholidays3);
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday", aSpecialholiday);
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday1", aSpecialholiday1);
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday2", aSpecialholiday2);
-            thisCommand.Parameters.AddWithValue("@aSpecialholiday3", aSpecialholiday3);
-            thisCommand.Parameters.AddWithValue("@aRemark", aRemark);
-            thisCommand.Parameters.AddWithValue("@aItme", aItme);
-            thisCommand.Parameters.AddWithValue("@aModdifyId", aModdifyId);
-            thisCommand.Parameters.AddWithValue("@aModdifyDate", DateTime.Now);
-
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
-    }
-    #endregion
-
+    
     #region 撈 人員資料 條件 人員GUID
     public DataTable SelectDept()
     {
@@ -614,4 +517,270 @@ public class sy_Attendance_DB
     }
     #endregion
 
+    #region 撈 sy_Attendance_hours 條件 keyword or GUID or dates datee
+    public DataTable SelectAttendanceHours()
+    {
+        DataTable dt = new DataTable();
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            thisConnection.Open();
+            //如果都沒有查詢條件 只顯示最新100
+            if (str_keyword == "" && str_dates == "" && str_datee == "" && ah_guid == "" && (ah_perGuid=="" || ah_AttendanceDate==""))
+            {
+                show_value.Append(@"  
+                    select top 100 ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,perGuid,perName
+                    from sy_Attendance_hours left join sy_Person on ah_perNo=perNO
+                    where ah_Status='A'
+                ");
+            }
+            else
+            {
+                show_value.Append(@"  
+                    select ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,perGuid,perName
+                    from sy_Attendance_hours left join sy_Person on ah_perNo=perNO
+                    where ah_Status='A'
+                ");
+                if (str_keyword != "")
+                {
+                    show_value.Append(@" and (  upper(perNo) LIKE '%' + upper(@str_keyword) + '%' or upper(perName) LIKE '%' + upper(@str_keyword) + '%' )  ");
+                    thisCommand.Parameters.AddWithValue("@str_keyword", str_keyword);
+                }
+                if (ah_guid != "")
+                {
+                    show_value.Append(@" and ah_guid=@ah_guid  ");
+                    thisCommand.Parameters.AddWithValue("@ah_guid", ah_guid);
+                }
+                if (ah_perGuid != "" && ah_AttendanceDate != "")
+                {
+                    show_value.Append(@" and ah_perGuid=@ah_perGuid and  ah_AttendanceDate=@ah_AttendanceDate ");
+                    thisCommand.Parameters.AddWithValue("@ah_perGuid", ah_perGuid);
+                    thisCommand.Parameters.AddWithValue("@ah_AttendanceDate", ah_AttendanceDate);
+                }
+                if (str_dates != "" && str_datee != "")
+                {
+                    show_value.Append(@" and (ah_AttendanceDate between @str_dates and @str_datee)  ");
+                    thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
+                    thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
+                }
+                if (str_dates != "" && str_datee == "")
+                {
+                    show_value.Append(@" and ah_AttendanceDate>@str_dates  ");
+                    thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
+                }
+                if (str_dates == "" && str_datee != "")
+                {
+                    show_value.Append(@" and ah_AttendanceDate<@str_datee  ");
+                    thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
+                }
+
+            }
+            show_value.Append(@"  
+                order by ah_AttendanceDate DESC,perNo ASC
+            ");
+
+
+            thisCommand.CommandType = CommandType.Text;
+            thisCommand.CommandText = show_value.ToString();
+            oda.SelectCommand = thisCommand;
+            oda.Fill(dt);
+        }
+        catch (Exception)
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        return dt;
+
+    }
+    #endregion
+
+    #region 刪除 sy_Attendance_hours update status="D"
+    public void DeleteAttendanceHours()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Attendance_hours set ah_Status='D',ah_ModdifyId=@ah_ModdifyId,ah_ModdifyDate=@ah_ModdifyDate  where ah_guid=@ah_guid               
+            ");
+
+            thisCommand.Parameters.AddWithValue("@ah_guid", ah_guid);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyId", ah_ModdifyId);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 新增 sy_Attendance_hours
+    public void InsertAttendanceHours()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                declare @perno nvarchar(20);
+                select @perno = perNo from sy_Person where perGuid=@ah_perGuid;
+                insert into sy_Attendance_hours 
+                (
+                    ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,ah_Status,ah_CreateId,ah_CreateDate,ah_ModdifyId,ah_ModdifyDate,ah_flag
+                ) 
+                values
+                (
+                    @ah_guid,@ah_perGuid,@perno,@ah_AttendanceDate,@ah_Times,@ah_Remark,@ah_Itme,'A',@ah_CreateId,@ah_CreateDate,@ah_ModdifyId,@ah_ModdifyDate,'N'
+                ) 
+            ");
+            thisCommand.Parameters.AddWithValue("@ah_guid", ah_guid);
+            thisCommand.Parameters.AddWithValue("@ah_perGuid", ah_perGuid);
+            thisCommand.Parameters.AddWithValue("@ah_AttendanceDate", ah_AttendanceDate);
+            thisCommand.Parameters.AddWithValue("@ah_Times", ah_Times);
+            thisCommand.Parameters.AddWithValue("@ah_Remark", ah_Remark);
+            thisCommand.Parameters.AddWithValue("@ah_Itme", ah_Itme);
+            thisCommand.Parameters.AddWithValue("@ah_CreateId", ah_CreateId);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyId", ah_ModdifyId);
+            thisCommand.Parameters.AddWithValue("@ah_CreateDate", DateTime.Now);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 修改 sy_Attendance_hours
+    public void UpdateAttendanceHours()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                declare @perno nvarchar(20);
+                select @perno = perNo from sy_Person where perGuid=@ah_perGuid;
+                update sy_Attendance_hours set 
+                ah_perGuid=@ah_perGuid,ah_perNo=@perno,ah_AttendanceDate=@ah_AttendanceDate,ah_Times=@ah_Times,ah_Remark=@ah_Remark,ah_Itme=@ah_Itme,ah_ModdifyId=@ah_ModdifyId,ah_ModdifyDate=@ah_ModdifyDate
+                where ah_guid=@ah_guid
+            ");
+            thisCommand.Parameters.AddWithValue("@ah_guid", ah_guid);
+            thisCommand.Parameters.AddWithValue("@ah_perGuid", ah_perGuid);
+            thisCommand.Parameters.AddWithValue("@ah_AttendanceDate", ah_AttendanceDate);
+            thisCommand.Parameters.AddWithValue("@ah_Times", ah_Times);
+            thisCommand.Parameters.AddWithValue("@ah_Remark", ah_Remark);
+            thisCommand.Parameters.AddWithValue("@ah_Itme", ah_Itme);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyId", ah_ModdifyId);
+            thisCommand.Parameters.AddWithValue("@ah_ModdifyDate", DateTime.Now);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 匯入刪除時間區間的資料 sy_Attendance_hours
+    public void deleteAttendanceHoursForImport()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                delete from sy_Attendance_hours  where ah_flag='Y' and ah_AttendanceDate between @dates and @datee
+            ");
+            thisCommand.Parameters.AddWithValue("@dates", dates);
+            thisCommand.Parameters.AddWithValue("@datee", datee);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
 }

@@ -102,12 +102,14 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
                         List<codeTooL> codeList = new List<codeTooL>();
                         for (int i = 0; i < dt_codegroup16.Rows.Count; i++)
                         {
-                            codeTooL e = new codeTooL();
-                            //e.aperGuid  = dt_a.Rows[i]["aperGuid "].ToString().Trim();
-                            e.code_value = dt_codegroup16.Rows[i]["code_value"].ToString().Trim();
-                            e.code_desc = dt_codegroup16.Rows[i]["code_desc"].ToString().Trim();
-                            e.siGuid = dt_codegroup16.Rows[i]["siGuid"].ToString().Trim();
-                            codeList.Add(e);
+                            if (dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="03" && dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="04" && dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="05") {
+                                codeTooL e = new codeTooL();
+                                //e.aperGuid  = dt_a.Rows[i]["aperGuid "].ToString().Trim();
+                                e.code_value = dt_codegroup16.Rows[i]["code_value"].ToString().Trim();
+                                e.code_desc = dt_codegroup16.Rows[i]["code_desc"].ToString().Trim();
+                                e.siGuid = dt_codegroup16.Rows[i]["siGuid"].ToString().Trim();
+                                codeList.Add(e);
+                            }
                         }
                         System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                         string ans = objSerializer.Serialize(codeList);  //new
