@@ -1344,16 +1344,16 @@
 
 
             //退保原因說明別
-            $(".dor").hide();
-            $(document).on("change", "#pi_Change", function () {
-                $(".dor").hide();
+            $(".pfidor").hide();
+            $(document).on("change", "#pfi_Change", function () {
+                $(".pfidor").hide();
                 if ($(this).val() == "02") {
-                    $(".dor").show();
+                    $(".pfidor").show();
                     getddl("20", "#pfi_DropOutReason");
                 }
 
                 if ($(this).val() == "03") {
-                    $(".dor").show();
+                    $(".pfidor").show();
                     getddl("21", "#pfi_DropOutReason");
                 }
             });
@@ -2249,8 +2249,8 @@
                                     <td><input name="pfi_AreaPerson" type="checkbox" value="Y" /></td>
                                     <td align="right"><div class="font-title titlebackicon" style="color:Red">異動別</div></td>
                                     <td><select id="pfi_Change" name="pfi_Change" class="inputex"></select></td>
-                                    <td align="right" class="dor"><div class="font-title titlebackicon">退保原因說明別</div></td>
-                                    <td class="dor"><select id="pfi_DropOutReason" name="pfi_DropOutReason" class="inputex"></select></td>
+                                    <td align="right" class="pfidor"><div class="font-title titlebackicon">退保原因說明別</div></td>
+                                    <td class="pfidor"><select id="pfi_DropOutReason" name="pfi_DropOutReason" class="inputex"></select></td>
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon font-red">補助代號</div></td>
