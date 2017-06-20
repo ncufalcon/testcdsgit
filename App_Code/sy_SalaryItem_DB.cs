@@ -48,6 +48,7 @@ public class sy_SalaryItem_DB
     string siStatus = string.Empty;
     string siRef = string.Empty;
     string siRefcom = string.Empty;
+    string siBuckle = string.Empty;
     DateTime siCreatDate;
     DateTime siModifyDate;
     #endregion
@@ -103,6 +104,10 @@ public class sy_SalaryItem_DB
     public string _siRefcom
     {
         set { siRefcom = value; }
+    }
+    public string _siBuckle
+    {
+        set { siBuckle = value; }
     }
     public DateTime _siCreatDate
     {
@@ -178,8 +183,8 @@ public class sy_SalaryItem_DB
         try
         {
             show_value.Append(@" 
-                insert into sy_SalaryItem (siGuid,siItemCode,siItemName,siAdd,siInsurance,siBenefit,siSupplementaryPremium,siIncomeTax,siCreatId,siCreatDate,siStatus,siRef,siRefcom) 
-                values(@siGuid,@siItemCode,@siItemName,@siAdd,@siInsurance,@siBenefit,@siSupplementaryPremium,@siIncomeTax,@siCreatId,@siCreatDate,'A',@siRef,@siRefcom) 
+                insert into sy_SalaryItem (siGuid,siItemCode,siItemName,siAdd,siInsurance,siBenefit,siSupplementaryPremium,siIncomeTax,siCreatId,siCreatDate,siStatus,siRef,siRefcom,siBuckle) 
+                values(@siGuid,@siItemCode,@siItemName,@siAdd,@siInsurance,@siBenefit,@siSupplementaryPremium,@siIncomeTax,@siCreatId,@siCreatDate,'A',@siRef,@siRefcom,@siBuckle) 
             ");
 
             thisCommand.Parameters.AddWithValue("@siGuid", siGuid);
@@ -193,6 +198,7 @@ public class sy_SalaryItem_DB
             thisCommand.Parameters.AddWithValue("@siCreatId", siCreatId);
             thisCommand.Parameters.AddWithValue("@siRef", siRef);
             thisCommand.Parameters.AddWithValue("@siRefcom", siRefcom);
+            thisCommand.Parameters.AddWithValue("@siBuckle", siBuckle);
             thisCommand.Parameters.AddWithValue("@siCreatDate", DateTime.Now);
 
             thisCommand.CommandText = show_value.ToString();
@@ -217,7 +223,7 @@ public class sy_SalaryItem_DB
     }
     #endregion
 
-    #region 修改 sy_PersonChange
+    #region 修改 sy_SalaryItem
     public void UpdateSalaryItem()
     {
         SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -227,7 +233,7 @@ public class sy_SalaryItem_DB
         try
         {
             show_value.Append(@" 
-                update sy_SalaryItem set siItemCode=@siItemCode,siItemName=@siItemName,siAdd=@siAdd,siInsurance=@siInsurance,siBenefit=@siBenefit,siSupplementaryPremium=@siSupplementaryPremium,siIncomeTax=@siIncomeTax,siModifyId=@siModifyId,siRef=@siRef,siModifyDate=@siModifyDate,siRefcom=@siRefcom
+                update sy_SalaryItem set siItemCode=@siItemCode,siItemName=@siItemName,siAdd=@siAdd,siInsurance=@siInsurance,siBenefit=@siBenefit,siSupplementaryPremium=@siSupplementaryPremium,siIncomeTax=@siIncomeTax,siModifyId=@siModifyId,siRef=@siRef,siModifyDate=@siModifyDate,siRefcom=@siRefcom,siBuckle=@siBuckle
                 where  siGuid=@siGuid               
             ");
 
@@ -242,6 +248,7 @@ public class sy_SalaryItem_DB
             thisCommand.Parameters.AddWithValue("@siModifyId", siModifyId);
             thisCommand.Parameters.AddWithValue("@siRef", siRef);
             thisCommand.Parameters.AddWithValue("@siRefcom", siRefcom);
+            thisCommand.Parameters.AddWithValue("@siBuckle", siBuckle);
             thisCommand.Parameters.AddWithValue("@siModifyDate", DateTime.Now);
 
             thisCommand.CommandText = show_value.ToString();

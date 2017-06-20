@@ -79,7 +79,7 @@ CommonEven = {
 
 
     goLogin: function () {
-        window.location = "../Page_Login.aspx";
+        window.location = "Page-Login.aspx";
     }
 
 }

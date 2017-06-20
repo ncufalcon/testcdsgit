@@ -109,7 +109,7 @@
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Ins();">新增</a>
                             </div>
                         </div>
-                        <div class="tabfixwidth" style="margin-top:20px;"">
+                        <div class="tabfixwidth" style="margin-top:20px;">
                             <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px">
                             </div><!-- overwidthblock -->
                         </div><!-- fixwidth -->

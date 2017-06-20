@@ -112,6 +112,9 @@ public class Holiday_DB
                 show_value.Append(@" and dayGuid=@dayGuid  ");
                 thisCommand.Parameters.AddWithValue("@dayGuid", dayGuid);
             }
+            show_value.Append(@" 
+                order by dayDate ASC
+            ");
 
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();

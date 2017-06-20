@@ -73,8 +73,12 @@ namespace payroll.model
         public string pGuid { get; set; }
         public string pPsmGuid { get; set; }
         public string pPerGuid { get; set; }
-        public string pPerCompanyGuid { get; set; }
+
+        public string pPerNo { get; set; }
+        public string pPerName { get; set; }
+        public string pPerCompanyName { get; set; }
         public string pPerDep { get; set; }
+
 
         public decimal pWeekdayTime1 { get; set; }
         public decimal pWeekdayTime2 { get; set; }
@@ -166,7 +170,46 @@ namespace payroll.model
         public decimal pBuckleCost { get; set; }
         public decimal pBuckleFee { get; set; }
 
+        public string sr_Guid { get; set; }
 
+    }
+
+
+
+    public class sy_PayAllowance
+    {
+        public string psaGuid { get; set; }
+        public string psaPerGuid { get; set; }
+        public string psaPsmGuid { get; set; }
+        public string psaAllowanceCode { get; set; }
+        public decimal psaPrice { get; set; }
+        public decimal psaQuantity { get; set; }
+        public decimal psaCost { get; set; }
+        public string psaStatus { get; set; }
+
+
+    }
+
+
+
+    public class sy_PayBuckle
+    {
+        public string psbGuid { get; set; }
+        public string psbPerGuid { get; set; }
+        public string psbPsmGuid { get; set; }
+        public string psbCreditor { get; set; }
+        public decimal psbCreditorCost { get; set; }
+        public decimal psbRatio { get; set; }
+        public string psaCpsbIssuedost { get; set; }
+        public string psbPayment { get; set; }
+        public string psbIntoName { get; set; }
+        public string psbIntoNumber { get; set; }
+        public string psbIntoAccount { get; set; }
+        public string psbContractor { get; set; }
+        public string psbTel { get; set; }
+        public decimal psbFee { get; set; }
+        public decimal psbCost { get; set; }
+        public string psbStatus { get; set; }
 
     }
 

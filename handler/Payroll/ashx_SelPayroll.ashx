@@ -1,11 +1,9 @@
-﻿<%@ WebHandler Language="C#" Class="ashx_PayList" %>
+﻿<%@ WebHandler Language="C#" Class="ashx_SelPayroll" %>
 
 using System;
 using System.Web;
 using System.Data;
-
-public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessionState
-{
+public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySessionState {
     Common com = new Common();
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
@@ -20,30 +18,24 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
 
                 string XmlStr = "";
                 DataView dv = new DataView();
-                string PerNo = (!string.IsNullOrEmpty(context.Request.Form["PerNo"])) ? context.Request.Form["PerNo"].ToString() : "";
-                string PerName = (!string.IsNullOrEmpty(context.Request.Form["PerName"])) ? context.Request.Form["PerName"].ToString() : "";
-                string Company = (!string.IsNullOrEmpty(context.Request.Form["Company"])) ? context.Request.Form["Company"].ToString() : "";
-                string Dep = (!string.IsNullOrEmpty(context.Request.Form["Dep"])) ? context.Request.Form["Dep"].ToString() : "";
-                string SalaryRang = (!string.IsNullOrEmpty(context.Request.Form["SalaryRang"])) ? context.Request.Form["SalaryRang"].ToString() : "";
-                string typ = (!string.IsNullOrEmpty(context.Request.Form["typ"])) ? context.Request.Form["typ"].ToString() : "";
+                string guid = (!string.IsNullOrEmpty(context.Request.Form["guid"])) ? context.Request.Form["guid"].ToString() : "";
 
 
-                string[] str = { PerNo, PerName, Company, Dep, SalaryRang };
+
+                string[] str = { guid};
                 string sqlinj = com.CheckSqlInJection(str);
 
                 payroll.model.sy_PayRoll pModel = new payroll.model.sy_PayRoll();
-                pModel.pPerNo = PerNo;
-                pModel.pPerName = PerName;
-                pModel.pPerCompanyName = Company;
-                pModel.pPerDep = Dep;
-                pModel.sr_Guid = SalaryRang;
-                pModel.pGuid = "";
+                pModel.pGuid = guid;
+                pModel.pPerNo = "";
+                pModel.pPerName = "";
+                pModel.pPerCompanyName = "";
+                pModel.pPerDep = "";
+                pModel.sr_Guid = "";
+
                 if (sqlinj == "")
                 {
-                    if (typ == "Y") //代表第一次進入畫面 Top 200
-                        dv = dal.SelSy_PaySalaryDetailTop200().DefaultView;
-                    else
-                        dv = dal.SelSy_PaySalaryDetail(pModel).DefaultView;
+                    dv = dal.SelSy_PaySalaryDetail(pModel).DefaultView;
 
                     //string paging = (Math.Ceiling(decimal.Parse((dvList.Count / 10).ToString())) + 1).ToString();
                     XmlStr += "<dList>";
@@ -144,8 +136,10 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                         XmlStr += "<pIntertemporal>" + dv[i]["pIntertemporal"].ToString() + "</pIntertemporal>";
                         XmlStr += "<sr_Year>" + dv[i]["sr_Year"].ToString() + "</sr_Year>";
                         XmlStr += "<sr_BeginDate>" + context.Server.HtmlEncode(dv[i]["sr_BeginDate"].ToString()) + "</sr_BeginDate>";
-                        XmlStr += "<sr_Enddate>" +context.Server.HtmlEncode( dv[i]["sr_Enddate"].ToString()) + "</sr_Enddate>";
+                        XmlStr += "<sr_Enddate>" + context.Server.HtmlEncode(dv[i]["sr_Enddate"].ToString()) + "</sr_Enddate>";
                         XmlStr += "<sr_SalaryDate>" + context.Server.HtmlEncode(dv[i]["sr_SalaryDate"].ToString()) + "</sr_SalaryDate>";
+                        XmlStr += "<sr_Guid>" + dv[i]["sr_Guid"].ToString() + "</sr_Guid>";
+                            
                         XmlStr += "</dView>";
                     }
                     XmlStr += "</dList>";
@@ -163,13 +157,10 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
             context.Response.Write("<dList>error</dList>");
         }
 
-
     }
 
-    public bool IsReusable
-    {
-        get
-        {
+    public bool IsReusable {
+        get {
             return false;
         }
     }

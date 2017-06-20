@@ -742,7 +742,7 @@
     <div class="WrapperMain">
         <div class="fixwidth">
             <div class="twocol underlineT1 margin10T">
-                <div class="left font-light">首頁 / 出勤管理 / <span class="font-black font-bold">出勤管理</span></div>
+                <div class="left font-light">首頁 / 出勤管理 / <span class="font-black font-bold">請假資料維護</span></div>
             </div>
             <div class="twocol margin15T">
                 <div class="left">

@@ -453,7 +453,146 @@ namespace payroll
 
 
 
+        /// <summary>
+        /// 發薪紀錄
+        /// </summary>
+        public DataTable SelSy_PaySalaryDetail(payroll.model.sy_PayRoll p)
+        {
 
+            string sql = @"select * from v_PaySalaryDetail where pStatus='A' ";
+
+            if (!string.IsNullOrEmpty(p.pPerNo))
+                sql += "and pPerNo like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerName))
+                sql += "and pPerName like '%'+ @pPerName +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerCompanyName))
+                sql += "and pPerCompanyName like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerDep))
+                sql += "and pPerDep like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.sr_Guid))
+                sql += "and sr_Guid=@sr_Guid ";
+
+            if (!string.IsNullOrEmpty(p.pGuid))
+                sql += "and pGuid = @pGuid ";
+
+            sql += "order by convert(datetime,sr_SalaryDate) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));
+            cmd.Parameters.AddWithValue("@pPerName", com.cSNull(p.pPerName));
+            cmd.Parameters.AddWithValue("@pPerCompanyName", com.cSNull(p.pPerCompanyName));
+            cmd.Parameters.AddWithValue("@pPerDep", com.cSNull(p.pPerDep));
+            cmd.Parameters.AddWithValue("@psmSalaryRange", com.cSNull(p.psmSalaryRange));
+            cmd.Parameters.AddWithValue("@pGuid", com.cSNull(p.pGuid));
+            cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+
+        /// <summary>
+        /// 發薪紀錄
+        /// </summary>
+        public DataTable SelSy_PaySalaryDetailTop200()
+        {
+
+            string sql = @"select * from v_PaySalaryDetail where pStatus='A' ";
+
+            //if (!string.IsNullOrEmpty(str))
+            //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
+
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            //cmd.Parameters.AddWithValue("@str", str);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+        /// <summary>
+        /// 發薪紀錄-津貼項
+        /// </summary>
+        public DataTable Selsy_PaySalaryAllowance(payroll.model.sy_PayAllowance p)
+        {
+
+            string sql = @"select *, case siAdd when '01' then '加項' when '02' then '扣項' else '' end as siAddstr from sy_PaySalaryAllowance left join sy_SalaryItem on psaAllowanceCode=siGuid where psaStatus='A' ";
+
+            if (!string.IsNullOrEmpty(p.psaPerGuid))
+                sql += "and psaPerGuid=@psaPerGuid ";
+
+            if (!string.IsNullOrEmpty(p.psaPsmGuid))
+                sql += "and psaPsmGuid=@psaPsmGuid ";
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@psaPerGuid", com.cSNull(p.psaPerGuid));
+            cmd.Parameters.AddWithValue("@psaPsmGuid", com.cSNull(p.psaPsmGuid));
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+        /// <summary>
+        /// 發薪紀錄-法扣
+        /// </summary>
+        public DataTable Selsy_PaySalaryBuckle(payroll.model.sy_PayBuckle p)
+        {
+
+            string sql = @"select * from sy_PaySalaryBuckle where psbStatus='A' ";
+
+            if (!string.IsNullOrEmpty(p.psbPerGuid))
+                sql += "and psbPerGuid=@psbPerGuid ";
+
+            if (!string.IsNullOrEmpty(p.psbPsmGuid))
+                sql += "and psbPsmGuid=@psbPsmGuid ";
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@psbPerGuid", p.psbPerGuid);
+            cmd.Parameters.AddWithValue("@psbPsmGuid", p.psbPsmGuid);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
 
     }
 }
