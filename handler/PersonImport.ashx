@@ -170,13 +170,13 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
 
                     //勞保
                     oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@plLaborPayroll"].Value = getMinLV("ilItem2");
+                    oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(getMinLV("ilItem2"));
                     //健保
                     oCmd.Parameters["@piGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@piInsurancePayroll"].Value = getMinLV("ilItem4");
+                    oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(getMinLV("ilItem4"));
                     //勞退
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@ppPayPayroll"].Value = getMinLV("ilItem3");
+                    oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem3"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //勞健保卡號

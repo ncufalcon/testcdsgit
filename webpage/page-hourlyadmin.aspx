@@ -503,8 +503,10 @@
                 $("input[name='txt_si_itembenefit']:checked").val();
                 $("input[name='txt_si_itemsup']:checked").val();
                 $("input[name='txt_si_itemtax']:checked").val();
+                $("input[name='txt_si_siBuckle']:checked").val();
                 $("#txt_si_itemref").val("");
                 $("#hidden_si_itemguid").val("");
+                datanodisabled();
             });
             //薪資項目設定 刪除
             $(document).on("click", "a[name='a_del_si']", function () {
@@ -544,6 +546,7 @@
                 $("input[name='txt_si_itembenefit']").removeAttr("checked");
                 $("input[name='txt_si_itemsup']").removeAttr("checked");
                 $("input[name='txt_si_itemtax']").removeAttr("checked");
+                $("input[name='txt_si_siBuckle']").removeAttr("checked");
                 $("#txt_si_itemref").val("");
                 $("#span_Status").text("修改");
                 $("#hidden_si_itemguid").val($(this).closest('tr').attr("trguid"))//修改才會有
@@ -586,8 +589,13 @@
                             for (var i = 0; i < response.length; i++) {
                                 var add_name = "";
                                 var tax_name = "";
+                                var str_disalbed = "";
+                                //如果是底薪或職能加給 使用者就不能刪除或修改 20170609新增這功能
+                                if (response[i].siRef == "01" || response[i].siRef == "02") {
+                                    str_disalbed = "disabled=disabled";
+                                }
                                 str_html += "<tr trguid='" + response[i].siGuid + "'>";
-                                str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='a_del_si' aguid='" + response[i].siGuid + "'>刪除</a></td>";
+                                str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='a_del_si' aguid='" + response[i].siGuid + "'  " + str_disalbed + ">刪除</a></td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siItemCode + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siItemName + "</td>";
                                 if (response[i].siAdd == "01")
@@ -661,6 +669,7 @@
                         mod_si_itembenefit: $("input[name='txt_si_itembenefit']:checked").val(),
                         mod_si_itemsup: $("input[name='txt_si_itemsup']:checked").val(),
                         mod_si_itemtax: $("input[name='txt_si_itemtax']:checked").val(),
+                        mod_si_siBuckle: $("input[name='txt_si_siBuckle']:checked").val(),
                         mod_si_itemref: $("#txt_si_itemref").val(),
                         mod_si_itemrefcom: $("#txt_si_itemrefcom").val(),
                         mod_si_itemguid: $("#hidden_si_itemguid").val(),
@@ -718,6 +727,7 @@
                     },
                     success: function (response) {
                         var str_html = "";
+                        var str_disalbed = "";
                         if (response != "nodata") {
                             $("#txt_si_itemcode").val(response[0].siItemCode);
                             $("#txt_si_itemname").val(response[0].siItemName);
@@ -727,9 +737,17 @@
                             $("input[name='txt_si_itemadd'][value='" + response[0].siAdd + "']").prop("checked", true);
                             $("input[name='txt_si_itembenefit'][value='" + response[0].siBenefit + "']").prop("checked", true);
                             $("input[name='txt_si_itemsup'][value='" + response[0].siSupplementaryPremium + "']").prop("checked", true);
-                            $("input[name='txt_si_itemtax'][value='" + response[0].siIncomeTax + "']").prop("checked", true); 
+                            $("input[name='txt_si_itemtax'][value='" + response[0].siIncomeTax + "']").prop("checked", true);
+                            $("input[name='txt_si_siBuckle'][value='" + response[0].siBuckle + "']").prop("checked", true);
+                            //如果是底薪或職能加給 使用者就不能刪除或修改 20170609新增這功能
+                            if (response[0].siRef == "01" || response[0].siRef == "02") {
+                                datadisabled();
+                            } else {
+                                datanodisabled();
+                            }
                             
                         } else {
+
                         }
                     },//success end
                     complete: function () {
@@ -797,10 +815,10 @@
                                 if (response[i].phBasic=="01") {
                                     str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>全薪</td>";
                                 }
-                                if (response[i].phBasic == "02") {
+                                else if (response[i].phBasic == "02") {
                                     str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>半薪</td>";
                                 }
-                                if (response[i].phBasic == "03") {
+                                else if (response[i].phBasic == "03") {
                                     str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'>無薪</td>";
                                 } else {
                                     str_html += "<td align='left' nowrap='nowrap' style='cursor: pointer;'></td>";
@@ -1296,7 +1314,32 @@
                     }
                 });//ajax end
             }
-            
+            //薪資項目設定各項disabled
+            function datadisabled() {
+                $("#txt_si_itemcode").attr("disabled", true);
+                $("#txt_si_itemname").attr("disabled", true);
+                $("#txt_si_itemref").attr("disabled", true);
+                $("#txt_si_itemrefcom").attr("disabled", true);
+                $("input[name='txt_si_Insurance']").attr("disabled", true);
+                $("input[name='txt_si_itemadd']").attr("disabled", true);
+                $("input[name='txt_si_itembenefit']").attr("disabled", true);
+                $("input[name='txt_si_itemsup']").attr("disabled", true);
+                $("input[name='txt_si_itemtax']").attr("disabled", true);
+                $("#btn_si_item").attr("disabled", true);//連儲存按鈕都不給點
+            }
+            //薪資項目設定取消各項disabled
+            function datanodisabled() {
+                $("#txt_si_itemcode").attr("disabled", false);
+                $("#txt_si_itemname").attr("disabled", false);
+                $("#txt_si_itemref").attr("disabled", false);
+                $("#txt_si_itemrefcom").attr("disabled", false);
+                $("input[name='txt_si_Insurance']").attr("disabled", false);
+                $("input[name='txt_si_itemadd']").attr("disabled", false);
+                $("input[name='txt_si_itembenefit']").attr("disabled", false);
+                $("input[name='txt_si_itemsup']").attr("disabled", false);
+                $("input[name='txt_si_itemtax']").attr("disabled", false);
+                $("#btn_si_item").attr("disabled", false);//連儲存按鈕都不給點
+            }
         });
     </script>
 </asp:Content>
@@ -1461,6 +1504,14 @@
                                 <div class="gentable fixTable">
                                     <table width="99%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
+                                            <td class="width10" colspan="3" align="right">
+                                            <div class="font-title titlebackicon">維護狀態</div>
+                                            </td>
+                                            <td class="width20" style="text-align:left;">
+                                                <span id="span_Status">新增</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td class="width25" align="right">
                                                 <div class="font-title titlebackicon">項目代號</div>
                                             </td>
@@ -1533,10 +1584,11 @@
                                                 <input type="radio" name="txt_si_itemtax" value="03" />與稅無關
                                             </td>
                                         <td class="width10" align="right">
-                                            <div class="font-title titlebackicon">維護狀態</div>
+                                            <div class="font-title titlebackicon">是否法扣</div>
                                         </td>
                                         <td class="width20">
-                                            <span id="span_Status">新增</span>
+                                            <input type="radio" name="txt_si_siBuckle" value="Y" />是
+                                            <input type="radio" name="txt_si_siBuckle" value="N" />否
                                         </td>
                                         </tr>
                                         <tr style="display:none;">
@@ -1569,13 +1621,14 @@
                             </table>
                         </div>
 
-                        <div class="div-line" style="margin-top: 20px; width: 450px">
+                        <!--20170609決定拿掉-->
+                        <!--<div class="div-line" style="margin-top: 20px; width: 450px">
                             <table class="table-margin">
                                 <tr>
                                     <td colspan="2">加班費如採固定金額時，每小時加班費為<input type="text" class="width10" value="" id="txt_o_oFixed" />元</td>
                                 </tr>
                             </table>
-                        </div>
+                        </div>-->
 
                         <div style="margin-top: 20px;" class="font-size2 font-bold">加班費如係按底薪換算，每小時加班費係以每小時底薪乘以何比率</div>
                         <div class="div-line" style="width: 450px">

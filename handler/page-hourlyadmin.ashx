@@ -38,6 +38,7 @@ public class page_hourlyadmin : IHttpHandler {
         public string siModifyDate { get; set; }
         public string siRef { get; set; }
         public string siRefcom { get; set; }
+        public string siBuckle { get; set; }
     }
     //sy_OverTime 欄位
     public class oTooL
@@ -261,6 +262,7 @@ public class page_hourlyadmin : IHttpHandler {
                         e.siIncomeTax = dt_si_data.Rows[i]["siIncomeTax"].ToString().Trim();
                         e.siRef = dt_si_data.Rows[i]["siRef"].ToString().Trim();
                         e.siRefcom = dt_si_data.Rows[i]["siRefcom"].ToString().Trim();
+                        e.siBuckle = dt_si_data.Rows[i]["siBuckle"].ToString().Trim();
                         siList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -284,6 +286,7 @@ public class page_hourlyadmin : IHttpHandler {
                 string mod_si_itemref = string.IsNullOrEmpty(context.Request.Form["mod_si_itemref"]) ? "" : context.Request.Form["mod_si_itemref"].ToString().Trim();
                 string mod_si_itemrefcom = string.IsNullOrEmpty(context.Request.Form["mod_si_itemrefcom"]) ? "" : context.Request.Form["mod_si_itemrefcom"].ToString().Trim();
                 string mod_si_itemguid = string.IsNullOrEmpty(context.Request.Form["mod_si_itemguid"]) ? "" : context.Request.Form["mod_si_itemguid"].ToString().Trim();
+                string mod_si_siBuckle = string.IsNullOrEmpty(context.Request.Form["mod_si_siBuckle"]) ? "" : context.Request.Form["mod_si_siBuckle"].ToString().Trim();
                 string mod_si_type = string.IsNullOrEmpty(context.Request.Form["mod_si_type"]) ? "" : context.Request.Form["mod_si_type"].ToString().Trim();
                 try
                 {
@@ -296,6 +299,7 @@ public class page_hourlyadmin : IHttpHandler {
                     si_db._siIncomeTax = mod_si_itemtax;
                     si_db._siRef = mod_si_itemref;
                     si_db._siRefcom = mod_si_itemrefcom;
+                    si_db._siBuckle = mod_si_siBuckle;
 
                     DataTable dt_chkcode = si_db.ChksiItemCode();
                     DataTable dt_refcom_add = si_db.ChksiItemCodeRefcom();
@@ -701,10 +705,12 @@ public class page_hourlyadmin : IHttpHandler {
                     List<codeTooL> codeList = new List<codeTooL>();
                     for (int i = 0; i < dt_codegroup16.Rows.Count; i++)
                     {
-                        codeTooL e = new codeTooL();
-                        e.code_value = dt_codegroup16.Rows[i]["code_value"].ToString().Trim();
-                        e.code_desc = dt_codegroup16.Rows[i]["code_desc"].ToString().Trim();
-                        codeList.Add(e);
+                        if (dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="03" && dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="04" && dt_codegroup16.Rows[i]["code_value"].ToString().Trim()!="05") {
+                            codeTooL e = new codeTooL();
+                            e.code_value = dt_codegroup16.Rows[i]["code_value"].ToString().Trim();
+                            e.code_desc = dt_codegroup16.Rows[i]["code_desc"].ToString().Trim();
+                            codeList.Add(e);
+                        }
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                     string ans = objSerializer.Serialize(codeList);  //new
