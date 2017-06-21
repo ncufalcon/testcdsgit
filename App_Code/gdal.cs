@@ -594,5 +594,79 @@ namespace payroll
 
         }
 
+        /// <summary>
+        /// 計算薪資
+        /// </summary>
+        /// <param name="Class"></param>
+        /// <param name="Region"></param>
+        /// <param name="Dep"></param>
+        /// <returns></returns>
+        public void GenRayroll(string rGuid,string UserInfo)
+        {
+            string sql = @"pr_GenPayroll";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@sr_Guid", rGuid);
+            cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                //DataTable dt = new DataTable();
+                //new SqlDataAdapter(cmd).Fill(dt);        
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                //return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
+
+
+
+    //    SqlCommand cmd = new SqlCommand();
+    //        try
+    //        {
+    //            cmd.Connection = Sqlconn;
+    //            cmd.Connection.Open();
+    //            SqlTransaction transaction;
+    //    transaction = cmd.Connection.BeginTransaction();
+    //            cmd.Transaction = transaction;
+
+    //            string sql = @"";
+
+    //            //新增Jumper
+    //            for (int i = 0; i<dt.Rows.Count; i++)
+    //            {
+
+    //                sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+    //                        values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
+
+
+    //                cmd.CommandText = sql;
+    //                cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
+    //                cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
+    //                cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
+    //                cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
+    //                cmd.ExecuteNonQuery();
+    //            }
+
+
+    ////cmd.ExecuteNonQuery();
+    //transaction.Commit();
+    //        }
+    //        catch (Exception ex) { throw ex; }
+    //        finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+
+
+
+
+
     }
 }

@@ -76,15 +76,36 @@
                             <div class="twocol margin15T">
                                 <div class="right">
                                     <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.List();">查詢</a>
+                                    <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
                                 </div>
                             </div>
                         </div>
+
+        <div id="div_GenPayroll" class=" gentable font-normal" style="display:none; height:200px">
+          <table  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  <td style="width:150px">日期起:<span id="sp_sDate_Gen"></span></td>
+                  <td style="width:150px">日期迄:<span id="sp_eDate_Gen"></span></td>
+                  <td><img src="../images/btn-search.gif" id="img_SalaryRange_Gen" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+                      <input id="txt_SalaryRang_Gen" type="hidden" />
+                  </td>
+                  <td  style="text-align:right">
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genPayroll();">開始計算薪資</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
+                  </td>
+              </tr>
+
+          </table> 
+
+        </div>
+
+
 
         <div class="stripeMe fixTable" id="div_Data">
                     <div class="twocol margin15T">
                             <div class="right">
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
-                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Ins();">新增</a>
+                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opGenPayroll();">計算薪資</a>
                             </div>
                         </div>
 
@@ -356,10 +377,11 @@
 
 
 
+
     <input id="hid_perGuid" type="hidden" />
     <input id="hid_pPsmGuid" type="hidden" />
     <input id="hid_EditType" type="hidden" />
-
+    <input id="hid_RangeType" type="hidden" />
     <script type="text/javascript">
 
 
@@ -378,7 +400,12 @@
                 hid_EditType: 'hid_EditType',
                 div_MList: 'div_MList',
                 sp_sDate: 'sp_sDate',
-                sp_eDate: 'sp_eDate'
+                sp_eDate: 'sp_eDate',
+                hid_RangeType: 'hid_RangeType',
+                sp_sDate_Gen: 'sp_sDate_Gen',
+                sp_eDate_Gen: 'sp_eDate_Gen',
+                txt_SalaryRang_Gen: 'txt_SalaryRang_Gen',
+                div_GenPayroll: 'div_GenPayroll'
             },
 
             Page1Id: {
@@ -578,8 +605,7 @@
                 }
                 CmFmCommon.ajax(opt);
             },
-
-
+            
             BuckleList: function () {
 
                 var perGuid = $('#' + this.Id.hid_perGuid).val();
@@ -624,8 +650,7 @@
                     CmFmCommon.ajax(opt);
                 }
             },
-
-
+            
             view: function (a) {
                 var guid = a.getAttribute('guid');
                 $.ajax({
@@ -722,15 +747,7 @@
                     }
                 });
             },
-
-
-
-
-
-
-
-
-
+            
             Del: function (a) {
                 if (confirm('刪除後無法回復，您確定要刪除嗎?')) {
                     var guid = a.getAttribute('Guid');
@@ -765,8 +782,7 @@
                     });
                 }
             },
-
-
+            
             Edit: function () {
 
                 var guid = $('#' + this.Page2Id.hid_Guid).val();
@@ -833,10 +849,7 @@
 
 
             },
-
-
-
-
+            
             countCost: function () {
                 var p = $('#' + JsEven.Page2Id.txt_Pric_m).val();
                 var q = $('#' + JsEven.Page2Id.txt_Quantity_m).val();
@@ -847,187 +860,10 @@
 
             },
 
-
-            //點放大鏡 查詢視窗
-            openfancybox: function (item) {
-                switch ($(item).attr("id")) {
-                    case "img_Code":
-                        link = "SearchWindow.aspx?v=Allowance";
-                        break;
-                    case "img_Person":
-                        link = "SearchWindow.aspx?v=Personnel";
-                        break;
-                }
-
-
-                $.fancybox({
-                    href: link,
-                    type: "iframe",
-                    minHeight: "400",
-                    closeClick: false,
-                    openEffect: 'elastic',
-                    closeEffect: 'elastic'
-                });
-            },
-
             reSearch: function () {
                 document.getElementById(JsEven.Id.div_Search).style.display = "block";
                 document.getElementById(JsEven.Id.div_Data).style.display = "none";
-            },
-
-
-            UploadFile: function () {
-                var fileUp = document.getElementById(this.Page1Id.file_Atta);
-                var ExtensionName = fileUp.value.toLowerCase().split('.')[1];
-
-
-                if (fileUp.value == "") {
-                    alert("請選擇檔案!!");
-                    return false;
-                }
-                else {
-                    if ($.inArray(ExtensionName, ['xls', 'xlsx']) == -1) {
-                        alert("請上傳Excel檔");
-                        return false;
-                    }
-                }
-
-                var iframe = document.createElement('iframe');
-                iframe.setAttribute('id', 'fileIFRAME');
-                iframe.setAttribute('name', iframe.id);
-                iframe.style.display = 'none';
-
-
-
-                var form = document.createElement('form');
-                document.body.appendChild(form);
-                form.style.display = 'none';
-                form.setAttribute('id', 'file_FORM');
-                form.setAttribute('name', form.id);
-
-                form.target = iframe.id;
-                form.method = "post";
-                form.enctype = "multipart/form-data";
-                form.encoding = "multipart/form-data";
-                form.action = "../handler/Allowance/ashx_ImportExcel.ashx";
-
-                form.appendChild(fileUp);
-                form.appendChild(iframe);
-
-
-                if (iframe.contentWindow)
-                    iframe.contentWindow.name = iframe.id;  //加進去以後才可以
-
-                form.submit();
-            },
-
-            feedbackFun: function (msg) {
-                switch (msg) {
-                    case "t":
-                        alert('登入逾時');
-                        CommonEven.goLogin();
-                        break;
-                    case "e":
-                        alert('匯入失敗');
-                        break;
-                    default:
-                        alert('匯入成功');
-                        var opt = {
-                            url: '../handler/Allowance/ashx_AllTempList.ashx',
-                            v: '',
-                            type: 'xml',
-                            success: function (xmldoc) {
-                                var div = document.getElementById(JsEven.Page1Id.div_Import);
-                                var dList = xmldoc.getElementsByTagName('dList');
-                                var dView = xmldoc.getElementsByTagName('dView');
-
-                                if (dView.length != 0) {
-                                    CmFmCommon.Xsl(xmldoc, '../xslt/Allowance/xsl_AllImport.xsl', div);
-                                    LicEven.tblClass();
-
-                                } else { div.innerHTML = '目前無任何資料'; }
-                            }
-                        }
-                        CmFmCommon.ajax(opt);
-                        break;
-                }
-                var div = document.getElementById(this.Page1Id.div_File);
-                div.innerHTML = "<input type='file' name='file_Atta' id='file_Atta' />";
-            },
-
-            DelTemp: function (a) {
-                if (confirm('刪除後無法回復，您確定要刪除?')) {
-                    var guid = a.getAttribute('guid');
-                    $.ajax({
-                        type: "POST",
-                        url: '../handler/Allowance/ashx_AllTempDel.ashx',
-                        data: 'guid=' + guid,
-                        dataType: 'text',  //xml, json, script, text, html
-                        success: function (msg) {
-                            switch (msg) {
-                                case "ok":
-                                    var div = document.getElementById(JsEven.Page1Id.div_Import);
-                                    var tr = div.getElementsByTagName('tr');
-                                    for (var i = 0; i < tr.length; i++) {
-                                        var t = tr[i];
-                                        if (guid == t.getAttribute('guid'))
-                                            t.parentNode.removeChild(t);
-                                    }
-                                    alert('刪除成功');
-                                    break;
-                                case "e":
-                                    alert('程式發生錯誤，請聯絡相關管理人員');
-                                    break;
-                                case "t":
-                                    alert('登入逾時');
-                                    CommonEven.goLogin();
-                                    break;
-                            }
-                            $.unblockUI();
-                        },
-                        error: function (xhr, statusText) {
-                            //alert(xhr.status);
-                            $.unblockUI();
-                            alert('程式發生錯誤，請聯絡相關管理人員');
-
-                        }
-                    });
-                }
-
-            },
-
-            Determine: function () {         
-                $.ajax({
-                    type: "POST",
-                    url: '../handler/Allowance/ashx_Determine.ashx',
-                    data: '',
-                    dataType: 'text',  //xml, json, script, text, html
-                    success: function (msg) {
-                        switch (msg) {
-                            case "ok":
-                                var div = document.getElementById(JsEven.Page1Id.div_Import);
-                                div.innerHTML = "";
-                                alert('匯入成功');
-                                break;
-                            case "e":
-                                alert('程式發生錯誤，請聯絡相關管理人員');
-                                break;
-                            case "t":
-                                alert('登入逾時');
-                                CommonEven.goLogin();
-                                break;
-                        }
-                        $.unblockUI();
-                    },
-                    error: function (xhr, statusText) {
-                        //alert(xhr.status);
-                        $.unblockUI();
-                        alert('程式發生錯誤，請聯絡相關管理人員');
-
-                    }
-                });
-            
-
+                document.getElementById(JsEven.Id.div_GenPayroll).style.display = "none";
             },
             //查詢視窗
             openfancybox: function (item) {
@@ -1042,8 +878,14 @@
                         link = "SearchWindow.aspx?v=Personnel";
                         break;
                     case "img_SalaryRange":
+                        $('#' + this.Id.hid_RangeType).val('S');
                         link = "SearchWindow.aspx?v=SalaryRange";
                         break;
+                    case "img_SalaryRange_Gen":
+                        $('#' + this.Id.hid_RangeType).val('Payroll');
+                        link = "SearchWindow.aspx?v=SalaryRange";
+                        break;
+                        
                 }
                 $.fancybox({
                     href: link,
@@ -1053,8 +895,57 @@
                     openEffect: 'elastic',
                     closeEffect: 'elastic'
                 });
+            },            
+
+            opGenPayroll: function () {
+                document.getElementById(JsEven.Id.div_GenPayroll).style.display = "block";
+                document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                document.getElementById(JsEven.Id.div_Data).style.display = "none";
+
             },
-            
+
+            Cancel: function () {
+                document.getElementById(JsEven.Id.div_GenPayroll).style.display = "none";
+                document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                document.getElementById(JsEven.Id.div_Data).style.display = "block";
+
+            },
+
+            genPayroll: function () {
+
+                var rGuid = $('#' + this.Id.txt_SalaryRang_Gen).val();
+                if (rGuid != "") {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    var opt = {
+                        url: '../handler/Payroll/ashx_GenPayroll.ashx',
+                        v: 'rGuid=' + rGuid,
+                        type: 'text',
+                        success: function (msg) {
+
+                            switch (msg) {
+                                case "DangerWord":
+                                    CommonEven.goErrorPage();
+                                    break;
+                                case "Timeout":
+                                    alert('登入逾時');
+                                    CommonEven.goLogin();
+                                    break;
+                                case "error":
+                                    alert('資料發生錯誤，請聯絡管理者');
+                                    break;
+                                default:
+                                    document.getElementById(JsEven.Id.div_GenPayroll).style.display = "none";
+                                    document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                                    document.getElementById(JsEven.Id.div_Data).style.display = "block";
+                                    break;
+                            }
+                            $.unblockUI();
+                        }
+                    }
+                    CmFmCommon.ajax(opt);
+                } else { alert('請選擇計薪週期');}
+
+            },
 
         }
 
@@ -1082,9 +973,18 @@
                     $("#" + JsEven.id.hid_PerGuid).val(str);
                     break;
                 case "SalaryRange":
-                    $("#" + JsEven.Id.sp_sDate).html(str);
-                    $("#" + JsEven.Id.sp_eDate).html(str2);
-                    $("#" + JsEven.Id.txt_SalaryRang_S).val(gv);
+                    var t = $('#' + JsEven.Id.hid_RangeType).val();
+                    if (t == "S") {
+                        $("#" + JsEven.Id.sp_sDate).html(str);
+                        $("#" + JsEven.Id.sp_eDate).html(str2);
+                        $("#" + JsEven.Id.txt_SalaryRang_S).val(gv);
+                    }
+                    else
+                    {
+                        $("#" + JsEven.Id.sp_sDate_Gen).html(str);
+                        $("#" + JsEven.Id.sp_eDate_Gen).html(str2);
+                        $("#" + JsEven.Id.txt_SalaryRang_Gen).val(gv);
+                    }
                     break;
             }
         }
