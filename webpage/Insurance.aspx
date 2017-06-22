@@ -755,12 +755,12 @@
                                 $("#idtmp").val($(this).children("plGuid").text().trim());
                                 $("#pl_No").val($(this).children("perNo").text().trim());
                                 $("#pl_NoGuid").val($(this).children("plPerGuid").text().trim());
-                                $("#pl_pName").html("");
+                                $("#pl_pName").html($(this).children("perName").text().trim());
                                 $("#pl_NoStatus").val("Y");
                                 $("#pl_Dep").html($(this).children("cbName").text().trim());
                                 $("#pl_SubsidyLevel").val($(this).children("slSubsidyCode").text().trim());
                                 $("#pl_SLGuid").val($(this).children("plSubsidyLevel").text().trim());
-                                $("#pl_SLName").html("");
+                                $("#pl_SLName").html($(this).children("slSubsidyIdentity").text().trim());
                                 $("#pl_SLStatus").val("Y");
                                 $("#pl_ChangeDate").val($(this).children("plChangeDate").text().trim());
                                 $("#pl_Change").val($(this).children("plChange").text().trim());
@@ -997,12 +997,12 @@
                                 $("#idtmp").val($(this).children("piGuid").text().trim());
                                 $("#pi_No").val($(this).children("perNo").text().trim());
                                 $("#pi_NoGuid").val($(this).children("piPerGuid").text().trim());
-                                $("#pi_pName").html("");
+                                $("#pi_pName").html($(this).children("perName").text().trim());
                                 $("#pi_NoStatus").val("Y");
                                 $("#pi_Dep").html($(this).children("cbName").text().trim());
                                 $("#pi_SubsidyLevel").val($(this).children("slSubsidyCode").text().trim());
                                 $("#pi_SLGuid").val($(this).children("piSubsidyLevel").text().trim());
-                                $("#pi_SLName").html("");
+                                $("#pi_SLName").html($(this).children("slSubsidyIdentity").text().trim());
                                 $("#pi_SLStatus").val("Y");
                                 $("#pi_ChangeDate").val($(this).children("piChangeDate").text().trim());
                                 $("#pi_Change").val($(this).children("piChange").text().trim());
@@ -1235,7 +1235,7 @@
                                 $("#idtmp").val($(this).children("ppGuid").text().trim());
                                 $("#pp_No").val($(this).children("perNo").text().trim());
                                 $("#pp_NoGuid").val($(this).children("ppPerGuid").text().trim());
-                                $("#pp_pName").html("");
+                                $("#pp_pName").html($(this).children("perName").text().trim());
                                 $("#pp_NoStatus").val("Y");
                                 $("#pp_Dep").html($(this).children("cbName").text().trim());
                                 $("#pp_ChangeDate").val($(this).children("ppChangeDate").text().trim());
@@ -1492,7 +1492,7 @@
                                 //基本資料
                                 $("#pfi_No").val($(this).children("perNo").text().trim());
                                 $("#pf_NoGuid").val($(this).children("pfiPerGuid").text().trim());
-                                $("#pf_pName").html("");
+                                $("#pf_pName").html($(this).children("perName").text().trim());
                                 $("#pf_NoStatus").val("Y");
                                 $("#pfi_Dep").html($(this).children("cbName").text().trim());
                                 $("#pfi_ChangeDate").val($(this).children("pfiChangeDate").text().trim());
@@ -1506,7 +1506,7 @@
                                 $("#pfi_Change").val($(this).children("pfiChange").text().trim());
                                 $("#pfi_SubsidyLevel").val($(this).children("slSubsidyCode").text().trim());
                                 $("#pf_SLGuid").val($(this).children("pfiSubsidyLevel").text().trim());
-                                $("#pf_SLName").html("");
+                                $("#pf_SLName").html($(this).children("slSubsidyIdentity").text().trim());
                                 $("#pf_SLStatus").val("Y");
                                 if ($(this).children("pfiAreaPerson").text().trim() == "Y")
                                     $("input[name='pfi_AreaPerson']").prop('checked', true);
@@ -1765,7 +1765,7 @@
                                 $("#idtmp").val($(this).children("pgiGuid").text().trim());
                                 $("#pgi_No").val($(this).children("perNo").text().trim());
                                 $("#pg_NoGuid").val($(this).children("pgiPerGuid").text().trim());
-                                $("#pg_pName").html("");
+                                $("#pg_pName").html($(this).children("perName").text().trim());
                                 $("#pg_NoStatus").val("Y");
                                 $("#pgi_Dep").html($(this).children("cbName").text().trim());
                                 $("#pgi_ChangeDate").val($(this).children("pgiChangeDate").text().trim());
@@ -1773,7 +1773,7 @@
                                 $("#pgi_Change").val($(this).children("pgiChange").text().trim());
                                 $("#pgi_InsuranceCode").val($(this).children("giInsuranceCode").text().trim());
                                 $("#pg_ICGuid").val($(this).children("pgiInsuranceCode").text().trim());
-                                $("#pg_IGName").html("");
+                                $("#pg_IGName").html($(this).children("giInsuranceName").text().trim());
                                 $("#pg_IGStatus").val("Y");
                                 $("#pgi_FName").val($(this).children("pfName").text().trim());
                                 $("#pg_PfGuid").val($(this).children("pgiPfGuid").text().trim());

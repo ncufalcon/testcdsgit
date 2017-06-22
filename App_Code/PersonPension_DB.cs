@@ -25,7 +25,6 @@ public class PersonPension_DB
     decimal ppLarboRatio;
     decimal ppEmployerRatio;
     decimal ppPayPayroll;
-    string ppIdentity = string.Empty;
     string ppPs = string.Empty;
     string ppCreateId = string.Empty;
     string ppModifyId = string.Empty;
@@ -62,10 +61,6 @@ public class PersonPension_DB
     public decimal _ppPayPayroll
     {
         set { ppPayPayroll = value; }
-    }
-    public string _ppIdentity
-    {
-        set { ppIdentity = value; }
     }
     public string _ppPs
     {
@@ -137,7 +132,6 @@ ppChangeDate,
 ppLarboRatio,
 ppEmployerRatio,
 ppPayPayroll,
-ppIdentity,
 ppPs,
 ppCreateId,
 ppModifyDate,
@@ -151,7 +145,6 @@ ppStatus
 @ppLarboRatio,
 @ppEmployerRatio,
 @ppPayPayroll,
-@ppIdentity,
 @ppPs,
 @ppCreateId,
 @ppModifyDate,
@@ -167,7 +160,6 @@ ppStatus
         oCmd.Parameters.AddWithValue("@ppLarboRatio", ppLarboRatio);
         oCmd.Parameters.AddWithValue("@ppEmployerRatio", ppEmployerRatio);
         oCmd.Parameters.AddWithValue("@ppPayPayroll", ppPayPayroll);
-        oCmd.Parameters.AddWithValue("@ppIdentity", ppIdentity);
         oCmd.Parameters.AddWithValue("@ppPs", ppPs);
         oCmd.Parameters.AddWithValue("@ppCreateId", ppCreateId);
         oCmd.Parameters.AddWithValue("@ppModifyId", ppModifyId);
@@ -275,7 +267,7 @@ where  ppStatus<>'D' and ppGuid=@ppGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,perFirstDate,perPensionIdentity,comLaborProtectionCode LaborCode,ppEmployerRatio,ppLarboRatio,ppChangeDate,
+        sb.Append(@"select perIDNumber,perName,perBirthday,perFirstDate,perPensionIdentity,comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate,
 (select min(ilItem3) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem3<>'0') ppLv,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>'0') InsLv
 from sy_Person 
@@ -298,7 +290,7 @@ where perGuid in (" + perGuid + @") ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborCode,ppEmployerRatio,ppLarboRatio,ppChangeDate
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate
 from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_PersonPension on ppChange='03' and ppStatus='A' and ppPerGuid=perGuid
@@ -319,7 +311,7 @@ where perGuid in (" + perGuid + @") ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtectionCode LaborCode,ppPayPayroll,
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2,ppPayPayroll,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>'0') InsLv
 from sy_Person 
 left join sy_Company on comGuid=perComGuid

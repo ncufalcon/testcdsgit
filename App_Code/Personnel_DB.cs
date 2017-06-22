@@ -328,7 +328,7 @@ where perStatus<>'D' ");
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT *,a.slGuid Lgv,a.slSubsidyCode LCode,b.slGuid Hgv,b.slSubsidyCode HCode from sy_Person 
+		sb.Append(@"SELECT *,a.slGuid Lgv,a.slSubsidyCode LCode,a.slSubsidyIdentity LStr,b.slGuid Hgv,b.slSubsidyCode HCode,b.slSubsidyIdentity HStr from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
 left join sy_InsuranceIdentity on iiGuid=perInsuranceDes

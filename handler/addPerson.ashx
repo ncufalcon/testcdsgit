@@ -68,7 +68,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "";
             string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "";
 
-
+            string newPersonGid = Guid.NewGuid().ToString();
             switch (Mode)
             {
                 case "New":
@@ -87,7 +87,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         return;
                     }
 
-                    Personnel_Db._perGuid = Guid.NewGuid().ToString();
+                    Personnel_Db._perGuid = newPersonGid;
                     Personnel_Db._perNo = pNo;
                     Personnel_Db._perName = pName;
                     Personnel_Db._perComGuid = pComGuid;
@@ -202,7 +202,6 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         PP_Db._ppGuid = Guid.NewGuid().ToString();
                         PP_Db._ppPerGuid = id;
                         PP_Db._ppModifyId = USERINFO.MemberGuid;
-                        PP_Db._ppIdentity = pp_Identity;
                         PP_Db.addPension();
                     }
                     //團保
@@ -245,7 +244,10 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             }
 
             context.Response.ContentType = "text/html";
-            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun();</script>");
+            if (Mode == "New")
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('add','" + newPersonGid + "');</script>");
+            else
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun();</script>");
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addPerson');</script>"); }
     }

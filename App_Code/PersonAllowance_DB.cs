@@ -172,7 +172,9 @@ where paGuid=@paGuid
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT * from sv_PersonAllowance where paGuid=@paGuid ");
+        sb.Append(@"SELECT * from sv_PersonAllowance
+left join sy_SalaryItem on siGuid=paAllowanceCode
+where paGuid=@paGuid ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

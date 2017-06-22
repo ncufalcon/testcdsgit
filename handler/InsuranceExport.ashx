@@ -51,10 +51,8 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "4");
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID2"].ToString());
                                             Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanBorID"].ToString());
                                             if (dt.Rows[i - 2]["fID"].ToString() == "")
                                             {
@@ -114,10 +112,8 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "2");
-                                            if (dt.Rows[i - 2]["comLaborProtectionCode"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Substring(0, (dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["comLaborProtectionCode"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Substring(dt.Rows[i - 2]["comLaborProtectionCode"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                             Xls.SetCellValue(i, 4, dt.Rows[i - 2]["comHealthInsuranceCode"].ToString());
                                             Xls.SetCellValue(i, 5, "1");
                                             Xls.SetCellValue(i, 6, "2");
@@ -132,7 +128,7 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
                                             Xls.SetCellValue(i, 10, dt.Rows[i - 2]["perIDNumber"].ToString());
                                             Xls.SetCellValue(i, 12, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 13, "1");
+                                            Xls.SetCellValue(i, 13, "2");
                                             Xls.SetCellValue(i, 14, dt.Rows[i - 2]["piDropOutReason"].ToString());
                                             Xls.SetCellValue(i, 15, dt.Rows[i - 2]["DORStr"].ToString());
                                             if (dt.Rows[i - 2]["piChangeDate"].ToString() == "") //勞保有退保資料,健保沒有退保資料時
@@ -161,10 +157,8 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "3");
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID2"].ToString());
                                             Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanborID"].ToString());
                                             Xls.SetCellValue(i, 5, "1");
                                             //判斷外籍,身份證前兩碼為英文 
@@ -212,11 +206,8 @@ public class InsuranceExport : IHttpHandler {
                                         {
                                             Xls.SetCellValue(i, 1, "2");
                                             string IDCode = (dt.Rows[i - 2]["iiIdentityCode"].ToString() != "4") ? "1" : "2";
-                                            Xls.SetCellValue(i, 2, IDCode);
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(0, (dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 4, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                             //判斷外籍,身份證前兩碼為英文 
                                             Regex reg1 = new Regex(@"^[A-Za-z]+$");
                                             if (reg1.IsMatch(dt.Rows[i - 2]["perIDNumber"].ToString().Substring(0, 2)))
@@ -257,10 +248,8 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "2");
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(0, (dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["plLaborNo"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["plLaborNo"].ToString().Substring(dt.Rows[i - 2]["plLaborNo"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                             //判斷外籍,身份證前兩碼為英文 
                                             Regex reg1 = new Regex(@"^[A-Za-z]+$");
                                             if (reg1.IsMatch(dt.Rows[i - 2]["perIDNumber"].ToString().Substring(0, 2)))
@@ -293,10 +282,8 @@ public class InsuranceExport : IHttpHandler {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
                                             Xls.SetCellValue(i, 1, "3");
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
-                                            if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                                Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
+                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID1"].ToString());
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID2"].ToString());
                                             //判斷外籍,身份證前兩碼為英文 
                                             Regex reg1 = new Regex(@"^[A-Za-z]+$");
                                             if (reg1.IsMatch(dt.Rows[i - 2]["perIDNumber"].ToString().Substring(0, 2)))
@@ -339,10 +326,8 @@ public class InsuranceExport : IHttpHandler {
                                 {
                                     for (int i = 2; i < dt.Rows.Count + 2; i++)
                                     {
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 1, dt.Rows[i - 2]["LaborCode"].ToString().Substring(0, (dt.Rows[i - 2]["LaborCode"].ToString().Length - 1)));
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborCode"].ToString().Substring(dt.Rows[i - 2]["LaborCode"].ToString().Length - 1, 1));
+                                        Xls.SetCellValue(i, 1, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                        Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                         Xls.SetCellValue(i, 3, "4");
                                         Xls.SetCellValue(i, 4, dt.Rows[i - 2]["perName"].ToString());
                                         Xls.SetCellValue(i, 5, dt.Rows[i - 2]["perIDNumber"].ToString());
@@ -380,10 +365,8 @@ public class InsuranceExport : IHttpHandler {
                                 {
                                     for (int i = 2; i < dt.Rows.Count + 2; i++)
                                     {
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 1, dt.Rows[i - 2]["LaborCode"].ToString().Substring(0, (dt.Rows[i - 2]["LaborCode"].ToString().Length - 1)));
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborCode"].ToString().Substring(dt.Rows[i - 2]["LaborCode"].ToString().Length - 1, 1));
+                                        Xls.SetCellValue(i, 1, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                        Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                         Xls.SetCellValue(i, 3, "4");
                                         Xls.SetCellValue(i, 4, dt.Rows[i - 2]["perName"].ToString());
                                         Xls.SetCellValue(i, 5, dt.Rows[i - 2]["perIDNumber"].ToString());
@@ -417,10 +400,8 @@ public class InsuranceExport : IHttpHandler {
                                 {
                                     for (int i = 2; i < dt.Rows.Count + 2; i++)
                                     {
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 1, dt.Rows[i - 2]["LaborCode"].ToString().Substring(0, (dt.Rows[i - 2]["LaborCode"].ToString().Length - 1)));
-                                        if (dt.Rows[i - 2]["LaborCode"].ToString() != "")
-                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborCode"].ToString().Substring(dt.Rows[i - 2]["LaborCode"].ToString().Length - 1, 1));
+                                        Xls.SetCellValue(i, 1, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                        Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                         Xls.SetCellValue(i, 3, "4");
                                         Xls.SetCellValue(i, 4, dt.Rows[i - 2]["perName"].ToString());
                                         Xls.SetCellValue(i, 5, dt.Rows[i - 2]["perIDNumber"].ToString());
@@ -458,10 +439,8 @@ public class InsuranceExport : IHttpHandler {
                                     for (int i = 2; i < dt.Rows.Count + 2; i++)
                                     {
                                         Xls.SetCellValue(i, 1, "4");
-                                        if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["LaborID"].ToString().Substring(0, (dt.Rows[i - 2]["LaborID"].ToString().Length - 1)));
-                                        if (dt.Rows[i - 2]["LaborID"].ToString() != "")
-                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["LaborID"].ToString().Substring(dt.Rows[i - 2]["LaborID"].ToString().Length - 1, 1));
+                                        Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                        Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                         Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanborID"].ToString());
                                         Xls.SetCellValue(i, 5, "3");
                                         Xls.SetCellValue(i, 6, "2");

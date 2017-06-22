@@ -522,7 +522,7 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2,comHealthInsuranceCode GanBorID
 ,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate,
 (select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
@@ -534,7 +534,7 @@ left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGu
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + @")
 union
-select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0,0,'',''
+select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0,0,'',''
 from sy_PersonFamily 
 left join sy_Person on pfPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
@@ -558,7 +558,7 @@ order by perIDNumber,fID ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,
-comLaborProtectionCode,comHealthInsuranceCode,
+comLaborProtection1,comLaborProtection2,comHealthInsuranceCode,
 piChangeDate,
 piDropOutReason,
 code_desc DORStr,
@@ -587,9 +587,10 @@ order by plChangeDate desc,plCreateDate desc ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,perSex,perPensionIdentity,
-plLaborNo,ppEmployerRatio,ppLarboRatio,ppChangeDate,iiIdentityCode,
+comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate,iiIdentityCode,
 (select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv
 from sy_Person 
+left join sy_Company on perComGuid=comGuid
 left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
@@ -610,9 +611,10 @@ where perGuid in (" + perGuid + ") ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,plLaborNo
+        sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
+left join sy_Company on perComGuid=comGuid
 where perGuid in (" + perGuid + ") ");
 
         oCmd.CommandText = sb.ToString();
@@ -651,7 +653,7 @@ from
 where row_count=3
 
 --撈出主檔guid
-select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtectionCode LaborID 
+select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2 
 from sy_PaySalaryDetail
 left join sy_PaySalaryMain on psmGuid=pPsmGuid
 left join sy_Person on perGuid=pPerGuid
@@ -661,7 +663,7 @@ where psmYear in (@day_1,@day_2,@day_3) and perGuid in (select perGuid from #tmp
         if (perGuid != "")
             sb.Append(@"and perGuid in (" + perGuid + ")");
 
-        sb.Append(@"group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtectionCode
+        sb.Append(@"group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
 
 select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate from sy_PersonInsurance 
 where piPerGuid in (select perGuid from #tmp_perguid) and (piChange='01' or piChange='03')  and piStatus='A'
