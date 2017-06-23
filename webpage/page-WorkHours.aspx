@@ -139,6 +139,8 @@
             });
             //時數計算
             $("#btn_go").click(function () {
+                $("#div_fbox_out").show();
+                $("#loadblock").hide();
                 $.fancybox({
                     href: "#fancybox_go",
                     closeClick: false,
