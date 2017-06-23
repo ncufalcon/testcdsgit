@@ -6,24 +6,24 @@ using System.Data;
 public class ashx_GenPayroll : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
     payroll.gdal dal = new payroll.gdal();
     Common com = new Common();
-    public void ProcessRequest (HttpContext context) {
+    public void ProcessRequest(HttpContext context)
+    {
 
         context.Response.ContentType = "text/plain";
         try
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-                string XmlStr = "";
                 DataView dv = new DataView();
                 string rGuid = (!string.IsNullOrEmpty(context.Request.Form["rGuid"])) ? context.Request.Form["rGuid"].ToString() : "";
 
-                string[] str = { rGuid};
+                string[] str = { rGuid };
                 string sqlinj = com.CheckSqlInJection(str);
 
                 if (sqlinj == "")
                 {
-                   // DataTable dt =   dal.GenRayroll(rGuid,USERINFO.MemberGuid); 
-                   dal.GenRayroll(rGuid,USERINFO.MemberGuid); 
+                    // DataTable dt =   dal.GenRayroll(rGuid,USERINFO.MemberGuid); 
+                    dal.GenRayroll(rGuid, USERINFO.MemberGuid);
                     context.Response.Write("ok");
                 }
                 else { context.Response.Write("DangerWord"); }

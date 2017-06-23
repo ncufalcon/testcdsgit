@@ -170,7 +170,10 @@ namespace payroll.model
         public decimal pBuckleCost { get; set; }
         public decimal pBuckleFee { get; set; }
 
+        public decimal pWelfare { get; set; }
         public string sr_Guid { get; set; }
+
+        public string UserInfo { get; set; }
 
     }
 
