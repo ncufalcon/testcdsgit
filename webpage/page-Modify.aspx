@@ -76,6 +76,15 @@
                 $("#txt_person_ps").val("");
                 $("input[name='txt_person_status']").removeAttr("checked");
                 $("#hidden_person_status").val("");
+                $("#Pbox").removeAttr('disabled');
+                $("#Pbox").attr("onclick", "openfancybox(this);");
+                $("#txt_person_empno").removeAttr('disabled');
+                $("#txt_person_change_date").removeAttr('disabled');
+                $("#txt_person_change_pro").removeAttr('disabled');
+                $("#td_person_before").removeAttr('disabled');
+                $("#td_person_after").removeAttr('disabled');
+                $("#txt_person_ps").removeAttr('disabled');
+                $("input[name='txt_person_status']").removeAttr('disabled');
             });
             //人事異動 儲存按鈕
             $("#btn_person_submit").click(function () {
@@ -94,7 +103,7 @@
                         $("#td_person_before").append("<select id='select_before' disabled></select>");
                         $("#td_person_after").append("<select id='select_after'></select>");
                         call_storedata();
-                        load_thispeopledata($("#txt_person_empno").val());
+                        load_thispeopledata($("#txt_person_empno").val(), "person");
                     }
                     if (change_type == "02") {
                         $("#td_person_before,#td_person_after").empty();
@@ -102,13 +111,13 @@
                         $("#td_person_before").append("<select id='select_before' disabled></select>");
                         $("#td_person_after").append("<select id='select_after'></select>");
                         call_prodata();
-                        load_thispeopledata($("#txt_person_empno").val());
+                        load_thispeopledata($("#txt_person_empno").val(), "person");
                     }
                     if (change_type == "03" || change_type == "04" || change_type == "05") {
                         if (change_type == "04") {
                             $("#td_person_before,#td_person_after").empty();
                             $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
-                            load_thispeopledata($("#txt_person_empno").val());
+                            load_thispeopledata($("#txt_person_empno"), "person");
                             $("#select_after").datetimepicker({
                                 format: 'Y/m/d',//'Y-m-d H:i:s'
                                 timepicker: false,    //false關閉時間選項 
@@ -129,6 +138,30 @@
             });
             //人事異動 tr 點擊事件
             $(document).on("click", "#div_person_list tbody tr td:not(:nth-child(1))", function () {
+                if ($(this).closest('tr').attr("trstat") == "0") {//未確認
+                    $("#txt_person_empno").removeAttr('disabled');
+                    $("#txt_person_change_date").removeAttr('disabled');
+                    $("#txt_person_change_pro").removeAttr('disabled');
+                    $("#td_person_before").removeAttr('disabled');
+                    $("#td_person_after").removeAttr('disabled');
+                    $("#txt_person_ps").removeAttr('disabled');
+                    $("input[name='txt_person_status']").removeAttr('disabled');
+
+                    $("#Pbox").removeAttr('disabled');
+                    $("#Pbox").attr("onclick", "openfancybox(this);");
+                    $("#txt_person_change_pro").removeAttr('disabled');
+                } else {//已確認
+                    $("#txt_person_empno").attr('disabled', 'disabled'); 
+                    $("#txt_person_change_date").attr('disabled', 'disabled');
+                    $("#txt_person_change_pro").attr('disabled', 'disabled');
+                    $("#td_person_before").attr('disabled', 'disabled');
+                    $("#td_person_after").attr('disabled', 'disabled');
+                    $("#txt_person_ps").attr('disabled', 'disabled');
+                    $("input[name='txt_person_status']").attr('disabled', 'disabled');
+                    $("#Pbox").attr('disabled', 'disabled');
+                    $("#Pbox").prop("onclick", false);
+                    $("#txt_person_change_pro").attr('disabled', 'disabled');
+                }
                 $("#td_person_before,#td_person_after").empty();
                 $("#txt_person_empno").val("");
                 $("#txt_hidden_person_guid").val("");
@@ -139,7 +172,7 @@
                 $("#select_after").val("");
                 $("#txt_person_chkdate").val(today_ymd);
                 $("#txt_person_chkpeople").val(now_user);
-                $("#input[name='txt_person_status']:checked").val();
+                $("input[name='txt_person_status']:checked").val();
                 $("#txt_person_ps").val("");
                 $("#span_person_Status").text("修改");
                 $("#hidden_pcguid").val($(this).closest('tr').attr("trguid"));//修改才會有
@@ -283,8 +316,8 @@
                                 str_html += "</thead>";
                                 str_html += "<tbody>";
                                 for (var i = 0; i < response.length; i++) {
-                                    str_html += "<tr trguid='" + response[i].pcGuid + "'>";
-                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
+                                    str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "'>";
+                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcChangeDate + "</td>";
@@ -476,32 +509,37 @@
             }
             //人事異動 刪除
             $(document).on("click", "a[name='del_person_a']", function () {
-                if (confirm("確定刪除?")) {
-                    $.ajax({
-                        type: "POST",
-                        async: true, //在沒有返回值之前,不會執行下一步動作
-                        url: "../handler/pageModify.ashx",
-                        data: {
-                            func: "del_personchangedata",
-                            del_guid: $(this).attr("aguid")
-                        },
-                        error: function (xhr) {
-                            alert("error");
-                        },
-                        beforeSend: function () {
-                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-                        },
-                        success: function (response) {
-                            if (response != "error") {
-                                alert("刪除成功");
-                                call_personchangedata();
+                if ($(this).attr("astatus") == "1") {
+                    alert("已確認資料不能刪除");
+                } else {
+                    if (confirm("確定刪除?")) {
+                        $.ajax({
+                            type: "POST",
+                            async: true, //在沒有返回值之前,不會執行下一步動作
+                            url: "../handler/pageModify.ashx",
+                            data: {
+                                func: "del_personchangedata",
+                                del_guid: $(this).attr("aguid")
+                            },
+                            error: function (xhr) {
+                                alert("error");
+                            },
+                            beforeSend: function () {
+                                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                            },
+                            success: function (response) {
+                                if (response != "error") {
+                                    alert("刪除成功");
+                                    call_personchangedata();
+                                }
+                            },//success end
+                            complete: function () {
+                                $.unblockUI();
                             }
-                        },//success end
-                        complete: function () {
-                            $.unblockUI();
-                        }
-                    });//ajax end
+                        });//ajax end
+                    }
                 }
+                
             });
             //************************************************人事異動 END*********************************************//
 
@@ -542,7 +580,6 @@
                 $("#txt_pay_siname").val("");
                 $("#txt_hidden_pay_siguid").val("");
                 $("#txt_hidden_pay_perguid").val("");
-                $("#PCbox").removeAttr("disabled");
                 $("#txt_pay_ps").val("");
                 $("input[name='txt_pay_status']").removeAttr("checked");
                 $("#txt_pay_before").removeAttr("disabled");
@@ -555,6 +592,8 @@
                 $("input[name='txt_pay_status']").removeAttr('disabled');
                 $("#txt_pay_change_date").removeAttr('disabled');
                 $("#txt_pay_after").removeAttr('disabled');
+                $("#PCbox").attr("onclick", "openfancybox(this);");
+                $("#PPbox").attr("onclick", "openfancybox(this);");
             });
             //薪資異動 儲存按鈕
             $("#btn_pay_submit").click(function () {
@@ -569,18 +608,26 @@
                     //未確認
                     $("#PPbox").removeAttr('disabled');
                     $("#PCbox").removeAttr('disabled');
+                    $("#PPbox").attr("onclick", "openfancybox(this);");
+                    $("#PCbox").attr("onclick", "openfancybox(this);");
                     $("#txt_pay_empno").removeAttr('disabled');
                     $("input[name='txt_pay_status']").removeAttr('disabled');
                     $("#txt_pay_change_date").removeAttr('disabled');
                     $("#txt_pay_after").removeAttr('disabled');
+                    $("#btn_pay_submit").removeAttr('disabled');
+                    
                 } else {
                     //已確認
+                    // 
                     $("#PPbox").attr("disabled", "disabled");
                     $("#PCbox").attr("disabled", "disabled");
+                    $("#PPbox").prop("onclick", false);
+                    $("#PCbox").prop("onclick", false);
                     $("#txt_pay_empno").attr("disabled", "disabled");
                     $("input[name='txt_pay_status").attr("disabled", "disabled");
                     $("#txt_pay_change_date").attr("disabled", "disabled");
                     $("#txt_pay_after").attr("disabled", "disabled");
+                    $("#btn_pay_submit").attr("disabled", "disabled");
                 }
                 call_paychangedata_byguid();
             });
@@ -615,7 +662,6 @@
             });
             //薪資異動 工號欄位 change事件
             $(document).on("change", "#txt_pay_empno", function () {
-                //alert($(this).val());
                 load_thispeopledata($(this).val(),"pay");
             });
             //全選
@@ -930,7 +976,7 @@
                             case "pay":
                                 $("#txt_pay_empno").val(response[0].perNo);
                                 $("#txt_pay_cname").text(response[0].perName);
-                                $("#txt_hidden_person_guid").val(response[0].perGuid);
+                                $("#txt_hidden_pay_perguid").val(response[0].perGuid);
                                 if ($("#hidden_pay_refcode").val() == "01") {
                                     $("#txt_pay_before").val(response[0].perBasicSalary);
                                 }
@@ -939,10 +985,8 @@
                                 } else {
                                     $("#txt_pay_before").val("");
                                 }
-
                                 break;
                         }
-
                     } else {
                         switch (txttype) {
                             case "person":
@@ -954,7 +998,6 @@
                                 $("#txt_hidden_person_guid").val("");
                                 break;
                         }
-
                     }
                 },//success end
                 complete: function () {

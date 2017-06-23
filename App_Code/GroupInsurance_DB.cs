@@ -249,7 +249,7 @@ where  pgiStatus<>'D' and pgiGuid=@pgiGuid ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT * from sy_PersonGroupInsurance where pgiPerGuid=@pgiPerGuid and pgiStatus<>'D' ");
+        sb.Append(@"SELECT * from sy_PersonGroupInsurance where pgiChange='01' and pgiPerGuid=@pgiPerGuid and pgiStatus<>'D' ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

@@ -274,7 +274,7 @@ where  pfiStatus<>'D' and pfiGuid=@pfiGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtectionCode LaborID,comHealthInsuranceCode GanBorID,perPensionIdentity,
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode GanBorID,perPensionIdentity,
 (select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
 pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,ppEmployerRatio,ppLarboRatio,ppChangeDate

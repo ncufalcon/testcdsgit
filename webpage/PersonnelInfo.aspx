@@ -301,11 +301,20 @@
             switch (msg) {
                 default:
                     alert("完成");
-                    ClearInput();
+                    //ClearInput();
                     getData();
-                    $("#editstatus").html("新增");
-                    $("#Psavebtn").hide();
-                    $("#Paddbtn").show();
+                    //$("#editstatus").html("新增");
+                    //$("#Psavebtn").hide();
+                    //$("#Paddbtn").show();
+                    break;
+                case "add":
+                    alert("完成");
+                    getData();
+                    $("#editstatus").html("編輯");
+                    $("#Psavebtn").show();
+                    $("#Paddbtn").hide();
+                    $(".noSpan").html($("#pNo").val());
+                    $("#idtmp").val(ern);
                     break;
                 case "error":
                     alert(ern + " Error");
@@ -479,11 +488,11 @@
                                 $("#pName").val($(this).children("perName").text().trim());
                                 $("#pComGuid").val($(this).children("perComGuid").text().trim());
                                 $("#pCompName").val($(this).children("comAbbreviate").text().trim());
-                                $("#CompStr").html("");
+                                $("#CompStr").html($(this).children("comAbbreviate").text().trim());
                                 $("#Compstatus").val("Y");
                                 $("#pDep").val($(this).children("perDep").text().trim());
                                 $("#pDepName").val($(this).children("cbValue").text().trim());
-                                $("#DepStr").html("");
+                                $("#DepStr").html($(this).children("cbName").text().trim());
                                 $("#Depstatus").val("Y");
                                 $("input[name='pSex'][value='" + $(this).children("perSex").text().trim() + "']").prop("checked", true);
                                 $("input[name='perMarriage'][value='" + $(this).children("perMarriage").text().trim() + "']").prop("checked", true);
@@ -514,16 +523,16 @@
                                 $("#pHIClass").val($(this).children("perHIClass").text().trim());
                                 $("#pInsuranceDes").val($(this).children("iiIdentityCode").text().trim());
                                 $("#plv_CodeGuid").val($(this).children("iiGuid").text().trim());
-                                $("#PLvStr").html("");
+                                $("#PLvStr").html($(this).children("iiIdentity").text().trim());
                                 $("#PLVstatus").val("Y");
                                 $("input[name='pGroupInsurance'][value='" + $(this).children("perGroupInsurance").text().trim() + "']").prop("checked", true);
                                 $("#pLaborID").val($(this).children("LCode").text().trim());
                                 $("#Labor_CodeGuid").val($(this).children("Lgv").text().trim());
-                                $("#LaborStr").html("");
+                                $("#LaborStr").html($(this).children("LStr").text().trim());
                                 $("#Laborstatus").val("Y");
                                 $("#pInsuranceID").val($(this).children("HCode").text().trim());
                                 $("#Health_CodeGuid").val($(this).children("Hgv").text().trim());
-                                $("#HealthStr").html("");
+                                $("#HealthStr").html($(this).children("HStr").text().trim());
                                 $("#Healthstatus").val("Y");
                                 $("#pp_Identity").val($(this).children("perPensionIdentity").text().trim());
                                 //計薪
@@ -915,7 +924,7 @@
                                 $("#pf_IDNumber").val($(this).children("pfIDNumber").text().trim());
                                 $("#pf_Code").val($(this).children("slSubsidyCode").text().trim());
                                 $("#pf_CodeGuid").val($(this).children("slSubsidyCode").text().trim());
-                                $("#PfStr").html("");
+                                $("#PfStr").html($(this).children("slSubsidyIdentity").text().trim());
                                 $("#PFstatus").val("Y");
                                 $("#pf_Title").val($(this).children("pfTitle").text().trim());
                                 $("#pf_Birthday").val($(this).children("pfBirthday").text().trim());
@@ -1353,7 +1362,9 @@
                             $(".patxt").val("");
                             $(data).find("info_item").each(function (i) {
                                 $("#paid").val($(this).children("paGuid").text().trim());
-                                $("#pa_AllowanceCode").val($(this).children("paAllowanceCode").text().trim());
+                                $("#pa_AllowanceCode").val($(this).children("siItemCode").text().trim());
+                                $("#PaStr").html($(this).children("siItemName").text().trim());
+                                $("#PAstatus").val("Y");
                                 $("#pa_Cost").val($(this).children("paCost").text().trim());
                             });
                         }

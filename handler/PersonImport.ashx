@@ -55,6 +55,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@piInsurancePayroll", SqlDbType.Decimal);
                 //勞退
                 oCmd.Parameters.Add("@ppGuid", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@ppEmployerRatio", SqlDbType.Decimal);
                 oCmd.Parameters.Add("@ppPayPayroll", SqlDbType.Decimal);
                 //團保
                 oCmd.Parameters.Add("@pgiGuid", SqlDbType.NVarChar);
@@ -67,6 +68,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@perPosition", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perTel", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perPhone", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@perContract", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perSex", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perBirthday", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perIDNumber", SqlDbType.NVarChar);
@@ -99,6 +101,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@perSyNumber", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perSyAccount", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perYears", SqlDbType.Decimal);
+                oCmd.Parameters.Add("@perPensionIdentity", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perCreateId", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perModifyId", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@perModifyDate", SqlDbType.DateTime);
@@ -120,35 +123,37 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     string perSex = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString() : "";
                     string perMarriage = (Xls.GetCellValue(j, 9) != null) ? Xls.GetCellValue(j, 9).ToString() : "";
                     string perYears = (Xls.GetCellValue(j, 10) != null) ? Xls.GetCellValue(j, 10).ToString() : "0";
-                    string perFirstDate = (Xls.GetCellValue(j, 11) != null) ? Xls.GetCellValue(j, 11).ToString() : "";
-                    string perLastDate = (Xls.GetCellValue(j, 12) != null) ? Xls.GetCellValue(j, 12).ToString() : "";
-                    string perExaminationDate = (Xls.GetCellValue(j, 13) != null) ? Xls.GetCellValue(j, 13).ToString() : "";
-                    string perExaminationLastDate = (Xls.GetCellValue(j, 14) != null) ? Xls.GetCellValue(j, 14).ToString() : "";
-                    string perContractDeadline = (Xls.GetCellValue(j, 15) != null) ? Xls.GetCellValue(j, 15).ToString() : "";
-                    string perResidentPermitDate = (Xls.GetCellValue(j, 16) != null) ? Xls.GetCellValue(j, 16).ToString() : "";
-                    string perTel = (Xls.GetCellValue(j, 17) != null) ? Xls.GetCellValue(j, 17).ToString() : "";
-                    string perPhone = (Xls.GetCellValue(j, 18) != null) ? Xls.GetCellValue(j, 18).ToString() : "";
-                    string perEmail = (Xls.GetCellValue(j, 19) != null) ? Xls.GetCellValue(j, 19).ToString() : "";
-                    string perPostalCode = (Xls.GetCellValue(j, 20) != null) ? Xls.GetCellValue(j, 20).ToString() : "";
-                    string perAddr = (Xls.GetCellValue(j, 21) != null) ? Xls.GetCellValue(j, 21).ToString() : "";
-                    string perResPostalCode = (Xls.GetCellValue(j, 22) != null) ? Xls.GetCellValue(j, 22).ToString() : "";
-                    string perResidentAddr = (Xls.GetCellValue(j, 23) != null) ? Xls.GetCellValue(j, 23).ToString() : "";
-                    string perContactPerson = (Xls.GetCellValue(j, 24) != null) ? Xls.GetCellValue(j, 24).ToString() : "";
-                    string perContactTel = (Xls.GetCellValue(j, 25) != null) ? Xls.GetCellValue(j, 25).ToString() : "";
-                    string perRel = (Xls.GetCellValue(j, 26) != null) ? Xls.GetCellValue(j, 26).ToString() : "";
-                    string perPs = (Xls.GetCellValue(j, 27) != null) ? Xls.GetCellValue(j, 27).ToString() : "";
-                    string perHIClass = (Xls.GetCellValue(j, 28) != null) ? Xls.GetCellValue(j, 28).ToString() : "";
-                    string perInsuranceDes = (Xls.GetCellValue(j, 29) != null) ? Xls.GetCellValue(j, 29).ToString() : "";
-                    string perGroupInsurance = (Xls.GetCellValue(j, 30) != null) ? Xls.GetCellValue(j, 30).ToString() : "";
-                    string perLaborID = (Xls.GetCellValue(j, 31) != null) ? Xls.GetCellValue(j, 31).ToString() : "";
-                    string perInsuranceID = (Xls.GetCellValue(j, 32) != null) ? Xls.GetCellValue(j, 32).ToString() : "";
-                    string perSalaryClass = (Xls.GetCellValue(j, 33) != null) ? Xls.GetCellValue(j, 33).ToString() : "";
-                    string perTaxable = (Xls.GetCellValue(j, 34) != null) ? Xls.GetCellValue(j, 34).ToString() : "";
-                    string perBasicSalary = (Xls.GetCellValue(j, 35) != null) ? Xls.GetCellValue(j, 35).ToString() : "0";
-                    string perAllowance = (Xls.GetCellValue(j, 36) != null) ? Xls.GetCellValue(j, 36).ToString() : "0";
-                    string perSyAccountName = (Xls.GetCellValue(j, 37) != null) ? Xls.GetCellValue(j, 37).ToString() : "";
-                    string perSyNumber = (Xls.GetCellValue(j, 38) != null) ? Xls.GetCellValue(j, 38).ToString() : "";
-                    string perSyAccount = (Xls.GetCellValue(j, 39) != null) ? Xls.GetCellValue(j, 39).ToString() : "";
+                    string perContract = (Xls.GetCellValue(j, 11) != null) ? Xls.GetCellValue(j, 11).ToString() : "";
+                    string perFirstDate = (Xls.GetCellValue(j, 12) != null) ? Xls.GetCellValue(j, 12).ToString() : "";
+                    string perLastDate = (Xls.GetCellValue(j, 13) != null) ? Xls.GetCellValue(j, 13).ToString() : "";
+                    string perExaminationDate = (Xls.GetCellValue(j, 14) != null) ? Xls.GetCellValue(j, 14).ToString() : "";
+                    string perExaminationLastDate = (Xls.GetCellValue(j, 15) != null) ? Xls.GetCellValue(j, 15).ToString() : "";
+                    string perContractDeadline = (Xls.GetCellValue(j, 16) != null) ? Xls.GetCellValue(j, 16).ToString() : "";
+                    string perResidentPermitDate = (Xls.GetCellValue(j, 17) != null) ? Xls.GetCellValue(j, 17).ToString() : "";
+                    string perTel = (Xls.GetCellValue(j, 18) != null) ? Xls.GetCellValue(j, 18).ToString() : "";
+                    string perPhone = (Xls.GetCellValue(j, 19) != null) ? Xls.GetCellValue(j, 19).ToString() : "";
+                    string perEmail = (Xls.GetCellValue(j, 20) != null) ? Xls.GetCellValue(j, 20).ToString() : "";
+                    string perPostalCode = (Xls.GetCellValue(j, 21) != null) ? Xls.GetCellValue(j, 21).ToString() : "";
+                    string perAddr = (Xls.GetCellValue(j, 22) != null) ? Xls.GetCellValue(j, 22).ToString() : "";
+                    string perResPostalCode = (Xls.GetCellValue(j, 23) != null) ? Xls.GetCellValue(j, 23).ToString() : "";
+                    string perResidentAddr = (Xls.GetCellValue(j, 24) != null) ? Xls.GetCellValue(j, 24).ToString() : "";
+                    string perContactPerson = (Xls.GetCellValue(j, 25) != null) ? Xls.GetCellValue(j, 25).ToString() : "";
+                    string perContactTel = (Xls.GetCellValue(j, 26) != null) ? Xls.GetCellValue(j, 26).ToString() : "";
+                    string perRel = (Xls.GetCellValue(j, 27) != null) ? Xls.GetCellValue(j, 27).ToString() : "";
+                    string perPs = (Xls.GetCellValue(j, 28) != null) ? Xls.GetCellValue(j, 28).ToString() : "";
+                    string perHIClass = (Xls.GetCellValue(j, 29) != null) ? Xls.GetCellValue(j, 29).ToString() : "";
+                    string perInsuranceDes = (Xls.GetCellValue(j, 30) != null) ? Xls.GetCellValue(j, 30).ToString() : "";
+                    string perGroupInsurance = (Xls.GetCellValue(j, 31) != null) ? Xls.GetCellValue(j, 31).ToString() : "";
+                    string perLaborID = (Xls.GetCellValue(j, 32) != null) ? Xls.GetCellValue(j, 32).ToString() : "";
+                    string perInsuranceID = (Xls.GetCellValue(j, 33) != null) ? Xls.GetCellValue(j, 33).ToString() : "";
+                    string perPensionIdentity = (Xls.GetCellValue(j, 34) != null) ? Xls.GetCellValue(j, 34).ToString() : "";
+                    string perSalaryClass = (Xls.GetCellValue(j, 35) != null) ? Xls.GetCellValue(j, 35).ToString() : "";
+                    string perTaxable = (Xls.GetCellValue(j, 36) != null) ? Xls.GetCellValue(j, 36).ToString() : "";
+                    string perBasicSalary = (Xls.GetCellValue(j, 37) != null) ? Xls.GetCellValue(j, 37).ToString() : "0";
+                    string perAllowance = (Xls.GetCellValue(j, 38) != null) ? Xls.GetCellValue(j, 38).ToString() : "0";
+                    string perSyAccountName = (Xls.GetCellValue(j, 39) != null) ? Xls.GetCellValue(j, 39).ToString() : "";
+                    string perSyNumber = (Xls.GetCellValue(j, 40) != null) ? Xls.GetCellValue(j, 40).ToString() : "";
+                    string perSyAccount = (Xls.GetCellValue(j, 41) != null) ? Xls.GetCellValue(j, 41).ToString() : "";
 
                     //檢查員編與身分證字號是否重複
                     DataSet ckds = Personnel_Db.checkPerson(perNo, perIDNumber);
@@ -176,6 +181,9 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(getMinLV("ilItem4"));
                     //勞退
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
+                    string tmpEratio = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiRetirement");
+                    tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
+                    oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse(tmpEratio);
                     oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem3"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
@@ -192,15 +200,16 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@perPosition"].Value = perPosition;
                     oCmd.Parameters["@perTel"].Value = perTel;
                     oCmd.Parameters["@perPhone"].Value = perPhone;
+                    oCmd.Parameters["@perContract"].Value = perContract;
                     oCmd.Parameters["@perSex"].Value = perSex;
-                    oCmd.Parameters["@perBirthday"].Value = perBirthday;
+                    oCmd.Parameters["@perBirthday"].Value = xlsDateTimeFormat(perBirthday);
                     oCmd.Parameters["@perIDNumber"].Value = perIDNumber;
                     oCmd.Parameters["@perMarriage"].Value = perMarriage;
-                    oCmd.Parameters["@perFirstDate"].Value = perFirstDate;
-                    oCmd.Parameters["@perLastDate"].Value = perLastDate;
-                    oCmd.Parameters["@perExaminationDate"].Value = perExaminationDate;
-                    oCmd.Parameters["@perExaminationLastDate"].Value = perExaminationLastDate;
-                    oCmd.Parameters["@perContractDeadline"].Value = perContractDeadline;
+                    oCmd.Parameters["@perFirstDate"].Value = xlsDateTimeFormat(perFirstDate);
+                    oCmd.Parameters["@perLastDate"].Value = xlsDateTimeFormat(perLastDate);
+                    oCmd.Parameters["@perExaminationDate"].Value = xlsDateTimeFormat(perExaminationDate);
+                    oCmd.Parameters["@perExaminationLastDate"].Value = xlsDateTimeFormat(perExaminationLastDate);
+                    oCmd.Parameters["@perContractDeadline"].Value = xlsDateTimeFormat(perContractDeadline);
                     oCmd.Parameters["@perResidentPermitDate"].Value = perResidentPermitDate;
                     oCmd.Parameters["@perContactPerson"].Value = perContactPerson;
                     oCmd.Parameters["@perContactTel"].Value = perContactTel;
@@ -224,6 +233,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@perSyNumber"].Value = perSyNumber;
                     oCmd.Parameters["@perSyAccount"].Value = perSyAccount;
                     oCmd.Parameters["@perYears"].Value = decimal.Parse(perYears);
+                    oCmd.Parameters["@perPensionIdentity"].Value = perPensionIdentity;
                     oCmd.Parameters["@perCreateId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@perModifyId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@perModifyDate"].Value = DateTime.Now;
@@ -238,6 +248,7 @@ perDep,
 perPosition,
 perTel,
 perPhone,
+perContract,
 perSex,
 perBirthday,
 perIDNumber,
@@ -270,6 +281,7 @@ perSyAccountName,
 perSyNumber,
 perSyAccount,
 perYears,
+perPensionIdentity,
 perCreateId,
 perModifyId,
 perModifyDate,
@@ -283,6 +295,7 @@ perStatus
 @perPosition,
 @perTel,
 @perPhone,
+@perContract,
 @perSex,
 @perBirthday,
 @perIDNumber,
@@ -315,6 +328,7 @@ perStatus
 @perSyNumber,
 @perSyAccount,
 @perYears,
+@perPensionIdentity,
 @perCreateId,
 @perModifyId,
 @perModifyDate,
@@ -381,6 +395,8 @@ perStatus
                     ppPerGuid,
                     ppChange,
                     ppChangeDate,
+                    ppLarboRatio,
+                    ppEmployerRatio,
                     ppPayPayroll,
                     ppCreateId,
                     ppModifyDate,
@@ -391,6 +407,8 @@ perStatus
                     @perGuid,
                     '01',
                     @perFirstDate,
+                    '0',
+                    @ppEmployerRatio,
                     @ppPayPayroll,
                     @perCreateId,
                     @perModifyDate,
@@ -485,7 +503,7 @@ perStatus
                     oCmd.Parameters["@pfPerGuid"].Value = PersonGid;
                     oCmd.Parameters["@pfName"].Value = pfName;
                     oCmd.Parameters["@pfTitle"].Value = pfTitle;
-                    oCmd.Parameters["@pfBirthday"].Value = pfBirthday;
+                    oCmd.Parameters["@pfBirthday"].Value = xlsDateTimeFormat(pfBirthday);
                     oCmd.Parameters["@pfIDNumber"].Value = pfIDNumber;
                     oCmd.Parameters["@pfHealthInsurance"].Value = pfHealthInsurance;
                     oCmd.Parameters["@pfCode"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", pfCode, "slGuid");
@@ -671,6 +689,13 @@ perStatus
         if (ds.Rows.Count > 0)
             str = ds.Rows[0][ColunmName].ToString();
 
+        return str;
+    }
+
+    private string xlsDateTimeFormat(string str)
+    {
+        if (str.Length != 10 && str !="")
+            str = DateTime.FromOADate(Double.Parse(str)).ToString("yyyy/MM/dd");
         return str;
     }
 

@@ -9,6 +9,8 @@
         }
     </style>
     <script type="text/javascript">
+        var order_column = "";//表頭排序欄位
+        var order_status = "";//表頭排序升/降冪
         $(function () {
             $("div[name='div_hours']").show();
             $("span[name='span_hours_search']").hide();
@@ -54,7 +56,6 @@
                     },
                 });
             });
-
             //工時歷史資料外面查詢按鈕
             $("#btn_search").click(function () {
                 $("div[name='div_hours']").hide();
@@ -66,7 +67,6 @@
                 $("span[name='span_hours_search']").hide();
                 load_hoursdata();
             });
-
             //工時歷史資料資料 tr 點擊事件
             $(document).on("click", "#tbl_hours_list tbody tr td:not(:nth-child(1))", function () {
                 $("#txt_type").text("修改");
@@ -74,14 +74,11 @@
                 load_leave($(this).closest('tr').attr("trperguid"), $(this).closest('tr').attr("trdate"));
                 load_historyhours($(this).closest('tr').attr("trperguid"), $(this).closest('tr').attr("trdate"));
             });
-
             //原始工時資料資料 tr 點擊事件
             $(document).on("click", "#tbl_oldhours_list tbody tr td:not(:nth-child(1))", function () {
                 $("#span_Status").text("修改");
                 load_oldhours_byguid($(this).closest('tr').attr("trguid"));//修改才會有
             });
-
-
             //新增按鈕
             $("#btn_add").click(function () {
                 $("#hidden_aguid").val("");
@@ -193,6 +190,16 @@
                 }
             });
 
+            //原始資料table 表頭排序
+            $(document).on("click", "a[name='order_column']", function () {
+                if (order_status == "ASC") {
+                    order_status = "DESC";
+                } else {
+                    order_status = "ASC";
+                }
+                order_column =$(this).attr("id");
+                load_oldhours();
+            });
         });
 
         //匯入 回傳
@@ -543,7 +550,9 @@
                     func: "load_oldhours",
                     str_keywords: $("#search_old_keyword").val(),
                     str_dates: $("#search_old_dates").val(),
-                    str_datee: $("#search_old_datee").val()
+                    str_datee: $("#search_old_datee").val(),
+                    str_order_status: order_status,
+                    str_order_column: order_column
                 },
                 error: function (xhr) {
                     alert("error");
@@ -559,18 +568,18 @@
                         alert("系統錯誤");
                     }
                     else {
-                        str_html += '<thead>';
-                        str_html += '<tr>';
-                        str_html += '<th width="60" nowrap="nowrap">操作</th>';
-                        str_html += '<th nowrap="nowrap" width="60">員工編號</th>';
-                        str_html += '<th nowrap="nowrap" width="150">姓名</th>';
-                        str_html += '<th nowrap="nowrap" width="40">加扣別</th>';
-                        str_html += '<th nowrap="nowrap" width="80">日期</th>';
-                        str_html += '<th nowrap="nowrap" width="55">出勤時數</th>';
-                        str_html += '<th nowrap="nowrap">備註</th>';
-                        str_html += '</tr>';
-                        str_html += '</thead>';
-                        str_html += '<tbody>';
+                        //str_html += '<thead>';
+                        //str_html += '<tr>';
+                        //str_html += '<th width="60" nowrap="nowrap">操作</th>';
+                        //str_html += '<th nowrap="nowrap" width="60"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cno">員工編號</a></th>';
+                        //str_html += '<th nowrap="nowrap" width="150"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cname">姓名</a></th>';
+                        //str_html += '<th nowrap="nowrap" width="40">加扣別</th>';
+                        //str_html += '<th nowrap="nowrap" width="80"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cdate">日期</a></th>';
+                        //str_html += '<th nowrap="nowrap" width="55">出勤時數</th>';
+                        //str_html += '<th nowrap="nowrap">備註</th>';
+                        //str_html += '</tr>';
+                        //str_html += '</thead>';
+                        //str_html += '<tbody>';
                         for (var i = 0; i < response.length; i++) {
                             str_html += '<tr trguid="' + response[i].ah_guid + '">';
                             str_html += '<td align="center" nowrap="nowrap" class="font-normal"><a name="a_del" aguid="' + response[i].ah_guid + '" href="javascript:void(0);">刪除</a></td>';
@@ -587,12 +596,12 @@
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].ah_Remark + '</td>';
                             str_html += '</tr>';
                         }
-                        str_html += '</tbody>';
+                        //str_html += '</tbody>';
                     }
                     $("#tbl_oldhours_list").append(str_html);
                     $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                     $(".stripeMe tr:even").addClass("alt");
-                    $(".fixTable").tableHeadFixer();
+                    //$(".fixTable").tableHeadFixer();
                 },//success end
                 complete: function () {
                     $.unblockUI();
@@ -820,7 +829,20 @@
                             <br />
                             <div class="tabfixwidth">
                                 <div class="stripeMe fixTable" style="max-height: 175px;">
-                                    <table width="99%" border="0" cellspacing="0" cellpadding="0" id="tbl_oldhours_list"></table>
+                                    <table width="99%" border="0" cellspacing="0" cellpadding="0">
+                                        <thead>
+                                        <tr>
+                                        <th width="60" nowrap="nowrap">操作</th>
+                                        <th nowrap="nowrap" width="60"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cno">員工編號</a></th>
+                                        <th nowrap="nowrap" width="150"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cname">姓名</a></th>
+                                        <th nowrap="nowrap" width="40">加扣別</th>
+                                        <th nowrap="nowrap" width="80"><a href="javascript:void(0);" style="color:blue;" name="order_column" id="cdate">日期</a></th>
+                                        <th nowrap="nowrap" width="55">出勤時數</th>
+                                        <th nowrap="nowrap">備註</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbl_oldhours_list"></tbody>
+                                    </table>
                                 </div>
                             </div>
                             <br />
