@@ -126,11 +126,13 @@ public class calendaradmin : IHttpHandler
                 string str_sr_paydate = string.IsNullOrEmpty(context.Request.Form["str_sr_paydate"]) ? "" : context.Request.Form["str_sr_paydate"].ToString().Trim();
                 string str_sr_dates = string.IsNullOrEmpty(context.Request.Form["str_sr_dates"]) ? "" : context.Request.Form["str_sr_dates"].ToString().Trim();
                 string str_sr_datee = string.IsNullOrEmpty(context.Request.Form["str_sr_datee"]) ? "" : context.Request.Form["str_sr_datee"].ToString().Trim();
+                string str_sr_guid = string.IsNullOrEmpty(context.Request.Form["str_mod_guid"]) ? "" : context.Request.Form["str_mod_guid"].ToString().Trim();
 
                 s_db._sr_Year = str_sr_year;
                 s_db._sr_SalaryDate = str_sr_paydate;
                 s_db._sr_BeginDate = str_sr_dates;
                 s_db._sr_Enddate = str_sr_datee;
+                s_db._sr_Guid = str_sr_guid;
                 DataTable dt_sr = s_db.SelectSR();
                 if (dt_sr.Rows.Count > 0)
                 {

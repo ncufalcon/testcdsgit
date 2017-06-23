@@ -322,6 +322,8 @@
                         $("#tbl_ti").append(str_html);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
+                        $("#span_str1").empty().append(response[0].tiFormula);
+                        $("#span_str2").empty().append(response[1].tiFormula);
                     },//success end
                     complete: function () {
                         $.unblockUI();
@@ -590,12 +592,14 @@
                                 var add_name = "";
                                 var tax_name = "";
                                 var str_disalbed = "";
+                                var str_display = "";
                                 //如果是底薪或職能加給 使用者就不能刪除或修改 20170609新增這功能
                                 if (response[i].siRef == "01" || response[i].siRef == "02") {
-                                    str_disalbed = "disabled=disabled";
+                                    str_disalbed = " disabled=disabled ";
+                                    str_display =" style='display:none;' "
                                 }
                                 str_html += "<tr trguid='" + response[i].siGuid + "'>";
-                                str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='a_del_si' aguid='" + response[i].siGuid + "'  " + str_disalbed + ">刪除</a></td>";
+                                str_html += "<td align='center' nowrap='nowrap' class='font-normal'><a href='javascript:void(0);' name='a_del_si' aguid='" + response[i].siGuid + "'  " + str_disalbed + str_display + " >刪除</a></td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siItemCode + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].siItemName + "</td>";
                                 if (response[i].siAdd == "01")
@@ -1325,6 +1329,7 @@
                 $("input[name='txt_si_itembenefit']").attr("disabled", true);
                 $("input[name='txt_si_itemsup']").attr("disabled", true);
                 $("input[name='txt_si_itemtax']").attr("disabled", true);
+                $("input[name='txt_si_siBuckle']").attr("disabled", true);
                 $("#btn_si_item").attr("disabled", true);//連儲存按鈕都不給點
             }
             //薪資項目設定取消各項disabled
@@ -1337,7 +1342,8 @@
                 $("input[name='txt_si_itemadd']").attr("disabled", false);
                 $("input[name='txt_si_itembenefit']").attr("disabled", false);
                 $("input[name='txt_si_itemsup']").attr("disabled", false);
-                $("input[name='txt_si_itemtax']").attr("disabled", false);
+                $("input[name='txt_si_itemtax']").attr("disabled", false); 
+                $("input[name='txt_si_siBuckle']").attr("disabled", false);
                 $("#btn_si_item").attr("disabled", false);//連儲存按鈕都不給點
             }
         });
@@ -1435,8 +1441,8 @@
                                         <br />
                                         <span>福利金=所有與福利金相關項目加總X<span name="span_ps_payset_boonpercent"></span>%並四捨五入至整數位</span><br />
                                         <span>課稅所得：判讀<br />
-                                            應發薪資總額 >= 基本工資(目前為<span name="span_ps_payset_pay"></span>)，則所有應稅項－(80X28)即為課稅所得<br />
-                                            應發薪資總額 < 基本工資(目前為<span name="span_ps_payset_pay"></span>)，則所有應稅項加總－出勤天數X80即為課稅所得
+                                            應發薪資總額 >= 基本工資(目前為<span name="span_ps_payset_pay"></span>)，則<span id="span_str1"></span>即為課稅所得<br /><!--所有應稅項－(80X28)-->
+                                            應發薪資總額 < 基本工資(目前為<span name="span_ps_payset_pay"></span>)，則<span id="span_str2"></span>即為課稅所得<!--所有應稅項加總－出勤天數X80-->
                                         </span>
                                         <input type="text" style="display:none;" id="txt_hidden_sf_str1" />
                                         <input type="text" style="display:none;" id="txt_hidden_sf_str2" />
