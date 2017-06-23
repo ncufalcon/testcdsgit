@@ -181,22 +181,22 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(getMinLV("ilItem4"));
                     //勞退
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
-                    string tmpEratio = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiRetirement");
+                    string tmpEratio = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiRetirement","iiStatus");
                     tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
                     oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse(tmpEratio);
                     oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem3"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //勞健保卡號
-                    string CompanyGid = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid");
-                    oCmd.Parameters["@LaborNo"].Value =  getCnValue("sy_Company", "comGuid", CompanyGid, "comLaborProtectionCode");
-                    oCmd.Parameters["@HealNo"].Value = getCnValue("sy_Company", "comGuid", CompanyGid, "comHealthInsuranceCode");
+                    string CompanyGid = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid","comStatus");
+                    oCmd.Parameters["@LaborNo"].Value =  getCnValue("sy_Company", "comGuid", CompanyGid, "comLaborProtectionCode","comStatus");
+                    oCmd.Parameters["@HealNo"].Value = getCnValue("sy_Company", "comGuid", CompanyGid, "comHealthInsuranceCode","comStatus");
 
                     oCmd.Parameters["@perGuid"].Value = Guid.NewGuid().ToString();
                     oCmd.Parameters["@perNo"].Value = perNo;
                     oCmd.Parameters["@perName"].Value = perName;
                     oCmd.Parameters["@perComGuid"].Value = CompanyGid;
-                    oCmd.Parameters["@perDep"].Value = getCnValue("sy_CodeBranches", "cbValue", perDep, "cbGuid");
+                    oCmd.Parameters["@perDep"].Value = getCnValue("sy_CodeBranches", "cbValue", perDep, "cbGuid","cbStatus");
                     oCmd.Parameters["@perPosition"].Value = perPosition;
                     oCmd.Parameters["@perTel"].Value = perTel;
                     oCmd.Parameters["@perPhone"].Value = perPhone;
@@ -221,10 +221,10 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@perResPostalCode"].Value = perResPostalCode;
                     oCmd.Parameters["@perPs"].Value = perPs;
                     oCmd.Parameters["@perHIClass"].Value = perHIClass;
-                    oCmd.Parameters["@perInsuranceDes"].Value = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiGuid");
+                    oCmd.Parameters["@perInsuranceDes"].Value = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiGuid","iiStatus");
                     oCmd.Parameters["@perGroupInsurance"].Value = perGroupInsurance;
-                    oCmd.Parameters["@perLaborID"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", perLaborID, "slGuid");
-                    oCmd.Parameters["@perInsuranceID"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", perInsuranceID, "slGuid");
+                    oCmd.Parameters["@perLaborID"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", perLaborID, "slGuid","slStatus");
+                    oCmd.Parameters["@perInsuranceID"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", perInsuranceID, "slGuid","slStatus");
                     oCmd.Parameters["@perSalaryClass"].Value = perSalaryClass;
                     oCmd.Parameters["@perTaxable"].Value = perTaxable;
                     oCmd.Parameters["@perBasicSalary"].Value = decimal.Parse(perBasicSalary);
@@ -486,7 +486,7 @@ perStatus
                         continue;
 
                     //無對應工號則不Insert
-                    if (getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid") == "")
+                    if (getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid","perStatus") == "")
                         continue;
 
                     FamilyCount += 1;
@@ -496,8 +496,8 @@ perStatus
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //到職日
-                    string PersonGid = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid");
-                    oCmd.Parameters["@ChangeDate"].Value = getCnValue("sy_Person", "perGuid", PersonGid, "perFirstDate");
+                    string PersonGid = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid","perStatus");
+                    oCmd.Parameters["@ChangeDate"].Value = getCnValue("sy_Person", "perGuid", PersonGid, "perFirstDate","perStatus");
 
                     oCmd.Parameters["@pfGuid"].Value = Guid.NewGuid().ToString();
                     oCmd.Parameters["@pfPerGuid"].Value = PersonGid;
@@ -506,7 +506,7 @@ perStatus
                     oCmd.Parameters["@pfBirthday"].Value = xlsDateTimeFormat(pfBirthday);
                     oCmd.Parameters["@pfIDNumber"].Value = pfIDNumber;
                     oCmd.Parameters["@pfHealthInsurance"].Value = pfHealthInsurance;
-                    oCmd.Parameters["@pfCode"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", pfCode, "slGuid");
+                    oCmd.Parameters["@pfCode"].Value = getCnValue("sy_SubsidyLevel", "slSubsidyCode", pfCode, "slGuid","slStatus");
                     oCmd.Parameters["@pfGroupInsurance"].Value = pfGroupInsurance;
                     oCmd.Parameters["@pfCreateId"].Value = USERINFO.MemberGuid;
                     oCmd.Parameters["@pfModifyId"].Value = USERINFO.MemberGuid;
@@ -640,15 +640,17 @@ perStatus
     /// <para>conName : 條件欄位名稱</para>
     /// <para>InputVal : 查詢條件值</para>
     /// <para>reName : 讀取欄位名稱</para>
+    /// <para>statusName : 狀態欄位名稱</para>
     /// </summary>
-    private string getCnValue(string TableName, string conName, string InputVal, string reName)
+    private string getCnValue(string TableName, string conName, string InputVal, string reName,string statusName)
     {
         string str = string.Empty;
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oCmd.Connection.Open();
         oCmd.CommandText = "SELECT * from " + TableName + " with (nolock) where " + conName + "='" + InputVal + "' "; //with (nolock) SqlTransaction不加會TimeOut
-
+        if (statusName != "")
+            oCmd.CommandText += " and " + statusName + "<>'D'";
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
