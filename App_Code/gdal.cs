@@ -510,7 +510,7 @@ namespace payroll
         public DataTable SelSy_PaySalaryDetailTop200()
         {
 
-            string sql = @"select * from v_PaySalaryDetail where pStatus='A' ";
+            string sql = @"select top 200 * from v_PaySalaryDetail where pStatus='A' ";
 
             //if (!string.IsNullOrEmpty(str))
             //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
@@ -606,6 +606,7 @@ namespace payroll
             string sql = @"pr_GenPayroll";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@sr_Guid", rGuid);
             cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
             try

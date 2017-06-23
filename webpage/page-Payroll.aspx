@@ -101,17 +101,17 @@
 
 
 
-        <div class="stripeMe fixTable" id="div_Data">
+        <div id="div_Data">
                     <div class="twocol margin15T">
                             <div class="right">
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opGenPayroll();">計算薪資</a>
                             </div>
                         </div>
-
-           <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px;margin-top:20px;">
+            <div class="fixwidth" style="margin-top:20px;">
+           <div id="div_MList" class="stripeMe fixTable" style="min-height:175px;max-height:175px">
            </div>
-          
+          </div>
        </div><!-- overwidthblock -->
 
 
