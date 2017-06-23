@@ -629,43 +629,350 @@ namespace payroll
 
 
 
-    //    SqlCommand cmd = new SqlCommand();
-    //        try
-    //        {
-    //            cmd.Connection = Sqlconn;
-    //            cmd.Connection.Open();
-    //            SqlTransaction transaction;
-    //    transaction = cmd.Connection.BeginTransaction();
-    //            cmd.Transaction = transaction;
 
-    //            string sql = @"";
+        /// <summary>
+        /// 修改個人津貼
+        /// </summary>
+        public void Upsy_PaySalary(payroll.model.sy_PayRoll p)
+        {
+            string sql = @"insert into sy_PaySalaryDetailLog (plogPGuid
+                                                             ,plogPsmGuid
+                                                             ,plogPerGuid
+                                                             ,plogPerNo
+                                                             ,plogPerName
+                                                             ,plogPerCompanyName
+                                                             ,plogPerDep
+                                                             ,plogWeekdayTime1
+                                                             ,plogWeekdaySalary1
+                                                             ,plogWeekdayTime2
+                                                             ,plogWeekdaySalary2
+                                                             ,plogWeekdayTime3
+                                                             ,plogWeekdaySalary3
+                                                             ,plogOffDayTime1
+                                                             ,plogOffDaySalary1
+                                                             ,plogOffDayTime2
+                                                             ,plogOffDaySalary2
+                                                             ,plogOffDayTime3
+                                                             ,plogOffDaySalary3
+                                                             ,plogHolidayTime1
+                                                             ,plogHolidaySalary1
+                                                             ,plogHolidayTime2
+                                                             ,plogHolidaySalary2
+                                                             ,plogHolidayTime3
+                                                             ,plogHolidaySalary3
+                                                             ,plogHolidayTime4
+                                                             ,plogHolidaySalary4
+                                                             ,plogHolidayDutyFree
+                                                             ,plogHolidayTaxation
+                                                             ,plogNationalholidaysTime1
+                                                             ,plogNationalholidaysSalary1
+                                                             ,plogNationalholidaysTime2
+                                                             ,plogNationalholidaysSalary2
+                                                             ,plogNationalholidaysTime3
+                                                             ,plogNationalholidaysSalary3
+                                                             ,plogNationalholidaysTime4
+                                                             ,plogNationalholidaysSalary4
+                                                             ,plogNationalholidaysDutyFree
+                                                             ,plogNationalholidaysTaxation
+                                                             ,plogSpecialholidaysTime1
+                                                             ,plogSpecialholidaysSalary1
+                                                             ,plogSpecialholidaysTime2
+                                                             ,plogSpecialholidaysSalary2
+                                                             ,plogSpecialholidaysTime3
+                                                             ,plogSpecialholidaysSalary3
+                                                             ,plogSpecialholidaysTime4
+                                                             ,plogSpecialholidaysSalary4
+                                                             ,plogSpecialholidaysDutyFree
+                                                             ,plogSpecialholidaysTaxation
+                                                             ,plogHolidaySumDutyFree
+                                                             ,plogHolidaySumTaxation
+                                                             ,plogAttendanceDays
+                                                             ,plogAttendanceTimes
+                                                             ,plogPayLeave
+                                                             ,plogAnnualLeaveTimes
+                                                             ,plogAnnualLeaveSalary
+                                                             ,plogMarriageLeaveTimes
+                                                             ,plogMarriageLeaveSalary
+                                                             ,plogSickLeaveTimes
+                                                             ,plogSickLeaveSalary
+                                                             ,plogFuneralLeaveTimes
+                                                             ,plogFuneralLeaveSalary
+                                                             ,plogMaternityLeaveTimes
+                                                             ,plogMaternityLeaveSalary
+                                                             ,plogHonoraryLeaveTimes
+                                                             ,plogHonoraryLeaveSalary
+                                                             ,plogTaxDeduction
+                                                             ,plogPay
+                                                             ,plogTaxation
+                                                             ,plogPremium
+                                                             ,plogOverTimeDutyfree
+                                                             ,plogOverTimeTaxation
+                                                             ,plogPersonInsurance
+                                                             ,plogPersonLabor
+                                                             ,plogPersonPension
+                                                             ,plogCompanyPension
+                                                             ,plogComInsurance
+                                                             ,plogComLabor
+                                                             ,plogAnnualLeavePro
+                                                             ,plogP1Time
+                                                             ,plogIntertemporal
+                                                             ,plogBuckleCost
+                                                             ,plogBuckleFee
+                                                             ,plogWelfare
+                                                             ,plogStatus                                         
+                                                             ,plogModdifyId)
+                                                            select pGuid
+                                                                  ,pPsmGuid
+                                                                  ,pPerGuid
+                                                                  ,pPerNo
+                                                                  ,pPerName
+                                                                  ,pPerCompanyName
+                                                                  ,pPerDep
+                                                                  ,pWeekdayTime1
+                                                                  ,pWeekdaySalary1
+                                                                  ,pWeekdayTime2
+                                                                  ,pWeekdaySalary2
+                                                                  ,pWeekdayTime3
+                                                                  ,pWeekdaySalary3
+                                                                  ,pOffDayTime1
+                                                                  ,pOffDaySalary1
+                                                                  ,pOffDayTime2
+                                                                  ,pOffDaySalary2
+                                                                  ,pOffDayTime3
+                                                                  ,pOffDaySalary3
+                                                                  ,pHolidayTime1
+                                                                  ,pHolidaySalary1
+                                                                  ,pHolidayTime2
+                                                                  ,pHolidaySalary2
+                                                                  ,pHolidayTime3
+                                                                  ,pHolidaySalary3
+                                                                  ,pHolidayTime4
+                                                                  ,pHolidaySalary4
+                                                                  ,pHolidayDutyFree
+                                                                  ,pHolidayTaxation
+                                                                  ,pNationalholidaysTime1
+                                                                  ,pNationalholidaysSalary1
+                                                                  ,pNationalholidaysTime2
+                                                                  ,pNationalholidaysSalary2
+                                                                  ,pNationalholidaysTime3
+                                                                  ,pNationalholidaysSalary3
+                                                                  ,pNationalholidaysTime4
+                                                                  ,pNationalholidaysSalary4
+                                                                  ,pNationalholidaysDutyFree
+                                                                  ,pNationalholidaysTaxation
+                                                                  ,pSpecialholidaysTime1
+                                                                  ,pSpecialholidaysSalary1
+                                                                  ,pSpecialholidaysTime2
+                                                                  ,pSpecialholidaysSalary2
+                                                                  ,pSpecialholidaysTime3
+                                                                  ,pSpecialholidaysSalary3
+                                                                  ,pSpecialholidaysTime4
+                                                                  ,pSpecialholidaysSalary4
+                                                                  ,pSpecialholidaysDutyFree
+                                                                  ,pSpecialholidaysTaxation
+                                                                  ,pHolidaySumDutyFree
+                                                                  ,pHolidaySumTaxation
+                                                                  ,pAttendanceDays
+                                                                  ,pAttendanceTimes
+                                                                  ,pPayLeave
+                                                                  ,pAnnualLeaveTimes
+                                                                  ,pAnnualLeaveSalary
+                                                                  ,pMarriageLeaveTimes
+                                                                  ,pMarriageLeaveSalary
+                                                                  ,pSickLeaveTimes
+                                                                  ,pSickLeaveSalary
+                                                                  ,pFuneralLeaveTimes
+                                                                  ,pFuneralLeaveSalary
+                                                                  ,pMaternityLeaveTimes
+                                                                  ,pMaternityLeaveSalary
+                                                                  ,pHonoraryLeaveTimes
+                                                                  ,pHonoraryLeaveSalary
+                                                                  ,pTaxDeduction
+                                                                  ,pPay
+                                                                  ,pTaxation
+                                                                  ,pPremium
+                                                                  ,pOverTimeDutyfree
+                                                                  ,pOverTimeTaxation
+                                                                  ,pPersonInsurance
+                                                                  ,pPersonLabor
+                                                                  ,pPersonPension
+                                                                  ,pCompanyPension
+                                                                  ,pComInsurance
+                                                                  ,pComLabor
+                                                                  ,pAnnualLeavePro
+                                                                  ,pP1Time
+                                                                  ,pIntertemporal
+                                                                  ,pBuckleCost
+                                                                  ,pBuckleFee
+                                                                  ,pWelfare
+                                                                  ,'Update',@UserInfo from sy_PaySalaryDetail where pGuid=@pGuid;
+                                                                  update sy_PaySalaryDetail set                                                               
+                                                                  pWeekdayTime1=@pWeekdayTime1
+                                                                  ,pWeekdaySalary1=@pWeekdaySalary1
+                                                                  ,pWeekdayTime2=@pWeekdayTime2
+                                                                  ,pWeekdaySalary2=@pWeekdaySalary2
+                                                                  ,pWeekdayTime3=@pWeekdayTime3
+                                                                  ,pWeekdaySalary3=@pWeekdaySalary3
 
-    //            //新增Jumper
-    //            for (int i = 0; i<dt.Rows.Count; i++)
-    //            {
+                                                                  ,pOffDayTime1=@pOffDayTime1
+                                                                  ,pOffDaySalary1=@pOffDaySalary1
+                                                                  ,pOffDayTime2=@pOffDayTime2
+                                                                  ,pOffDaySalary2=@pOffDaySalary2
+                                                                  ,pOffDayTime3=@pOffDayTime3
+                                                                  ,pOffDaySalary3=@pOffDaySalary3
 
-    //                sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
-    //                        values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
+                                                                  ,pHolidayTime1=@pHolidayTime1
+                                                                  ,pHolidaySalary1=@pHolidaySalary1
+                                                                  ,pHolidayTime2=@pHolidayTime2
+                                                                  ,pHolidaySalary2=@pHolidaySalary2
+                                                                  ,pHolidayTime3=@pHolidayTime3
+                                                                  ,pHolidaySalary3=@pHolidaySalary3
+                                                                  ,pHolidayTime4=@pHolidayTime4
+                                                                  ,pHolidaySalary4=@pHolidaySalary4
+
+                                                                  ,pHolidayDutyFree=@pHolidayDutyFree
+                                                                  ,pHolidayTaxation=@pHolidayTaxation
+
+                                                                  ,pNationalholidaysTime1=@pNationalholidaysTime1
+                                                                  ,pNationalholidaysSalary1=@pNationalholidaysSalary1
+                                                                  ,pNationalholidaysTime2=@pNationalholidaysTime2
+                                                                  ,pNationalholidaysSalary2=@pNationalholidaysSalary2
+                                                                  ,pNationalholidaysTime3=@pNationalholidaysTime3
+                                                                  ,pNationalholidaysSalary3=@pNationalholidaysSalary3
+                                                                  ,pNationalholidaysTime4=@pNationalholidaysTime4
+                                                                  ,pNationalholidaysSalary4=@pNationalholidaysSalary4
+
+                                                                  ,pNationalholidaysDutyFree=@pNationalholidaysDutyFree
+                                                                  ,pNationalholidaysTaxation=@pNationalholidaysTaxation
+                                                           
+                                                                  ,pHolidaySumDutyFree=@pHolidaySumDutyFree
+                                                                  ,pHolidaySumTaxation=@pHolidaySumTaxation
+
+                                                                  ,pAttendanceDays=@pAttendanceDays
+                                                                  ,pAttendanceTimes=@pAttendanceTimes
+                                                                  ,pPayLeave=@pPayLeave
+                                                                  ,pAnnualLeaveTimes=@pAnnualLeaveTimes
+                                                                  ,pAnnualLeaveSalary=@pAnnualLeaveSalary
+                                                                  ,pMarriageLeaveTimes=@pMarriageLeaveTimes
+                                                                  ,pMarriageLeaveSalary=@pMarriageLeaveSalary
+                                                                  ,pSickLeaveTimes=@pSickLeaveTimes
+                                                                  ,pSickLeaveSalary=@pSickLeaveSalary
+                                                                  ,pFuneralLeaveTimes=@pFuneralLeaveTimes
+                                                                  ,pFuneralLeaveSalary=@pFuneralLeaveSalary
+                                                                  ,pMaternityLeaveTimes=@pMaternityLeaveTimes
+                                                                  ,pMaternityLeaveSalary=@pMaternityLeaveSalary
+                                                                  ,pHonoraryLeaveTimes=@pHonoraryLeaveTimes
+                                                                  ,pHonoraryLeaveSalary=@pHonoraryLeaveSalary
+                                                                  ,pTaxDeduction=@pTaxDeduction
+                                                                  ,pPay=@pPay
+                                                                  ,pTaxation=@pTaxation
+                                                                  ,pPremium=@pPremium
+                                                                  ,pOverTimeDutyfree=@pOverTimeDutyfree
+                                                                  ,pOverTimeTaxation=@pOverTimeTaxation
+                                                                  ,pPersonInsurance=@pPersonInsurance
+                                                                  ,pPersonLabor=@pPersonLabor
+                                                                  ,pPersonPension=@pPersonPension
+                                                                  ,pCompanyPension=@pCompanyPension
+                                                                  ,pComInsurance=@pComInsurance
+                                                                  ,pComLabor=@pComLabor
+                                                                  ,pAnnualLeavePro=@pAnnualLeavePro
+                                                                  ,pP1Time=@pP1Time
+                                                                  ,pIntertemporal=@pIntertemporal
+                                                                  ,pBuckleCost=@pBuckleCost
+                                                                  ,pBuckleFee=@pBuckleFee
+                                                                  ,pWelfare=@pWelfare where pGuid=@pGuid";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pGuid", p.pGuid);
+            cmd.Parameters.AddWithValue("@pWeekdayTime1", p.pWeekdayTime1);
+            cmd.Parameters.AddWithValue("@pWeekdayTime2", p.pWeekdayTime2);
+            cmd.Parameters.AddWithValue("@pWeekdayTime3", p.pWeekdayTime3);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary1", p.pWeekdaySalary1);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary2", p.pWeekdaySalary2);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary3", p.pWeekdaySalary3);
+
+            cmd.Parameters.AddWithValue("@pOffDayTime1", p.pOffDayTime1);
+            cmd.Parameters.AddWithValue("@pOffDayTime2", p.pOffDayTime2);
+            cmd.Parameters.AddWithValue("@pOffDayTime3", p.pOffDayTime3);
+            cmd.Parameters.AddWithValue("@pOffDaySalary1", p.pOffDaySalary1);
+            cmd.Parameters.AddWithValue("@pOffDaySalary2", p.pOffDaySalary2);
+            cmd.Parameters.AddWithValue("@pOffDaySalary3", p.pOffDaySalary3)
+                ;
+            cmd.Parameters.AddWithValue("@pHolidayTime1", p.pHolidayTime1);
+            cmd.Parameters.AddWithValue("@pHolidayTime2", p.pHolidayTime2);
+            cmd.Parameters.AddWithValue("@pHolidayTime3", p.pHolidayTime3);
+            cmd.Parameters.AddWithValue("@pHolidayTime4", p.pHolidayTime4);
+            cmd.Parameters.AddWithValue("@pHolidaySalary1", p.pHolidaySalary1);
+            cmd.Parameters.AddWithValue("@pHolidaySalary2", p.pHolidaySalary2);
+            cmd.Parameters.AddWithValue("@pHolidaySalary3", p.pHolidaySalary3);
+            cmd.Parameters.AddWithValue("@pHolidaySalary4", p.pHolidaySalary4);
+            cmd.Parameters.AddWithValue("@pHolidayDutyFree", p.pHolidayDutyFree);
+            cmd.Parameters.AddWithValue("@pHolidayTaxation", p.pHolidayTaxation);
+
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime1", p.pNationalholidaysTime1);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime2", p.pNationalholidaysTime2);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime3", p.pNationalholidaysTime3);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime4", p.pNationalholidaysTime4);
+
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary1", p.pNationalholidaysSalary1);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary2", p.pNationalholidaysSalary2);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary3", p.pNationalholidaysSalary3);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary4", p.pNationalholidaysSalary4);
+
+            cmd.Parameters.AddWithValue("@pNationalholidaysDutyFree", p.pNationalholidaysDutyFree);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTaxation", p.pNationalholidaysTaxation);
+
+            cmd.Parameters.AddWithValue("@pHolidaySumDutyFree", p.pHolidaySumDutyFree);
+            cmd.Parameters.AddWithValue("@pHolidaySumTaxation", p.pHolidaySumTaxation);
+
+            cmd.Parameters.AddWithValue("@pAttendanceDays", p.pAttendanceDays);
+            cmd.Parameters.AddWithValue("@pAttendanceTimes", p.pAttendanceTimes);
+            cmd.Parameters.AddWithValue("@pPayLeave", p.pPayLeave);
+            cmd.Parameters.AddWithValue("@pAnnualLeaveTimes", p.pAnnualLeaveTimes);
+            cmd.Parameters.AddWithValue("@pAnnualLeaveSalary", p.pAnnualLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMarriageLeaveTimes", p.pMarriageLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMarriageLeaveSalary", p.pMarriageLeaveSalary);
+            cmd.Parameters.AddWithValue("@pSickLeaveTimes", p.pSickLeaveTimes);
+            cmd.Parameters.AddWithValue("@pSickLeaveSalary", p.pSickLeaveSalary);
+            cmd.Parameters.AddWithValue("@pFuneralLeaveTimes", p.pFuneralLeaveTimes);
+            cmd.Parameters.AddWithValue("@pFuneralLeaveSalary", p.pFuneralLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMaternityLeaveTimes", p.pMaternityLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMaternityLeaveSalary", p.pMaternityLeaveSalary);
+            cmd.Parameters.AddWithValue("@pHonoraryLeaveTimes", p.pHonoraryLeaveTimes);
+            cmd.Parameters.AddWithValue("@pHonoraryLeaveSalary", p.pHonoraryLeaveSalary);
 
 
-    //                cmd.CommandText = sql;
-    //                cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
-    //                cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
-    //                cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
-    //                cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
-    //                cmd.ExecuteNonQuery();
-    //            }
+            cmd.Parameters.AddWithValue("@pTaxDeduction", p.pTaxDeduction);
+            cmd.Parameters.AddWithValue("@pPay", p.pPay);
+            cmd.Parameters.AddWithValue("@pTaxation", p.pTaxation);
+            cmd.Parameters.AddWithValue("@pPremium", p.pPremium);
+            cmd.Parameters.AddWithValue("@pOverTimeDutyfree", p.pOverTimeDutyfree);
+            cmd.Parameters.AddWithValue("@pOverTimeTaxation", p.pOverTimeTaxation);
+            cmd.Parameters.AddWithValue("@pPersonInsurance", p.pPersonInsurance);
+            cmd.Parameters.AddWithValue("@pPersonLabor", p.pPersonLabor);
+            cmd.Parameters.AddWithValue("@pPersonPension", p.pPersonPension);
+            cmd.Parameters.AddWithValue("@pCompanyPension", p.pCompanyPension);
+            cmd.Parameters.AddWithValue("@pComInsurance", p.pComInsurance);
+            cmd.Parameters.AddWithValue("@pComLabor", p.pComLabor);
+            cmd.Parameters.AddWithValue("@pAnnualLeavePro", p.pAnnualLeavePro);
+            cmd.Parameters.AddWithValue("@pP1Time", p.pP1Time);
+            cmd.Parameters.AddWithValue("@pIntertemporal", p.pIntertemporal);
+            cmd.Parameters.AddWithValue("@pBuckleCost", p.pBuckleCost);
+            cmd.Parameters.AddWithValue("@pBuckleFee", p.pBuckleFee);
+            cmd.Parameters.AddWithValue("@pWelfare", p.pWelfare);
+            cmd.Parameters.AddWithValue("@UserInfo", p.UserInfo);
+ 
 
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
 
-    ////cmd.ExecuteNonQuery();
-    //transaction.Commit();
-    //        }
-    //        catch (Exception ex) { throw ex; }
-    //        finally { cmd.Connection.Close(); cmd.Dispose(); }
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
 
-
-
-
+        }
 
 
     }

@@ -128,6 +128,11 @@
                         <li><a href="#tabs-3" onclick="JsEven.BuckleList()">法扣</a></li>
                     </ul>
                     <div id="tabs-1">
+                            <div class="twocol margin15TB">
+                                <div class="right">
+                                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit();">儲存</a>                                 
+                                </div>
+                            </div>
                         <div class="gentable">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
@@ -380,6 +385,8 @@
 
     <input id="hid_perGuid" type="hidden" />
     <input id="hid_pPsmGuid" type="hidden" />
+    <input id="hid_pGuid" type="hidden" />
+    
     <input id="hid_EditType" type="hidden" />
     <input id="hid_RangeType" type="hidden" />
     <script type="text/javascript">
@@ -396,6 +403,7 @@
                 txt_Dep_S: 'txt_Dep_S',
                 txt_SalaryRang_S: 'txt_SalaryRang_S',
                 hid_perGuid: 'hid_perGuid',
+                hid_pGuid:'hid_pGuid',
                 hid_pPsmGuid: 'hid_pPsmGuid',
                 hid_EditType: 'hid_EditType',
                 div_MList: 'div_MList',
@@ -662,14 +670,15 @@
                         var CView = xmldoc.getElementsByTagName('dView');
                         if (CView.length == 1) {
                             var e = CView[0];
+                            var pGuid = CommonEven.XmlNodeGetValue(e, "pGuid");
                             var perGuid = CommonEven.XmlNodeGetValue(e, "pPerGuid");
                             var pPsmGuid = CommonEven.XmlNodeGetValue(e, "pPsmGuid");
 
                             $('#' + JsEven.Id.hid_perGuid).val(perGuid);
                             $('#' + JsEven.Id.hid_pPsmGuid).val(pPsmGuid);
                             $('#' + JsEven.Id.hid_EditType).val("Edit");
-
-
+                            $('#' + JsEven.Id.hid_pGuid).val(pGuid);
+                            
                             $('#' + JsEven.Page1Id.td_PerNo).html(CommonEven.XmlNodeGetValue(e, "pPerNo"));
                             $('#' + JsEven.Page1Id.td_PerName).html(CommonEven.XmlNodeGetValue(e, "pPerName"));
                             $('#' + JsEven.Page1Id.td_PerCom).html(CommonEven.XmlNodeGetValue(e, "pPerCompanyName"));
@@ -680,13 +689,15 @@
                             $('#' + JsEven.Page1Id.txt_pWeekdayTime3).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime3"));
                             $('#' + JsEven.Page1Id.txt_pWeekdaySalary1).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary1"));
                             $('#' + JsEven.Page1Id.txt_pWeekdaySalary2).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary2"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary3).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary3"));                            
+                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary3).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary3"));
+
                             $('#' + JsEven.Page1Id.txt_pOffDayTime1).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime1"));
                             $('#' + JsEven.Page1Id.txt_pOffDayTime2).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime2"));
                             $('#' + JsEven.Page1Id.txt_pOffDayTime3).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime3"));
                             $('#' + JsEven.Page1Id.txt_pOffDaySalary1).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary1"));
                             $('#' + JsEven.Page1Id.txt_pOffDaySalary2).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary2"));
                             $('#' + JsEven.Page1Id.txt_pOffDaySalary3).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary3"));
+
                             $('#' + JsEven.Page1Id.txt_pHolidayTime1).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime1"));
                             $('#' + JsEven.Page1Id.txt_pHolidayTime2).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime2"));
                             $('#' + JsEven.Page1Id.txt_pHolidayTime3).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime3"));
@@ -695,6 +706,7 @@
                             $('#' + JsEven.Page1Id.txt_pHolidaySalary2).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary2"));
                             $('#' + JsEven.Page1Id.txt_pHolidaySalary3).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary3"));
                             $('#' + JsEven.Page1Id.txt_pHolidaySalary4).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary4"));
+
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysTime1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime1"));
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysTime2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime2"));
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysTime3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime3"));
@@ -702,7 +714,8 @@
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary1"));
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary2"));
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary3"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary4"));                            
+                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary4"));
+
                             $('#' + JsEven.Page1Id.txt_pAnnualLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveTimes"));
                             $('#' + JsEven.Page1Id.txt_pAnnualLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveSalary"));
                             $('#' + JsEven.Page1Id.txt_pMarriageLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMarriageLeaveTimes"));
@@ -785,67 +798,161 @@
             
             Edit: function () {
 
-                var guid = $('#' + this.Page2Id.hid_Guid).val();
-                var typ = $('#' + this.Page2Id.hid_EditType).val();
-                var PerGuid = $('#' + this.Page2Id.hid_PerGuid_m).val();
-                var AllCode = $('#' + this.Page2Id.hid_CodeGuid_m).val();
-                var Price = $('#' + this.Page2Id.txt_Pric_m).val();
-                var Quantity = $('#' + this.Page2Id.txt_Quantity_m).val();
-                var Cost = $('#' + this.Page2Id.txt_Cost_m).val();
-                var Ps = $('#' + this.Page2Id.txt_Ps_m).val();
-                var Date = $('#' + this.Page2Id.txt_Date_m).val();
+                var pGuid = $('#' + this.Id.hid_pGuid).val();
+                if (pGuid != "") {
+                    var pWeekdayTime1 = $('#' + this.Page1Id.txt_pWeekdayTime1).val();
+                    var pWeekdayTime2 = $('#' + this.Page1Id.txt_pWeekdayTime2).val();
+                    var pWeekdayTime3 = $('#' + this.Page1Id.txt_pWeekdayTime3).val();
+                    var pWeekdaySalary1 = $('#' + this.Page1Id.txt_pWeekdaySalary1).val();
+                    var pWeekdaySalary2 = $('#' + this.Page1Id.txt_pWeekdaySalary2).val();
+                    var pWeekdaySalary3 = $('#' + this.Page1Id.txt_pWeekdaySalary3).val();
+                    var pOffDayTime1 = $('#' + this.Page1Id.txt_pOffDayTime1).val();
+                    var pOffDayTime2 = $('#' + this.Page1Id.txt_pOffDayTime2).val();
+                    var pOffDayTime3 = $('#' + this.Page1Id.txt_pOffDayTime3).val();
+                    var pOffDaySalary1 = $('#' + this.Page1Id.txt_pOffDaySalary1).val();
+                    var pOffDaySalary2 = $('#' + this.Page1Id.txt_pOffDaySalary2).val();
+                    var pOffDaySalary3 = $('#' + this.Page1Id.txt_pOffDaySalary3).val();
+                    var pHolidayTime1 = $('#' + this.Page1Id.txt_pHolidayTime1).val();
+                    var pHolidayTime2 = $('#' + this.Page1Id.txt_pHolidayTime2).val();
+                    var pHolidayTime3 = $('#' + this.Page1Id.txt_pHolidayTime3).val();
+                    var pHolidayTime4 = $('#' + this.Page1Id.txt_pHolidayTime4).val();
+                    var pHolidaySalary1 = $('#' + this.Page1Id.txt_pHolidaySalary1).val();
+                    var pHolidaySalary2 = $('#' + this.Page1Id.txt_pHolidaySalary2).val();
+                    var pHolidaySalary3 = $('#' + this.Page1Id.txt_pHolidaySalary3).val();
+                    var pHolidaySalary4 = $('#' + this.Page1Id.txt_pHolidaySalary4).val();
+                    var pHolidayDutyFree = $('#' + this.Page1Id.txt_pHolidayDutyFree).val();
+                    var pHolidayTaxation = $('#' + this.Page1Id.txt_pHolidayTaxation).val();
+                    var pNationalholidaysTime1 = $('#' + this.Page1Id.txt_pNationalholidaysTime1).val();
+                    var pNationalholidaysTime2 = $('#' + this.Page1Id.txt_pNationalholidaysTime2).val();
+                    var pNationalholidaysTime3 = $('#' + this.Page1Id.txt_pNationalholidaysTime3).val();
+                    var pNationalholidaysTime4 = $('#' + this.Page1Id.txt_pNationalholidaysTime4).val();
+                    var pNationalholidaysSalary1 = $('#' + this.Page1Id.txt_pNationalholidaysSalary1).val();
+                    var pNationalholidaysSalary2 = $('#' + this.Page1Id.txt_pNationalholidaysSalary2).val();
+                    var pNationalholidaysSalary3 = $('#' + this.Page1Id.txt_pNationalholidaysSalary3).val();
+                    var pNationalholidaysSalary4 = $('#' + this.Page1Id.txt_pNationalholidaysSalary4).val();
+                    var pNationalholidaysTaxation = $('#' + this.Page1Id.txt_pNationalholidaysTaxation).val();
+                    var pNationalholidaysDutyFree = $('#' + this.Page1Id.txt_pNationalholidaysDutyFree).val();
 
-                if (PerGuid == "") { alert('請選擇員工'); return false; }
-                if (AllCode == "") { alert('請選擇津貼項目'); return false; }
-                if (Price == "") { alert('請輸入單價'); return false; }
-                CheckFormat.CheckInt(this.Page2Id.txt_Pric_m);
-                if (Quantity == "") { alert('請輸入數量'); return false; }
-                CheckFormat.CheckInt(this.Page2Id.txt_Quantity_m);
-                if (Cost == "") { alert('請輸入金額'); return false; }
-                CheckFormat.CheckInt(this.Page2Id.txt_Cost_m);
-                if (Date == "") { alert('請選擇日期'); return false; }
-                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-                $.ajax({
-                    type: "POST",
-                    url: '../handler/Allowance/ashx_AllEdit.ashx',
-                    data: 'guid=' + guid +
-                          '&typ=' + typ +
-                          '&PerGuid=' + PerGuid +
-                          '&AllCode=' + AllCode +
-                          '&Price=' + Price +
-                          '&Quantity=' + Quantity +
-                          '&Cost=' + Cost +
-                          '&Ps=' + Ps +
-                          '&Date=' + Date,
-                    dataType: 'text',  //xml, json, script, text, html
-                    success: function (msg) {
-                        switch (msg) {
-                            case "ok":
-                                alert('儲存成功');
-                                JsEven.Ins();
-                                JsEven.List('Y');
-                                break;
-                            case "e":
-                                alert('程式發生錯誤，請聯絡相關管理人員');
-                                break;
-                            case "t":
-                                alert('登入逾時');
-                                CommonEven.goLogin();
-                                break;
-                            case "d":
-                                CommandEven.goErrorPage();
-                                break;
+                    var pHolidaySumDutyFree = $('#' + this.Page1Id.txt_pHolidaySumDutyFree).val();
+                    var pHolidaySumTaxation = $('#' + this.Page1Id.txt_pHolidaySumTaxation).val();
+                    var pAnnualLeaveTimes = $('#' + this.Page1Id.txt_pAnnualLeaveTimes).val();
+                    var pAnnualLeaveSalary = $('#' + this.Page1Id.txt_pAnnualLeaveSalary).val();
+                    var pMarriageLeaveTimes = $('#' + this.Page1Id.txt_pMarriageLeaveTimes).val();
+                    var pMarriageLeaveSalary = $('#' + this.Page1Id.txt_pMarriageLeaveSalary).val();
+                    var pSickLeaveTimes = $('#' + this.Page1Id.txt_pSickLeaveTimes).val();
+                    var pSickLeaveSalary = $('#' + this.Page1Id.txt_pSickLeaveSalary).val();
+                    var pFuneralLeaveTimes = $('#' + this.Page1Id.txt_pFuneralLeaveTimes).val();
+                    var pFuneralLeaveSalary = $('#' + this.Page1Id.txt_pFuneralLeaveSalary).val();
+                    var pMaternityLeaveTimes = $('#' + this.Page1Id.txt_pMaternityLeaveTimes).val();
+                    var pMaternityLeaveSalary = $('#' + this.Page1Id.txt_pMaternityLeaveSalary).val();
+                    var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
+                    var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
+                    var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
+                    var pOverTimeTaxation = $('#' + this.Page1Id.txt_pOverTimeTaxation).val();
+                    var pIntertemporal = $('#' + this.Page1Id.txt_pIntertemporal).val();
+                    var pPay = $('#' + this.Page2Id.txt_pPay).val();
+                    var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
+                    var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
+                    var pPersonInsurance = $('#' + this.Page2Id.txt_pPersonInsurance).val();
+                    var pPersonLabor = $('#' + this.Page2Id.txt_pPersonLabor).val();
+                    var pPersonPension = $('#' + this.Page2Id.txt_pPersonPension).val();
+                    var pCompanyPension = $('#' + this.Page2Id.txt_pCompanyPension).val();
+
+
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    $.ajax({
+                        type: "POST",
+                        url: '../handler/Payroll/ashx_PayEdit.ashx',
+                        data: 'pGuid=' + pGuid +
+                              '&pWeekdayTime1=' + pWeekdayTime1 +
+                              '&pWeekdayTime2=' + pWeekdayTime2 +
+                              '&pWeekdayTime3=' + pWeekdayTime3 +
+                              '&pWeekdaySalary1=' + pWeekdaySalary1 +
+                              '&pWeekdaySalary2=' + pWeekdaySalary2 +
+                              '&pWeekdaySalary3=' + pWeekdaySalary3 +
+
+                              '&pOffDayTime1=' + pOffDayTime1 +
+                              '&pOffDayTime2=' + pOffDayTime2 +
+                              '&pOffDayTime3=' + pOffDayTime3 +
+                              '&pOffDaySalary1=' + pOffDaySalary1 +
+                              '&pOffDaySalary2=' + pOffDaySalary2 +
+                              '&pOffDaySalary3=' + pOffDaySalary3 +
+
+                              '&pHolidayTime1=' + pHolidayTime1 +
+                              '&pHolidayTime2=' + pHolidayTime2 +
+                              '&pHolidayTime3=' + pHolidayTime3 +
+                              '&pHolidayTime4=' + pHolidayTime4 +
+                              '&pHolidaySalary1=' + pHolidaySalary1 +
+                              '&pHolidaySalary2=' + pHolidaySalary2 +
+                              '&pHolidaySalary3=' + pHolidaySalary3 +
+                              '&pHolidaySalary4=' + pHolidaySalary4 +
+
+                              '&pNationalholidaysTime1=' + pNationalholidaysTime1 +
+                              '&pNationalholidaysTime2=' + pNationalholidaysTime2 +
+                              '&pNationalholidaysTime3=' + pNationalholidaysTime3 +
+                              '&pNationalholidaysTime4=' + pNationalholidaysTime4 +
+                              '&pNationalholidaysSalary1=' + pNationalholidaysSalary1 +
+                              '&pNationalholidaysSalary2=' + pNationalholidaysSalary2 +
+                              '&pNationalholidaysSalary3=' + pNationalholidaysSalary3 +
+                              '&pNationalholidaysSalary4=' + pNationalholidaysSalary4 +
+
+
+                              '&pAnnualLeaveTimes=' + pAnnualLeaveTimes +
+                              '&pAnnualLeaveSalary=' + pAnnualLeaveSalary +
+
+                              '&pMarriageLeaveTimes=' + pMarriageLeaveTimes +
+                              '&pMarriageLeaveSalary=' + pMarriageLeaveSalary +
+                              '&pSickLeaveTimes=' + pSickLeaveTimes +
+                              '&pSickLeaveSalary=' + pSickLeaveSalary +
+                              '&pFuneralLeaveTimes=' + pFuneralLeaveTimes +
+                              '&pFuneralLeaveSalary=' + pFuneralLeaveSalary +
+                              '&pMaternityLeaveTimes=' + pMaternityLeaveTimes +
+                              '&pMaternityLeaveSalary=' + pMaternityLeaveSalary +
+                              '&pHolidayDutyFree=' + pHolidayDutyFree +
+                              '&pHolidayTaxation=' + pHolidayTaxation +
+                              '&pNationalholidaysTaxation=' + pNationalholidaysTaxation +
+                              '&pNationalholidaysDutyFree=' + pNationalholidaysDutyFree +
+                              '&pHolidaySumDutyFree=' + pHolidaySumDutyFree +
+                              '&pHolidaySumTaxation=' + pHolidaySumTaxation +
+                              '&pAttendanceDays=' + pAttendanceDays +
+                              '&pAttendanceTimes=' + pAttendanceTimes +
+                              '&pOverTimeDutyfree=' + pOverTimeDutyfree +
+                              '&pOverTimeTaxation=' + pOverTimeTaxation +
+                              '&pIntertemporal=' + pIntertemporal +
+                              '&pPay=' + pPay +
+                              '&pTaxation=' + pTaxation +
+                              '&pPremium=' + pPremium +
+                              '&pPersonInsurance=' + pPersonInsurance +
+                              '&pPersonLabor=' + pPersonLabor +
+                              '&pPersonPension=' + pPersonPension +
+                              '&pCompanyPension=' + pCompanyPension,
+                        dataType: 'text',  //xml, json, script, text, html
+                        success: function (msg) {
+                            switch (msg) {
+                                case "ok":
+                                    alert('儲存成功');
+                                    break;
+                                case "e":
+                                    alert('程式發生錯誤，請聯絡相關管理人員');
+                                    break;
+                                case "t":
+                                    alert('登入逾時');
+                                    CommonEven.goLogin();
+                                    break;
+                                case "d":
+                                    CommandEven.goErrorPage();
+                                    break;
+                            }
+                            $.unblockUI();
+                        },
+                        error: function (xhr, statusText) {
+                            //alert(xhr.status);
+                            $.unblockUI();
+                            alert('資料發生錯誤');
+
                         }
-                        $.unblockUI();
-                    },
-                    error: function (xhr, statusText) {
-                        //alert(xhr.status);
-                        $.unblockUI();
-                        alert('資料發生錯誤');
-
-                    }
-                });
-
+                    });
+                } else { alert('請選擇要修改的資料');}
 
 
             },

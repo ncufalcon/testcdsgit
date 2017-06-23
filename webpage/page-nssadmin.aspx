@@ -1192,7 +1192,7 @@
                         str_html += '<thead>';
                         str_html += '<tr>';
                         //str_html += '<th width="80" nowrap="nowrap">操作</th>';
-                        str_html += '<th nowrap="nowrap">月投保薪資</th>';
+                        //str_html += '<th nowrap="nowrap">月投保薪資</th>';
                         str_html += '<th nowrap="nowrap">勞保</th>';
                         str_html += '<th nowrap="nowrap">勞退</th>';
                         str_html += '<th nowrap="nowrap">健保</th>';
@@ -1203,7 +1203,7 @@
                         for (var i = 0; i < response.length; i++) {
                             str_html += '<tr trguid=' + response[i].ilGuid + '>';
                             //str_html += '<td align="center" nowrap="nowrap" class="font-normal"><a name="a_sl_del_guid" href="javascript:void(0);" aguid=' + response[i].slGuid + '>刪除</a></td>';
-                            str_html += '<td align="center" nowrap="nowrap">' + response[i].ilItem1 + '</td>';
+                            //str_html += '<td align="center" nowrap="nowrap">' + response[i].ilItem1 + '</td>';
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].ilItem2 + '</td>';
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].ilItem3 + '</td>';
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].ilItem4 + '</td>';
@@ -1610,7 +1610,7 @@
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_gii_giidentityCode" /></td>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">投保身分證</div>
+                                                        <div class="font-title titlebackicon">投保身分</div> 
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_gii_giiIdentity" />
