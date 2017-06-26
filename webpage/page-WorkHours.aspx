@@ -10,7 +10,7 @@
     </style>
     <script type="text/javascript">
         var order_column = "";//表頭排序欄位
-        var order_status = "";//表頭排序升/降冪
+        var order_status = "";//表頭排序升/降冪 
         $(function () {
             $("div[name='div_hours']").show();
             $("span[name='span_hours_search']").hide();
