@@ -459,7 +459,10 @@ namespace payroll
         public DataTable SelSy_PaySalaryDetail(payroll.model.sy_PayRoll p)
         {
 
-            string sql = @"select * from v_PaySalaryDetail where pStatus='A' ";
+            string sql = @"select *
+                           ,(select sum(b.pPersonPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
+                           ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
+                           from v_PaySalaryDetail as a where pStatus='A' ";
 
             if (!string.IsNullOrEmpty(p.pPerNo))
                 sql += "and pPerNo like '%'+ @pPerNo +'%' ";

@@ -51,8 +51,8 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<pPerDep>" + dv[i]["pPerDep"].ToString() + "</pPerDep>";
 
                         XmlStr += "<pWeekdayTime1>" + dv[i]["pWeekdayTime1"].ToString() + "</pWeekdayTime1>";
-                        XmlStr += "<pWeekdayTime2>" + dv[i]["pWeekdayTime1"].ToString() + "</pWeekdayTime2>";
-                        XmlStr += "<pWeekdayTime3>" + dv[i]["pWeekdayTime1"].ToString() + "</pWeekdayTime3>";
+                        XmlStr += "<pWeekdayTime2>" + dv[i]["pWeekdayTime2"].ToString() + "</pWeekdayTime2>";
+                        XmlStr += "<pWeekdayTime3>" + dv[i]["pWeekdayTime3"].ToString() + "</pWeekdayTime3>";
                         XmlStr += "<pWeekdaySalary1>" + dv[i]["pWeekdaySalary1"].ToString() + "</pWeekdaySalary1>";
                         XmlStr += "<pWeekdaySalary2>" + dv[i]["pWeekdaySalary2"].ToString() + "</pWeekdaySalary2>";
                         XmlStr += "<pWeekdaySalary3>" + dv[i]["pWeekdaySalary3"].ToString() + "</pWeekdaySalary3>";
@@ -128,6 +128,8 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<pPersonLabor>" + dv[i]["pPersonLabor"].ToString() + "</pPersonLabor>";
                         XmlStr += "<pPersonPension>" + dv[i]["pPersonPension"].ToString() + "</pPersonPension>";
                         XmlStr += "<pCompanyPension>" + dv[i]["pCompanyPension"].ToString() + "</pCompanyPension>";
+                        XmlStr += "<pPersonPensionSum>" + dv[i]["pPersonPensionSum"].ToString() + "</pPersonPensionSum>";
+                        XmlStr += "<pCompanyPensionSum>" + dv[i]["pCompanyPensionSum"].ToString() + "</pCompanyPensionSum>";
                         XmlStr += "<pStatus>" + dv[i]["pStatus"].ToString() + "</pStatus>";
                         XmlStr += "<pComInsurance>" + dv[i]["pComInsurance"].ToString() + "</pComInsurance>";
                         XmlStr += "<pComLabor>" + dv[i]["pComLabor"].ToString() + "</pComLabor>";
@@ -140,6 +142,9 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<sr_SalaryDate>" + context.Server.HtmlEncode(dv[i]["sr_SalaryDate"].ToString()) + "</sr_SalaryDate>";
                         XmlStr += "<sr_Guid>" + dv[i]["sr_Guid"].ToString() + "</sr_Guid>";
                             
+                            
+
+
                         XmlStr += "</dView>";
                     }
                     XmlStr += "</dList>";

@@ -1041,9 +1041,11 @@
                                     alert('資料發生錯誤，請聯絡管理者');
                                     break;
                                 default:
+                                    JsEven.List();
                                     document.getElementById(JsEven.Id.div_GenPayroll).style.display = "none";
                                     document.getElementById(JsEven.Id.div_Search).style.display = "none";
                                     document.getElementById(JsEven.Id.div_Data).style.display = "block";
+                                    alert('薪資計算完成');
                                     break;
                             }
                             $.unblockUI();
