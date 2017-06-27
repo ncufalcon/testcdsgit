@@ -10,7 +10,7 @@
     </style>
     <script type="text/javascript">
         var order_column = "";//表頭排序欄位
-        var order_status = "";//表頭排序升/降冪 
+        var order_status = "";//表頭排序升/降冪
         $(function () {
             $("div[name='div_hours']").show();
             $("span[name='span_hours_search']").hide();
@@ -700,9 +700,9 @@
             $.ajax({
                 type: "POST",
                 async: true, //在沒有返回值之前,不會執行下一步動作
-                url: "../handler/page-Attendance.ashx",
+                url: "../handler/page-WorkHours.ashx",
                 data: {
-                    func: "load_payrange"
+                    func: "load_payrange_workinghours"
                 },
                 error: function (xhr) {
                     alert("error");

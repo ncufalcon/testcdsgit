@@ -1641,17 +1641,17 @@
                             <table class="table-margin">
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oOverTime1" maxlength="2" />小時以內</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOverTime1" maxlength="2" />小時以內</td>
                                     <td>加班比率-1類<input type="text" value="" class="width25" id="txt_o_oOverTimePay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oOverTime2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oOverTime2End" maxlength="2" />小時</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOverTime2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oOverTime2End" maxlength="2" />小時</td>
                                     <td>加班比率-2類<input type="text" class="width25" value="" id="txt_o_oOverTimePay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oOverTime3" maxlength="2" />小時以上</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOverTime3" maxlength="2" />小時以上</td>
                                     <td>加班比率-3類<input type="text" value="" class="width25" id="txt_o_oOverTimePay3" maxlength="6" />%</td>
                                 </tr>
                             </table>
@@ -1662,17 +1662,17 @@
                             <table class="table-margin">
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oOffDay1" maxlength="2" />小時以內</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOffDay1" maxlength="2" />小時以內</td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oOffDayPay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oOffDay2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oOffDay2End" maxlength="2" />小時</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOffDay2Start" maxlength="2" />至<input type="text" class="width15" value="" id="txt_o_oOffDay2End" maxlength="2" />小時</td>
                                     <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oOffDayPay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oOffDay3Start" maxlength="2" /><!---->至<input type="text" value="0" class="width10" id="txt_o_oOffDay3End" maxlength="2" style="display:none;" /></td>
+                                        <input type="text" value="" class="width15" id="txt_o_oOffDay3Start" maxlength="2" /><!---->至<input type="text" value="0" class="width15" id="txt_o_oOffDay3End" maxlength="2" style="display:none;" /></td>
                                     <td>加給倍率<input type="text" value="0" class="width25" id="txt_o_oOffDayPay3" maxlength="6" />%</td>
                                 </tr>
                             </table>
@@ -1683,22 +1683,22 @@
                             <table class="table-margin">
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays1" maxlength="2" />小時以內</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oNationalHolidays1" maxlength="2" />小時以內</td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oNationalHolidays2End" maxlength="2" />小時</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oNationalHolidays2Start" maxlength="2" />至<input type="text" class="width15" value="" id="txt_o_oNationalHolidays2End" maxlength="2" />小時</td>
                                     <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oNationalHolidaysPay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays3Start" maxlength="2" />至<input type="text" value="" class="width10" id="txt_o_oNationalHolidays3End" maxlength="2" /></td>
+                                        <input type="text" value="" class="width15" id="txt_o_oNationalHolidays3Start" maxlength="2" />至<input type="text" value="" class="width15" id="txt_o_oNationalHolidays3End" maxlength="2" /></td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay3" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oNationalHolidays4" maxlength="2" />小時以上</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oNationalHolidays4" maxlength="2" />小時以上</td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oNationalHolidaysPay4" maxlength="6" />%</td>
                                 </tr>
                             </table>
@@ -1709,22 +1709,22 @@
                             <table class="table-margin">
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday1" maxlength="2" />小時以內</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oPublickHoliday1" maxlength="2" />小時以內</td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay1" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday2Start" maxlength="2" />至<input type="text" class="width10" value="" id="txt_o_oPublickHoliday2End" maxlength="2" />小時</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oPublickHoliday2Start" maxlength="2" />至<input type="text" class="width15" value="" id="txt_o_oPublickHoliday2End" maxlength="2" />小時</td>
                                     <td>加給倍率<input type="text" class="width25" value="" id="txt_o_oPublickHolidayPay2" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday3Start" maxlength="2" />至<input type="text" value="" class="width10" id="txt_o_oPublickHoliday3End" maxlength="2" /></td>
+                                        <input type="text" value="" class="width15" id="txt_o_oPublickHoliday3Start" maxlength="2" />至<input type="text" value="" class="width15" id="txt_o_oPublickHoliday3End" maxlength="2" /></td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay3" maxlength="6" />%</td>
                                 </tr>
                                 <tr>
                                     <td width="150px">
-                                        <input type="text" value="" class="width10" id="txt_o_oPublickHoliday4" maxlength="2" />小時以上</td>
+                                        <input type="text" value="" class="width15" id="txt_o_oPublickHoliday4" maxlength="2" />小時以上</td>
                                     <td>加給倍率<input type="text" value="" class="width25" id="txt_o_oPublickHolidayPay4" maxlength="6" />%</td>
                                 </tr>
                             </table>

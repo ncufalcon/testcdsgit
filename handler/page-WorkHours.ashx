@@ -79,8 +79,22 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
         public string perGuid { get; set; }//
         public string perName { get; set; }//
     }
-
+    //sy_SalaryRange 欄位 計薪週期
+    public class srTooL
+    {
+        public string sr_Guid { get; set; }//GUID
+        public string sr_Year { get; set; }//年度
+        public string sr_BeginDate { get; set; }//週期起
+        public string sr_Enddate { get; set; }//週期迄
+        public string sr_BeginDate_c { get; set; }//週期起 yyyy-mm-dd 因為在SQL日期between 一定要yyyy-mm-dd
+        public string sr_Enddate_c { get; set; }//週期迄 yyyy-mm-dd yyyy-mm-dd 因為在SQL日期between 一定要yyyy-mm-dd
+        public string sr_SalaryDate { get; set; }//發薪日
+        public string sr_Ps { get; set; }//備註
+        //狀態目前不需要顯示在畫面上
+        //public string sr_Status { get; set; }//狀態
+    }
     sy_Attendance_DB at_db = new sy_Attendance_DB();
+    SalaryRange_DB sr_db = new SalaryRange_DB();
     public void ProcessRequest(HttpContext context)
     {
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
@@ -247,12 +261,24 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                 string old_datee = string.IsNullOrEmpty(context.Request.Form["str_datee"]) ? "" : context.Request.Form["str_datee"].ToString().Trim();
                 string old_keyword = string.IsNullOrEmpty(context.Request.Form["str_keywords"]) ? "" : context.Request.Form["str_keywords"].ToString().Trim();
                 string old_ahguid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
+                string old_order_column = string.IsNullOrEmpty(context.Request.Form["str_order_column"]) ? "" : context.Request.Form["str_order_column"].ToString().Trim();
+                string old_order_status = string.IsNullOrEmpty(context.Request.Form["str_order_status"]) ? "" : context.Request.Form["str_order_status"].ToString().Trim();
                 try
                 {
                     at_db._str_keyword = old_keyword;
                     at_db._str_dates = old_dates;
                     at_db._str_datee = old_datee;
                     at_db._ah_guid = old_ahguid;
+                    if (old_order_column=="cno") {
+                        at_db._str_order_column = "ah_perNo";
+                    }
+                    if (old_order_column=="cname") {
+                        at_db._str_order_column = "perName";
+                    }
+                    if (old_order_column=="cdate") {
+                        at_db._str_order_column = "ah_AttendanceDate";
+                    }
+                    at_db._str_order_status = old_order_status;
                     DataTable dt = at_db.SelectAttendanceHours();
                     if (dt.Rows.Count > 0)
                     {
@@ -403,6 +429,40 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                 catch (Exception ex)
                 {
                     context.Response.Write("error");
+                }
+                break;
+            //撈計薪週期 for 工時計算
+            case "load_payrange_workinghours":
+                sr_db._sr_Year = "";
+                sr_db._sr_SalaryDate = "";
+                sr_db._sr_BeginDate = "";
+                sr_db._sr_Enddate = "";
+                sr_db._sr_Guid = "";
+                DataTable dt_sr = sr_db.SelectSR();
+                if (dt_sr.Rows.Count > 0)
+                {
+                    List<srTooL> eList = new List<srTooL>();
+                    for (int i = 0; i < dt_sr.Rows.Count; i++)
+                    {
+                        srTooL e = new srTooL();
+                        e.sr_Guid = dt_sr.Rows[i]["sr_Guid"].ToString().Trim();//Guid
+                        e.sr_Year = dt_sr.Rows[i]["sr_Year"].ToString().Trim();//年度
+                        e.sr_BeginDate = dt_sr.Rows[i]["sr_BeginDate"].ToString().Trim();//週期起
+                        e.sr_Enddate = dt_sr.Rows[i]["sr_Enddate"].ToString().Trim();//週期迄
+                        e.sr_BeginDate_c = dt_sr.Rows[i]["sr_BeginDate"].ToString().Trim().Replace("/", "-");//週期起 yyyy-mm-dd 因為在SQL日期between 一定要yyyy-mm-dd
+                        e.sr_Enddate_c = dt_sr.Rows[i]["sr_Enddate"].ToString().Trim().Replace("/", "-");//週期迄 yyyy-mm-dd 因為在SQL日期between 一定要yyyy-mm-dd
+                        e.sr_SalaryDate = dt_sr.Rows[i]["sr_SalaryDate"].ToString().Trim();//發薪日
+                        e.sr_Ps = dt_sr.Rows[i]["sr_Ps"].ToString().Trim();//備註
+                        eList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(eList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else
+                {
+                    context.Response.Write("nodata");
                 }
                 break;
         }
