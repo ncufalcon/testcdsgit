@@ -154,9 +154,11 @@
                 if ($("#sel_daterange").val() == "") {
                     alert("請先選擇一個計薪週期");
                 } else {
-                    $(".fancybox-close").attr("disabled", "disabled");//過程中不能關fancybox
                     $("#loadblock").show();
                     $("#div_fbox_out").hide();
+                    $(".fancybox-close").attr("disabled", "disabled");//過程中不能關fancybox
+                    //$("#loadblock").show();
+                    //$("#div_fbox_out").hide();
                     //alert($("#sel_daterange").find(":selected").attr("value_s"));
                     //alert($("#sel_daterange").find(":selected").attr("value_s"));
                     $.ajax({
@@ -172,7 +174,7 @@
                             alert("error");
                         },
                         beforeSend: function () {
-                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                            //$.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                         },
                         success: function (response) {
                             if (response == "ok") {
@@ -186,7 +188,7 @@
                             }
                         },//success end
                         complete: function () {
-                            $.unblockUI();
+                            //$.unblockUI();
                         }
                     });//ajax end
                 }
@@ -698,9 +700,9 @@
             $.ajax({
                 type: "POST",
                 async: true, //在沒有返回值之前,不會執行下一步動作
-                url: "../handler/page-Attendance.ashx",
+                url: "../handler/page-WorkHours.ashx",
                 data: {
-                    func: "load_payrange"
+                    func: "load_payrange_workinghours"
                 },
                 error: function (xhr) {
                     alert("error");
