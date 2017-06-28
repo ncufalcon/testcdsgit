@@ -8,7 +8,7 @@
         $(document).ready(function () {
             getddl("02", "#pPosition");
             getddl("17", "#pf_Title");
-            getddl("18", "#pp_Identity"); 
+            getddl("18", "#pp_Identity");  
 
             $(document).on("keyup", "#pIDNumber,#pf_IDNumber", function () {
                 this.value = this.value.toUpperCase();
