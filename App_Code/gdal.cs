@@ -724,7 +724,7 @@ namespace payroll
                                                              ,plogBuckleFee
                                                              ,plogWelfare
                                                              ,plogStatus                                         
-                                                             ,plogModdifyId)
+                                                             ,plogModdifyId,plogShouldPay)
                                                             select pGuid
                                                                   ,pPsmGuid
                                                                   ,pPerGuid
@@ -809,7 +809,7 @@ namespace payroll
                                                                   ,pBuckleCost
                                                                   ,pBuckleFee
                                                                   ,pWelfare
-                                                                  ,'Update',@UserInfo from sy_PaySalaryDetail where pGuid=@pGuid;
+                                                                  ,'Update',@UserInfo, pShouldPay from sy_PaySalaryDetail where pGuid=@pGuid;
                                                                   update sy_PaySalaryDetail set                                                               
                                                                   pWeekdayTime1=@pWeekdayTime1
                                                                   ,pWeekdaySalary1=@pWeekdaySalary1
