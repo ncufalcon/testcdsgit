@@ -19,6 +19,8 @@ public class sy_Attendance_DB
     string str_perno = string.Empty;
     string dates = string.Empty;
     string datee = string.Empty;
+    string str_order_column = string.Empty;
+    string str_order_status = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -44,6 +46,14 @@ public class sy_Attendance_DB
     public string _datee
     {
         set { datee = value; }
+    }
+    public string _str_order_column
+    {
+        set { str_order_column = value; }
+    }
+    public string _str_order_status
+    {
+        set { str_order_status = value; }
     }
     #endregion
 
@@ -578,9 +588,17 @@ public class sy_Attendance_DB
                 }
 
             }
-            show_value.Append(@"  
-                order by ah_AttendanceDate DESC,perNo ASC
-            ");
+            if (str_order_column != "" && str_order_status!="")
+            {
+                string str_order = " order by "+ str_order_column + " "+ str_order_status + " ";
+                show_value.Append(@""+ str_order + "");
+            }
+            else {
+                show_value.Append(@"  
+                    order by ah_AttendanceDate DESC,perNo ASC
+                ");
+            }
+            
 
 
             thisCommand.CommandType = CommandType.Text;
