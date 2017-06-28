@@ -52,10 +52,10 @@
     <a href='#' target='_self' title="人事資料管理">人事資料管理</a>
         <ul>
             <li><a href='PersonnelInfo.aspx' target='_self' title="基本資料管理">基本資料管理</a></li>
-            <li><a href='Insurance.aspx' target='_self' title="保險管理">保險管理</a></li>
             <li><a href='page-Modify.aspx' target='_self' title="異動管理">異動管理</a></li>
         </ul>
     </li>
+    <li><a href='Insurance.aspx' target='_self' title="保險管理">保險管理</a></li>
                         <li>
                             <a href="Javascript:void(0)" target="_self" title="薪資管理">薪資管理</a>
                             <ul>
