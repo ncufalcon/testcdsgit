@@ -1048,7 +1048,7 @@
                                     alert('薪資計算完成');
                                     break;
                             }
-                            $.unblockUI();
+                            //$.unblockUI();
                         }
                     }
                     CmFmCommon.ajax(opt);
