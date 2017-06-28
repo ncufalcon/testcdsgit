@@ -601,7 +601,6 @@
                 }
             });
 
-
             //表頭排序
             $(document).on("click", "a[name='sortbtn']", function () {
                 $("#sortName").val($(this).attr("atp"));
@@ -610,6 +609,17 @@
                 else
                     $("#sortMethod").val("desc");
                 getData();
+            });
+
+            //20170628 王晨峻根據USER測試修改報告調整 
+            //合約別按鈕 選擇正式，在保險關聯那邊要將"提繳身分"下拉選單釘選在"強制提繳對象"
+            $("input[name='pContract']").click(function () {
+                var this_var = $(this).val();
+                if (this_var == "01") {//正式
+                    $("#pp_Identity").val("1");
+                } else {
+                    $("#pp_Identity").val("");
+                }
             });
         });
         
@@ -1188,7 +1198,31 @@
                     }
                 });
             });
+
         });
+        //20170628 王晨峻根據USER測試修改報告調整 
+        //三位一逗點共用function  1,000,000
+        function format_money(str_money) {
+            if (str_money != "" && str_money != null && !isNaN(str_money)) {//不等於空 不等於NULL 都是數字
+                // 決定三個位數的分隔符號
+                //glue可以自行定義，這邊統一要做金額的","就不傳參數，預設都是null，直接帶","
+                //但還是保留這個參數，以後可以用
+                var glue = (typeof glue == 'string') ? glue : ',';
+                var digits = str_money.toString().split('.'); // 先分左邊跟小數點
+                var integerDigits = digits[0].split(""); // 獎整數的部分切割成陣列
+                var threeDigits = []; // 用來存放3個位數的陣列
+                // 當數字足夠，從後面取出三個位數，轉成字串塞回 threeDigits
+                while (integerDigits.length > 3) {
+                    threeDigits.unshift(integerDigits.splice(integerDigits.length - 3, 3).join(""));
+                }
+                threeDigits.unshift(integerDigits.join(""));
+                digits[0] = threeDigits.join(glue);
+                return digits.join(".");
+                //str_money = str_money.parseNumber({ format: "#,###.00", locale: "us" });
+            }
+            return str_money;
+        }
+        //三位一逗點 END
 
         function PbNewClick() {
             $("#pb_editstatus").html("新增");
@@ -1239,8 +1273,8 @@
                                 tabstr += '<tr aid=' + $(this).children("pbGuid").text() + '>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditorCost").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbRatio").text().trim()+'%</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbCreditorCost").text()) + '</td>';//20170628 三位一逗點
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + $(this).children("pbRatio").text().trim() + '%</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
                                 if ($(this).children("pbPayment").text() == "01")
                                     tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
@@ -1249,7 +1283,7 @@
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoName").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoNumber").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoAccount").text() + '</td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbFee").text() + '</td>';
+                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbFee").text()) + '</td>';
                                 tabstr += '</tr>';
                             });
                         }
@@ -1785,7 +1819,7 @@
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >債權金額</div></td>
                                             <td class="width15"><input id="pb_CreditorCost" name="pb_CreditorCost" type="text" class="inputex width100 pbtxt" /></td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >移轉比例</div></td>
-                                            <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt num" /></td>
+                                            <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon font-red">解款行代號</div></td>
@@ -1805,7 +1839,7 @@
                                             <td align="right"><div class="font-title titlebackicon font-red">債權人承辦人</div></td>
                                             <td><input type="text" id="pb_Contractor" name="pb_Contractor" class="inputex width100 pbtxt" /></td>
                                             <td align="right"><div class="font-title titlebackicon font-red">聯絡電話</div></td>
-                                            <td><input type="text" id="pb_Tel" name="pb_Tel" class="inputex width100 pbtxt num" /></td>
+                                            <td><input type="text" id="pb_Tel" name="pb_Tel" class="inputex width100 pbtxt" /></td><!--20170628 因user表示電話欄位會如下(02)8791-1825#701 所以把num的class拿掉-->
                                             <td align="right"><div class="font-title titlebackicon font-red">匯款手續費<br />掛號郵資</div></td>
                                             <td><input id="pb_Fee" name="pb_Fee" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
