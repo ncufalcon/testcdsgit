@@ -327,13 +327,21 @@ where perStatus<>'D' ");
 		SqlCommand oCmd = new SqlCommand();
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
-
-		sb.Append(@"SELECT *,a.slGuid Lgv,a.slSubsidyCode LCode,a.slSubsidyIdentity LStr,b.slGuid Hgv,b.slSubsidyCode HCode,b.slSubsidyIdentity HStr from sy_Person 
+        //20170703 修改 
+        //1. join sy_InsuranceIdentity 的時候加上 perStatus<>'D'
+        //2. join sy_SubsidyLevel 的時候加上 slStatus<>'D'
+        //原本join是沒有判斷iiStatus跟slStatus
+        //所以就算sy_InsuranceIdentity裡面的身分刪除了status變成D還是可以join到值
+        //現在改成要對應status<>'D'
+        //這樣的話因為適用GUID去對應，如果對應不到畫面上頭保身分 勞保補助身分 健保補助身分都會變成空白的
+        //廣哥怕他們如果有去刪身分，但人員這邊，因為還有資料，所以他們也不會記得去改，
+        //乾脆空白給他們，看到就會去改
+        sb.Append(@"SELECT *,a.slGuid Lgv,a.slSubsidyCode LCode,a.slSubsidyIdentity LStr,b.slGuid Hgv,b.slSubsidyCode HCode,b.slSubsidyIdentity HStr from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
-left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
-left join sy_SubsidyLevel a on a.slGuid=perLaborID
-left join sy_SubsidyLevel b on b.slGuid=perInsuranceID
+left join sy_InsuranceIdentity on iiGuid=perInsuranceDes and iiStatus<>'D'
+left join sy_SubsidyLevel a on a.slGuid=perLaborID and a.slStatus<>'D'
+left join sy_SubsidyLevel b on b.slGuid=perInsuranceID and b.slStatus<>'D'
 where perGuid=@perGuid ");
 
 		oCmd.CommandText = sb.ToString();
