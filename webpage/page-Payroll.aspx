@@ -560,7 +560,7 @@
 
                                 document.getElementById(JsEven.Id.div_Search).style.display = "none";
                                 document.getElementById(JsEven.Id.div_Data).style.display = "block";
-                                //tableHeadFixer();
+                                $("#" + JsEven.Id.div_MList).tableHeadFixer();
                                 //$.fn.tableHeadFixer($('.table'));
                                 break;
                         }

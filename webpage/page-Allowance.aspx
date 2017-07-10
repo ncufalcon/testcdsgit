@@ -277,7 +277,7 @@
 
                                 document.getElementById(JsEven.Page2Id.div_Search).style.display = "none";
                                 document.getElementById(JsEven.Page2Id.div_Data).style.display = "block";
-                                //tableHeadFixer();
+                                $("#" + JsEven.Page2Id.div_MList).tableHeadFixer();
                                 //$.fn.tableHeadFixer($('.table'));
                                 break;
                         }
