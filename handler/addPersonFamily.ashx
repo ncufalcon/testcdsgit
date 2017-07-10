@@ -50,6 +50,7 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
                     FI_Db._pfiSubsidyLevel = pf_CodeGuid;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
+                    FI_Db._pfiStatus = "A";
                     FI_Db.addFamilyIns();
                     //眷屬團保
                     if (pf_GroupInsurance == "Y")

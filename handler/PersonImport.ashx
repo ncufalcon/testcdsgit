@@ -184,7 +184,8 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     string tmpEratio = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiRetirement","iiStatus");
                     tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
                     oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse(tmpEratio);
-                    oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem3"));
+                    //20170703修改 word上面說"員工到職勞退提撥，雇主提繳比率統一為6%、勞退月提繳工資應為11100" 原本撈ilItem3 現在改撈ilItem2勞保
+                    oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem2"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //勞健保卡號
