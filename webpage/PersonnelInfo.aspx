@@ -1038,10 +1038,10 @@
                         msg += "請輸入執行明令發文字號\n";
                     if ($("#pDetentionRatio").val().trim() == "")
                         msg += "請輸入執行扣押薪資比例\n";
-                    if ($("#pMonthPayroll").val().trim() == "")
-                        msg += "請輸入每月應領薪津\n";
-                    if ($("#pYearEndBonuses").val().trim() == "")
-                        msg += "請輸入年終獎金\n";
+                    //if ($("#pMonthPayroll").val().trim() == "")
+                    //    msg += "請輸入每月應領薪津\n";
+                    //if ($("#pYearEndBonuses").val().trim() == "")
+                    //    msg += "請輸入年終獎金\n";
             }
                 if (msg != "") {
                     alert(msg);
@@ -1076,18 +1076,18 @@
                         msg += "請輸入債權人\n";
                     if ($("#pb_CreditorCost").val().trim() == "")
                         msg += "請輸入債權金額\n";
-                    if ($("#pb_Issued").val().trim() == "")
-                        msg += "請輸入執行命令發文日期\n";
-                    else if ($("#pb_Issued").val() != "" && $("#pb_Issued").val().substring(4, 5) != "/" && $("#pb_Issued").val().substring(7, 8) != "/")
-                        msg += "請檢查日期格式，格式範例：2017/01/01 \n";
-                    if ($("#pb_IntoNumber").val().trim() == "")
-                        msg += "請輸入解款行代號\n";
-                    if ($("#pb_IntoAccount").val().trim() == "")
-                        msg += "請輸入收款人帳號\n";
-                    if ($("#pb_IntoName").val().trim() == "")
-                        msg += "請輸入戶名\n";
-                    if ($("input[name='pb_Payment']:checked").length == 0)
-                        msg += "請選擇繳款方式\n";
+                    //if ($("#pb_Issued").val().trim() == "")
+                    //    msg += "請輸入執行命令發文日期\n";
+                    //else if ($("#pb_Issued").val() != "" && $("#pb_Issued").val().substring(4, 5) != "/" && $("#pb_Issued").val().substring(7, 8) != "/")
+                    //    msg += "請檢查日期格式，格式範例：2017/01/01 \n";
+                    //if ($("#pb_IntoNumber").val().trim() == "")
+                    //    msg += "請輸入解款行代號\n";
+                    //if ($("#pb_IntoAccount").val().trim() == "")
+                    //    msg += "請輸入收款人帳號\n";
+                    //if ($("#pb_IntoName").val().trim() == "")
+                    //    msg += "請輸入戶名\n";
+                    //if ($("input[name='pb_Payment']:checked").length == 0)
+                    //    msg += "請選擇繳款方式\n";
                     if ($("#pb_Contractor").val().trim() == "")
                         msg += "請輸入債權人承辦人\n";
                     if ($("#pb_Tel").val().trim() == "")
@@ -1276,10 +1276,12 @@
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbCreditorCost").text()) + '</td>';//20170628 三位一逗點
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + $(this).children("pbRatio").text().trim() + '%</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
-                                if ($(this).children("pbPayment").text() == "01")
-                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
-                                else
-                                    tabstr += '<td nowrap="nowrap" style="cursor: pointer;">匯款</td>';
+                                if ($(this).children("pbPayment").text().trim() != "") {
+                                    if ($(this).children("pbPayment").text() == "01")
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">支票</td>';
+                                    else
+                                        tabstr += '<td nowrap="nowrap" style="cursor: pointer;">匯款</td>';
+                                } else tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoName").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoNumber").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoAccount").text() + '</td>';
@@ -1785,9 +1787,9 @@
                                        <td class="width15"><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
                                    </tr>
                                    <tr>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red"">每月應領薪津</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon ">每月應領薪津</div></td>
                                        <td class="width15"><input id="pMonthPayroll" name="pMonthPayroll" type="text" class="inputex width100" /></td>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red"">年終獎金</div></td>
+                                       <td class="width13" align="right"><div class="font-title titlebackicon ">年終獎金</div></td>
                                        <td class="width15"><input id="pYearEndBonuses" name="pYearEndBonuses" type="text" class="inputex width100" /></td>
                                    </tr>
                                </table>
@@ -1822,17 +1824,17 @@
                                             <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
-                                            <td align="right"><div class="font-title titlebackicon font-red">解款行代號</div></td>
+                                            <td align="right"><div class="font-title titlebackicon ">解款行代號</div></td>
                                             <td><input id="pb_IntoNumber" name="pb_IntoNumber" type="text" class="inputex width100 pbtxt" /></td>
-                                            <td align="right"><div class="font-title titlebackicon font-red">收款人帳號</div></td>
+                                            <td align="right"><div class="font-title titlebackicon">收款人帳號</div></td>
                                             <td><input id="pb_IntoAccount" name="pb_IntoAccount" type="text" class="inputex width100 pbtxt" /></td>
-                                            <td class="width13" align="right"><div class="font-title titlebackicon font-red" >執行命令發文日期</div></td>
+                                            <td class="width13" align="right"><div class="font-title titlebackicon" >執行命令發文日期</div></td>
                                             <td class="width15"><input id="pb_Issued" name="pb_Issued" type="text" class="inputex width100 pbtxt" /></td>
                                         </tr>
                                         <tr>
-                                            <td align="right"><div class="font-title titlebackicon font-red">戶名</div></td>
+                                            <td align="right"><div class="font-title titlebackicon ">戶名</div></td>
                                             <td colspan="3"><input id="pb_IntoName" name="pb_IntoName" type="text" class="inputex width100 pbtxt" /></td>
-                                            <td align="right"><div class="font-title titlebackicon font-red">繳款方式</div></td>
+                                            <td align="right"><div class="font-title titlebackicon ">繳款方式</div></td>
                                             <td><input type="radio" name="pb_Payment" value="01" class="pbrao" />支票<input type="radio" name="pb_Payment" value="02" class="pbrao" />匯款</td>
                                         </tr>
                                         <tr>

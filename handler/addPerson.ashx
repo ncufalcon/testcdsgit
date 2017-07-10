@@ -236,8 +236,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perGuid = id;
                     Personnel_Db._perReferenceNumber = pReferenceNumber;
                     Personnel_Db._perDetentionRatio = decimal.Parse(pDetentionRatio);
-                    Personnel_Db._perMonthPayroll = decimal.Parse(pMonthPayroll);
-                    Personnel_Db._perYearEndBonuses = decimal.Parse(pYearEndBonuses);
+                    Personnel_Db._perMonthPayroll = (!string.IsNullOrEmpty(pMonthPayroll)) ? decimal.Parse(pMonthPayroll) : 0;
+                    Personnel_Db._perYearEndBonuses = (!string.IsNullOrEmpty(pYearEndBonuses)) ? decimal.Parse(pYearEndBonuses): 0;
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modBuckle();
                     break;
