@@ -184,4 +184,22 @@ where paGuid=@paGuid ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable checkPACode()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sv_PersonAllowance where paAllowanceCode=@paAllowanceCode and paPerGuid=@paPerGuid ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@paPerGuid", paPerGuid);
+        oCmd.Parameters.AddWithValue("@paAllowanceCode", paAllowanceCode);
+        oda.Fill(ds);
+        return ds;
+    }
 }

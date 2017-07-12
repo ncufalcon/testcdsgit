@@ -2,6 +2,7 @@
 
 using System;
 using System.Web;
+using System.Data;
 using System.Web.SessionState;
 
 public class addPersonAllowance : IHttpHandler,IRequiresSessionState {
@@ -17,6 +18,14 @@ public class addPersonAllowance : IHttpHandler,IRequiresSessionState {
             string pa_CodeGuid = (context.Request.Form["pa_CodeGuid"] != null) ? context.Request.Form["pa_CodeGuid"].ToString() : "";
             string pa_Cost = (context.Request.Form["pa_Cost"] != null) ? context.Request.Form["pa_Cost"].ToString() : "";
 
+            PA_Db._paPerGuid = PerID;
+            PA_Db._paAllowanceCode = pa_CodeGuid;
+            DataTable dt = PA_Db.checkPACode();
+            if (dt.Rows.Count > 0)
+            {
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('repeatPACode','');</script>");
+                return;
+            }
 
             switch (Mode)
             {

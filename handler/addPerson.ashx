@@ -3,7 +3,9 @@
 using System;
 using System.Web;
 using System.Data;
+using System.Data.SqlClient;
 using System.Web.SessionState;
+using System.Configuration;
 
 public class addPerson : IHttpHandler,IRequiresSessionState {
     Personnel_DB Personnel_Db = new Personnel_DB();
@@ -176,7 +178,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._plPerGuid = id;
                         LH_Db._plLaborNo = getLH_Code(id, "L");
                         LH_Db._plChange = "01";
-                        LH_Db._plChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        LH_Db._plChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
+                        LH_Db._plLaborPayroll = decimal.Parse(getMinLV("ilItem2"));
                         LH_Db._plModifyId = USERINFO.MemberGuid;
                         LH_Db.addLabor();
                     }
@@ -190,7 +193,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._piPerGuid = id;
                         LH_Db._piCardNo = getLH_Code(id, "H");
                         LH_Db._piChange = "01";
-                        LH_Db._piChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        LH_Db._piChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
+                        LH_Db._piInsurancePayroll = decimal.Parse(getMinLV("ilItem4"));
                         LH_Db._piModifyId = USERINFO.MemberGuid;
                         LH_Db.addHeal();
                     }
@@ -202,6 +206,12 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         PP_Db._ppGuid = Guid.NewGuid().ToString();
                         PP_Db._ppPerGuid = id;
                         PP_Db._ppModifyId = USERINFO.MemberGuid;
+                        PP_Db._ppChange = "01";
+                        PP_Db._ppChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
+                        PP_Db._ppPayPayroll = decimal.Parse(getMinLV("ilItem2"));
+                        string tmpEratio = getValue("sy_InsuranceIdentity", "iiGuid", pInsuranceDes, "iiRetirement","iiStatus");
+                        tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
+                        PP_Db._ppEmployerRatio = decimal.Parse(tmpEratio);
                         PP_Db.addPension();
                     }
                     //團保
@@ -215,6 +225,10 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                             GI_Db._pgiPerGuid = id;
                             GI_Db._pgiType = "01"; //身份
                             GI_Db._pgiChange = "01"; //異動別
+                            //團保加保生效日應為員工到職日起滿一個月
+                            string sDay = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
+                            DateTime daytmp = DateTime.Parse(sDay).AddMonths(1);
+                            GI_Db._pgiChangeDate = daytmp.ToString("yyyy/MM/dd");
                             GI_Db._pgiModifyId = USERINFO.MemberGuid;
                             GI_Db.addGroupInsurance();
                         }
@@ -236,8 +250,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perGuid = id;
                     Personnel_Db._perReferenceNumber = pReferenceNumber;
                     Personnel_Db._perDetentionRatio = decimal.Parse(pDetentionRatio);
-                    Personnel_Db._perMonthPayroll = (!string.IsNullOrEmpty(pMonthPayroll)) ? decimal.Parse(pMonthPayroll) : 0;
-                    Personnel_Db._perYearEndBonuses = (!string.IsNullOrEmpty(pYearEndBonuses)) ? decimal.Parse(pYearEndBonuses): 0;
+                    Personnel_Db._perMonthPayroll = decimal.Parse(pMonthPayroll);
+                    Personnel_Db._perYearEndBonuses = decimal.Parse(pYearEndBonuses);
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;
                     Personnel_Db.modBuckle();
                     break;
@@ -264,6 +278,62 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                 codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
         }
         return codeStr;
+    }
+
+    /// <summary>
+    /// <para>TableName : 資料表名稱,conName : 條件欄位名稱,InputVal : 查詢條件值,reName : 讀取欄位名稱,statusName : 狀態欄位名稱</para>
+    /// </summary>
+    private string getValue(string TableName, string conName, string InputVal, string reName,string statusName)
+    {
+        string str = string.Empty;
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.Connection.Open();
+        oCmd.CommandText = "SELECT * from " + TableName + " with (nolock) where " + conName + "='" + InputVal + "' "; //with (nolock) SqlTransaction不加會TimeOut
+        if (statusName != "")
+            oCmd.CommandText += " and " + statusName + "<>'D'";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oda.Fill(ds);
+        oda.Dispose();
+        oCmd.Connection.Close();
+        oCmd.Connection.Dispose();
+
+        if (ds.Rows.Count > 0)
+            str = ds.Rows[0][reName].ToString();
+
+        return str;
+    }
+
+
+    /// <summary>
+    /// <para>ColunmName : 欄位名稱</para>
+    /// <para>ilItem1 : 月投保薪資</para>
+    /// <para>ilItem2 : 勞保</para>
+    /// <para>ilItem3 : 勞退</para>
+    /// <para>ilItem4 : 健保</para>
+    /// </summary>
+    private string getMinLV(string ColunmName)
+    {
+        string str = string.Empty;
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.Connection.Open();
+        oCmd.CommandText = "SELECT * from sy_InsuranceLevel with (nolock) order by ilItem3 "; //with (nolock) SqlTransaction不加會TimeOut
+
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oda.Fill(ds);
+        oda.Dispose();
+        oCmd.Connection.Close();
+        oCmd.Connection.Dispose();
+
+        if (ds.Rows.Count > 0)
+            str = ds.Rows[0][ColunmName].ToString();
+
+        return str;
     }
 
     public bool IsReusable {

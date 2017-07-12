@@ -800,8 +800,8 @@
                         tabstr += '<th width="80" nowrap="nowrap">操作</th>';
                         tabstr += '<th nowrap="nowrap" >員工代號</th>';
                         tabstr += '<th nowrap="nowrap" >姓名</th>';
+                        tabstr += '<th nowrap="nowrap" >投保身份</th>';
                         tabstr += '<th nowrap="nowrap" >補助等級</th>';
-                        tabstr += '<th nowrap="nowrap" >勞保卡號</th>';
                         tabstr += '<th nowrap="nowrap" >異動別</th>';
                         tabstr += '<th nowrap="nowrap" >勞保投保薪資</th>';
                         tabstr += '<th nowrap="nowrap" >異動日期</th></tr></thead>';
@@ -813,8 +813,8 @@
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="lbdelbtn" aid=' + $(this).children("plGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("iiIdentity").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("slSubsidyCode").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plLaborNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plLaborPayroll").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("plChangeDate").text() + '</td>';

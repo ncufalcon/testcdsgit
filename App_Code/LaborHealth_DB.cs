@@ -170,11 +170,12 @@ public class LaborHealth_DB
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"SELECT top 200 plGuid,plPerGuid,perNo,perName,plSubsidyLevel,slSubsidyCode,plLaborNo,plChangeDate,plChange,code_desc,
-plLaborPayroll,plChangeDate,plChangeDate
+plLaborPayroll,plChangeDate,plChangeDate,iiIdentity
 from sy_PersonLabor
 left join sy_Person on perGuid=plPerGuid
 left join sy_SubsidyLevel on slGuid=plSubsidyLevel
 left join sy_codetable on code_group='11' and code_value=plChange
+left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where plStatus<>'D' ");
         if (KeyWord != "")
         {

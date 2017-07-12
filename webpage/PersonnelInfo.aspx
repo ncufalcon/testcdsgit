@@ -325,6 +325,9 @@
                 case "repeatID":
                     alert("此身分證字號已存在");
                     break;
+                case "repeatPACode":
+                    alert("此津貼代號已存在");
+                    break;
                 case "PF":
                     alert("完成");
                     getPerFamilyList();
@@ -553,7 +556,7 @@
                         }
                     }
                 });
-                $(".noSpan").html($(this).closest('tr').children().get(1).innerText);
+                $(".noSpan").html($(this).closest('tr').children().get(1).innerText + "　　姓名:" + $(this).closest('tr').children().get(2).innerText);
                 getPerFamilyList();
                 getPerBuckleList();
                 getPerAllowanceList();
@@ -567,10 +570,17 @@
                         //if ($("input[name='pContract']:checked").val() == "01")
                         //    sday = new Date(sday.getFullYear(), sday.getMonth() + 1, sday.getDate());
                         //else
-                        sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate());
+                        sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate() - 1);
                         $("#pContractDeadline").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
                     }
                 }
+            });
+
+            //設定體檢到期日
+            $(document).on("change", "#pExaminationDate", function () {
+                var sday = new Date($("#pExaminationDate").val());
+                sday = new Date(sday.getFullYear() + 1, sday.getMonth(), sday.getDate() - 1);
+                $("#pExaminationLastDate").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
             });
 
             //確認公司&部門
