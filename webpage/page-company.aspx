@@ -65,16 +65,16 @@
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon" style="color:Red">公司簡稱</div></td>
                                     <td><input type="text" class="inputex width95" id="txt_comAbbreviate" /></td>
-                                  <td align="right"><div class="font-title titlebackicon">營業人名稱</div></td>
-                                    <td><input type="text" class="inputex width95" id="txt_comBusinessEntity"/></td>
+                                    <td align="right"><div class="font-title titlebackicon">營業人名稱</div></td>
+                                    <td colspan="3"><input type="text" class="inputex width99" id="txt_comBusinessEntity"/></td>
                                 </tr>
                                 <tr>
                                     <td class="width15" align="right"><div class="font-title titlebackicon" style="color:Red">統一編號</div></td>
                                     <td class="width20"><input type="text" class="inputex width95" id="txt_comUniform" /></td>
-                                    <td  align="right"><div class="font-title titlebackicon">營利事業稅籍編號</div></td>
-                                    <td ><input type="text" class="inputex width95" id="txt_comBIT" /></td>
-                                    <td align="right"><div class="font-title titlebackicon">房屋稅籍編號</div></td>
-                                    <td><input type="text" class="inputex width95" id="txt_comHouseTax"/></td>
+                                    <td class="width17" align="right"><div class="font-title titlebackicon">營利事業稅籍編號</div></td>
+                                    <td class="width20"><input type="text" class="inputex width95" id="txt_comBIT" /></td>
+                                    <td class="width15"align="right"><div class="font-title titlebackicon">房屋稅籍編號</div></td>
+                                    <td class="width20"><input type="text" class="inputex width95" id="txt_comHouseTax"/></td>
                  
 
                                 </tr>
@@ -82,6 +82,8 @@
 
                                     <td align="right"><div class="font-title titlebackicon">所屬國稅局分局</div></td>
                                     <td><input type="text" class="inputex width95" id="txt_comNTB"/></td>
+                                    <td align="right"><div class="font-title titlebackicon">所屬國稅局分局代號</div></td>
+                                    <td><input type="text" class="inputex width95" id="txt_comNTBCode"/></td>
                                     <td align="right"><div class="font-title titlebackicon">勞工保險業別代號</div></td>
                                     <td><input type="text" class="inputex width95" id="txt_comLaborProtectionCode"/></td>
                                 </tr>
@@ -106,6 +108,7 @@
                                     <td><input type="text" class="inputex width95" id="txt_comResponsible"/></td>
                                     <td class="width15" align="right"><div class="font-title titlebackicon">所屬國稅局</div></td>
                                     <td class="width20"><input type="text" class="inputex width95" id="txt_comNTA"/></td>
+
                                     <td class="width15" align="right"><div class="font-title titlebackicon">勞工保險證號</div></td>
                                     <td class="width20"><input type="text" class="inputex width60" id="txt_comLaborProtection1" />-<input type="text" class="inputex width15" id="txt_comLaborProtection2"/></td>
                                 </tr>
@@ -180,6 +183,7 @@
 
                 txt_comBIT: 'txt_comBIT', //營利事業稅籍編號
                 txt_comNTB: 'txt_comNTB', //所屬國稅局分局
+                txt_comNTBCode: 'txt_comNTBCode', //所屬國稅局分局代號
                 txt_comLaborProtectionCode: 'txt_comLaborProtectionCode', //勞工保險業別代號
 
                 txt_comHouseTax: 'txt_comHouseTax', //房屋稅籍編號
@@ -288,6 +292,7 @@
 
                             $('#' + JsEven.id.txt_comBIT).val(CommonEven.XmlNodeGetValue(e, "comBIT"));
                             $('#' + JsEven.id.txt_comNTB).val(CommonEven.XmlNodeGetValue(e, "comNTB"));
+                            $('#' + JsEven.id.txt_comNTBCode).val(CommonEven.XmlNodeGetValue(e, "comNTBCode"));
                             $('#' + JsEven.id.txt_comLaborProtectionCode).val(CommonEven.XmlNodeGetValue(e, "comLaborProtectionCode"));
 
                             $('#' + JsEven.id.txt_comHouseTax).val(CommonEven.XmlNodeGetValue(e, "comHouseTax"));
@@ -334,6 +339,7 @@
 
                 var txt_comBIT = $('#' + this.id.txt_comBIT).val();
                 var txt_comNTB = $('#' + this.id.txt_comNTB).val();
+                var txt_comNTBCode = $('#' + this.id.txt_comNTBCode).val();
                 var txt_comLaborProtectionCode = $('#' + this.id.txt_comLaborProtectionCode).val();
 
                 var txt_comHouseTax = $('#' + this.id.txt_comHouseTax).val();
@@ -377,6 +383,7 @@
 
                            '&comBIT=' + txt_comBIT +
                            '&comNTB=' + txt_comNTB +
+                           '&comNTBCode=' + txt_comNTBCode +
                            '&comLaborProtectionCode=' + txt_comLaborProtectionCode +
 
                            '&comHouseTax=' + txt_comHouseTax +
@@ -400,7 +407,7 @@
                             switch (msg) {
                                 case "Timeout":
                                     alert("請重新登入");
-                                    window.location.href = "index.aspx";
+                                    window.location.href = "login.aspx";
                                     break;
                                 case "sign":
                                     alert("請勿輸入特殊符號");

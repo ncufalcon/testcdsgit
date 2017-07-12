@@ -83,7 +83,7 @@ public class Dal
     //新增主資料
     public void insertCompanyData(string comName,string comAbbreviate,string comUniform,
                                   string comNTA,string comLaborProtection1,string comLaborProtection2,
-                                  string comBIT,string comNTB,string comLaborProtectionCode,
+                                  string comBIT,string comNTB, string comNTBCode, string comLaborProtectionCode,
                                   string comHouseTax,string comCity,string comHealthInsuranceCode,
                                   string comBusinessEntity,string comResponsible,string comTel,
                                   string comAddress1,string comAddress2,string comPs,
@@ -93,7 +93,7 @@ public class Dal
         string sql = @"insert sy_Company (
   comName,comAbbreviate,comUniform,
   comNTA,comLaborProtection1,comLaborProtection2,
-  comBIT,comNTB,comLaborProtectionCode,
+  comBIT,comNTB,comNTBCode,comLaborProtectionCode,
   comHouseTax,comCity,comHealthInsuranceCode,
   comBusinessEntity,comResponsible,comTel,
   comAddress1,comAddress2,comPs,
@@ -102,7 +102,7 @@ public class Dal
   values (
   @comName,@comAbbreviate,@comUniform,
   @comNTA,@comLaborProtection1,@comLaborProtection2,
-  @comBIT,@comNTB,@comLaborProtectionCode,
+  @comBIT,@comNTB,@comNTBCode,@comLaborProtectionCode,
   @comHouseTax,@comCity,@comHealthInsuranceCode,
   @comBusinessEntity,@comResponsible,@comTel,
   @comAddress1,@comAddress2,@comPs,
@@ -120,6 +120,7 @@ public class Dal
 
         cmd.Parameters.AddWithValue("@comBIT", comBIT);
         cmd.Parameters.AddWithValue("@comNTB", comNTB);
+        cmd.Parameters.AddWithValue("@comNTBCode", comNTBCode);
         cmd.Parameters.AddWithValue("@comLaborProtectionCode", comLaborProtectionCode);
 
         cmd.Parameters.AddWithValue("@comHouseTax", comHouseTax);
@@ -223,7 +224,7 @@ public class Dal
     //修改主資料
     public void UpdateCompanyData(string comName, string comAbbreviate, string comUniform,
                                   string comNTA, string comLaborProtection1, string comLaborProtection2,
-                                  string comBIT, string comNTB, string comLaborProtectionCode,
+                                  string comBIT, string comNTB, string comNTBCode, string comLaborProtectionCode,
                                   string comHouseTax, string comCity, string comHealthInsuranceCode,
                                   string comBusinessEntity, string comResponsible, string comTel,
                                   string comAddress1, string comAddress2, string comPs,
@@ -233,7 +234,7 @@ public class Dal
     {
         string sql = @"update sy_Company set comName =@comName,comAbbreviate =@comAbbreviate,comUniform =@comUniform,
   comNTA =@comNTA,comLaborProtection1 =@comLaborProtection1,comLaborProtection2 =@comLaborProtection2,
-  comBIT =@comBIT,comNTB =@comNTB,comLaborProtectionCode =@comLaborProtectionCode,
+  comBIT =@comBIT,comNTB =@comNTB,comNTBCode =@comNTBCode,comLaborProtectionCode =@comLaborProtectionCode,
   comHouseTax =@comHouseTax,comCity =@comCity ,comHealthInsuranceCode =@comHealthInsuranceCode,
   comBusinessEntity =@comBusinessEntity,comResponsible =@comResponsible,comTel =@comTel,
   comAddress1 = @comAddress1,comAddress2 =@comAddress2,comPs =@comPs,
@@ -252,6 +253,7 @@ public class Dal
 
         cmd.Parameters.AddWithValue("@comBIT", comBIT);
         cmd.Parameters.AddWithValue("@comNTB", comNTB);
+        cmd.Parameters.AddWithValue("@comNTBCode", comNTBCode);
         cmd.Parameters.AddWithValue("@comLaborProtectionCode", comLaborProtectionCode);
 
         cmd.Parameters.AddWithValue("@comHouseTax", comHouseTax);

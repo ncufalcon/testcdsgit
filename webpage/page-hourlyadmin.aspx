@@ -1466,9 +1466,9 @@
                                         </div>
                                     </div>
                                     <span class="font-size3 font-black" style="color:red;">
-                                        提醒：<br />
-                                        項目:
-                                        應稅項目加總、出勤天數需要用[]來表示，ex[應稅項目加總]or[出勤天數]
+                                        項目請以代碼表示:<br />
+                                        [A01]:應稅項加總<br />
+                                        [A02]:出勤天數
                                     </span>
                                     <%--<span class="font-size3 font-black" id="span_tf_desc">目前維護項目:應發薪資總額>=基本工資(目前為21009)</span>
                                     <table class="gentable" id="tbl_tf"></table>

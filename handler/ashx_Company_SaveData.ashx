@@ -30,6 +30,7 @@ public class ashx_Company_SaveData : IHttpHandler {
 
                 string comBIT = (!string.IsNullOrEmpty(context.Request.Form["comBIT"])) ? context.Request.Form["comBIT"].ToString() : "";
                 string comNTB = (!string.IsNullOrEmpty(context.Request.Form["comNTB"])) ? context.Request.Form["comNTB"].ToString() : "";
+                     string comNTBCode = (!string.IsNullOrEmpty(context.Request.Form["comNTBCode"])) ? context.Request.Form["comNTBCode"].ToString() : "";
                 string comLaborProtectionCode = (!string.IsNullOrEmpty(context.Request.Form["comLaborProtectionCode"])) ? context.Request.Form["comLaborProtectionCode"].ToString() : "";
                                 
                 string comHouseTax = (!string.IsNullOrEmpty(context.Request.Form["comHouseTax"])) ? context.Request.Form["comHouseTax"].ToString() : "";
@@ -67,7 +68,7 @@ public class ashx_Company_SaveData : IHttpHandler {
                         case "Ins":
                             dal.insertCompanyData(comName, comAbbreviate, comUniform,
                     comNTA, comLaborProtection1, comLaborProtection2,
-                    comBIT, comNTB, comLaborProtectionCode,
+                    comBIT, comNTB, comNTBCode, comLaborProtectionCode,
                     comHouseTax, comCity, comHealthInsuranceCode,
                     comBusinessEntity, comResponsible, comTel,
                     comAddress1, comAddress2, comPs,
@@ -79,7 +80,7 @@ public class ashx_Company_SaveData : IHttpHandler {
                         case "Up":
                             dal.UpdateCompanyData(comName, comAbbreviate, comUniform,
                     comNTA, comLaborProtection1, comLaborProtection2,
-                    comBIT, comNTB, comLaborProtectionCode,
+                    comBIT, comNTB, comNTBCode, comLaborProtectionCode,
                     comHouseTax, comCity, comHealthInsuranceCode,
                     comBusinessEntity, comResponsible, comTel,
                     comAddress1, comAddress2, comPs,

@@ -1032,13 +1032,16 @@
                             switch (msg) {
                                 case "DangerWord":
                                     CommonEven.goErrorPage();
+                                    $.unblockUI();
                                     break;
                                 case "Timeout":
                                     alert('登入逾時');
                                     CommonEven.goLogin();
+                                    $.unblockUI();
                                     break;
                                 case "error":
                                     alert('資料發生錯誤，請聯絡管理者');
+                                    $.unblockUI();
                                     break;
                                 default:
                                     JsEven.List();
@@ -1048,7 +1051,7 @@
                                     alert('薪資計算完成');
                                     break;
                             }
-                            //$.unblockUI();
+                            
                         }
                     }
                     CmFmCommon.ajax(opt);
