@@ -1272,7 +1272,7 @@
                             $(data).find("pb_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("pbGuid").text() + '>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
+                                tabstr += '<td  style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbCreditorCost").text()) + '</td>';//20170628 三位一逗點
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + $(this).children("pbRatio").text().trim() + '%</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIssued").text() + '</td>';
@@ -1282,7 +1282,7 @@
                                     else
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">匯款</td>';
                                 } else tabstr += '<td nowrap="nowrap" style="cursor: pointer;"></td>';
-                                tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoName").text() + '</td>';
+                                tabstr += '<td style="cursor: pointer;">' + $(this).children("pbIntoName").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoNumber").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pbIntoAccount").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbFee").text()) + '</td>';

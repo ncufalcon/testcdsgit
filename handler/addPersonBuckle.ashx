@@ -67,7 +67,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
             context.Response.ContentType = "text/html";
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('PB');</script>");
         }
-        catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addPersonFamily');</script>"); }
+        catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','editPersonBuckle');</script>"); }
     }
 
     public bool IsReusable {
