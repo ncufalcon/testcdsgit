@@ -41,7 +41,7 @@ public class ashx_Company_Edit : IHttpHandler {
 
                 XmlStr += "<comBIT>" + dv[i]["comBIT"].ToString() + "</comBIT>";
                 XmlStr += "<comNTB>" + dv[i]["comNTB"].ToString() + "</comNTB>";
-                    XmlStr += "<comNTBCode>" + dv[i]["comNTBCode"].ToString() + "</comNTBCode>";
+                XmlStr += "<comNTBCode>" + dv[i]["comNTBCode"].ToString() + "</comNTBCode>";
                 XmlStr += "<comLaborProtectionCode>" + dv[i]["comLaborProtectionCode"].ToString() + "</comLaborProtectionCode>";
 
                 XmlStr += "<comHouseTax>" + dv[i]["comHouseTax"].ToString() + "</comHouseTax>";
