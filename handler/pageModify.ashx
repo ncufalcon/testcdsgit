@@ -84,8 +84,8 @@ public class pageModify : IHttpHandler, IRequiresSessionState
     sy_PersonAllowanceChang1e_DB pac_db = new sy_PersonAllowanceChang1e_DB();
     public void ProcessRequest (HttpContext context)
     {
-        //string session_no = context.Session["MemberInfo_Guid"].ToString().Trim();
-        //string session_name = context.Session["MemberInfo_Name"].ToString().Trim();
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             //撈異動項目下拉選單資料
@@ -336,7 +336,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string back_person_guid = string.IsNullOrEmpty(context.Request.Form["back_person_guid"]) ? "" : context.Request.Form["back_person_guid"].ToString().Trim();
                 string back_date = string.IsNullOrEmpty(context.Request.Form["back_date"]) ? "" : context.Request.Form["back_date"].ToString().Trim();
                 try {
-                    pc_db._str_creatid = "王胖爺";
+                    pc_db._str_creatid = session_no;
                     pc_db._str_date = back_date;
                     pc_db._str_back_per_guid = back_person_guid;
                     pc_db.UpdatePersonLabor();
@@ -414,7 +414,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     if (mod_pay_status == "1")
                     {
                         pac_db._pacVenifyDate = mod_pay_chkdate;
-                        pac_db._pacVenify = "王胖爺";
+                        pac_db._pacVenify = session_name;
                     }
                     else {
                         pac_db._pacVenifyDate = "";
@@ -425,13 +425,13 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     pac_db._pacChange = mod_siguid;//異動項目GUID
                     if (mod_pay_type=="新增") {
                         pac_db._pacGuid = Guid.NewGuid().ToString();
-                        pac_db._pacCreateId = "王胖爺";
+                        pac_db._pacCreateId = session_no;
                         pac_db.InsertPersonAllowanceChang1e();
                     }
                     if (mod_pay_type == "修改")
                     {
                         pac_db._pacGuid = mod_hidden_pacguid;
-                        pac_db._pacModifyId = "王胖爺";
+                        pac_db._pacModifyId = session_no;
                         pac_db.UpdatePersonAllowanceChang1e();
                     }
                     if (mod_pay_status=="1") {//已確認要更新
@@ -458,7 +458,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string del_pay_guid = string.IsNullOrEmpty(context.Request.Form["del_pay_guid"]) ? "" : context.Request.Form["del_pay_guid"].ToString().Trim();
                 try {
                     pac_db._pacGuid = del_pay_guid;
-                    pac_db._pacModifyId = "王胖爺";
+                    pac_db._pacModifyId = session_no;
                     pac_db.DeletePersonAllowanceChang1e();
                 }
                 catch (Exception ex) {
@@ -476,24 +476,29 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string[] guid = str_payguid.Split(',');
                 string[] arr_afertmoney = str_aftertmoney.Split(',');
                 string[] arr_siRef = str_siRef.Split(',');
-                string[] arr_perguid = str_siRef.Split(',');
-                string[] arr_pacguid = str_siRef.Split(',');
+                string[] arr_perguid = str_perguid.Split(',');
+                string[] arr_pacguid = str_pacguid.Split(',');
 
                 int total_rows = guid.Length;
                 int count_rows = 0;
+                DateTime dtnow = DateTime.Now;
+                string str_dtnow = dtnow.ToString("yyyy/mm/dd");
                 try {
                     for (int i = 0; i < guid.Length; i++)
                     {
                         pac_db._pacGuid = guid[i].ToString().Trim();
+                        pac_db._pacVenify = session_name;
+                        pac_db._pacVenifyDate = str_dtnow;
+                        pac_db._pacPerGuid = arr_perguid[i].ToString().Trim();//人員guid
+                        pac_db._pacModifyDate = dtnow;
+                        pac_db._pacModifyId = session_no;
                         pac_db.UpdateStatus();
                         pac_db._str_after = Convert.ToInt32(arr_afertmoney[i].ToString().Trim());//異動後金額
-                        pac_db._pacPerGuid = arr_perguid[i].ToString().Trim();//人員guid
-                        pac_db._pacModifyId = "王胖爺";
-                        if (arr_siRef[i].ToString().Trim() == "")//底薪
+                        if (arr_siRef[i].ToString().Trim() == "01")//底薪
                         {
                             pac_db.UpdatePersonBasicSalary();
                         }
-                        else if (arr_siRef[i].ToString().Trim() == "")//職能加給
+                        else if (arr_siRef[i].ToString().Trim() == "02")//職能加給
                         {
                             pac_db.UpdatePersonAllowance();
                         }

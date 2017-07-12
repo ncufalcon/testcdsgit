@@ -11,7 +11,7 @@
     <script type="text/javascript">
         //人事異動 一開始預設確認日是今天 確認者是操作者
         var today_ymd = get_datenow();
-        var now_user = "<%=Session["MemberInfo_Name"] %>";;//目前還沒有登入這塊 先寫死
+        var now_user = "<%=USERINFO.MemberName %>";;//目前還沒有登入這塊 先寫死
         $(function () {
             //人事異動 工號欄位 change事件
             $(document).on("change", "#txt_person_empno", function () {
