@@ -201,6 +201,49 @@ line-height:1.55em;border:none;z-index:2;}
 .div-line {border-style: solid;border-width:1px; border-color:white;}
 .table-margin{margin:10px 10px 10px 10px}
 
+
+
+
+
+/* 分頁 */
+div.pagination {overflow: hidden;font-size:9pt;padding:10px 0; }
+div.pagination ul {list-style: none;padding: 2px 0;line-height: 16px;}
+div.pagination li {display: inline;}
+div.pagination.sabrosus {
+	padding:3px;
+	margin:3px;
+	text-align:center;
+}
+
+div.pagination.sabrosus a {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #9AC0D1;
+	text-decoration: none;
+	color: #000000;
+}
+
+div.pagination.sabrosus a:hover, div.pagination.pagination a:active {
+	border: 1px solid #9A3500;
+	color: #000;
+	background-color: #CBE2EF;
+}
+
+div.pagination.sabrosus li.current {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid navy;
+	font-weight: bold;
+	background-color: #CBE2EF;
+	color: #FFF;
+}
+
+div.pagination.sabrosus li.disabled {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #929292;
+	color: #929292;
+}
 /*
 *{
 scrollbar-3Dlight-color:#433E30;
