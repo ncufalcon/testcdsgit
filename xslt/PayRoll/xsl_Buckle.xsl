@@ -28,19 +28,19 @@
       <tbody>
         <xsl:for-each select="dView">
           <tr guid="{psbGuid}">
-            <td style="text-align:center;width:10%" >
+            <td style="text-align:left ;width:10%" >
               <xsl:value-of select="psbCreditor"/>
             </td>
-            <td style="text-align:left;width:10%" >
+            <td style="text-align:right;width:10%" >
               <xsl:value-of select="psbRatio"/>
             </td >
-            <td style="text-align:center;width:10%">
+            <td style="text-align:right;width:10%">
               <xsl:value-of select="psbCreditorCost"/>
             </td >
-            <td style="text-align:left;width:10%" >
+            <td style="text-align:right;width:10%" >
               <xsl:value-of select="psbFee"/>
             </td>
-            <td style="text-align:center;width:10%" >
+            <td style="text-align:right;width:10%" >
               <xsl:value-of select="psbCost"/>
             </td >      
           </tr>

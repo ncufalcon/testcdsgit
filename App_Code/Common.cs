@@ -478,6 +478,22 @@ public class Common
             return "資料錯誤";
         }
     }
+
+    /// <summary>
+    /// 驗證數字 如果為0則傳回空
+    /// </summary>
+    /// <returns></returns>
+    public string checkNumber(string n)
+    {
+        if (!string.IsNullOrEmpty(n))
+        {
+            if (Math.Round(double.Parse(n), 0) == 0)
+            { return ""; }
+            else { return n; }
+        }
+        else { return ""; }
+
+    }
 }
 
 public class JavaScript

@@ -34,7 +34,7 @@
             <td style="text-align:center;width:10%" >
               <xsl:value-of select="siAddstr"/>
             </td >
-            <td style="text-align:left;width:10%" >
+            <td style="text-align:right;width:10%" >
               <xsl:value-of select="psaCost"/>
             </td>
 
