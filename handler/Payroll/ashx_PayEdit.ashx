@@ -70,7 +70,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pOverTimeDutyfree = (!string.IsNullOrEmpty(context.Request.Form["pOverTimeDutyfree"])) ? decimal.Parse(context.Request.Form["pOverTimeDutyfree"].ToString()) : 0;
                 decimal pOverTimeTaxation = (!string.IsNullOrEmpty(context.Request.Form["pOverTimeTaxation"])) ? decimal.Parse(context.Request.Form["pOverTimeTaxation"].ToString()) : 0;
                 decimal pIntertemporal = (!string.IsNullOrEmpty(context.Request.Form["pIntertemporal"])) ? decimal.Parse(context.Request.Form["pOverTimeTaxation"].ToString()) : 0;
-                decimal pPay = (!string.IsNullOrEmpty(context.Request.Form["pPay"])) ? decimal.Parse(context.Request.Form["pIntertemporal"].ToString()) : 0;
+                decimal pPay = (!string.IsNullOrEmpty(context.Request.Form["pPay"])) ? decimal.Parse(context.Request.Form["pPay"].ToString()) : 0;
                 decimal pTaxation = (!string.IsNullOrEmpty(context.Request.Form["pTaxation"])) ? decimal.Parse(context.Request.Form["pTaxation"].ToString()) : 0;
                 decimal pPremium = (!string.IsNullOrEmpty(context.Request.Form["pPremium"])) ? decimal.Parse(context.Request.Form["pPremium"].ToString()) : 0;
                 decimal pPersonInsurance = (!string.IsNullOrEmpty(context.Request.Form["pPersonInsurance"])) ? decimal.Parse(context.Request.Form["pPersonInsurance"].ToString()) : 0;
