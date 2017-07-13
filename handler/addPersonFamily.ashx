@@ -43,15 +43,18 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
                     PF_Db.addPersonFamily();
 
                     //眷屬健保
-                    FI_Db._pfiGuid = Guid.NewGuid().ToString();
-                    FI_Db._pfiPerGuid = PerID;
-                    FI_Db._pfiPfGuid = GuidStr;
-                    FI_Db._pfiChange = "01";
-                    FI_Db._pfiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
-                    FI_Db._pfiSubsidyLevel = pf_CodeGuid;
-                    FI_Db._pfiModifyId = USERINFO.MemberGuid;
-                    FI_Db._pfiStatus = "A";
-                    FI_Db.addFamilyIns();
+                    if (pf_HealthInsurance == "Y")
+                    {
+                        FI_Db._pfiGuid = Guid.NewGuid().ToString();
+                        FI_Db._pfiPerGuid = PerID;
+                        FI_Db._pfiPfGuid = GuidStr;
+                        FI_Db._pfiChange = "01";
+                        FI_Db._pfiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        FI_Db._pfiSubsidyLevel = pf_CodeGuid;
+                        FI_Db._pfiModifyId = USERINFO.MemberGuid;
+                        FI_Db._pfiStatus = "A";
+                        FI_Db.addFamilyIns();
+                    }
                     //眷屬團保
                     if (pf_GroupInsurance == "Y")
                     {

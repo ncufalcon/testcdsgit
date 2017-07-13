@@ -556,7 +556,7 @@ where perGuid=@perGuid
 		StringBuilder sb = new StringBuilder();
 
 		sb.Append(@"SELECT * from sy_Person with (nolock) where perNo=@ckNo and perStatus='A'
-SELECT * from sy_Person with (nolock) where perIDNumber=@ckID ");
+SELECT * from sy_Person with (nolock) where perIDNumber=@ckID and perStatus='A' ");
 
         oComd.CommandText = sb.ToString();
         oComd.CommandType = CommandType.Text;
