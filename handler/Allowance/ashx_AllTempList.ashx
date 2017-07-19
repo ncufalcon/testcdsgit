@@ -3,7 +3,8 @@
 using System;
 using System.Web;
 using System.Data;
-public class ashx_AllTempList : IHttpHandler,System.Web.SessionState.IReadOnlySessionState {
+public class ashx_AllTempList : IHttpHandler, System.Web.SessionState.IReadOnlySessionState
+{
 
 
     Common com = new Common();
@@ -15,10 +16,17 @@ public class ashx_AllTempList : IHttpHandler,System.Web.SessionState.IReadOnlySe
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
+                DataView dv = new DataView();
                 string XmlStr = "";
+                string perNo = (!string.IsNullOrEmpty(context.Request.Form["perNo"])) ? context.Request.Form["perNo"].ToString() : "";
+                string perName = (!string.IsNullOrEmpty(context.Request.Form["perName"])) ? context.Request.Form["perName"].ToString() : "";
+                string perCom = (!string.IsNullOrEmpty(context.Request.Form["perCom"])) ? context.Request.Form["perCom"].ToString() : "";
+                string perDep = (!string.IsNullOrEmpty(context.Request.Form["perDep"])) ? context.Request.Form["perDep"].ToString() : "";
+                if (perNo == "" && perName == "" && perCom == "" && perDep == "")
+                    dv = dal.SelAllowanceTempTop200().DefaultView;
+                else
+                    dv = dal.SelAllowanceTemp(perNo, perName, perCom, perDep).DefaultView;
 
-
-                DataView dv = dal.SelAllowanceTemp().DefaultView;
                 XmlStr += "<dList>";
                 for (int i = 0; i < dv.Count; i++)
                 {
@@ -47,8 +55,10 @@ public class ashx_AllTempList : IHttpHandler,System.Web.SessionState.IReadOnlySe
         }
     }
 
-    public bool IsReusable {
-        get {
+    public bool IsReusable
+    {
+        get
+        {
             return false;
         }
     }

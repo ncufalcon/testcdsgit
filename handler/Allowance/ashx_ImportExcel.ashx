@@ -27,8 +27,8 @@ public class ashx_ImportExcel : IHttpHandler {
 
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                dt.Rows[i]["日期(YYYYMMDD)"] = com.IsDateFormatRDate(dt.Rows[i]["日期(YYYYMMDD)"].ToString());
-                dt.Rows[i]["金額"] = dt.Rows[i]["金額"].ToString().Replace(",", "");
+                dt.Rows[i]["columns2"] = DateTime.Parse(dt.Rows[i]["columns2"].ToString()).ToString("yyyy/MM/dd");
+                dt.Rows[i]["columns3"] = dt.Rows[i]["columns3"].ToString().Replace(",", "");
             }
             dal.DelsyAllowanceTemp();
             dal.InsAllTemp(dt);
@@ -61,7 +61,7 @@ public class ashx_ImportExcel : IHttpHandler {
         for (int i = 0; i < cellCount; i++)
         {
             if (headerRow.GetCell(i) != null)
-                table.Columns.Add(new DataColumn(headerRow.GetCell(i).ToString().Trim()));
+                table.Columns.Add(new DataColumn("columns" + i));  //table.Columns.Add(new DataColumn(headerRow.GetCell(i).ToString().Trim()));
             else
                 table.Columns.Add(new DataColumn(""));
         }

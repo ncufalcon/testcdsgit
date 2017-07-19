@@ -122,10 +122,12 @@
                 hid_PerGuid: 'hid_PerGuid',
                 sp_CName: 'sp_CName',
                 hid_CGuid: 'hid_CGuid',
-                hid_CStatus:'hid_CStatus',
+                hid_CStatus: 'hid_CStatus',
+
                 sp_DepName: 'sp_DepName',
                 hid_DepGuid: 'hid_DepGuid',
                 hid_Depstatus: 'hid_Depstatus',
+
                 sp_sDate: 'sp_sDate',
                 sp_eDate: 'sp_eDate',
                 hid_SalaryRangeGuid: 'hid_SalaryRangeGuid'

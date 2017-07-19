@@ -62,6 +62,7 @@ public class Personnel_DB
 	string perSyAccount = string.Empty;
 	string perReferenceNumber = string.Empty;
     decimal perDetentionRatio;
+    decimal perDetentionFee;    
     decimal perMonthPayroll;
     decimal perYearEndBonuses;
     decimal perYears;
@@ -251,7 +252,11 @@ public class Personnel_DB
 	{
 		set { perDetentionRatio = value; }
 	}
-	public decimal _perMonthPayroll
+    public decimal _perDetentionFee
+    {
+        set { perDetentionFee = value; }
+    }
+    public decimal _perMonthPayroll
 	{
 		set { perMonthPayroll = value; }
 	}
@@ -1104,6 +1109,7 @@ where perGuid=@perGuid
         oCmd.CommandText = @"update sy_Person set
 perReferenceNumber=@perReferenceNumber,
 perDetentionRatio=@perDetentionRatio,
+perDetentionFee=@perDetentionFee,
 perMonthPayroll=@perMonthPayroll,
 perYearEndBonuses=@perYearEndBonuses,
 perModifyId=@perModifyId,
@@ -1115,6 +1121,7 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oCmd.Parameters.AddWithValue("@perReferenceNumber", perReferenceNumber);
         oCmd.Parameters.AddWithValue("@perDetentionRatio", perDetentionRatio);
+        oCmd.Parameters.AddWithValue("@perDetentionFee", perDetentionFee);
         oCmd.Parameters.AddWithValue("@perMonthPayroll", perMonthPayroll);
         oCmd.Parameters.AddWithValue("@perYearEndBonuses", perYearEndBonuses);
         oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);

@@ -24,7 +24,7 @@
                     </ul>
                     <div id="tabs-1">
 
-                 <div class="twocol margin15T">
+                 <div class="twocol margin15T" id="div_Upload">
                    <table style="width:100%">
                        <tr>
                            <td>
@@ -32,12 +32,34 @@
                                 <span id="div_File"><input type="file" name="file_Atta" id="file_Atta" /></span>
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.UploadFile();">匯入暫存</a>
                            </td>
-                           <td style="text-align:right">
-                               <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Determine()" >確認匯入</a>
-                           </td>
                        </tr>
                    </table>
                 </div>
+
+            <div class="twocol margin15T" id="div_UploadSearch" style="display:none">
+                     <table style="width:100%">
+                         <tr>
+                             <td><div class="font-title titlebackicon">員工編號</div></td>
+                             <td><input type="text" id="txt_PerNoPage1" autofocus="autofocus" class="inputex width60"  /></td>
+                             <td><div class="font-title titlebackicon">員工姓名</div></td>
+                             <td><input type="text" id="txt_PerNamePage1" autofocus="autofocus" class="inputex width60"  /></td>
+                             <td><div class="font-title titlebackicon">公司</div></td>
+                             <td><input type="text" id="txt_PerCompanyPage1" autofocus="autofocus" class="inputex width60"  /></td>
+                             <td><div class="font-title titlebackicon">部門</div></td>
+                             <td><input type="text" id="txt_PerDepPage1" autofocus="autofocus" class="inputex width60"  /></td>
+                         </tr>
+                         <tr>
+                           <td style="text-align:right" colspan="8">
+                               <br />
+                                    <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.TempList()" >查詢</a>
+                                    <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Determine()" >確認匯入</a>
+                                    <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reImport()" >重新匯入</a>
+                           </td>
+                         </tr>
+
+                     </table>
+             </div>
+               
 <%--                        <asp:FileUpload ID="file_upload" runat="server" />
                         <asp:LinkButton ID="lbtn_Import" runat="server" OnClick="btnb_Click" CssClass="keybtn">匯入</asp:LinkButton>--%>
 
@@ -194,7 +216,14 @@
             Page1Id: {
                 file_Atta: 'file_Atta',
                 div_File: 'div_File',
-                div_Import: 'div_Import'
+                div_Import: 'div_Import',
+
+                div_Upload: 'div_Upload',
+                div_UploadSearch: 'div_UploadSearch',
+                txt_PerNoPage1:'txt_PerNoPage1',
+                txt_PerNamePage1:'txt_PerNamePage1',
+                txt_PerCompanyPage1:'txt_PerCompanyPage1',
+                txt_PerDepPage1:'txt_PerDepPage1'
             },
 
             Page2Id: {
@@ -477,6 +506,7 @@
 
 
             UploadFile: function () {
+
                 var fileUp = document.getElementById(this.Page1Id.file_Atta);
                 var ExtensionName = fileUp.value.toLowerCase().split('.')[1];
 
@@ -491,7 +521,7 @@
                         return false;
                     }
                 }
-
+                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 var iframe = document.createElement('iframe');
                 iframe.setAttribute('id', 'fileIFRAME');
                 iframe.setAttribute('name', iframe.id);
@@ -531,29 +561,49 @@
                         alert('匯入失敗');
                         break;
                     default:
+                        document.getElementById(JsEven.Page1Id.div_Upload).style.display = "none";
+                        document.getElementById(JsEven.Page1Id.div_UploadSearch).removeAttribute("style");
+                        JsEven.TempList();
                         alert('匯入成功');
-                        var opt = {
-                            url: '../handler/Allowance/ashx_AllTempList.ashx',
-                            v: '',
-                            type: 'xml',
-                            success: function (xmldoc) {
-                                var div = document.getElementById(JsEven.Page1Id.div_Import);
-                                var dList = xmldoc.getElementsByTagName('dList');
-                                var dView = xmldoc.getElementsByTagName('dView');
-
-                                if (dView.length != 0) {
-                                    CmFmCommon.Xsl(xmldoc, '../xslt/Allowance/xsl_AllImport.xsl', div);
-                                    LicEven.tblClass();
-
-                                } else { div.innerHTML = '目前無任何資料'; }
-                            }
-                        }
-                        CmFmCommon.ajax(opt);
                         break;
                 }
                 var div = document.getElementById(this.Page1Id.div_File);
                 div.innerHTML = "<input type='file' name='file_Atta' id='file_Atta' />";
+                $.unblockUI();
             },
+
+
+            TempList:function(){
+
+                var perNo = $('#' + this.Page1Id.txt_PerNoPage1).val();
+                var perName = $('#' + this.Page1Id.txt_PerNamePage1).val();
+                var perCom = $('#' + this.Page1Id.txt_PerCompanyPage1).val();
+                var perDep = $('#' + this.Page1Id.txt_PerDepPage1).val();
+
+                var opt = {
+                    url: '../handler/Allowance/ashx_AllTempList.ashx',
+                    v: 'perNo=' + perNo +
+                       '&perName=' + perName +
+                       '&perCom=' + perCom +
+                       '&perDep=' + perDep,
+                    type: 'xml',
+                    success: function (xmldoc) {
+                        var div = document.getElementById(JsEven.Page1Id.div_Import);
+                        var dList = xmldoc.getElementsByTagName('dList');
+                        var dView = xmldoc.getElementsByTagName('dView');
+
+                        if (dView.length != 0) {
+                            CmFmCommon.Xsl(xmldoc, '../xslt/Allowance/xsl_AllImport.xsl', div);
+                            LicEven.tblClass();
+
+                        } else { div.innerHTML = '目前無任何資料'; }
+                    }
+                }
+                CmFmCommon.ajax(opt);
+
+
+            },
+
 
             DelTemp: function (a) {
                 if (confirm('刪除後無法回復，您確定要刪除?')) {
@@ -596,7 +646,7 @@
 
             },
 
-            Determine: function () {         
+            Determine: function () {
                 $.ajax({
                     type: "POST",
                     url: '../handler/Allowance/ashx_Determine.ashx',
@@ -626,10 +676,14 @@
 
                     }
                 });
-            
 
-        }
-            
+
+            },
+
+            reImport: function () {
+                document.getElementById(JsEven.Page1Id.div_UploadSearch).style.display = "none";
+                document.getElementById(JsEven.Page1Id.div_Upload).removeAttribute("style");
+            }
 
         }
 

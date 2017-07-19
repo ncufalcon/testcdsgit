@@ -63,9 +63,9 @@
                                 <li><a href='page-Gifts.aspx' target='_self' title="年節禮金計算">年節禮金計算</a></li>
                                 <li><a href='page-SalaryHoliday.aspx' target='_self' title="給薪假計算">給薪假計算</a></li>
                                 <li><a href='page-Payroll.aspx' target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
-                                <li><a href='../webpage/page-Saveto.aspx' target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
+                                <li><a href='page-Saveto.aspx' target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
                                 <li><a href='page-SalaryPrint.html' target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
-                                <li><a href='page-SalaryList.html' target='_self' title="薪資冊">薪資冊</a></li>
+                                <li><a href='Page-PayrollList.aspx' target='_self' title="薪資冊">薪資冊</a></li>
                                 <li><a href='page-SalaryBar.html' target='_self' title="電子薪資條">電子薪資條</a></li>
                                 <!--<li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>-->
                             </ul>

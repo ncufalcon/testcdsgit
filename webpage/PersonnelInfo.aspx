@@ -549,6 +549,7 @@
                                 //法院執行命令
                                 $("#pReferenceNumber").val($(this).children("perReferenceNumber").text().trim());
                                 $("#pDetentionRatio").val($(this).children("perDetentionRatio").text().trim());
+                                $("#pDetentionFee").val($(this).children("perDetentionFee").text().trim());                                
                                 $("#pMonthPayroll").val($(this).children("perMonthPayroll").text().trim());
                                 $("#pYearEndBonuses").val($(this).children("perYearEndBonuses").text().trim());
 
@@ -1046,8 +1047,8 @@
                 else {
                     if ($("#pReferenceNumber").val().trim() == "")
                         msg += "請輸入執行明令發文字號\n";
-                    if ($("#pDetentionRatio").val().trim() == "")
-                        msg += "請輸入執行扣押薪資比例\n";
+                    if ($("#pDetentionRatio").val().trim() == "" && $("#pDetentionFee").val().trim() == "")
+                        msg += "請輸入執行扣押薪資比例或金額則一輸入\n";
                     //if ($("#pMonthPayroll").val().trim() == "")
                     //    msg += "請輸入每月應領薪津\n";
                     //if ($("#pYearEndBonuses").val().trim() == "")
@@ -1791,10 +1792,16 @@
                            <div class="gentable font-normal">
                                <table>
                                    <tr>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行明令發文字號</div></td>
-                                       <td class="width15"><input id="pReferenceNumber" name="pReferenceNumber" type="text" class="inputex width100" /></td>
-                                       <td class="width13" align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
-                                       <td class="width15"><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
+                                       <td  align="right"><div class="font-title titlebackicon font-red">執行明令發文字號</div></td>
+                                       <td ><input id="pReferenceNumber" name="pReferenceNumber" type="text" class="inputex width100" /></td>
+  <%--                                     <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
+                                       <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>--%>
+                                   </tr>
+                                   <tr>
+                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
+                                       <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
+                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押金額</div></td>
+                                       <td ><input id="pDetentionFee" name="pDetentionFee" type="text" class="inputex width100" /></td>
                                    </tr>
                                    <tr>
                                        <td class="width13" align="right"><div class="font-title titlebackicon ">每月應領薪津</div></td>

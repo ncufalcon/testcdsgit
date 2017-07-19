@@ -66,7 +66,9 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             string pSyAccount = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pSyAccount"].ToString() : "";
             //法院執行命令
             string pReferenceNumber = (context.Request.Form["pReferenceNumber"] != null) ? context.Request.Form["pReferenceNumber"].ToString() : "";
-            string pDetentionRatio = (context.Request.Form["pDetentionRatio"] != null) ? context.Request.Form["pDetentionRatio"].ToString() : "";
+            string pDetentionRatio = (!string.IsNullOrEmpty(context.Request.Form["pDetentionRatio"])) ? context.Request.Form["pDetentionRatio"].ToString() : "0";
+            string pDetentionFee = (!string.IsNullOrEmpty(context.Request.Form["pDetentionFee"])) ? context.Request.Form["pDetentionFee"].ToString() : "0";
+
             string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "";
             string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "";
 
@@ -250,6 +252,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                     Personnel_Db._perGuid = id;
                     Personnel_Db._perReferenceNumber = pReferenceNumber;
                     Personnel_Db._perDetentionRatio = decimal.Parse(pDetentionRatio);
+                    Personnel_Db._perDetentionFee = decimal.Parse(pDetentionFee);
                     Personnel_Db._perMonthPayroll = decimal.Parse(pMonthPayroll);
                     Personnel_Db._perYearEndBonuses = decimal.Parse(pYearEndBonuses);
                     Personnel_Db._perModifyId = USERINFO.MemberGuid;

@@ -277,28 +277,78 @@ namespace payroll
                 transaction = cmd.Connection.BeginTransaction();
                 cmd.Transaction = transaction;
 
-                string sql = @"";
+                string sql = "";
+                //產生temp table
+                sql = @"CREATE TABLE #temp (
+                         columns0 nvarchar(50),
+                         columns2 nvarchar(50),
+                         columns3 nvarchar(50),
+                         columns4 decimal(10, 0)
+                       )
+                       ;";
 
-                //新增Jumper
-                for (int i = 0; i < dt.Rows.Count; i++)
+                cmd.CommandText = sql;
+                cmd.ExecuteNonQuery();
+
+
+                // 利用 SqlBulkCopy 新增資料到temp table
+                SqlBulkCopyOptions setting = SqlBulkCopyOptions.CheckConstraints | SqlBulkCopyOptions.TableLock;
+                using (SqlBulkCopy sqlBC = new SqlBulkCopy(cmd.Transaction.Connection, setting, cmd.Transaction))
                 {
+                    sqlBC.BulkCopyTimeout = 600; ///設定逾時的秒數
+                    //sqlBC.BatchSize = 1000; ///設定一個批次量寫入多少筆資料, 設定值太小會影響效能 
+                    ////設定 NotifyAfter 屬性，以便在每複製 10000 個資料列至資料表後，呼叫事件處理常式。
+                    //sqlBC.NotifyAfter = 10000;
+                    ///設定要寫入的資料庫
+                    sqlBC.DestinationTableName = "#temp";
 
-                    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
-                            values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
+                    /// 對應來源與目標資料欄位
+                    sqlBC.ColumnMappings.Add("columns0", "columns0");
+                    sqlBC.ColumnMappings.Add("columns2", "columns2");
+                    sqlBC.ColumnMappings.Add("columns3", "columns3");
+                    sqlBC.ColumnMappings.Add("columns4", "columns4");
 
-
-                    cmd.CommandText = sql;
-                    cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
-                    cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
-                    cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
-                    cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
-                    cmd.ExecuteNonQuery();
+                    /// 開始寫入資料
+                    sqlBC.WriteToServer(dt);
                 }
 
 
-                //cmd.ExecuteNonQuery();
-                transaction.Commit();
-            }
+                    //insert 資料
+                    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+                            select columns0,columns2,columns3,columns4 from #temp ";
+
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+
+
+                    //cmd.Connection = Sqlconn;
+                    //cmd.Connection.Open();
+                    //SqlTransaction transaction;
+                    //transaction = cmd.Connection.BeginTransaction();
+                    //cmd.Transaction = transaction;
+
+                    //string sql = @"";
+
+                    ////新增Jumper
+                    //for (int i = 0; i < dt.Rows.Count; i++)
+                    //{
+
+                    //    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+                    //            values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
+
+
+                    //    cmd.CommandText = sql;
+                    //    cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
+                    //    cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
+                    //    cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
+                    //    cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
+                    //    cmd.ExecuteNonQuery();
+                    //}
+
+
+                    ////cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                }
             catch (Exception ex) { throw ex; }
             finally { cmd.Connection.Close(); cmd.Dispose(); }
         }
@@ -329,13 +379,53 @@ namespace payroll
         /// <summary>
         /// 查詢個人津貼匯入暫存檔_AllowanceTemp
         /// </summary>
-        public DataTable SelAllowanceTemp()
+        public DataTable SelAllowanceTempTop200()
         {
 
-            string sql = @"select * FROM v_AllowanceTemp ";
+            string sql = @"select top 200 * FROM v_AllowanceTemp order by atPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
 
+        }
+
+
+
+        /// <summary>
+        /// 查詢個人津貼匯入暫存檔_AllowanceTemp
+        /// </summary>
+        public DataTable SelAllowanceTemp(string pNo, string pName, string pCom, string pDep)
+        {
+
+            string sql = @"select * FROM v_AllowanceTemp where 1=1 ";
+
+            if (!string.IsNullOrEmpty(pNo))
+                sql += "and atPerNo like '%'+ @pNo +'%' ";
+
+            if (!string.IsNullOrEmpty(pName))
+                sql += "and perName like '%'+ @pName +'%' ";
+
+            if (!string.IsNullOrEmpty(pCom))
+                sql += "and comName like '%'+ @pCom +'%' ";
+
+            if (!string.IsNullOrEmpty(pDep))
+                sql += "and (cbName like '%'+ @pDep +'%' and cbValue like '%'+ @pDep +'%') ";
+
+
+            sql += "order by atPerNo";
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pNo", pNo);
+            cmd.Parameters.AddWithValue("@pName", pName);
+            cmd.Parameters.AddWithValue("@pCom", pCom);
+            cmd.Parameters.AddWithValue("@pDep", pDep);
             try
             {
                 cmd.Connection.Open();
