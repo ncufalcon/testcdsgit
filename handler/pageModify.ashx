@@ -39,6 +39,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string pcPs { get; set; }//備註
         public string begin_name { get; set; }//
         public string end_name { get; set; }//
+        public string mbName { get; set; }//
     }
     //sy_Person 欄位 人事資料
     public class pTooL
@@ -76,6 +77,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string siItemName { get; set; }
         public string pacChange { get; set; }
         public string siRef { get; set; }
+        public string mbNAme { get; set; }
     }
 
     CodeTable_DB code_db = new CodeTable_DB();
@@ -179,7 +181,8 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.pcChangeBegin = dt_personchange.Rows[i]["pcChangeBegin"].ToString().Trim();//異動前
                         e.pcChangeEnd = dt_personchange.Rows[i]["pcChangeEnd"].ToString().Trim();//異動後
                         e.pcVenifyDate = dt_personchange.Rows[i]["pcVenifyDate"].ToString().Trim();//確認日
-                        e.pcVenify = dt_personchange.Rows[i]["pcVenify"].ToString().Trim();//確認者
+                        e.pcVenify = dt_personchange.Rows[i]["pcVenify"].ToString().Trim();//確認者GUID
+                        e.mbName = dt_personchange.Rows[i]["mbName"].ToString().Trim();//確認者姓名
                         e.pcStatus = dt_personchange.Rows[i]["pcStatus"].ToString().Trim();//狀態
                         e.pcChangeName = dt_personchange.Rows[i]["pcChangeName"].ToString().Trim();//異動項目
                         e.ChangeCName = dt_personchange.Rows[i]["ChangeCName"].ToString().Trim();//異動項目中文名稱
@@ -198,7 +201,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                             e.begin_name = dt_personchange.Rows[i]["pcChangeBegin"].ToString().Trim();//
                             e.end_name = dt_personchange.Rows[i]["pcChangeEnd"].ToString().Trim();//
                         }
-
+                        
 
                         pcList.Add(e);
                     }
@@ -370,7 +373,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.pacChangeBegin = dt_pacdata.Rows[i]["pacChangeBegin"].ToString().Trim();
                         e.pacChangeEnd = dt_pacdata.Rows[i]["pacChangeEnd"].ToString().Trim();
                         e.pacVenifyDate = dt_pacdata.Rows[i]["pacVenifyDate"].ToString().Trim();
-                        e.pacVenify = dt_pacdata.Rows[i]["pacVenify"].ToString().Trim();
+                        e.pacVenify = dt_pacdata.Rows[i]["mbName"].ToString().Trim();//pacVenify是GUID 這邊要抓名字
                         e.pacStatus = dt_pacdata.Rows[i]["pacStatus"].ToString().Trim();
                         e.pacPs = dt_pacdata.Rows[i]["pacPs"].ToString().Trim();
                         e.pacStatus_d = dt_pacdata.Rows[i]["pacStatus_d"].ToString().Trim();
@@ -414,7 +417,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     if (mod_pay_status == "1")
                     {
                         pac_db._pacVenifyDate = mod_pay_chkdate;
-                        pac_db._pacVenify = session_name;
+                        pac_db._pacVenify = session_no;//資料庫存GUID 但畫面要顯示名字
                     }
                     else {
                         pac_db._pacVenifyDate = "";
@@ -487,7 +490,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     for (int i = 0; i < guid.Length; i++)
                     {
                         pac_db._pacGuid = guid[i].ToString().Trim();
-                        pac_db._pacVenify = session_name;
+                        pac_db._pacVenify = session_no;//資料庫存GUID 但畫面要顯示名字
                         pac_db._pacVenifyDate = str_dtnow;
                         pac_db._pacPerGuid = arr_perguid[i].ToString().Trim();//人員guid
                         pac_db._pacModifyDate = dtnow;

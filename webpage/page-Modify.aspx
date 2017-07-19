@@ -11,7 +11,8 @@
     <script type="text/javascript">
         //人事異動 一開始預設確認日是今天 確認者是操作者
         var today_ymd = get_datenow();
-        var now_user = "<%=USERINFO.MemberName %>";;//目前還沒有登入這塊 先寫死
+        var now_user = "<%=USERINFO.MemberName %>";;//登入者姓名 目前還沒有登入這塊 先寫死
+        var now_user_guid = "<%=USERINFO.MemberGuid %>";;//登入者GUID 目前還沒有登入這塊 先寫死
         $(function () {
             //人事異動 工號欄位 change事件
             $(document).on("change", "#txt_person_empno", function () {
@@ -42,6 +43,7 @@
             
             $("#txt_person_chkdate,#txt_pay_chkdate").val(today_ymd);
             $("#txt_person_chkpeople,#txt_pay_chkpeople").val(now_user);
+            $("#txt_person_chkpeople_guid").val(now_user_guid);
 
             call_changedata();//撈異動項目下拉選單選項
             call_personchangedata();//撈人事異動資料
@@ -72,6 +74,7 @@
                 $("#td_person_after").empty();
                 $("#txt_person_chkdate").val(today_ymd);
                 $("#txt_person_chkpeople").val(now_user);
+                $("#txt_person_chkpeople_guid").val(now_user_guid);
                 $("#txt_person_cname").text("");
                 $("#txt_person_ps").val("");
                 $("input[name='txt_person_status']").removeAttr("checked");
@@ -325,7 +328,7 @@
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].begin_name + "</td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].end_name + "</td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenifyDate + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenify + "</td>";
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].mbName + "</td>";
                                     if (response[i].pcStatus == "0") {
                                         str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;color:red;'>待確認</td>";
                                     } else {
@@ -405,15 +408,18 @@
                             if (response[0].pcStatus == "1") {
                                 $("#txt_person_chkdate").val(response[0].pcVenifyDate);
                                 $("#txt_person_chkpeople").val(response[0].pcVenify);
+                                $("#txt_person_chkpeople_guid").val(response[0].pcVenify);
                             } else {
                                 $("#txt_person_chkdate").val(today_ymd);
                                 $("#txt_person_chkpeople").val(now_user);
+                                $("#txt_person_chkpeople_guid").val(now_user_guid);
                             }
                             
                             $("input[name='txt_person_status'][value='" + response[0].pcStatus + "']").prop("checked", true);
                             $("#txt_person_ps").val(response[0].pcPs);
                             $("#hidden_person_status").val(response[0].pcStatus);
-                            $("#txt_person_change_pro").attr("disabled", "disabled")
+                            $("#txt_person_change_pro").attr("disabled", "disabled");
+                            
                         } else {
                             alert("");
                         }
@@ -443,7 +449,7 @@
                                 mod_before: $("#select_before").val(),
                                 mod_after: $("#select_after").val(),
                                 mod_chkdate: $("#txt_person_chkdate").val(),
-                                mod_chkpeople: $("#txt_person_chkpeople").val(),
+                                mod_chkpeople: $("#txt_person_chkpeople_guid").val(),//傳GUID回去 
                                 mod_status: $("input[name='txt_person_status']:checked").val(),
                                 mod_ps: $("#txt_person_ps").val(),
                                 mod_addormod: $("#span_person_Status").text(),
@@ -1302,6 +1308,7 @@
                                         </td>
                                         <td>
                                             <input type="text" class="inputex" maxlength="200" id="txt_person_chkpeople" disabled="disabled" />
+                                            <input type="text" class="inputex" id="txt_person_chkpeople_guid" style="display:none;" />
                                         </td>
                                     </tr>
                                     <tr>

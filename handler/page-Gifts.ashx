@@ -31,6 +31,8 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
     }
     page_Gifts_DB a_db = new page_Gifts_DB();
     public void ProcessRequest (HttpContext context) {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             case "load_data":
@@ -142,8 +144,8 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
                     a_db._paPrice = Convert.ToDecimal(add_money);
                     a_db._paAllowanceCode = add_moneytype;
                     a_db._paDate = add_paydate;
-                    a_db._paCreateId = "王胖爺";
-                    a_db._paModifyId = "王胖爺";
+                    a_db._paCreateId = session_no;
+                    a_db._paModifyId = session_no;
                     a_db.InsertPersonSingleAllowance();
                 }
                 catch (Exception ex) {

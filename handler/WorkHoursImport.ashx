@@ -16,6 +16,8 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
 
     sy_Attendance_DB a_db = new sy_Attendance_DB();
     public void ProcessRequest (HttpContext context) {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         bool status = true;
         string YearMonth = string.Empty;
         string now_rows = string.Empty;
@@ -31,7 +33,7 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
         try
         {
             DateTime Start1 = DateTime.Now; /// 記錄時間
-            string str_userid = "Wang";
+            string str_userid = session_no;
             DateTime dtnow = DateTime.Now;
             //將EXCEL資料先放到dt裡面再做insert
             DataTable dt = new DataTable();
@@ -135,30 +137,6 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                     DateTime END2 = DateTime.Now; /// 記錄時間
                     string dtime1 = (END1 - Start1).TotalMilliseconds.ToString( "#,###" );
                     string dtime2 = (END2 - END1).TotalMilliseconds.ToString( "#,###" );
-                    string aaa ;
-                    aaa = "3";
-                    //DateTime dtime_now = DateTime.Now;
-                    //for (int k = 0; k < dt.Rows.Count; k++)
-                    ////for (int k = 0; k < 100; k++)
-                    //{
-                    //    str_nowrow = k;
-                    //    str_no_rowdata = dt.Rows[k]["str_perno"].ToString().Trim() + "<==>" + dt.Rows[k]["str_date"].ToString().Trim() + "<==>" + dt.Rows[k]["str_times"].ToString().Trim();
-                    //    oCmd.CommandText = @"
-                    //        declare @aperGuid nvarchar(50)
-                    //        select @aperGuid=perGuid from sy_Person where perNo=@ah_perNo
-                    //        insert into sy_Attendance_hours(ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,ah_Status,ah_CreateId,ah_CreateDate,ah_ModdifyId,ah_ModdifyDate,ah_flag)
-                    //        values(@ah_guid,@aperGuid,@ah_perNo,@ah_AttendanceDate,@ah_Times,'','01','A',@ah_CreateId,@ah_CreateDate,@ah_ModdifyId,@ah_ModdifyDate,'Y')
-                    //    ";
-                    //    oCmd.Parameters["@ah_guid"].Value = Guid.NewGuid().ToString();
-                    //    oCmd.Parameters["@ah_perNo"].Value = dt.Rows[k]["str_perno"].ToString().Trim();
-                    //    oCmd.Parameters["@ah_AttendanceDate"].Value = dt.Rows[k]["str_date"].ToString().Trim();
-                    //    oCmd.Parameters["@ah_Times"].Value = Convert.ToDecimal(dt.Rows[k]["str_times"].ToString().Trim());
-                    //    oCmd.Parameters["@ah_CreateId"].Value = str_userid;
-                    //    oCmd.Parameters["@ah_CreateDate"].Value = dtime_now;
-                    //    oCmd.Parameters["@ah_ModdifyId"].Value = str_userid;
-                    //    oCmd.Parameters["@ah_ModdifyDate"].Value = dtime_now;
-                    //    oCmd.ExecuteNonQuery();
-                    //}
                 }
 
                 //再commit insert

@@ -13,10 +13,12 @@ using System.Web.SessionState;
 public class page_Seniority : IHttpHandler, IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             case "update":
-                string str_year = string.IsNullOrEmpty(context.Request.Form["str_year"]) ? "" : context.Request.Form["str_year"].ToString().Trim();
+                //string str_year = string.IsNullOrEmpty(context.Request.Form["str_year"]) ? "" : context.Request.Form["str_year"].ToString().Trim();
                 string str_date = string.IsNullOrEmpty(context.Request.Form["str_date"]) ? "" : context.Request.Form["str_date"].ToString().Trim();
                 string str_perguid = string.IsNullOrEmpty(context.Request.Form["str_perguid"]) ? "" : context.Request.Form["str_perguid"].ToString().Trim();
                 string str_updatetype = string.IsNullOrEmpty(context.Request.Form["str_updatetype"]) ? "" : context.Request.Form["str_updatetype"].ToString().Trim();
@@ -44,7 +46,7 @@ public class page_Seniority : IHttpHandler, IRequiresSessionState {
                     //oCmd.Parameters.AddWithValue("@comGuid", "");
                     //oCmd.Parameters.AddWithValue("@depGuid", "");
                     //oCmd.Parameters.AddWithValue("@paydate", str_paydate);
-                    oCmd.Parameters.AddWithValue("@year", str_year);
+                    //oCmd.Parameters.AddWithValue("@year", str_year);
                     oCmd.Parameters.AddWithValue("@end_date", str_date);
                     oCmd.Parameters.AddWithValue("@mod_type", str_updatetype);
                     oCmd.Parameters.AddWithValue("@perguid", mod_guid);

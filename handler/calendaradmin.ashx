@@ -4,8 +4,9 @@ using System;
 using System.Web;
 using System.Data;
 using System.Collections.Generic;
+using System.Web.SessionState;
 
-public class calendaradmin : IHttpHandler 
+public class calendaradmin : IHttpHandler , IRequiresSessionState
 {
     //Holiday 欄位
     public class TooL
@@ -39,6 +40,8 @@ public class calendaradmin : IHttpHandler
     SalaryRange_DB s_db = new SalaryRange_DB();
     public void ProcessRequest (HttpContext context)
     {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             case "call_holidaydata":
@@ -91,13 +94,13 @@ public class calendaradmin : IHttpHandler
 
                 if (str_mod_type == "修改")
                 {
-                    h_db._dayCreatId = "王胖爺";//目前還沒有登入的這塊 先寫死
+                    h_db._dayCreatId = session_no;//目前還沒有登入的這塊 先寫死
                     h_db._dayGuid = str_mod_guid;
                     h_db.UpdateHoliday();
                 }
                 else if (str_mod_type == "新增")
                 {
-                    h_db._dayModifyId = "王胖爺";//目前還沒有登入的這塊 先寫死
+                    h_db._dayModifyId = session_no;//目前還沒有登入的這塊 先寫死
                     h_db._dayGuid=Guid.NewGuid().ToString();
                     h_db.InsertHoliday();
                 }
@@ -109,7 +112,7 @@ public class calendaradmin : IHttpHandler
             case "del_holidaydata":
                 string str_holiday_del_guid = string.IsNullOrEmpty(context.Request.Form["str_holiday_del_guid"]) ? "" : context.Request.Form["str_holiday_del_guid"].ToString().Trim();
                 h_db._dayGuid = str_holiday_del_guid;
-                h_db._dayModifyId = "王胖爺";//目前還沒有登入的這塊 先寫死
+                h_db._dayModifyId = session_no;//目前還沒有登入的這塊 先寫死
                 try
                 {
                     h_db.DeleteHoliday();

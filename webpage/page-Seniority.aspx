@@ -20,7 +20,7 @@
                         url: "../handler/page-Seniority.ashx",
                         data: {
                             func: "update",
-                            str_year: $("#txt_year").val(),
+                            //str_year: $("#txt_year").val(),
                             str_date: $("#txt_date").val(),
                             str_perguid: $("#tmpUID").val(),
                             str_updatetype: $("input[name='cbox_updatetype']:checked").val()
@@ -50,13 +50,13 @@
         });
         //檢查查詢欄位
         function chk_data() {
-            var chk_year = $("#txt_year").val();
+            //var chk_year = $("#txt_year").val();
             var chk_date = $("#txt_date").val();
             var chk_empno = $("#tmpUID").val();
-            if (chk_year == "") {
-                alert("請輸入計算年度");
-                return false;
-            }
+            //if (chk_year == "") {
+            //    alert("請輸入計算年度");
+            //    return false;
+            //}
             if (chk_date == "") {
                 alert("請選擇年資認定截止日期");
                 return false;
@@ -65,10 +65,10 @@
                 alert("請挑選人員");
                 return false;
             }
-            if (isNaN(chk_year)) {
-                alert("計算年度只能輸入識字");
-                return false;
-            }
+            //if (isNaN(chk_year)) {
+            //    alert("計算年度只能輸入識字");
+            //    return false;
+            //}
             if (chk_date.length != 10) {
                 alert("請選擇正確的年資認定截止日期yyyy/mm/dd");
                 return false;
@@ -138,11 +138,11 @@
                 <div class="gentable ">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td class="width15" align="right">
+                            <!--<td class="width15" align="right">
                                 <div class="font-title titlebackicon">輸入計算年度</div>
                             </td>
                             <td class="width13">
-                                <input type="text" class="inputex width95" value="" maxlength="4" id="txt_year" /></td>
+                                <input type="text" class="inputex width95" value="" maxlength="4" id="txt_year" /></td>-->
                             <td class="width15" align="right">
                                 <div class="font-title titlebackicon">選擇年資認定截止日期</div>
                             </td>
@@ -156,7 +156,7 @@
                         </tr>
                         <tr>
                             <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
-                            <td colspan="5">
+                            <td colspan="2">
                                 <img id="mPersonBox" src="../images/btn-search.gif" onclick="openMutiBox(this)" style="cursor: pointer;" />
                                 <span id="uName"></span>
                             </td>

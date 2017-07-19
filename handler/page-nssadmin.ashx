@@ -103,8 +103,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
     sy_SubsidyLevel_DB sl_db = new sy_SubsidyLevel_DB();
     sy_InsuranceLevel_DB il_db = new sy_InsuranceLevel_DB();
     public void ProcessRequest (HttpContext context) {
-        //string session_no = context.Session["MemberInfo_Guid"].ToString().Trim();
-        //string session_name = context.Session["MemberInfo_Name"].ToString().Trim();
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func)
         {
@@ -182,7 +182,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     ib_db._ibHealthcare6_up = (mod_ibHealthcare6_up == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare6_up);
                     ib_db._ibHealthcare6_down = (mod_ibHealthcare6_down == "") ? 0 : Convert.ToDecimal(mod_ibHealthcare6_down);
                     ib_db._ibHealthcare7 = mod_ibHealthcare7;
-                    ib_db._ibModifyId = "王胖爺";
+                    ib_db._ibModifyId = session_no;
                     DataTable dt_chkibdata = ib_db.SelectInsuranceBasic();
                     if (dt_chkibdata.Rows.Count > 0)
                     {
@@ -245,8 +245,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     gi_db._giInsuranceCode = mod_gi_code;
                     gi_db._giInsuranceName = mod_gi_name;
                     gi_db._giPs = mod_gi_ps;
-                    gi_db._giCreatId = "王胖爺";
-                    gi_db._giModifyId = "王胖爺";
+                    gi_db._giCreatId = session_no;
+                    gi_db._giModifyId = session_no;
                     DataTable dt_chk_code = gi_db.SelectGroupInsuranceCode();
                     if (mod_gi_Status=="新增") {
 
@@ -284,7 +284,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 string del_gi_guid = string.IsNullOrEmpty(context.Request.Form["del_gi_guid"]) ? "" : context.Request.Form["del_gi_guid"].ToString().Trim();
                 try {
                     gi_db._giGuid = del_gi_guid;
-                    gi_db._giModifyId = "王胖爺";
+                    gi_db._giModifyId = session_no;
                     gi_db.DeleteGroupInsurance();
                     context.Response.Write("ok");
                 }
@@ -348,8 +348,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     ii_db._iiInsurance4 = mod_ii_iiInsurance4;
                     ii_db._iiInsurance5 = mod_ii_iiInsurance5;
                     ii_db._iiRetirement = mod_ii_iiRetirement;
-                    ii_db._iiCreatId = "王胖爺";
-                    ii_db._iiModifyId = "王胖爺";
+                    ii_db._iiCreatId = session_no;
+                    ii_db._iiModifyId = session_no;
                     DataTable dt_chk_code = ii_db.SelectInsuranceIdentityCode();
                     if (mod_ii_Status=="新增") {
 
@@ -387,7 +387,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 string del_ii_guid = string.IsNullOrEmpty(context.Request.Form["del_ii_guid"]) ? "" : context.Request.Form["del_ii_guid"].ToString().Trim();
                 try {
                     ii_db._iiGuid = del_ii_guid;
-                    ii_db._iiModifyId = "王胖爺";
+                    ii_db._iiModifyId = session_no;
                     ii_db.DeleteInsuranceIdentity();
                     context.Response.Write("ok");
                 }
@@ -442,8 +442,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     gii_db._giiItem1 = mod_gii_giiItem1;
                     gii_db._giiItem2 = mod_gii_giiItem2;
                     gii_db._giiItem3 = mod_gii_giiItem3;
-                    gii_db._giiCreatId = "王胖爺";
-                    gii_db._giiModifyId = "王胖爺";
+                    gii_db._giiCreatId = session_no;
+                    gii_db._giiModifyId = session_no;
                     DataTable dt_chk_code = gii_db.SelectGroupInsuranceIdentityCode();
                     if (mod_gii_Status=="新增") {
 
@@ -481,7 +481,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 string del_gii_guid = string.IsNullOrEmpty(context.Request.Form["del_gii_guid"]) ? "" : context.Request.Form["del_gii_guid"].ToString().Trim();
                 try {
                     gii_db._giiGuid = del_gii_guid;
-                    gii_db._giiModifyId = "王胖爺";
+                    gii_db._giiModifyId = session_no;
                     gii_db.DeleteGroupInsuranceIdentity();
                     context.Response.Write("ok");
                 }
@@ -537,8 +537,8 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                     sl_db._slSubsidyRatio1 = Convert.ToDecimal(mod_sl_slSubsidyRatio1);
                     sl_db._slSubsidyRatio2 = Convert.ToDecimal(mod_sl_slSubsidyRatio2);
                     sl_db._slSubsidyRatio3 = Convert.ToDecimal(mod_sl_slSubsidyRatio3);
-                    sl_db._slCreatId = "王胖爺";
-                    sl_db._slModifyId = "王胖爺";
+                    sl_db._slCreatId = session_no;
+                    sl_db._slModifyId = session_no;
                     DataTable dt_chk_code = sl_db.SelectGroupInsuranceIdentityCode();
                     if (mod_sl_Status=="新增") {
 
@@ -576,7 +576,7 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 string del_sl_guid = string.IsNullOrEmpty(context.Request.Form["del_sl_guid"]) ? "" : context.Request.Form["del_sl_guid"].ToString().Trim();
                 try {
                     sl_db._slGuid = del_sl_guid;
-                    sl_db._slModifyId = "王胖爺";
+                    sl_db._slModifyId = session_no;
                     sl_db.DeleteSubsidyLevel();
                     context.Response.Write("ok");
                 }

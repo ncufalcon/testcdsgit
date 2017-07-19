@@ -4,8 +4,9 @@ using System;
 using System.Web;
 using System.Data;
 using System.Collections.Generic;
+using System.Web.SessionState;
 
-public class page_hourlyadmin : IHttpHandler {
+public class page_hourlyadmin : IHttpHandler, IRequiresSessionState {
     //sy_BasicSalary 欄位 代碼檔
     public class bsTooL
     {
@@ -127,6 +128,8 @@ public class page_hourlyadmin : IHttpHandler {
     sy_PayHoliday_DB ph_db = new sy_PayHoliday_DB();
     public void ProcessRequest (HttpContext context)
     {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             //撈時薪設定資料
@@ -320,7 +323,7 @@ public class page_hourlyadmin : IHttpHandler {
                             }
                             else {
                                 si_db._siGuid = Guid.NewGuid().ToString();
-                                si_db._siCreatId = "王胖爺";
+                                si_db._siCreatId = session_no;
                                 si_db.InsertSalaryItem();
                                 context.Response.Write("ok");
                             }
@@ -341,14 +344,14 @@ public class page_hourlyadmin : IHttpHandler {
                                     context.Response.Write("siref_notonly_mod");
                                 }
                                 else {
-                                    si_db._siModifyId = "王胖爺";
+                                    si_db._siModifyId = session_no;
                                     si_db.UpdateSalaryItem();
                                     context.Response.Write("ok");
                                 }
 
                             }
                             else {
-                                si_db._siModifyId = "王胖爺";
+                                si_db._siModifyId = session_no;
                                 si_db.UpdateSalaryItem();
                                 context.Response.Write("ok");
                             }

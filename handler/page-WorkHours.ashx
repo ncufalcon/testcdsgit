@@ -97,6 +97,8 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
     SalaryRange_DB sr_db = new SalaryRange_DB();
     public void ProcessRequest(HttpContext context)
     {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
         switch (str_func) {
             case "load_hoursdata":
@@ -343,10 +345,10 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     at_db._ah_Times = Convert.ToDecimal(mod_aTimes);
                     at_db._ah_Remark = mod_aRemark;
                     at_db._ah_Itme = mod_aItme;
-                    at_db._ah_ModdifyId = "王胖爺";
+                    at_db._ah_ModdifyId = session_no;
                     if (mod_type=="新增") {
                         at_db._ah_guid = Guid.NewGuid().ToString();
-                        at_db._ah_CreateId = "王胖爺";
+                        at_db._ah_CreateId = session_no;
                         at_db.InsertAttendanceHours();
                     }
                     if (mod_type=="修改") {
@@ -363,7 +365,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
             case "hours_go":
                 string go_ranges = string.IsNullOrEmpty(context.Request.Form["str_ranges"]) ? "" : context.Request.Form["str_ranges"].ToString().Trim();
                 string go_rangee = string.IsNullOrEmpty(context.Request.Form["str_rangee"]) ? "" : context.Request.Form["str_rangee"].ToString().Trim();
-                string str_userid = "Wang";
+                string str_userid = session_no;
                 try {
                     //跑工時計算SP
                     SqlCommand oCmd2 = new SqlCommand();

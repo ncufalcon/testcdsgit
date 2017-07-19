@@ -8,10 +8,13 @@ using System.IO;
 using FlexCel.Core;
 using FlexCel.XlsAdapter;
 using System.Configuration;
+using System.Web.SessionState;
 
-public class InsuranceLevelImport : IHttpHandler {
+public class InsuranceLevelImport : IHttpHandler, IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
+        string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
+        string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         bool status = true;
         HttpFileCollection uploadFiles = context.Request.Files;//檔案集合
 
@@ -132,8 +135,8 @@ public class InsuranceLevelImport : IHttpHandler {
                     oCmd.Parameters["@ilItem3"].Value = (cl3.Trim() == "") ? 0 : Convert.ToDecimal(cl3.Trim());
                     oCmd.Parameters["@ilItem4"].Value = (cl2.Trim() == "") ? 0 : Convert.ToDecimal(cl2.Trim());
                     oCmd.Parameters["@ilEffectiveDate"].Value = textdate;
-                    oCmd.Parameters["@ilCreatId"].Value = "王胖爺";
-                    oCmd.Parameters["@ilModifyId"].Value = "王胖爺";
+                    oCmd.Parameters["@ilCreatId"].Value = session_no;
+                    oCmd.Parameters["@ilModifyId"].Value = session_no;
                     oCmd.Parameters["@ilModifyDate"].Value = DateTime.Now;
                     oCmd.ExecuteNonQuery();
 

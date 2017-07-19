@@ -137,10 +137,11 @@ public class sy_PersonAllowanceChang1e_DB
             thisConnection.Open();
             show_value.Append(@"  
                 select pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
-                        pacModifyId,pacModifyDate,pacStatus_d,perNo,perName,pacChange,siItemName,siRef
+                        pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName
                 from sy_PersonAllowanceChang1e
-                left join sy_Person on pacPerGuid = perGuid
+                left join sy_Person a on pacPerGuid = a.perGuid
                 left join sy_SalaryItem on pacChange = siGuid
+                left join sy_Member on pacVenify=mbGuid
                 where pacStatus_d='A'
             ");
 
@@ -164,13 +165,13 @@ public class sy_PersonAllowanceChang1e_DB
                 show_value.Append(@" and pacStatus=@pacStatus  ");
                 thisCommand.Parameters.AddWithValue("@pacStatus", str_status);
             }
-            show_value.Append(@" order by pacStatus, pacCreateDate DESC   ");
+            show_value.Append(@" order by pacStatus, pacCreateDate ASC   ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
             oda.Fill(dt);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             oda.Dispose();
             thisConnection.Close();
@@ -342,13 +343,15 @@ public class sy_PersonAllowanceChang1e_DB
         {
             show_value.Append(@" 
                 update sy_PersonAllowanceChang1e 
-                set pacStatus='1',pacModifyId=@pacModifyId,pacModifyDate=@pacModifyDate
+                set pacStatus='1',pacModifyId=@pacModifyId,pacModifyDate=@pacModifyDate,pacVenify=@pacVenify,pacVenifyDate=@pacVenifyDate
                 where pacGuid=@pacGuid
             ");
-
+            
             thisCommand.Parameters.AddWithValue("@pacGuid", pacGuid);
             thisCommand.Parameters.AddWithValue("@pacModifyId", pacModifyId);
-            thisCommand.Parameters.AddWithValue("@pacModifyDate", DateTime.Now);
+            thisCommand.Parameters.AddWithValue("@pacModifyDate", pacModifyDate);
+            thisCommand.Parameters.AddWithValue("@pacVenify", pacVenify);
+            thisCommand.Parameters.AddWithValue("@pacVenifyDate", pacVenifyDate);
 
             thisCommand.CommandText = show_value.ToString();
             thisCommand.CommandType = CommandType.Text;
