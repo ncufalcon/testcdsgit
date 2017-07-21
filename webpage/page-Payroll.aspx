@@ -239,6 +239,10 @@
                                         <td align="right"><div class="font-title titlebackicon">國定假日加班-2類</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTime2" /></td>                                       
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary2"/></td>
+
+                                        <td align="right"><div class="font-title titlebackicon">陪產假</div></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pProductionLeaveTimes" /></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pProductionLeaveSalary"/></td>
                                     </tr>
 
                                     <tr>
@@ -248,6 +252,11 @@
                                         <td align="right"><div class="font-title titlebackicon">國定假日加班-3類</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTime3" /></td>                                       
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary3"/></td>
+
+
+                                        <td align="right"><div class="font-title titlebackicon">兵役假</div></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pMilitaryLeaveTimes" /></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pMilitaryLeaveSalary"/></td>
                                     </tr>
                                     <tr>
                                         <td>&nbsp;</td>
@@ -470,6 +479,11 @@
                 txt_pFuneralLeaveSalary:'txt_pFuneralLeaveSalary',
                 txt_pMaternityLeaveTimes:'txt_pMaternityLeaveTimes',
                 txt_pMaternityLeaveSalary:'txt_pMaternityLeaveSalary',
+
+                txt_pProductionLeaveTimes: 'txt_pProductionLeaveTimes',
+                txt_pProductionLeaveSalary: 'txt_pProductionLeaveSalary',
+                txt_pMilitaryLeaveTimes: 'txt_pMilitaryLeaveTimes',
+                txt_pMilitaryLeaveSalary: 'txt_pMilitaryLeaveSalary',
                                    
                 txt_pHolidayDutyFree: 'txt_pHolidayDutyFree',
                 txt_pHolidayTaxation: 'txt_pHolidayTaxation',
@@ -728,6 +742,12 @@
                             $('#' + JsEven.Page1Id.txt_pFuneralLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pFuneralLeaveSalary"));
                             $('#' + JsEven.Page1Id.txt_pMaternityLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveTimes"));
                             $('#' + JsEven.Page1Id.txt_pMaternityLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveSalary"));
+
+                            $('#' + JsEven.Page1Id.txt_pProductionLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pProductionLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pProductionLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pProductionLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pMilitaryLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pMilitaryLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveSalary"));
+
                             $('#' + JsEven.Page1Id.txt_pHolidayDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidayDutyFree"));
                             $('#' + JsEven.Page1Id.txt_pHolidayTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidayTaxation"));
                             $('#' + JsEven.Page1Id.txt_pNationalholidaysTaxation).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTaxation"));
@@ -736,6 +756,8 @@
                             $('#' + JsEven.Page1Id.txt_pHolidaySumTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidaySumTaxation"));
                             $('#' + JsEven.Page1Id.txt_pAttendanceDays).val(CommonEven.XmlNodeGetValue(e, "pAttendanceDays"));
                             $('#' + JsEven.Page1Id.txt_pAttendanceTimes).val(CommonEven.XmlNodeGetValue(e, "pAttendanceTimes"));
+
+
                             //$('#' + JsEven.Page1Id.txt_pPayLeave).val(CommonEven.XmlNodeGetValue(e, "pPayLeave"));
                             $('#' + JsEven.Page1Id.txt_pOverTimeDutyfree).val(CommonEven.XmlNodeGetValue(e, "pOverTimeDutyfree"));
                             $('#' + JsEven.Page1Id.txt_pOverTimeTaxation).val(CommonEven.XmlNodeGetValue(e, "pOverTimeTaxation"));
@@ -847,6 +869,12 @@
                     var pFuneralLeaveSalary = $('#' + this.Page1Id.txt_pFuneralLeaveSalary).val();
                     var pMaternityLeaveTimes = $('#' + this.Page1Id.txt_pMaternityLeaveTimes).val();
                     var pMaternityLeaveSalary = $('#' + this.Page1Id.txt_pMaternityLeaveSalary).val();
+
+                    var pProductionLeaveTimes = $('#' + this.Page1Id.txt_pProductionLeaveTimes).val();
+                    var pProductionLeaveSalary = $('#' + this.Page1Id.txt_pProductionLeaveSalary).val();
+                    var pMilitaryLeaveTimes = $('#' + this.Page1Id.txt_pMilitaryLeaveTimes).val();
+                    var pMilitaryLeaveSalary = $('#' + this.Page1Id.txt_pMilitaryLeaveSalary).val();
+
                     var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
                     var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
                     var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
@@ -910,6 +938,12 @@
                               '&pFuneralLeaveSalary=' + pFuneralLeaveSalary +
                               '&pMaternityLeaveTimes=' + pMaternityLeaveTimes +
                               '&pMaternityLeaveSalary=' + pMaternityLeaveSalary +
+
+                              '&pProductionLeaveTimes=' + pProductionLeaveTimes +
+                              '&pProductionLeaveSalary=' + pProductionLeaveSalary +
+                              '&pMilitaryLeaveTimes=' + pMilitaryLeaveTimes +
+                              '&pMilitaryLeaveSalary=' + pMilitaryLeaveSalary +
+
                               '&pHolidayDutyFree=' + pHolidayDutyFree +
                               '&pHolidayTaxation=' + pHolidayTaxation +
                               '&pNationalholidaysTaxation=' + pNationalholidaysTaxation +

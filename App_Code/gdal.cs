@@ -632,7 +632,7 @@ namespace payroll
         public DataTable Selsy_PaySalaryAllowance(payroll.model.sy_PayAllowance p)
         {
 
-            string sql = @"select *, case siAdd when '01' then '加項' when '02' then '扣項' else '' end as siAddstr from sy_PaySalaryAllowance left join sy_SalaryItem on psaAllowanceCode=siGuid where psaStatus='A' ";
+            string sql = @"select *, case siAdd when '01' then N'加項' when '02' then N'扣項' else '' end as siAddstr from sy_PaySalaryAllowance left join sy_SalaryItem on psaAllowanceCode=siGuid where psaStatus='A' ";
 
             if (!string.IsNullOrEmpty(p.psaPerGuid))
                 sql += "and psaPerGuid=@psaPerGuid ";
@@ -814,7 +814,17 @@ namespace payroll
                                                              ,plogBuckleFee
                                                              ,plogWelfare
                                                              ,plogStatus                                         
-                                                             ,plogModdifyId,plogShouldPay)
+                                                             ,plogModdifyId
+
+                                                             ,plogProductionLeaveTimes
+                                                             ,plogProductionLeaveSalary
+                                                             ,plogMilitaryLeaveTimes
+                                                             ,plogMilitaryLeaveSalary
+                                                             ,plogShouldPay
+                                                             ,plogBasicSalary
+                                                             ,plogAllowance
+                                                             ,plogCompanyGuid
+                                                             ,plogDepGuid)
                                                             select pGuid
                                                                   ,pPsmGuid
                                                                   ,pPerGuid
@@ -899,7 +909,19 @@ namespace payroll
                                                                   ,pBuckleCost
                                                                   ,pBuckleFee
                                                                   ,pWelfare
-                                                                  ,'Update',@UserInfo, pShouldPay from sy_PaySalaryDetail where pGuid=@pGuid;
+                                                                  ,'Update',@UserInfo
+
+                                                                  ,pProductionLeaveTimes
+                                                                  ,pProductionLeaveSalary
+                                                                  ,pMilitaryLeaveTimes
+                                                                  ,pMilitaryLeaveSalary
+                                                                  ,pShouldPay
+                                                                  ,pBasicSalary
+                                                                  ,pAllowance
+                                                                  ,pCompanyGuid
+                                                                  ,pDepGuid
+                                                                   from sy_PaySalaryDetail where pGuid=@pGuid;
+
                                                                   update sy_PaySalaryDetail set                                                               
                                                                   pWeekdayTime1=@pWeekdayTime1
                                                                   ,pWeekdaySalary1=@pWeekdaySalary1
@@ -957,6 +979,12 @@ namespace payroll
                                                                   ,pMaternityLeaveSalary=@pMaternityLeaveSalary
                                                                   ,pHonoraryLeaveTimes=@pHonoraryLeaveTimes
                                                                   ,pHonoraryLeaveSalary=@pHonoraryLeaveSalary
+
+                                                                  ,pProductionLeaveTimes=@pProductionLeaveTimes
+                                                                  ,pProductionLeaveSalary=@pProductionLeaveSalary
+                                                                  ,pMilitaryLeaveTimes=@pMilitaryLeaveTimes
+                                                                  ,pMilitaryLeaveSalary=@pMilitaryLeaveSalary
+
                                                                   ,pTaxDeduction=@pTaxDeduction
                                                                   ,pPay=@pPay
                                                                   ,pTaxation=@pTaxation
@@ -1015,7 +1043,6 @@ namespace payroll
 
             cmd.Parameters.AddWithValue("@pNationalholidaysDutyFree", p.pNationalholidaysDutyFree);
             cmd.Parameters.AddWithValue("@pNationalholidaysTaxation", p.pNationalholidaysTaxation);
-
             cmd.Parameters.AddWithValue("@pHolidaySumDutyFree", p.pHolidaySumDutyFree);
             cmd.Parameters.AddWithValue("@pHolidaySumTaxation", p.pHolidaySumTaxation);
 
@@ -1035,6 +1062,10 @@ namespace payroll
             cmd.Parameters.AddWithValue("@pHonoraryLeaveTimes", p.pHonoraryLeaveTimes);
             cmd.Parameters.AddWithValue("@pHonoraryLeaveSalary", p.pHonoraryLeaveSalary);
 
+            cmd.Parameters.AddWithValue("@pProductionLeaveTimes", p.pProductionLeaveTimes);
+            cmd.Parameters.AddWithValue("@pProductionLeaveSalary", p.pProductionLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMilitaryLeaveTimes", p.pMilitaryLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMilitaryLeaveSalary", p.pMilitaryLeaveSalary);
 
             cmd.Parameters.AddWithValue("@pTaxDeduction", p.pTaxDeduction);
             cmd.Parameters.AddWithValue("@pPay", p.pPay);

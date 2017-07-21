@@ -59,6 +59,12 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pFuneralLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pFuneralLeaveSalary"])) ? decimal.Parse(context.Request.Form["pFuneralLeaveSalary"].ToString()) : 0;
                 decimal pMaternityLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pMaternityLeaveTimes"])) ? decimal.Parse(context.Request.Form["pMaternityLeaveTimes"].ToString()) : 0;
                 decimal pMaternityLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pMaternityLeaveSalary"])) ? decimal.Parse(context.Request.Form["pMaternityLeaveSalary"].ToString()) : 0;
+
+                decimal pProductionLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pProductionLeaveTimes"])) ? decimal.Parse(context.Request.Form["pProductionLeaveTimes"].ToString()) : 0;
+                decimal pProductionLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pProductionLeaveSalary"])) ? decimal.Parse(context.Request.Form["pProductionLeaveSalary"].ToString()) : 0;
+                decimal pMilitaryLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pMilitaryLeaveTimes"])) ? decimal.Parse(context.Request.Form["pMilitaryLeaveTimes"].ToString()) : 0;
+                decimal pMilitaryLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pMilitaryLeaveSalary"])) ? decimal.Parse(context.Request.Form["pMilitaryLeaveSalary"].ToString()) : 0;
+
                 decimal pHolidayDutyFree = (!string.IsNullOrEmpty(context.Request.Form["pHolidayDutyFree"])) ? decimal.Parse(context.Request.Form["pHolidayDutyFree"].ToString()) : 0;
                 decimal pHolidayTaxation = (!string.IsNullOrEmpty(context.Request.Form["pHolidayTaxation"])) ? decimal.Parse(context.Request.Form["pHolidayTaxation"].ToString()) : 0;
                 decimal pNationalholidaysTaxation = (!string.IsNullOrEmpty(context.Request.Form["pNationalholidaysTaxation"])) ? decimal.Parse(context.Request.Form["pNationalholidaysTaxation"].ToString()) : 0;
@@ -121,6 +127,10 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                     p.pFuneralLeaveSalary = pFuneralLeaveSalary;
                     p.pMaternityLeaveTimes = pMaternityLeaveTimes;
                     p.pMaternityLeaveSalary = pMaternityLeaveSalary;
+                    p.pProductionLeaveTimes = pProductionLeaveTimes;
+                    p.pProductionLeaveSalary = pProductionLeaveSalary;
+                    p.pMilitaryLeaveTimes = pMilitaryLeaveTimes;
+                    p.pMilitaryLeaveSalary = pMilitaryLeaveSalary;
                     p.pHolidayDutyFree = pHolidayDutyFree;
                     p.pHolidayTaxation = pHolidayTaxation;
                     p.pNationalholidaysTaxation = pNationalholidaysTaxation;
@@ -146,7 +156,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
         }
         catch (Exception ex)
         {
-            //                變數名稱 '@pHolidayDutyFree' 已經宣告。變數名稱在一個查詢批次或預存程序內必須是唯一的。
+            //變數名稱 '@pHolidayDutyFree' 已經宣告。變數名稱在一個查詢批次或預存程序內必須是唯一的。
             //必須宣告純量變數 "@UserInfo"。
             //必須宣告純量變數 "@pNationalholidaysDutyFree"。
             //ErrorLog err = new ErrorLog();

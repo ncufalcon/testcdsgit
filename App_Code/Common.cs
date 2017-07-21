@@ -487,7 +487,7 @@ public class Common
     {
         if (!string.IsNullOrEmpty(n))
         {
-            if (Math.Round(double.Parse(n), 0) == 0)
+            if (Math.Ceiling(double.Parse(n)) == 0)
             { return ""; }
             else { return n; }
         }

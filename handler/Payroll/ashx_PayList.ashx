@@ -123,6 +123,11 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                         XmlStr += "<pMaternityLeaveTimes>" + dv[i]["pMaternityLeaveTimes"].ToString() + "</pMaternityLeaveTimes>";
                         XmlStr += "<pMaternityLeaveSalary>" + dv[i]["pMaternityLeaveSalary"].ToString() + "</pMaternityLeaveSalary>";
 
+                        XmlStr += "<pProductionLeaveTimes>" + dv[i]["pProductionLeaveTimes"].ToString() + "</pProductionLeaveTimes>";
+                        XmlStr += "<pProductionLeaveSalary>" + dv[i]["pProductionLeaveSalary"].ToString() + "</pProductionLeaveSalary>";
+                        XmlStr += "<pMilitaryLeaveTimes>" + dv[i]["pMilitaryLeaveTimes"].ToString() + "</pMilitaryLeaveTimes>";
+                        XmlStr += "<pMilitaryLeaveSalary>" + dv[i]["pMilitaryLeaveSalary"].ToString() + "</pMilitaryLeaveSalary>";
+
                         XmlStr += "<pHonoraryLeaveTimes>" + dv[i]["pHonoraryLeaveTimes"].ToString() + "</pHonoraryLeaveTimes>";
                         XmlStr += "<pHonoraryLeaveSalary>" + dv[i]["pHonoraryLeaveSalary"].ToString() + "</pHonoraryLeaveSalary>";
                         XmlStr += "<pTaxDeduction>" + dv[i]["pTaxDeduction"].ToString() + "</pTaxDeduction>";

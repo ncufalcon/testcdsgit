@@ -24,7 +24,7 @@
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" id="btn_submit">確定</a>
+                    <a href="javascript:void(0);" class="keybtn" id="btn_submit">匯出Excel</a>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -100,7 +100,7 @@
                 chk_Leave: 'chk_Leave',
                 sp_PerName: 'sp_PerName',
 
-                txt_CompanyNo:'txt_CompanyNo',
+                txt_CompanyNo: 'txt_CompanyNo',
                 sp_CName: 'sp_CName',
                 hid_CGuid: 'hid_CGuid',
 
@@ -159,11 +159,11 @@
                 var arGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
                 if (arGuid != '') {
                     var PerGuid = $('#' + this.Id.hid_PerGuid).val();
-                    var Leave = $('#' + this.Id.chk_Leave).val();
-                    var ShouldPay = $('#' + this.Id.chk_ShouldPay).val();
+                    var Leave = ($("#" + this.Id.chk_Leave).attr("checked") == "checked") ? "Y" : "";  //$('#' + this.Id.chk_Leave).val();
+                    var ShouldPay = ($("#" + this.Id.chk_ShouldPay).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
                     var Company = $('#' + this.Id.hid_CGuid).val();
                     var Dep = $('#' + this.Id.hid_DepGuid).val();
-                    window.location = "../handler/Payroll/ashx_ImportPayroll.ashx?sr_guid=" + arGuid
+                    window.location = "../handler/Payroll/ashx_ExportExcel.ashx?sr_guid=" + arGuid
                         + "&PerGuid=" + PerGuid
                         + "&Leave=" + Leave
                         + "&ShouldPay=" + ShouldPay

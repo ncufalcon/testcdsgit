@@ -148,6 +148,12 @@ namespace payroll.model
         public decimal pHonoraryLeaveTimes { get; set; }
         public decimal pHonoraryLeaveSalary { get; set; }
 
+        public decimal pProductionLeaveTimes { get; set; }
+        public decimal pProductionLeaveSalary { get; set; }
+        public decimal pMilitaryLeaveTimes { get; set; }
+        public decimal pMilitaryLeaveSalary { get; set; }
+
+
         public decimal pTaxDeduction { get; set; }
         public decimal pPay { get; set; }
         public decimal pTaxation { get; set; }
