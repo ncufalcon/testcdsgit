@@ -15,8 +15,8 @@
                     alert("請選擇要匯入的檔案");
                     return;
                 }
-                parent.$(".fancybox-close").attr("disabled", "disabled");//匯入過程中不能關fancybox
-                parent.$.blockUI({ message: '<img src="../images/loading.gif" />' });
+                //parent.$(".fancybox-close").attr("disabled", "disabled");//匯入過程中不能關fancybox
+                //parent.$.blockUI({ message: '<img src="../images/loading.gif" />' });
                 var exten = $("input[name='dataFile']").val().replace(/^.*\./, '');
                 var PassExten = ["xls", "xlsx"];
                 if ($.inArray(exten, PassExten) == -1) {
@@ -77,7 +77,7 @@
             <br />-->
         </div>
         <div id="loadblock" style="display: none; text-align: center;">
-                <img src="../images/loading.gif" />處理的資料及計算較多，需較長時間，請稍待...
+                <img src="../images/loading.gif" />處理的資料較多，需較長時間，請稍待...
             </div>
     </form>
 </body>

@@ -95,7 +95,10 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                         //因為excel的日期格式是d-mmm，這邊抓到會是5位數的數字 
                         //所以要這樣先轉成我們要的日期格式 DateTime.FromOADate(Double.Parse(str)).ToString("yyyy/MM/dd")
                         //抓最大最小日期只要在抓第一筆有資料的row做就好
-
+                        //防止user右邊的column都沒有刪除 所以判斷(1, k)到底有沒有值再跑回圈
+                        if (Xls.GetCellValue(1, k)==null || Xls.GetCellValue(1, k).ToString()=="") {
+                                continue;
+                        }
                         str_date = (Xls.GetCellValue(1, k) != null) ? DateTime.FromOADate(Double.Parse(Xls.GetCellValue(1, k).ToString())).ToString("yyyy/MM/dd"): "";
                         str_times = (Xls.GetCellValue(j, k) != null) ? Convert.ToDecimal(Xls.GetCellValue(j, k).ToString().Trim()) : 0;
                         perno = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString().Trim() : "";
