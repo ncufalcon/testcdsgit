@@ -578,12 +578,12 @@ public class sy_Attendance_DB
                 }
                 if (str_dates != "" && str_datee == "")
                 {
-                    show_value.Append(@" and ah_AttendanceDate>@str_dates  ");
+                    show_value.Append(@" and ah_AttendanceDate>=@str_dates  ");
                     thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
                 }
                 if (str_dates == "" && str_datee != "")
                 {
-                    show_value.Append(@" and ah_AttendanceDate<@str_datee  ");
+                    show_value.Append(@" and ah_AttendanceDate<=@str_datee  ");
                     thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
                 }
 

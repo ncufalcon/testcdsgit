@@ -232,7 +232,7 @@
                 success: function (response) {
                     var str_html = "";
                     if (response == "nodata") {
-                        str_html += "<tr><td nowrap='nowrap'>查無資料</td></tr>";
+                        str_html += "<tr><td nowrap='nowrap' colspan='7'>查無資料</td></tr>";
                     } else if (response == "error") {
                         alert("系統錯誤");
                     }
@@ -567,7 +567,7 @@
                 success: function (response) {
                     var str_html = "";
                     if (response == "nodata") {
-                        str_html += "<tr><td nowrap='nowrap'>查無資料</td></tr>";
+                        str_html += "<tr><td nowrap='nowrap' colspan='7'>查無資料</td></tr>";
                     } else if (response == "error") {
                         alert("系統錯誤");
                     }
