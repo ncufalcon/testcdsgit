@@ -595,7 +595,56 @@ namespace payroll
         }
 
 
+        /// <summary>
+        /// 發薪紀錄匯出
+        /// </summary>
+        public DataTable SelSy_PaySalaryExport(payroll.model.sy_PayRoll p)
+        {
 
+            string sql = @"select *
+                           ,(select sum(b.pPersonPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
+                           ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
+                           from v_PaySalaryDetail as a where pStatus='A' ";
+
+            if (!string.IsNullOrEmpty(p.pPerNo))
+                sql += "and pPerNo like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerName))
+                sql += "and pPerName like '%'+ @pPerName +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerCompanyName))
+                sql += "and pPerCompanyName like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pPerDep))
+                sql += "and pPerDep like '%'+ @pPerNo +'%' ";
+
+            if (!string.IsNullOrEmpty(p.sr_Guid))
+                sql += "and sr_Guid=@sr_Guid ";
+
+            if (!string.IsNullOrEmpty(p.pGuid))
+                sql += "and pGuid = @pGuid ";
+
+            sql += "order by convert(datetime,sr_SalaryDate) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));
+            cmd.Parameters.AddWithValue("@pPerName", com.cSNull(p.pPerName));
+            cmd.Parameters.AddWithValue("@pPerCompanyName", com.cSNull(p.pPerCompanyName));
+            cmd.Parameters.AddWithValue("@pPerDep", com.cSNull(p.pPerDep));
+            cmd.Parameters.AddWithValue("@psmSalaryRange", com.cSNull(p.psmSalaryRange));
+            cmd.Parameters.AddWithValue("@pGuid", com.cSNull(p.pGuid));
+            cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
 
         /// <summary>
         /// 發薪紀錄
@@ -815,11 +864,12 @@ namespace payroll
                                                              ,plogWelfare
                                                              ,plogStatus                                         
                                                              ,plogModdifyId
-
                                                              ,plogProductionLeaveTimes
                                                              ,plogProductionLeaveSalary
                                                              ,plogMilitaryLeaveTimes
                                                              ,plogMilitaryLeaveSalary
+                                                             ,plogAbortionLeaveTimes
+                                                             ,plogAbortionLeaveSalary
                                                              ,plogShouldPay
                                                              ,plogBasicSalary
                                                              ,plogAllowance
@@ -910,11 +960,12 @@ namespace payroll
                                                                   ,pBuckleFee
                                                                   ,pWelfare
                                                                   ,'Update',@UserInfo
-
                                                                   ,pProductionLeaveTimes
                                                                   ,pProductionLeaveSalary
                                                                   ,pMilitaryLeaveTimes
                                                                   ,pMilitaryLeaveSalary
+                                                                  ,pAbortionLeaveTimes
+                                                                  ,pAbortionLeaveSalary
                                                                   ,pShouldPay
                                                                   ,pBasicSalary
                                                                   ,pAllowance
@@ -984,6 +1035,8 @@ namespace payroll
                                                                   ,pProductionLeaveSalary=@pProductionLeaveSalary
                                                                   ,pMilitaryLeaveTimes=@pMilitaryLeaveTimes
                                                                   ,pMilitaryLeaveSalary=@pMilitaryLeaveSalary
+                                                                  ,pAbortionLeaveTimes=@pAbortionLeaveTimes
+                                                                  ,pAbortionLeaveSalary=@pAbortionLeaveSalary
 
                                                                   ,pTaxDeduction=@pTaxDeduction
                                                                   ,pPay=@pPay
@@ -1066,6 +1119,8 @@ namespace payroll
             cmd.Parameters.AddWithValue("@pProductionLeaveSalary", p.pProductionLeaveSalary);
             cmd.Parameters.AddWithValue("@pMilitaryLeaveTimes", p.pMilitaryLeaveTimes);
             cmd.Parameters.AddWithValue("@pMilitaryLeaveSalary", p.pMilitaryLeaveSalary);
+            cmd.Parameters.AddWithValue("@pAbortionLeaveTimes", p.pAbortionLeaveTimes);
+            cmd.Parameters.AddWithValue("@pAbortionLeaveSalary", p.pAbortionLeaveSalary);
 
             cmd.Parameters.AddWithValue("@pTaxDeduction", p.pTaxDeduction);
             cmd.Parameters.AddWithValue("@pPay", p.pPay);

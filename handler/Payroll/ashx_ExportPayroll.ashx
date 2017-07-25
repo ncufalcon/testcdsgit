@@ -23,12 +23,14 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
         string Company = (!string.IsNullOrEmpty(context.Request.QueryString["Company"])) ? context.Request.QueryString["Company"].ToString() : "";
         string Dep = (!string.IsNullOrEmpty(context.Request.QueryString["Dep"])) ? context.Request.QueryString["Dep"].ToString() : "";
 
+        payroll.model.sy_PayRoll pModel = new payroll.model.sy_PayRoll();
+
 
 
 
         if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
         {
-            //DataView dv = dal.Call_pr_LeaveExport(sr_guid, PerNo, Company, Dep, Position).DefaultView;
+            DataView dv = dal.SelSy_PaySalaryExport(pModel).DefaultView;
 
 
             //FileStream fs = new FileStream(context.Server.MapPath("~/Excel_sample/LeaveExport.xlsx"), FileMode.Open, FileAccess.Read);

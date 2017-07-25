@@ -227,7 +227,7 @@
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary1"/></td>
 
                                         
-                                        <td align="right"><div class="font-title titlebackicon">(流)產假</div></td>
+                                        <td align="right"><div class="font-title titlebackicon">產假</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pMaternityLeaveTimes" /></td>
                                         <td><input type="text" class="inputex width95" id="txt_pMaternityLeaveSalary"/></td>
                                     </tr>
@@ -253,7 +253,6 @@
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTime3" /></td>                                       
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary3"/></td>
 
-
                                         <td align="right"><div class="font-title titlebackicon">兵役假</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pMilitaryLeaveTimes" /></td>
                                         <td><input type="text" class="inputex width95" id="txt_pMilitaryLeaveSalary"/></td>
@@ -265,6 +264,9 @@
                                         <td align="right"><div class="font-title titlebackicon">國定假日加班-4類</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTime4" /></td>                                       
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary4"/></td>
+                                        <td align="right"><div class="font-title titlebackicon">產假</div></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pAbortionLeaveTimes" /></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pAbortionLeaveSalary"/></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">例假日加班免稅時數</div></td>
@@ -479,12 +481,13 @@
                 txt_pFuneralLeaveSalary:'txt_pFuneralLeaveSalary',
                 txt_pMaternityLeaveTimes:'txt_pMaternityLeaveTimes',
                 txt_pMaternityLeaveSalary:'txt_pMaternityLeaveSalary',
-
                 txt_pProductionLeaveTimes: 'txt_pProductionLeaveTimes',
                 txt_pProductionLeaveSalary: 'txt_pProductionLeaveSalary',
                 txt_pMilitaryLeaveTimes: 'txt_pMilitaryLeaveTimes',
                 txt_pMilitaryLeaveSalary: 'txt_pMilitaryLeaveSalary',
-                                   
+                txt_pAbortionLeaveTimes: 'txt_pAbortionLeaveTimes',
+                txt_pAbortionLeaveSalary: 'txt_pAbortionLeaveSalary',
+                
                 txt_pHolidayDutyFree: 'txt_pHolidayDutyFree',
                 txt_pHolidayTaxation: 'txt_pHolidayTaxation',
                 txt_pNationalholidaysTaxation: 'txt_pNationalholidaysTaxation',
@@ -747,6 +750,8 @@
                             $('#' + JsEven.Page1Id.txt_pProductionLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pProductionLeaveSalary"));
                             $('#' + JsEven.Page1Id.txt_pMilitaryLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveTimes"));
                             $('#' + JsEven.Page1Id.txt_pMilitaryLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveSalary"));
+                            $('#' + JsEven.Page1Id.txt_pAbortionLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pAbortionLeaveTimes"));
+                            $('#' + JsEven.Page1Id.txt_pAbortionLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pAbortionLeaveSalary"));
 
                             $('#' + JsEven.Page1Id.txt_pHolidayDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidayDutyFree"));
                             $('#' + JsEven.Page1Id.txt_pHolidayTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidayTaxation"));
@@ -874,6 +879,8 @@
                     var pProductionLeaveSalary = $('#' + this.Page1Id.txt_pProductionLeaveSalary).val();
                     var pMilitaryLeaveTimes = $('#' + this.Page1Id.txt_pMilitaryLeaveTimes).val();
                     var pMilitaryLeaveSalary = $('#' + this.Page1Id.txt_pMilitaryLeaveSalary).val();
+                    var pAbortionLeaveTimes = $('#' + this.Page1Id.txt_pAbortionLeaveTimes).val();
+                    var pAbortionLeaveSalary = $('#' + this.Page1Id.txt_pAbortionLeaveSalary).val();
 
                     var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
                     var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
@@ -938,11 +945,12 @@
                               '&pFuneralLeaveSalary=' + pFuneralLeaveSalary +
                               '&pMaternityLeaveTimes=' + pMaternityLeaveTimes +
                               '&pMaternityLeaveSalary=' + pMaternityLeaveSalary +
-
                               '&pProductionLeaveTimes=' + pProductionLeaveTimes +
                               '&pProductionLeaveSalary=' + pProductionLeaveSalary +
                               '&pMilitaryLeaveTimes=' + pMilitaryLeaveTimes +
                               '&pMilitaryLeaveSalary=' + pMilitaryLeaveSalary +
+                              '&pAbortionLeaveTimes=' + pAbortionLeaveTimes +
+                              '&pAbortionLeaveSalary=' + pAbortionLeaveSalary +
 
                               '&pHolidayDutyFree=' + pHolidayDutyFree +
                               '&pHolidayTaxation=' + pHolidayTaxation +

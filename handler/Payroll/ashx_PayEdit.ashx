@@ -64,6 +64,8 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pProductionLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pProductionLeaveSalary"])) ? decimal.Parse(context.Request.Form["pProductionLeaveSalary"].ToString()) : 0;
                 decimal pMilitaryLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pMilitaryLeaveTimes"])) ? decimal.Parse(context.Request.Form["pMilitaryLeaveTimes"].ToString()) : 0;
                 decimal pMilitaryLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pMilitaryLeaveSalary"])) ? decimal.Parse(context.Request.Form["pMilitaryLeaveSalary"].ToString()) : 0;
+                decimal pAbortionLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pAbortionLeaveTimes"])) ? decimal.Parse(context.Request.Form["pAbortionLeaveTimes"].ToString()) : 0;
+                decimal pAbortionLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pAbortionLeaveSalary"])) ? decimal.Parse(context.Request.Form["pAbortionLeaveSalary"].ToString()) : 0;
 
                 decimal pHolidayDutyFree = (!string.IsNullOrEmpty(context.Request.Form["pHolidayDutyFree"])) ? decimal.Parse(context.Request.Form["pHolidayDutyFree"].ToString()) : 0;
                 decimal pHolidayTaxation = (!string.IsNullOrEmpty(context.Request.Form["pHolidayTaxation"])) ? decimal.Parse(context.Request.Form["pHolidayTaxation"].ToString()) : 0;
@@ -131,6 +133,8 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                     p.pProductionLeaveSalary = pProductionLeaveSalary;
                     p.pMilitaryLeaveTimes = pMilitaryLeaveTimes;
                     p.pMilitaryLeaveSalary = pMilitaryLeaveSalary;
+                    p.pAbortionLeaveTimes = pAbortionLeaveTimes;
+                    p.pAbortionLeaveSalary = pAbortionLeaveSalary;                        
                     p.pHolidayDutyFree = pHolidayDutyFree;
                     p.pHolidayTaxation = pHolidayTaxation;
                     p.pNationalholidaysTaxation = pNationalholidaysTaxation;

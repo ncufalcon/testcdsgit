@@ -152,7 +152,8 @@ namespace payroll.model
         public decimal pProductionLeaveSalary { get; set; }
         public decimal pMilitaryLeaveTimes { get; set; }
         public decimal pMilitaryLeaveSalary { get; set; }
-
+        public decimal pAbortionLeaveTimes { get; set; }
+        public decimal pAbortionLeaveSalary { get; set; }
 
         public decimal pTaxDeduction { get; set; }
         public decimal pPay { get; set; }

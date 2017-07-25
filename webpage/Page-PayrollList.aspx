@@ -72,7 +72,7 @@
 
                         <tr>
                             <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
-                            <td >
+                            <td  colspan="3">
                                 <img id="mPersonBox" src="../images/btn-search.gif" onclick="JsEven.openMutiBox(this)" style="cursor: pointer;" />
                                 <br />
                                 <span id="sp_PerName"></span>
