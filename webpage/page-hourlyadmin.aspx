@@ -1152,7 +1152,6 @@
             function chk_o_num(){
                 var chk_oMale = $("#txt_o_oMale").val();
                 var chk_oFemale = $("#txt_o_oFemale").val();
-                var chk_oFixed = $("#txt_o_oFixed").val();
                 var chk_oOverTime1 = $("#txt_o_oOverTime1").val();
                 var chk_oOverTime2Start = $("#txt_o_oOverTime2Start").val();
                 var chk_oOverTime2End = $("#txt_o_oOverTime2End").val();
@@ -1199,7 +1198,7 @@
                 var chk_oSpecialHolidaysPay3 = $("#txt_o_oSpecialHolidaysPay3").val();
                 var chk_oSpecialHolidaysPay4 = $("#txt_o_oSpecialHolidaysPay4").val();
                 
-                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oFixed) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End) || isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3))
+                if (isNaN(chk_oMale) || isNaN(chk_oFemale) || isNaN(chk_oOverTime1) || isNaN(chk_oOverTime2Start) || isNaN(chk_oOverTime2End) || isNaN(chk_oOverTime3) || isNaN(chk_oOverTimePay1) || isNaN(chk_oOverTimePay2) || isNaN(chk_oOverTimePay3))
                 {
                     alert("請勿輸入數字以外的東西");
                     return false;
@@ -1577,8 +1576,6 @@
                                                     <option value="04">健保減項</option>
                                                     <option value="05">勞退自提加項</option>
                                                     <option value="06">勞退自提減項</option>
-                                                    <option value="07">福利金</option>
-                                                    <option value="08">法扣</option>
                                                 </select>
                                             </td>
                                         </tr>
