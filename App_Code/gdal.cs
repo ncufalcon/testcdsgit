@@ -604,7 +604,7 @@ namespace payroll
             string sql = @"select *
                            ,(select sum(b.pPersonPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
                            ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
-                           from v_PaySalaryDetail as a where pStatus='A' ";
+                           from v_PaySalaryDetail as a  left join sy_CodeBranches on a.pDepGuid=cbGuid and cbStatus<>'D'   where pStatus='A'  ";
 
             if (!string.IsNullOrEmpty(p.sr_Guid))
                 sql += "and sr_Guid=@sr_Guid ";
@@ -612,19 +612,20 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pPerGuid))
                 sql += "and pPerGuid=@pPerGuid ";
 
-            if (p.pLeaveStatus == "")
+            if (p.pLeaveStatus != "Y")
                 sql += "and perLastDate <> '' ";
 
-            if (p.pShouldPayStatus == "")
+            if (p.pShouldPayStatus != "Y")
                 sql += "and pShouldPay <> 0 ";
 
+
             if (!string.IsNullOrEmpty(p.pCompany))
-                sql += "and pCompany= @pCompany ";
+                sql += "and pCompanyGuid= @pCompany ";
 
             if (!string.IsNullOrEmpty(p.pDep))
-                sql += "and pDep = @pDep ";
+                sql += "and pDepGuid = @pDep ";
 
-            sql += "order by perNo desc ";
+            sql += "order by pPerNo desc ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));

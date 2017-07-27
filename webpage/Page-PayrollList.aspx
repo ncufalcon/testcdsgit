@@ -24,7 +24,7 @@
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" id="btn_submit">匯出Excel</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" id="btn_submit">匯出Excel</a>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -70,14 +70,14 @@
                             </td>
                         </tr>
 
-                        <tr>
+<%--                        <tr>
                             <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
                             <td  colspan="3">
                                 <img id="mPersonBox" src="../images/btn-search.gif" onclick="JsEven.openMutiBox(this)" style="cursor: pointer;" />
                                 <br />
                                 
                             </td>
-                        </tr>
+                        </tr>--%>
                     </table>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                     var ShouldPay = ($("#" + this.Id.chk_ShouldPay).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
                     var Company = $('#' + this.Id.hid_CGuid).val();
                     var Dep = $('#' + this.Id.hid_DepGuid).val();
-                    window.location = "../handler/Payroll/ashx_ExportExcel.ashx?sr_guid=" + arGuid
+                    window.location = "../handler/Payroll/ashx_ExportPayroll.ashx?sr_guid=" + arGuid
                         + "&PerGuid=" + PerGuid
                         + "&Leave=" + Leave
                         + "&ShouldPay=" + ShouldPay
