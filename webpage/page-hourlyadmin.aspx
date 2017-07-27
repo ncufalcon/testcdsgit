@@ -1566,7 +1566,7 @@
                                                 <input type="radio" name="txt_si_itemsup" checked="checked" value="Y" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itemsup" value="N" />否
                                             </td>
                                             <td align="right">
-                                                <div class="font-title titlebackicon">對應欄位(在勞健保比對使用)</div>
+                                                <div class="font-title titlebackicon">對應欄位</div>
                                             </td>
                                             <td>
                                                 <select id="txt_si_itemrefcom">

@@ -141,7 +141,7 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<sr_Enddate>" + context.Server.HtmlEncode(dv[i]["sr_Enddate"].ToString()) + "</sr_Enddate>";
                         XmlStr += "<sr_SalaryDate>" + context.Server.HtmlEncode(dv[i]["sr_SalaryDate"].ToString()) + "</sr_SalaryDate>";
                         XmlStr += "<sr_Guid>" + dv[i]["sr_Guid"].ToString() + "</sr_Guid>";
-                            
+                            XmlStr += "<pSalary>" + dv[i]["pSalary"].ToString() + "</pSalary>";
                             
 
 

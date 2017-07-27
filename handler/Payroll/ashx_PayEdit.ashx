@@ -85,6 +85,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pPersonLabor = (!string.IsNullOrEmpty(context.Request.Form["pPersonLabor"])) ? decimal.Parse(context.Request.Form["pPersonLabor"].ToString()) : 0;
                 decimal pPersonPension = (!string.IsNullOrEmpty(context.Request.Form["pPersonPension"])) ? decimal.Parse(context.Request.Form["pPersonPension"].ToString()) : 0;
                 decimal pCompanyPension = (!string.IsNullOrEmpty(context.Request.Form["pCompanyPension"])) ? decimal.Parse(context.Request.Form["pCompanyPension"].ToString()) : 0;
+                decimal pSalary = (!string.IsNullOrEmpty(context.Request.Form["pSalary"])) ? decimal.Parse(context.Request.Form["pSalary"].ToString()) : 0;
 
 
                 string[] str = { "" };
@@ -134,7 +135,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                     p.pMilitaryLeaveTimes = pMilitaryLeaveTimes;
                     p.pMilitaryLeaveSalary = pMilitaryLeaveSalary;
                     p.pAbortionLeaveTimes = pAbortionLeaveTimes;
-                    p.pAbortionLeaveSalary = pAbortionLeaveSalary;                        
+                    p.pAbortionLeaveSalary = pAbortionLeaveSalary;
                     p.pHolidayDutyFree = pHolidayDutyFree;
                     p.pHolidayTaxation = pHolidayTaxation;
                     p.pNationalholidaysTaxation = pNationalholidaysTaxation;
@@ -146,11 +147,11 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                     p.pOverTimeDutyfree = pOverTimeDutyfree;
                     p.pOverTimeTaxation = pOverTimeTaxation;
                     p.pIntertemporal = pIntertemporal;
+                    p.pSalary = pSalary;
                     p.pPay = pPay;
                     p.pTaxation = pTaxation;
                     p.pPremium = pPremium;
                     p.UserInfo = USERINFO.MemberGuid;
-
                     dal.Upsy_PaySalary(p);
                     context.Response.Write("ok");
                 }

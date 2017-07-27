@@ -606,34 +606,31 @@ namespace payroll
                            ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
                            from v_PaySalaryDetail as a where pStatus='A' ";
 
-            if (!string.IsNullOrEmpty(p.pPerNo))
-                sql += "and pPerNo like '%'+ @pPerNo +'%' ";
-
-            if (!string.IsNullOrEmpty(p.pPerName))
-                sql += "and pPerName like '%'+ @pPerName +'%' ";
-
-            if (!string.IsNullOrEmpty(p.pPerCompanyName))
-                sql += "and pPerCompanyName like '%'+ @pPerNo +'%' ";
-
-            if (!string.IsNullOrEmpty(p.pPerDep))
-                sql += "and pPerDep like '%'+ @pPerNo +'%' ";
-
             if (!string.IsNullOrEmpty(p.sr_Guid))
                 sql += "and sr_Guid=@sr_Guid ";
 
-            if (!string.IsNullOrEmpty(p.pGuid))
-                sql += "and pGuid = @pGuid ";
+            if (!string.IsNullOrEmpty(p.pPerGuid))
+                sql += "and pPerGuid=@pPerGuid ";
 
-            sql += "order by convert(datetime,sr_SalaryDate) desc ";
+            if (p.pLeaveStatus == "")
+                sql += "and perLastDate <> '' ";
+
+            if (p.pShouldPayStatus == "")
+                sql += "and pShouldPay <> 0 ";
+
+            if (!string.IsNullOrEmpty(p.pCompany))
+                sql += "and pCompany= @pCompany ";
+
+            if (!string.IsNullOrEmpty(p.pDep))
+                sql += "and pDep = @pDep ";
+
+            sql += "order by perNo desc ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));
-            cmd.Parameters.AddWithValue("@pPerName", com.cSNull(p.pPerName));
-            cmd.Parameters.AddWithValue("@pPerCompanyName", com.cSNull(p.pPerCompanyName));
-            cmd.Parameters.AddWithValue("@pPerDep", com.cSNull(p.pPerDep));
-            cmd.Parameters.AddWithValue("@psmSalaryRange", com.cSNull(p.psmSalaryRange));
-            cmd.Parameters.AddWithValue("@pGuid", com.cSNull(p.pGuid));
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
+            cmd.Parameters.AddWithValue("@pPerGuid", com.cSNull(p.pPerGuid));
+            cmd.Parameters.AddWithValue("@pCompany", com.cSNull(p.pCompany));
+            cmd.Parameters.AddWithValue("@pDep", com.cSNull(p.pDep));
             try
             {
                 cmd.Connection.Open();
@@ -874,7 +871,7 @@ namespace payroll
                                                              ,plogBasicSalary
                                                              ,plogAllowance
                                                              ,plogCompanyGuid
-                                                             ,plogDepGuid)
+                                                             ,plogDepGuid,plogSalary)
                                                             select pGuid
                                                                   ,pPsmGuid
                                                                   ,pPerGuid
@@ -970,8 +967,8 @@ namespace payroll
                                                                   ,pBasicSalary
                                                                   ,pAllowance
                                                                   ,pCompanyGuid
-                                                                  ,pDepGuid
-                                                                   from sy_PaySalaryDetail where pGuid=@pGuid;
+                                                                  ,pDepGuid,pSalary
+                                                                   from sy_PaySalaryDetail where pGuid=@pGuid 
 
                                                                   update sy_PaySalaryDetail set                                                               
                                                                   pWeekdayTime1=@pWeekdayTime1
@@ -1055,7 +1052,8 @@ namespace payroll
                                                                   ,pIntertemporal=@pIntertemporal
                                                                   ,pBuckleCost=@pBuckleCost
                                                                   ,pBuckleFee=@pBuckleFee
-                                                                  ,pWelfare=@pWelfare where pGuid=@pGuid";
+                                                                  ,pWelfare=@pWelfare 
+                                                                  ,pSalary=@pSalary where pGuid=@pGuid";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@pGuid", p.pGuid);
@@ -1141,7 +1139,7 @@ namespace payroll
             cmd.Parameters.AddWithValue("@pBuckleFee", p.pBuckleFee);
             cmd.Parameters.AddWithValue("@pWelfare", p.pWelfare);
             cmd.Parameters.AddWithValue("@UserInfo", p.UserInfo);
- 
+            cmd.Parameters.AddWithValue("@pSalary", p.pSalary);
 
             try
             {

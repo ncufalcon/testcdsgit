@@ -75,7 +75,7 @@
                             <td  colspan="3">
                                 <img id="mPersonBox" src="../images/btn-search.gif" onclick="JsEven.openMutiBox(this)" style="cursor: pointer;" />
                                 <br />
-                                <span id="sp_PerName"></span>
+                                
                             </td>
                         </tr>
                     </table>
@@ -159,6 +159,8 @@
                 var arGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
                 if (arGuid != '') {
                     var PerGuid = $('#' + this.Id.hid_PerGuid).val();
+                    var sDate = $('#' + this.Id.sp_sDate).html();
+                    var eDate = $('#' + this.Id.sp_eDate).html();
                     var Leave = ($("#" + this.Id.chk_Leave).attr("checked") == "checked") ? "Y" : "";  //$('#' + this.Id.chk_Leave).val();
                     var ShouldPay = ($("#" + this.Id.chk_ShouldPay).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
                     var Company = $('#' + this.Id.hid_CGuid).val();
@@ -168,6 +170,8 @@
                         + "&Leave=" + Leave
                         + "&ShouldPay=" + ShouldPay
                         + "&Company=" + Company
+                        + "&sDate=" + sDate
+                        + "&eDate=" + eDate
                         + "&Dep=" + Dep;
                 } else { alert('請選擇計薪週期'); }
             }

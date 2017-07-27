@@ -258,13 +258,13 @@
                                         <td><input type="text" class="inputex width95" id="txt_pMilitaryLeaveSalary"/></td>
                                     </tr>
                                     <tr>
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
+                                        <td align="right"><div class="font-title titlebackicon">本薪</div></td>
+                                        <td><input type="text" class="inputex width95" id="txt_pSalary" /></td>
                                         <td>&nbsp;</td>
                                         <td align="right"><div class="font-title titlebackicon">國定假日加班-4類</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTime4" /></td>                                       
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysSalary4"/></td>
-                                        <td align="right"><div class="font-title titlebackicon">產假</div></td>
+                                        <td align="right"><div class="font-title titlebackicon">流產假</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pAbortionLeaveTimes" /></td>
                                         <td><input type="text" class="inputex width95" id="txt_pAbortionLeaveSalary"/></td>
                                     </tr>
@@ -319,7 +319,11 @@
                         </div>
                     </div><!-- tabs-1 -->
                     <div id="tabs-2">
-
+                            <div class="twocol margin15TB">
+                                <div class="right">
+                                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit();">儲存</a>                                 
+                                </div>
+                            </div>
                         <div class="gentable">
 
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -504,7 +508,7 @@
                 txt_pOverTimeTaxation: 'txt_pOverTimeTaxation',
                 txt_pIntertemporal: 'txt_pIntertemporal',
 
-
+                txt_pSalary: 'txt_pSalary'
 
 
             },
@@ -767,7 +771,9 @@
                             $('#' + JsEven.Page1Id.txt_pOverTimeDutyfree).val(CommonEven.XmlNodeGetValue(e, "pOverTimeDutyfree"));
                             $('#' + JsEven.Page1Id.txt_pOverTimeTaxation).val(CommonEven.XmlNodeGetValue(e, "pOverTimeTaxation"));
                             $('#' + JsEven.Page1Id.txt_pIntertemporal).val(CommonEven.XmlNodeGetValue(e, "pIntertemporal"));
+                            $('#' + JsEven.Page1Id.txt_pSalary).val(CommonEven.XmlNodeGetValue(e, "pSalary"));
 
+                            
                             $('#' + JsEven.Page2Id.txt_pPay).val(CommonEven.XmlNodeGetValue(e, "pPay"));
                             $('#' + JsEven.Page2Id.txt_pTaxation).val(CommonEven.XmlNodeGetValue(e, "pTaxation"));
                             $('#' + JsEven.Page2Id.txt_pPremium).val(CommonEven.XmlNodeGetValue(e, "pPremium"));
@@ -777,6 +783,8 @@
                             $('#' + JsEven.Page2Id.txt_pCompanyPension).val(CommonEven.XmlNodeGetValue(e, "pCompanyPension"));
                             $('#' + JsEven.Page2Id.txt_pPersonPensionSum).val(CommonEven.XmlNodeGetValue(e, "pPersonPensionSum"));
                             $('#' + JsEven.Page2Id.txt_pCompanyPensionSum).val(CommonEven.XmlNodeGetValue(e, "pCompanyPensionSum"));
+
+                           
                             JsEven.AllList(perGuid, pPsmGuid);
                         }
                         else {
@@ -887,6 +895,8 @@
                     var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
                     var pOverTimeTaxation = $('#' + this.Page1Id.txt_pOverTimeTaxation).val();
                     var pIntertemporal = $('#' + this.Page1Id.txt_pIntertemporal).val();
+                    var pSalary = $('#' + this.Page1Id.txt_pSalary).val();
+                    
                     var pPay = $('#' + this.Page2Id.txt_pPay).val();
                     var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
                     var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
@@ -969,7 +979,8 @@
                               '&pPersonInsurance=' + pPersonInsurance +
                               '&pPersonLabor=' + pPersonLabor +
                               '&pPersonPension=' + pPersonPension +
-                              '&pCompanyPension=' + pCompanyPension,
+                              '&pCompanyPension=' + pCompanyPension + 
+                              '&pSalary=' + pSalary,
                         dataType: 'text',  //xml, json, script, text, html
                         success: function (msg) {
                             switch (msg) {
