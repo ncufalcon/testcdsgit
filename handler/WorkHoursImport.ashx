@@ -91,18 +91,21 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                 for (int j = 3; j <= Xls.GetRowCount(1); j++)
                 {
                     now_rows = j.ToString();
-                    for (int k = 4; k <= col_count; k++) {
+                    for (int k = 4; k <= col_count; k++)
+                    {
                         //因為excel的日期格式是d-mmm，這邊抓到會是5位數的數字 
                         //所以要這樣先轉成我們要的日期格式 DateTime.FromOADate(Double.Parse(str)).ToString("yyyy/MM/dd")
                         //抓最大最小日期只要在抓第一筆有資料的row做就好
                         //防止user右邊的column都沒有刪除 所以判斷(1, k)到底有沒有值再跑回圈
-                        if (Xls.GetCellValue(1, k)==null || Xls.GetCellValue(1, k).ToString()=="") {
-                                continue;
+                        if (Xls.GetCellValue(1, k) == null || Xls.GetCellValue(1, k).ToString() == "")
+                        {
+                            continue;
                         }
-                        str_date = (Xls.GetCellValue(1, k) != null) ? DateTime.FromOADate(Double.Parse(Xls.GetCellValue(1, k).ToString())).ToString("yyyy/MM/dd"): "";
+                        str_date = (Xls.GetCellValue(1, k) != null) ? DateTime.FromOADate(Double.Parse(Xls.GetCellValue(1, k).ToString())).ToString("yyyy/MM/dd") : "";
                         str_times = (Xls.GetCellValue(j, k) != null) ? Convert.ToDecimal(Xls.GetCellValue(j, k).ToString().Trim()) : 0;
                         perno = (Xls.GetCellValue(j, 2) != null) ? Xls.GetCellValue(j, 2).ToString().Trim() : "";
-                        if (j==3) {
+                        if (j == 3)
+                        {
                             if (k == 4)
                             {
                                 if (str_date != "")
@@ -110,8 +113,10 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                                     dates = (Xls.GetCellValue(1, k) != null) ? DateTime.FromOADate(Double.Parse(Xls.GetCellValue(1, k).ToString())).ToString("yyyy/MM/dd") : "";
                                 }
                             }
-                            else {
-                                if (str_date!="") {
+                            else
+                            {
+                                if (str_date != "")
+                                {
                                     datee = (Xls.GetCellValue(1, k) != null) ? DateTime.FromOADate(Double.Parse(Xls.GetCellValue(1, k).ToString())).ToString("yyyy/MM/dd") : "";
                                 }
                             }
@@ -127,19 +132,20 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                     }
                 }
                 DateTime END1 = DateTime.Now; /// 記錄時間
-                if (dt.Rows.Count>0) {
+                if (dt.Rows.Count > 0)
+                {
                     //先刪除這批匯入的時間區間內所有匯入的資料 ah_flag = 'Y' 不刪除手動匯入資料
-                    deleteAttendanceHoursForImport(myTrans,dates,datee);
+                    deleteAttendanceHoursForImport(myTrans, dates, datee);
 
                     // 建立 temp table
-                    CreateTempTable( myTrans );
+                    CreateTempTable(myTrans);
                     // 利用 SqlBulkCopy 新增資料到temp table
-                    DoBulkCopy( myTrans, dt );
+                    DoBulkCopy(myTrans, dt);
                     //insert 資料
                     DoDataJoinAndInsert(myTrans);
                     DateTime END2 = DateTime.Now; /// 記錄時間
-                    string dtime1 = (END1 - Start1).TotalMilliseconds.ToString( "#,###" );
-                    string dtime2 = (END2 - END1).TotalMilliseconds.ToString( "#,###" );
+                    string dtime1 = (END1 - Start1).TotalMilliseconds.ToString("#,###");
+                    string dtime2 = (END2 - END1).TotalMilliseconds.ToString("#,###");
                 }
 
                 //再commit insert
@@ -160,7 +166,7 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
             context.Response.ContentType = "text/html";
             if (status == false)
                 //context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('工時匯入失敗，請聯絡系統管理員');</script>");
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('第"+now_rows+"筆資料有誤');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('第" + now_rows + "筆資料有誤');</script>");
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('工時匯入完成');</script>");
         }

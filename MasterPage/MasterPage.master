@@ -60,13 +60,13 @@
                             <a href="Javascript:void(0)" target="_self" title="薪資管理">薪資管理</a>
                             <ul>
                                 <li><a href="page-Allowance.aspx" target="_self" title="津貼管理">津貼管理</a></li>
-                                <li><a href='page-Gifts.aspx' target='_self' title="年節禮金計算">年節禮金計算</a></li>
-                                <li><a href='page-SalaryHoliday.aspx' target='_self' title="給薪假計算">給薪假計算</a></li>
-                                <li><a href='page-Payroll.aspx' target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
-                                <li><a href='page-Saveto.aspx' target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
-                                <li><a href='page-SalaryPrint.html' target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
-                                <li><a href='Page-PayrollList.aspx' target='_self' title="薪資冊">薪資冊</a></li>
-                                <li><a href='page-SalaryBar.html' target='_self' title="電子薪資條">電子薪資條</a></li>
+                                <li><a href="page-Gifts.aspx" target='_self' title="年節禮金計算">年節禮金計算</a></li>
+                                <li><a href="page-SalaryHoliday.aspx" target='_self' title="給薪假計算">給薪假計算</a></li>
+                                <li><a href="page-Payroll.aspx" target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
+                                <li><a href="page-Saveto.aspx" target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
+                                <li><a href="Page-PayrollPrint.aspx" target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
+                                <li><a href="Page-PayrollList.aspx" target='_self' title="薪資冊">薪資冊</a></li>
+                                <li><a href="page-SalaryBar.html" target='_self' title="電子薪資條">電子薪資條</a></li>
                                 <!--<li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>-->
                             </ul>
                         </li>
@@ -74,9 +74,9 @@
                             <a href='Javascript:void(0)' target='_self' title="出勤管理">出勤管理</a>
                             <ul>
                                 <!--<li><a href='page-Attendance.html' target='_self' title="出勤管理">出勤管理</a></li>-->
-                                <li><a href='../webpage/page-WorkHours.aspx' target='_self' title="時數管理">時數管理</a></li>
-                                <li><a href='../webpage/page-Seniority.aspx' target='_self' title="年資與特休天數計算">年資與特休天數計算</a></li>
-                                <li><a href='../webpage/page-Attendance.aspx' target='_self' title="請假資料維護">請假資料維護</a></li>
+                                <li><a href="page-WorkHours.aspx" target='_self' title="時數管理">時數管理</a></li>
+                                <li><a href="page-Seniority.aspx" target='_self' title="年資與特休天數計算">年資與特休天數計算</a></li>
+                                <li><a href="page-Attendance.aspx" target='_self' title="請假資料維護">請假資料維護</a></li>
                                 <li><a href="file/SA List 統計資料.xlsx" target='_self' title="月出勤報表">月出勤報表</a></li>
                             </ul>
                         </li>
@@ -130,15 +130,15 @@
         $('.fancybox').fancybox();
     });
 </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            //tabs
-            $(".statabs").tabs();
+<script type="text/javascript">
+    $(document).ready(function () {
+        //tabs
+        $(".statabs").tabs();
 
-            $(".fixTable").tableHeadFixer();
+        $(".fixTable").tableHeadFixer();
 
-        });
-    </script>
+    });
+</script>
 <script type="text/javascript" src="../js/GenCommon.js"></script>
 <script type='text/javascript' src='../js/autoheight.js'></script><!-- 置底 -->
            <script type="text/javascript" src="../js/tableHeadFixer.js"></script>

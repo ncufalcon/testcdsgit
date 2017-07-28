@@ -1154,5 +1154,29 @@ namespace payroll
         }
 
 
+
+
+
+        /// <summary>
+        /// 發薪紀錄-法扣
+        /// </summary>
+        public DataTable Selsy_PaySalaryPrint()
+        {
+
+            string sql = @"select top 1 * from sy_PaySalaryPrint ";
+
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
     }
 }
