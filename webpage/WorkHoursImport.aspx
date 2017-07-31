@@ -11,31 +11,36 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#subbtn").click(function () {
-                if ($("#dataFile").val() == "") {
-                    alert("請選擇要匯入的檔案");
-                    return;
-                }
-                //parent.$(".fancybox-close").attr("disabled", "disabled");//匯入過程中不能關fancybox
-                //parent.$.blockUI({ message: '<img src="../images/loading.gif" />' });
-                var exten = $("input[name='dataFile']").val().replace(/^.*\./, '');
-                var PassExten = ["xls", "xlsx"];
-                if ($.inArray(exten, PassExten) == -1) {
-                    alert("請上傳Excel檔");
-                    return;
-                }
-                $("#loadblock").show();
-                $("#txtBlock").hide();
-                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
-                var form = $("form")[0];
+                try {
+                    if ($("#dataFile").val() == "") {
+                        alert("請選擇要匯入的檔案");
+                        return;
+                    }
+                    //parent.$(".fancybox-close").attr("disabled", "disabled");//匯入過程中不能關fancybox
+                    //parent.$.blockUI({ message: '<img src="../images/loading.gif" />' });
+                    var exten = $("input[name='dataFilea']").val().replace(/^.*\./, '');
+                    var PassExten = ["xls", "xlsx"];
+                    if ($.inArray(exten, PassExten) == -1) {
+                        alert("請上傳Excel檔");
+                        return;
+                    }
+                    $("#loadblock").show();
+                    $("#txtBlock").hide();
+                    var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                    var form = $("form")[0];
 
-                form.appendChild(iframe[0]);
+                    form.appendChild(iframe[0]);
 
-                form.setAttribute("action", "../handler/WorkHoursImport.ashx");
-                form.setAttribute("method", "post");
-                form.setAttribute("enctype", "multipart/form-data");
-                form.setAttribute("encoding", "multipart/form-data");
-                form.setAttribute("target", "postiframe");
-                form.submit();
+                    form.setAttribute("action", "../handler/WorkHoursImport.ashx");
+                    form.setAttribute("method", "post");
+                    form.setAttribute("enctype", "multipart/form-data");
+                    form.setAttribute("encoding", "multipart/form-data");
+                    form.setAttribute("target", "postiframe");
+                    form.submit();
+                }
+                catch (ex){
+                    alert(ex);
+                }
             });
         });
 
