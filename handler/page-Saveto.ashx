@@ -21,6 +21,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                 string str_perguid = string.IsNullOrEmpty(context.Request.Form["str_perguid"]) ? "" : context.Request.Form["str_perguid"].ToString().Trim();
                 string str_comno = string.IsNullOrEmpty(context.Request.Form["str_comno"]) ? "" : context.Request.Form["str_comno"].ToString().Trim();
                 string str_exporttype = string.IsNullOrEmpty(context.Request.Form["str_exporttype"]) ? "" : context.Request.Form["str_exporttype"].ToString().Trim();
+                string str_rangeGuid = string.IsNullOrEmpty(context.Request.Form["str_rangeGuid"]) ? "" : context.Request.Form["str_rangeGuid"].ToString().Trim();
                 string FileName = string.Empty;
                 string fileSpec = string.Empty;
                 try
@@ -72,6 +73,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                         oCmd.Parameters.AddWithValue("@paydate", str_paydate);
                         oCmd.Parameters.AddWithValue("@exporttype", str_exporttype);
                         oCmd.Parameters.AddWithValue("@comno", str_comno);
+                        oCmd.Parameters.AddWithValue("@rangeGuid", str_rangeGuid);
 
                         DataTable dt_a = new DataTable();
                         oda.Fill(dt_a);

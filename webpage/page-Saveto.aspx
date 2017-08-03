@@ -25,7 +25,8 @@
                             str_paydate: $("#txt_paydate").val(),
                             str_perguid: $("#tmpUID").val(),
                             str_comno: $("#txt_comno").val(),
-                            str_exporttype: $("input[name='radio_export_type']:checked").val()
+                            str_exporttype: $("input[name='radio_export_type']:checked").val(),
+                            str_rangeGuid:$("#tmpRangeGuid").val()
                         },
                         error: function (xhr) {
                             alert("error");
@@ -149,6 +150,7 @@
             switch (type) {
                 case "CityBankSR":
                     $("#txt_paydate").val(str4);
+                    $("#tmpRangeGuid").val(gv);
                     break;
             }
         }
@@ -186,6 +188,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <input type="hidden" id="tmpUID" />
     <input type="hidden" id="tmpName" />
+    <input type="hidden" id="tmpRangeGuid" />
     <div class="WrapperMain">
 
 
