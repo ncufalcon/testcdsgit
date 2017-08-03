@@ -148,13 +148,16 @@
         function setReturnValue(type, gv, str, str2, str3, str4) {
             switch (type) {
                 case "CityBankSR":
-                    $("#txt_paydate").val(str);
+                    $("#txt_paydate").val(str4);
                     break;
             }
         }
 
         //多選查詢視窗
         function openMutiBox(item) {
+            $("#uName").empty();
+            $("#tmpUID").val("");
+            $("#tmpName").val("");
             var link = "";
             switch ($(item).attr("id")) {
                 case "mPersonBox":
