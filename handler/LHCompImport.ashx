@@ -15,6 +15,7 @@ public class LHCompImport : IHttpHandler {
     public void ProcessRequest(HttpContext context) {
         bool status = true;
         string YearMonth = string.Empty;
+        string result = string.Empty;
         HttpFileCollection uploadFiles = context.Request.Files;//檔案集合
 
         SqlConnection oConn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -52,7 +53,7 @@ public class LHCompImport : IHttpHandler {
                 oCmd.Parameters.Add("@P_Salary", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@P_PersonPay", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@P_Date", SqlDbType.NVarChar);
-                
+
                 for (int j = 13; j <= Xls.GetRowCount(4) - 6; j++)
                 {
                     string P_Date = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString().Trim() : "";
@@ -190,12 +191,16 @@ H_Date
                 SqlDataAdapter oda = new SqlDataAdapter(oCmd2);
                 //oCmd.Parameters.AddWithValue("@voc_no", voc_no);
                 //oCmd.Parameters.AddWithValue("@Year", Year);
-                oCmd2.ExecuteNonQuery();
+                //oCmd2.ExecuteNonQuery();
 
+                DataTable ds = new DataTable();
+                oda.Fill(ds);
                 oCmd2.Connection.Close();
                 oCmd2.Connection.Dispose();
                 oCmd2.Dispose();
 
+                if (ds.Rows.Count > 0)
+                    result = ds.Rows[0]["Column1"].ToString();
             }
         }
         catch (Exception ex)
@@ -211,7 +216,12 @@ H_Date
             if (status == false)
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對失敗，請聯絡系統管理員');</script>");
             else
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對完成');</script>");
+            {
+                if (result == "succeed")
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對完成');</script>");
+                else
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('" + result + "');</script>");
+            }
         }
     }
 
