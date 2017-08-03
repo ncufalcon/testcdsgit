@@ -105,7 +105,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                     text += "";//付款金額
                                 }
                                 text += "@@";
-                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim();//交易日
+                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim().Replace("/","");//交易日
                                 text += "@";
                                 text += dt_a.Rows[i]["perNo"].ToString().Trim();//交易序號
                                 text += "@@@@@";
@@ -121,43 +121,43 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += dt_a.Rows[i]["syNumber"].ToString().Trim();//銀行代碼
                                 //text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
                                 text += "@@@@";
-                                if (str_exporttype == "0")
-                                {
-                                    //薪資
-                                    text += "";
-                                }
-                                else {
-                                    //法扣
-                                    text += dt_a.Rows[i]["perName"].ToString().Trim() + dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"";
-                                }
-                                
-                                //text += "AIP";
-                                text += "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
-                                writer.WriteLine(text);
-                            }
-                            writer.Write(writer.NewLine);
-                            context.Response.Write(str_filename+".txt");
+                                //if (str_exporttype == "0")
+                                //{
+                                //    //薪資
+                                //    text += "";
+                                //}
+                                //else {
+                                //法扣
+                                //text += dt_a.Rows[i]["perName"].ToString().Trim() + dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"";
+                                //}
+                                text += "ID:"+dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"#, ";
+                            //text += "AIP";
+                            text += "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+                            writer.WriteLine(text);
                         }
+                        writer.Write(writer.NewLine);
+                        context.Response.Write(str_filename+".txt");
+                    }
                         else
                         {
-                            context.Response.Write("nodata");
-                        }
-
+                        context.Response.Write("nodata");
                     }
+
+                }
                 }
                 catch (Exception ex){
-                    context.Response.Write("error");
-                }
-
-                break;
+            context.Response.Write("error");
         }
 
+        break;
     }
 
-    public bool IsReusable {
-        get {
-            return false;
-        }
+}
+
+public bool IsReusable {
+    get {
+        return false;
     }
+}
 
 }
