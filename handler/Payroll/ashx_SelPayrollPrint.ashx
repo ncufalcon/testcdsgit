@@ -8,16 +8,20 @@ public class ashx_SelPayrollPrint : IHttpHandler, System.Web.SessionState.IReadO
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
     {
-
-
-        DataView dv = dal.Selsy_PaySalaryPrint().DefaultView;
-        if(dv.Count == 1)
-        {
-
-
-        }
         context.Response.ContentType = "text/plain";
-        context.Response.Write("Hello World");
+        try
+        {
+            if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                DataView dv = dal.Selsy_PaySalaryPrint().DefaultView;
+                if (dv.Count == 1)
+                {
+                    context.Response.Write(context.Server.HtmlEncode(dv[0]["pspContent"].ToString()));
+                }
+            }
+            else { context.Response.Write("t"); }
+        }catch(Exception ex) { context.Response.Write("e");  }
+
     }
 
     public bool IsReusable {

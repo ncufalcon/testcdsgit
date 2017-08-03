@@ -1576,6 +1576,8 @@
                                                     <option value="04">健保減項</option>
                                                     <option value="05">勞退自提加項</option>
                                                     <option value="06">勞退自提減項</option>
+                                                    <option value="07">福利金</option>
+                                                    <option value="08">法扣</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -1837,5 +1839,8 @@
         <!-- fixwidth -->
     </div>
     <!-- WrapperMain -->
+
+
+
 </asp:Content>
 

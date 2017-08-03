@@ -613,7 +613,7 @@ namespace payroll
                 sql += "and pPerGuid=@pPerGuid ";
 
             if (p.pLeaveStatus != "Y")
-                sql += "and perLastDate <> '' ";
+                sql += "and isnull(rtrim(perLastDate),'') = '' ";
 
             if (p.pShouldPayStatus != "Y")
                 sql += "and pShouldPay <> 0 ";

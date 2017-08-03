@@ -13,7 +13,7 @@ using FlexCel.XlsAdapter;
 
 public class WorkHoursImport : IHttpHandler, IRequiresSessionState
 {
-
+    ErrorLog err = new ErrorLog();
     sy_Attendance_DB a_db = new sy_Attendance_DB();
     public void ProcessRequest (HttpContext context) {
         string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
@@ -156,6 +156,7 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
         }
         catch (Exception ex)
         {
+            err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
             status = false;
             myTrans.Rollback();
         }

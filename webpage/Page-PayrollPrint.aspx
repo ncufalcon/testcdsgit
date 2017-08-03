@@ -3,40 +3,57 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <script src="../tinymce/js/tinymce/tinymce.min.js" type="text/javascript"></script>
 
 
-            <script type="text/javascript">
-        $(document).ready(function(){
-            $('#div_design').fancybox({
-   
- 
-            });
-        });
-     </script>
+    <script src="../tinymce/tinymce.min.js" type="text/javascript"></script>
 
 
-    <script type="text/javascript">
+
+
+<script type="text/javascript">
     tinymce.init({
         selector: "textarea",
         language: "zh_TW",
         //menubar: false, //上方工具列顯示or隱藏
-        plugins:
-        [
-       "advlist autolink lists image link charmap print preview searchreplace visualblocks code fullscreen insertdatetime table contextmenu paste pagebreak imageupload textcolor"
-        ],
+        file_browser_callback: function (field_name, url, type, win) {
+            if (type == "image") {
+                tinymce.activeEditor.windowManager.close();
+                tinymce.activeEditor.windowManager.open({
+                    title: "圖片上傳",
+                    url: '<%= ResolveUrl("~/tinymce/ImageUpload/upload.aspx") %>',
+                    width: 300,
+                    height: 120
+                });
+            }
+        },
+        plugins: ["advlist autolink lists image link charmap print preview searchreplace visualblocks code fullscreen insertdatetime table contextmenu paste pagebreak textcolor image"],
+        font_formats: "新細明體=新細明體;標楷體=標楷體;微軟正黑體=微軟正黑體;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Comic Sans MS=comic sans ms,sans-serif;Times New Roman=times new roman,times;",
         pagebreak_separator: "<!--pagebreak-->",
-        image_advtab: true,
+        image_advtab: true, //圖片進階選項
         relative_urls: false,
         remove_script_host: false,
         convert_urls: true,
-        toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link pagebreak imageupload | forecolor backcolor | fontsizeselect fontselect"
+        toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link pagebreak table image | forecolor backcolor | fontselect fontsizeselect"
     });
-    </script>
+</script>
 
 
 
-
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#div_design').fancybox({
+                href: 'page-WorkHours.aspx',
+                type: "iframe",
+                minHeight: "400",
+                closeClick: false,
+                openEffect: 'elastic',
+                closeEffect: 'elastic',
+                beforeShow: function () { tinymce.execCommand('mceToggleEditor', false, 'fbwysiwyg'); },
+                beforeClose: function () { tinyMCE.execCommand('mceRemoveControl', false, 'fbwysiwyg'); }
+ 
+            });
+        });
+     </script>
 
             <script type="text/javascript">
         //確認公司&部門
@@ -56,6 +73,7 @@
 
         </div>
         <!-- fixwidth -->
+        <div id="div_List" style="display:none">
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
@@ -119,51 +137,58 @@
                 </div>
             </div>
         </div>
+        </div>
+
+
+
+        <div id="div_Edit">
+        <div class="fixwidth">
+            <div class="twocol margin15TB">
+                <div class="right">
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >儲存</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >取消</a>
+
+                    <!--<a href="#" class="keybtn">取消</a>-->
+                </div>
+            </div>
+        </div>
+        <div id="div_design" class="fixwidth ">
+            <table style="height:500px" >
+                <tr>
+                    <td>
+                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  >
+     
+                        </textarea>
+     
+                    </td>
+                </tr>
+                <tr>
+                    <td class="font-size4 ">
+                    <span class="font-title titlebackicon">加項</span><br />
+                         時薪:[A001]  基本薪資:[A002]  免稅加班費:[A003]  應稅加班費:[A004] 津貼項目(加項):[A005] <br />
+                    <span class="font-title titlebackicon">檢項</span><br />
+                         代扣健保費:[B001]  代扣勞保費:[B002]  勞退自提:[B003]  補充保費:[B004] 津貼項目(減項):[B005]<br />
+                    <span class="font-title titlebackicon">其它</span><br />
+                         基本時數:[C001]  加班時數(一):[C002]  加班時數(二):[C003]  加班時數(三):[C004] 公司勞退提繳:[C004]<br />
+
+
+     
+     
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </div>
     </div>
+
+
+
+
+
+
+
     <!-- WrapperMain -->
     <input type="hidden" id="hid_PerGuid" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div id="div_design" style="display:none">
-        <table style="height:500px" >
-            <tr>
-                <td>
-                    <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px" >
-
-                    </textarea>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-
-
-
-                </td>
-            </tr>
-        </table>
-    </div>
-
-
-
-
 
 
 
@@ -193,7 +218,7 @@
                 txt_Dep: 'txt_Dep',
                 sp_DepName: 'sp_DepName',
                 hid_DepGuid: 'hid_DepGuid',
-
+                tex_designContent:'tex_designContent'
             },
 
             //查詢視窗
@@ -262,47 +287,37 @@
             opDiv: function () {
 
 
-                $.ajax({
-                    type: "POST",
-                    url: '../handler/Allowance/ashx_AllTempDel.ashx',
-                    data: 'guid=' + guid,
-                    dataType: 'text',  //xml, json, script, text, html
-                    success: function (msg) {
-                        switch (msg) {
-                            case "ok":
-                                var div = document.getElementById(JsEven.Page1Id.div_Import);
-                                var tr = div.getElementsByTagName('tr');
-                                for (var i = 0; i < tr.length; i++) {
-                                    var t = tr[i];
-                                    if (guid == t.getAttribute('guid'))
-                                        t.parentNode.removeChild(t);
-                                }
-                                alert('刪除成功');
-                                break;
-                            case "e":
-                                alert('程式發生錯誤，請聯絡相關管理人員');
-                                break;
-                            case "t":
-                                alert('登入逾時');
-                                CommonEven.goLogin();
-                                break;
-                        }
-                        $.unblockUI();
-                    },
-                    error: function (xhr, statusText) {
-                        //alert(xhr.status);
-                        $.unblockUI();
-                        alert('程式發生錯誤，請聯絡相關管理人員');
+                //$.ajax({
+                //    type: "POST",
+                //    url: '../handler/Payroll/ashx_SelPayrollPrint.ashx',
+                //    data: '',
+                //    dataType: 'text',  //xml, json, script, text, html
+                //    success: function (msg) {
+                //        switch (msg) {
+                //            case "e":
+                //                alert('程式發生錯誤，請聯絡相關管理人員');
+                //                break;
+                //            case "t":
+                //                alert('登入逾時');
+                //                CommonEven.goLogin();
+                //                break;
+                //            default:
+                //                tinyMCE.get(JsEven.Id.tex_designContent).setContent(msg);
+                //                $.fancybox.open('#div_design');
+                //                break;
+                //        }
+                //        $.unblockUI();
+                //    },
+                //    error: function (xhr, statusText) {
+                //        //alert(xhr.status);
+                //        $.unblockUI();
+                //        alert('程式發生錯誤，請聯絡相關管理人員');
 
-                    }
-                });
-
-
-
-
-
+                //    }
+                //});
 
                 $.fancybox.open('#div_design');
+               
             }
 
         }

@@ -6,6 +6,7 @@ using System.Data;
 public class ashx_GenPayroll : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
     payroll.gdal dal = new payroll.gdal();
     Common com = new Common();
+    ErrorLog err = new ErrorLog();
     public void ProcessRequest(HttpContext context)
     {
 
@@ -33,7 +34,7 @@ public class ashx_GenPayroll : IHttpHandler, System.Web.SessionState.IReadOnlySe
         catch (Exception ex)
         {
             //ErrorLog err = new ErrorLog();
-            //err.InsErrorLog("ashx_NewStaffList.ashx", ex.Message, USERINFO.MemberEmpno);
+            err.InsErrorLog("ashx_GenPayroll.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("error");
         }
     }
