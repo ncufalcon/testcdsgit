@@ -2,6 +2,7 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -10,8 +11,8 @@ using FlexCel.XlsAdapter;
 using System.Configuration;
 using System.Text;
 
-public class LHCompImport : IHttpHandler {
-
+public class LHCompImport : IHttpHandler,IRequiresSessionState {
+    ErrorLog err = new ErrorLog();
     public void ProcessRequest(HttpContext context) {
         bool status = true;
         string YearMonth = string.Empty;
@@ -26,6 +27,9 @@ public class LHCompImport : IHttpHandler {
         oCmd.Transaction = myTrans;
         try
         {
+            string ddl_SalaryRange = (context.Request["ddl_SalaryRange"] != null) ? context.Request["ddl_SalaryRange"].ToString() : "";
+            string[] DayAry = ddl_SalaryRange.Split(',');
+
             for (int i = 0; i < uploadFiles.Count; i++)
             {
                 HttpPostedFile aFile = uploadFiles[i];
@@ -189,8 +193,9 @@ H_Date
                 oCmd2.Connection.Open();
 
                 SqlDataAdapter oda = new SqlDataAdapter(oCmd2);
-                //oCmd.Parameters.AddWithValue("@voc_no", voc_no);
-                //oCmd.Parameters.AddWithValue("@Year", Year);
+                oCmd2.Parameters.AddWithValue("@modifyID", USERINFO.MemberGuid);
+                oCmd2.Parameters.AddWithValue("@sdate", DayAry[0]);
+                oCmd2.Parameters.AddWithValue("@edate", DayAry[1]);
                 //oCmd2.ExecuteNonQuery();
 
                 DataTable ds = new DataTable();
@@ -206,6 +211,7 @@ H_Date
         catch (Exception ex)
         {
             status = false;
+            err.InsErrorLog("LHCompImport.ashx", ex.Message, USERINFO.MemberName);
             myTrans.Rollback();
         }
         finally

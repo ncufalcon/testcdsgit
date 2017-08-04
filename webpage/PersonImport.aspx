@@ -16,6 +16,8 @@
                     break;
                 case "LH_Compare":
                     $("#downSample").attr("href", "../Template/LH_Compare.xlsx");
+                    $("#srTr").show();
+                    Getddl_SalaryRange();
                     break;
             }
 
@@ -30,6 +32,11 @@
                 if ($.inArray(exten, PassExten) == -1) {
                     alert("請上傳Excel檔");
                     return false
+                }
+
+                if ($.getParamValue('tp') == "LH_Compare" && $("#ddl_SalaryRange").val() == "") {
+                    alert("請選擇計薪週期");
+                    return false;
                 }
 
                 $("#loadblock").show();
@@ -55,6 +62,36 @@
             });
         });
 
+        //DDL
+        function Getddl_SalaryRange() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/ddlSalaryRange.ashx",
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("ddlSalaryRange Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#ddl_SalaryRange").empty();
+                        var ddlstr = '<option value="">-----------請選擇-----------</option>';
+                        if ($(data).find("data_item").length > 0) {
+                            $(data).find("data_item").each(function (i) {
+                                ddlstr += '<option value="' + $(this).children("sr_BeginDate").text() + ',' + $(this).children("sr_Enddate").text() + '">' + $(this).children("sr_BeginDate").text() + " - " + $(this).children("sr_Enddate").text() + '</option>';
+                            });
+                        }
+                        $("#ddl_SalaryRange").append(ddlstr);
+                    }
+                }
+            });
+        }
+
         function feedbackFun(msg) {
             switch ($.getParamValue('tp')) {
                 case "Person":
@@ -79,6 +116,7 @@
                 <td align="right">請選擇檔案：</td>
                 <td><input type="file" id="dataFile" name="dataFile" />&nbsp;<input class="keybtn" id="subbtn" type="button" value="確認" /></td>
             </tr>
+            <tr id="srTr" style="display:none;"><td align="right">計薪週期：</td><td><select id="ddl_SalaryRange" name="ddl_SalaryRange"></select></td></tr>
             <tr><td></td><td><a id="downSample">範本下載</a></td></tr>
         </table>
     </div>

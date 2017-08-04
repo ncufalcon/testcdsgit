@@ -55,7 +55,7 @@
                     href: "PersonImport.aspx?tp=LH_Compare",
                     type: "iframe",
                     width: "450",
-                    minHeight: "50",
+                    minHeight: "100",
                     closeClick: false,
                     openEffect: 'elastic',
                     closeEffect: 'elastic',

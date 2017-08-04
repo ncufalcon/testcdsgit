@@ -11,6 +11,7 @@ using FlexCel.XlsAdapter;
 using System.Configuration;
 
 public class PersonImport : IHttpHandler,IRequiresSessionState {
+    ErrorLog err = new ErrorLog();
     Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest(HttpContext context)
     {
@@ -609,6 +610,7 @@ perStatus
         catch (Exception ex)
         {
             status = false;
+            err.InsErrorLog("PersonImport.ashx", ex.Message, USERINFO.MemberName);
             myTrans.Rollback();
             exStr = ex.Message;
         }

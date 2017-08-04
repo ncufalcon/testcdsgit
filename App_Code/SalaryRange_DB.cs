@@ -103,7 +103,7 @@ public class SalaryRange_DB
                 show_value.Append(@" and sr_Enddate<=@sr_Enddate ");
                 thisCommand.Parameters.AddWithValue("@sr_Enddate", sr_Enddate);
             }
-            show_value.Append(@" order by sr_SalaryDate DESC ");
+
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
@@ -248,41 +248,20 @@ public class SalaryRange_DB
 
     }
     #endregion
-
-    #region 修改 holiday
-    public void UpdateSRImportStatus()
+    
+    public DataTable ddlSelectList()
     {
-        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
-        SqlCommand thisCommand = thisConnection.CreateCommand();
-        SqlDataAdapter oda = new SqlDataAdapter();
-        StringBuilder show_value = new StringBuilder();
-        try
-        {
-            show_value.Append(@" 
-                update sy_SalaryRange set sr_importStatus='Y' where sr_Guid=@sr_Guid
-            ");
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
 
-            thisCommand.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+        sb.Append(@"SELECT * from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc ");
 
-            thisCommand.CommandText = show_value.ToString();
-            thisCommand.CommandType = CommandType.Text;
-
-            thisCommand.Connection.Open();
-            thisCommand.ExecuteNonQuery();
-            thisCommand.Connection.Close();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
-        finally
-        {
-            oda.Dispose();
-            thisConnection.Close();
-            thisConnection.Dispose();
-            thisCommand.Dispose();
-        }
-
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oda.Fill(ds);
+        return ds;
     }
-    #endregion
 }
