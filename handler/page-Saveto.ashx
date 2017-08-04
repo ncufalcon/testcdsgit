@@ -11,10 +11,12 @@ using System.Collections.Generic;
 using System.Web.SessionState;
 
 public class page_Saveto : IHttpHandler, IRequiresSessionState {
-
-    public void ProcessRequest (HttpContext context) {
+    ErrorLog err = new ErrorLog();
+    public void ProcessRequest(HttpContext context)
+    {
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
-        switch (str_func) {
+        switch (str_func)
+        {
             case "downloadtxt":
                 string str_filename = string.IsNullOrEmpty(context.Request.Form["str_filename"]) ? "" : context.Request.Form["str_filename"].ToString().Trim();
                 string str_paydate = string.IsNullOrEmpty(context.Request.Form["str_paydate"]) ? "" : context.Request.Form["str_paydate"].ToString().Trim();
@@ -40,7 +42,8 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                             mod_guid += "'" + split_str[i] + "'";
                         }
                     }
-                    else {
+                    else
+                    {
                         mod_guid = "";
                     }
 
@@ -51,7 +54,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                     {
                         Directory.CreateDirectory(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\")));
                     }
-                    fileSpec = UpLoadPath + str_filename+".txt";
+                    fileSpec = UpLoadPath + str_filename + ".txt";
                     //fileSpec = context.Server.MapPath("~/Template/"+str_filename+".txt");
 
                     using (TextWriter writer = File.CreateText(fileSpec))
@@ -103,11 +106,12 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                         text += "";//付款金額
                                     }
                                 }
-                                else {
+                                else
+                                {
                                     text += "";//付款金額
                                 }
                                 text += "@@";
-                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim().Replace("/","");//交易日
+                                text += dt_a.Rows[i]["SalaryDate"].ToString().Trim().Replace("/", "");//交易日
                                 text += "@";
                                 text += dt_a.Rows[i]["perNo"].ToString().Trim();//交易序號
                                 text += "@@@@@";
@@ -115,13 +119,13 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += str_comno;//公司代碼
                                 text += "@@@@@@@";
                                 text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();//受款人
-                                //text += "@";
-                                //text += "AIP";
+                                                                                           //text += "@";
+                                                                                           //text += "AIP";
                                 text += "@@@@@";
                                 text += dt_a.Rows[i]["perSyAccount"].ToString().Trim();//受款人帳號
                                 text += "@@@@@@@";
                                 text += dt_a.Rows[i]["syNumber"].ToString().Trim();//銀行代碼
-                                //text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
+                                                                                   //text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();
                                 text += "@@@@";
                                 //if (str_exporttype == "0")
                                 //{
@@ -132,34 +136,36 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 //法扣
                                 //text += dt_a.Rows[i]["perName"].ToString().Trim() + dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"";
                                 //}
-                                text += "ID:"+dt_a.Rows[i]["perIDNumber"].ToString().Trim()+"#, ";
-                            //text += "AIP";
-                            text += "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
-                            writer.WriteLine(text);
+                                text += "ID:" + dt_a.Rows[i]["perIDNumber"].ToString().Trim() + "#, ";
+                                //text += "AIP";
+                                text += "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+                                writer.WriteLine(text);
+                            }
+                            writer.Write(writer.NewLine);
+                            context.Response.Write(str_filename + ".txt");
                         }
-                        writer.Write(writer.NewLine);
-                        context.Response.Write(str_filename+".txt");
-                    }
                         else
                         {
-                        context.Response.Write("nodata");
-                    }
+                            context.Response.Write("nodata");
+                        }
 
+                    }
                 }
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("page_Saveto.ashx", ex.Message, USERINFO.MemberName);
+                    context.Response.Write("error");
                 }
-                catch (Exception ex){
-            context.Response.Write("error");
+
+                break;
         }
 
-        break;
     }
 
-}
-
-public bool IsReusable {
-    get {
-        return false;
+    public bool IsReusable {
+        get {
+            return false;
+        }
     }
-}
 
 }

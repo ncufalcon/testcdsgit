@@ -845,6 +845,7 @@ namespace payroll
                                                              ,plogTaxDeduction
                                                              ,plogPay
                                                              ,plogTaxation
+                                                             ,plogTax
                                                              ,plogPremium
                                                              ,plogOverTimeDutyfree
                                                              ,plogOverTimeTaxation
@@ -942,6 +943,7 @@ namespace payroll
                                                                   ,pTaxDeduction
                                                                   ,pPay
                                                                   ,pTaxation
+                                                                  ,pTax
                                                                   ,pPremium
                                                                   ,pOverTimeDutyfree
                                                                   ,pOverTimeTaxation
@@ -957,7 +959,8 @@ namespace payroll
                                                                   ,pBuckleCost
                                                                   ,pBuckleFee
                                                                   ,pWelfare
-                                                                  ,'Update',@UserInfo
+                                                                  ,'Update'
+                                                                  ,@UserInfo
                                                                   ,pProductionLeaveTimes
                                                                   ,pProductionLeaveSalary
                                                                   ,pMilitaryLeaveTimes
@@ -978,14 +981,12 @@ namespace payroll
                                                                   ,pWeekdaySalary2=@pWeekdaySalary2
                                                                   ,pWeekdayTime3=@pWeekdayTime3
                                                                   ,pWeekdaySalary3=@pWeekdaySalary3
-
                                                                   ,pOffDayTime1=@pOffDayTime1
                                                                   ,pOffDaySalary1=@pOffDaySalary1
                                                                   ,pOffDayTime2=@pOffDayTime2
                                                                   ,pOffDaySalary2=@pOffDaySalary2
                                                                   ,pOffDayTime3=@pOffDayTime3
                                                                   ,pOffDaySalary3=@pOffDaySalary3
-
                                                                   ,pHolidayTime1=@pHolidayTime1
                                                                   ,pHolidaySalary1=@pHolidaySalary1
                                                                   ,pHolidayTime2=@pHolidayTime2
@@ -994,10 +995,8 @@ namespace payroll
                                                                   ,pHolidaySalary3=@pHolidaySalary3
                                                                   ,pHolidayTime4=@pHolidayTime4
                                                                   ,pHolidaySalary4=@pHolidaySalary4
-
                                                                   ,pHolidayDutyFree=@pHolidayDutyFree
                                                                   ,pHolidayTaxation=@pHolidayTaxation
-
                                                                   ,pNationalholidaysTime1=@pNationalholidaysTime1
                                                                   ,pNationalholidaysSalary1=@pNationalholidaysSalary1
                                                                   ,pNationalholidaysTime2=@pNationalholidaysTime2
@@ -1039,6 +1038,7 @@ namespace payroll
                                                                   ,pTaxDeduction=@pTaxDeduction
                                                                   ,pPay=@pPay
                                                                   ,pTaxation=@pTaxation
+                                                                  ,pTax=@pTax
                                                                   ,pPremium=@pPremium
                                                                   ,pOverTimeDutyfree=@pOverTimeDutyfree
                                                                   ,pOverTimeTaxation=@pOverTimeTaxation
@@ -1124,6 +1124,7 @@ namespace payroll
             cmd.Parameters.AddWithValue("@pTaxDeduction", p.pTaxDeduction);
             cmd.Parameters.AddWithValue("@pPay", p.pPay);
             cmd.Parameters.AddWithValue("@pTaxation", p.pTaxation);
+            cmd.Parameters.AddWithValue("@pTax", p.pTax);
             cmd.Parameters.AddWithValue("@pPremium", p.pPremium);
             cmd.Parameters.AddWithValue("@pOverTimeDutyfree", p.pOverTimeDutyfree);
             cmd.Parameters.AddWithValue("@pOverTimeTaxation", p.pOverTimeTaxation);

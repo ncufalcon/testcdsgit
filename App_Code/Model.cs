@@ -158,6 +158,7 @@ namespace payroll.model
         public decimal pTaxDeduction { get; set; }
         public decimal pPay { get; set; }
         public decimal pTaxation { get; set; }
+        public decimal pTax { get; set; }        
         public decimal pPremium { get; set; }
         public decimal pOverTimeDutyfree { get; set; }
         public decimal pOverTimeTaxation { get; set; }

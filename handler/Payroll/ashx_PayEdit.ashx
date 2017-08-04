@@ -66,7 +66,6 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pMilitaryLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pMilitaryLeaveSalary"])) ? decimal.Parse(context.Request.Form["pMilitaryLeaveSalary"].ToString()) : 0;
                 decimal pAbortionLeaveTimes = (!string.IsNullOrEmpty(context.Request.Form["pAbortionLeaveTimes"])) ? decimal.Parse(context.Request.Form["pAbortionLeaveTimes"].ToString()) : 0;
                 decimal pAbortionLeaveSalary = (!string.IsNullOrEmpty(context.Request.Form["pAbortionLeaveSalary"])) ? decimal.Parse(context.Request.Form["pAbortionLeaveSalary"].ToString()) : 0;
-
                 decimal pHolidayDutyFree = (!string.IsNullOrEmpty(context.Request.Form["pHolidayDutyFree"])) ? decimal.Parse(context.Request.Form["pHolidayDutyFree"].ToString()) : 0;
                 decimal pHolidayTaxation = (!string.IsNullOrEmpty(context.Request.Form["pHolidayTaxation"])) ? decimal.Parse(context.Request.Form["pHolidayTaxation"].ToString()) : 0;
                 decimal pNationalholidaysTaxation = (!string.IsNullOrEmpty(context.Request.Form["pNationalholidaysTaxation"])) ? decimal.Parse(context.Request.Form["pNationalholidaysTaxation"].ToString()) : 0;
@@ -80,6 +79,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pIntertemporal = (!string.IsNullOrEmpty(context.Request.Form["pIntertemporal"])) ? decimal.Parse(context.Request.Form["pOverTimeTaxation"].ToString()) : 0;
                 decimal pPay = (!string.IsNullOrEmpty(context.Request.Form["pPay"])) ? decimal.Parse(context.Request.Form["pPay"].ToString()) : 0;
                 decimal pTaxation = (!string.IsNullOrEmpty(context.Request.Form["pTaxation"])) ? decimal.Parse(context.Request.Form["pTaxation"].ToString()) : 0;
+                decimal pTax = (!string.IsNullOrEmpty(context.Request.Form["pTax"])) ? decimal.Parse(context.Request.Form["pTax"].ToString()) : 0;
                 decimal pPremium = (!string.IsNullOrEmpty(context.Request.Form["pPremium"])) ? decimal.Parse(context.Request.Form["pPremium"].ToString()) : 0;
                 decimal pPersonInsurance = (!string.IsNullOrEmpty(context.Request.Form["pPersonInsurance"])) ? decimal.Parse(context.Request.Form["pPersonInsurance"].ToString()) : 0;
                 decimal pPersonLabor = (!string.IsNullOrEmpty(context.Request.Form["pPersonLabor"])) ? decimal.Parse(context.Request.Form["pPersonLabor"].ToString()) : 0;
@@ -150,6 +150,7 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                     p.pSalary = pSalary;
                     p.pPay = pPay;
                     p.pTaxation = pTaxation;
+                    p.pTax = pTax;
                     p.pPremium = pPremium;
                     p.UserInfo = USERINFO.MemberGuid;
                     dal.Upsy_PaySalary(p);

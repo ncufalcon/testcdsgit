@@ -22,7 +22,7 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
 
 
 
-                string[] str = { guid};
+                string[] str = { guid };
                 string sqlinj = com.CheckSqlInJection(str);
 
                 payroll.model.sy_PayRoll pModel = new payroll.model.sy_PayRoll();
@@ -120,6 +120,7 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<pTaxDeduction>" + com.checkNumber(dv[i]["pTaxDeduction"].ToString()) + "</pTaxDeduction>";
                         XmlStr += "<pPay>" + com.checkNumber(dv[i]["pPay"].ToString()) + "</pPay>";
                         XmlStr += "<pTaxation>" + com.checkNumber(dv[i]["pTaxation"].ToString()) + "</pTaxation>";
+                        XmlStr += "<pTax>" + com.checkNumber(dv[i]["pTax"].ToString()) + "</pTax>";
                         XmlStr += "<pPremium>" + com.checkNumber(dv[i]["pPremium"].ToString()) + "</pPremium>";
                         XmlStr += "<pOverTimeDutyfree>" + com.checkNumber(dv[i]["pOverTimeDutyfree"].ToString()) + "</pOverTimeDutyfree>";
                         XmlStr += "<pOverTimeTaxation>" + com.checkNumber(dv[i]["pOverTimeTaxation"].ToString()) + "</pOverTimeTaxation>";
@@ -141,10 +142,7 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
                         XmlStr += "<sr_Enddate>" + context.Server.HtmlEncode(dv[i]["sr_Enddate"].ToString()) + "</sr_Enddate>";
                         XmlStr += "<sr_SalaryDate>" + context.Server.HtmlEncode(dv[i]["sr_SalaryDate"].ToString()) + "</sr_SalaryDate>";
                         XmlStr += "<sr_Guid>" + dv[i]["sr_Guid"].ToString() + "</sr_Guid>";
-                            XmlStr += "<pSalary>" + dv[i]["pSalary"].ToString() + "</pSalary>";
-                            
-
-
+                        XmlStr += "<pSalary>" + dv[i]["pSalary"].ToString() + "</pSalary>";
                         XmlStr += "</dView>";
                     }
                     XmlStr += "</dList>";

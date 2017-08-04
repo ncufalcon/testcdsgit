@@ -333,8 +333,8 @@
                                     <td><input type="text" class="inputex width60" id="txt_pPay"/></td>
                                     <td align="right"><div class="font-title titlebackicon">課稅所得</div></td>
                                     <td><input type="text" class="inputex width60" id="txt_pTaxation"/></td>
-                                    <td align="right">&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td align="right"><div class="font-title titlebackicon">扣繳稅額</div></td>
+                                    <td><input type="text" class="inputex width60" id="txt_pTax"/></td>
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">補充保費</div></td>
@@ -516,6 +516,7 @@
             Page2Id: {                
                 txt_pPay: 'txt_pPay',
                 txt_pTaxation: 'txt_pTaxation',
+                txt_pTax:'txt_pTax',
                 txt_pPremium: 'txt_pPremium',
                 txt_pPersonInsurance: 'txt_pPersonInsurance',
                 txt_pPersonLabor: 'txt_pPersonLabor',
@@ -776,6 +777,7 @@
                             
                             $('#' + JsEven.Page2Id.txt_pPay).val(CommonEven.XmlNodeGetValue(e, "pPay"));
                             $('#' + JsEven.Page2Id.txt_pTaxation).val(CommonEven.XmlNodeGetValue(e, "pTaxation"));
+                            $('#' + JsEven.Page2Id.txt_pTax).val(CommonEven.XmlNodeGetValue(e, "pTax"));                            
                             $('#' + JsEven.Page2Id.txt_pPremium).val(CommonEven.XmlNodeGetValue(e, "pPremium"));
                             $('#' + JsEven.Page2Id.txt_pPersonInsurance).val(CommonEven.XmlNodeGetValue(e, "pPersonInsurance"));
                             $('#' + JsEven.Page2Id.txt_pPersonLabor).val(CommonEven.XmlNodeGetValue(e, "pPersonLabor"));
@@ -899,6 +901,7 @@
                     
                     var pPay = $('#' + this.Page2Id.txt_pPay).val();
                     var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
+                    var pTax = $('#' + this.Page2Id.txt_pTax).val();
                     var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
                     var pPersonInsurance = $('#' + this.Page2Id.txt_pPersonInsurance).val();
                     var pPersonLabor = $('#' + this.Page2Id.txt_pPersonLabor).val();
@@ -942,11 +945,8 @@
                               '&pNationalholidaysSalary2=' + pNationalholidaysSalary2 +
                               '&pNationalholidaysSalary3=' + pNationalholidaysSalary3 +
                               '&pNationalholidaysSalary4=' + pNationalholidaysSalary4 +
-
-
                               '&pAnnualLeaveTimes=' + pAnnualLeaveTimes +
                               '&pAnnualLeaveSalary=' + pAnnualLeaveSalary +
-
                               '&pMarriageLeaveTimes=' + pMarriageLeaveTimes +
                               '&pMarriageLeaveSalary=' + pMarriageLeaveSalary +
                               '&pSickLeaveTimes=' + pSickLeaveTimes +
@@ -975,6 +975,7 @@
                               '&pIntertemporal=' + pIntertemporal +
                               '&pPay=' + pPay +
                               '&pTaxation=' + pTaxation +
+                              '&pTax=' + pTax +
                               '&pPremium=' + pPremium +
                               '&pPersonInsurance=' + pPersonInsurance +
                               '&pPersonLabor=' + pPersonLabor +
