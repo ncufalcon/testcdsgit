@@ -104,6 +104,7 @@ public class SalaryRange_DB
                 thisCommand.Parameters.AddWithValue("@sr_Enddate", sr_Enddate);
             }
 
+            show_value.Append(@" order by sr_SalaryDate DESC ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;
