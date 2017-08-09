@@ -58,7 +58,7 @@ public class SalaryRange_DB
     }
     #endregion
 
-    #region 撈 holiday 條件 keyword or date(yyyy/mm/dd) or GUID
+    #region 撈 計薪週期 條件 keyword or date(yyyy/mm/dd) or GUID
     public DataTable SelectSR()
     {
         DataTable dt = new DataTable();
@@ -129,7 +129,7 @@ public class SalaryRange_DB
     }
     #endregion
 
-    #region 修改 holiday
+    #region 修改 計薪週期
     public void UpdateSR()
     {
         SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -214,7 +214,7 @@ public class SalaryRange_DB
     }
     #endregion
 
-    #region 刪除 holiday
+    #region 刪除 計薪週期
     public void DeleteSR()
     {
         SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -249,7 +249,44 @@ public class SalaryRange_DB
 
     }
     #endregion
-    
+
+    #region update 計薪週期匯入註記
+    public void UpdateSRImportStatus()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_SalaryRange set sr_importStatus='Y' where sr_Guid=@sr_Guid
+            ");
+
+            thisCommand.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
     public DataTable ddlSelectList()
     {
         SqlCommand oCmd = new SqlCommand();
