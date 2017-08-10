@@ -259,4 +259,23 @@ where  pgiStatus<>'D' and pgiGuid=@pgiGuid ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable checkLastStatus(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select * from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid 
+and pgiChangeDate=(select MAX(pgiChangeDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid) 
+and pgiCreateDate=(select MAX(pgiCreateDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }

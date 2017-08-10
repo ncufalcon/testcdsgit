@@ -3,6 +3,7 @@
 using System;
 using System.Web;
 using System.Web.SessionState;
+using System.Data;
 
 public class addGroupIns : IHttpHandler,IRequiresSessionState {
     GroupInsurance_DB GI_Db = new GroupInsurance_DB();
@@ -19,10 +20,37 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
             string pgi_ChangeDate = (context.Request.Form["pgi_ChangeDate"] != null) ? context.Request.Form["pgi_ChangeDate"].ToString() : "";
             string pgi_InsuranceCode= (context.Request.Form["pg_ICGuid"] != null) ? context.Request.Form["pg_ICGuid"].ToString() : "";
             string pgi_Ps = (context.Request.Form["pgi_Ps"] != null) ? context.Request.Form["pgi_Ps"].ToString() : "";
+            DataTable checkDt = new DataTable();
 
             switch (Mode)
             {
                 case "New":
+                    //驗証
+                    switch (pgi_Change)
+                    {
+                        case "01":
+                            checkDt = GI_Db.checkLastStatus(pgi_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["pgiChange"].ToString() == "01")
+                                {
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該成員已加保');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                        case "02":
+                            checkDt = GI_Db.checkLastStatus(pgi_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["pgiChange"].ToString() == "02")
+                                {
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該成員已退保');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                    }
                     GI_Db._pgiGuid = Guid.NewGuid().ToString();
                     GI_Db._pgiPerGuid = pgi_No;
                     GI_Db._pgiPfGuid = pgi_PfGuid;
@@ -36,7 +64,7 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
                     GI_Db.addGroupInsurance();
                     break;
                 case "Modify":
-                     GI_Db._pgiGuid = id;
+                    GI_Db._pgiGuid = id;
                     GI_Db._pgiPerGuid = pgi_No;
                     GI_Db._pgiPfGuid = pgi_PfGuid;
                     GI_Db._pgiType = pgi_Type;
@@ -54,7 +82,7 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addGroupIns');</script>"); }
     }
- 
+
     public bool IsReusable {
         get {
             return false;
