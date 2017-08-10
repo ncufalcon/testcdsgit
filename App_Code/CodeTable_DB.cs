@@ -74,6 +74,7 @@ public class CodeTable_DB
         DataTable ds = new DataTable();
 
         oCmd.Parameters.AddWithValue("@group", group);
+        oCmd.Parameters.AddWithValue("@code_value", item);
         oda.Fill(ds);
         return ds;
     }

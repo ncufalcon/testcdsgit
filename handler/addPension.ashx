@@ -3,6 +3,7 @@
 using System;
 using System.Web;
 using System.Web.SessionState;
+using System.Data;
 
 public class addPension : IHttpHandler,IRequiresSessionState {
     PersonPension_DB PP_Db = new PersonPension_DB();
@@ -19,10 +20,38 @@ public class addPension : IHttpHandler,IRequiresSessionState {
             string pp_EmployerRatio = (context.Request.Form["pp_LarboRatio"] != null) ? context.Request.Form["pp_LarboRatio"].ToString() : "";
             string pp_PayPayroll = (context.Request.Form["pp_PayPayroll"] != null) ? context.Request.Form["pp_PayPayroll"].ToString() : "";
             string pp_Ps = (context.Request.Form["pp_Ps"] != null) ? context.Request.Form["pp_Ps"].ToString() : "";
+            DataTable checkDt = new DataTable();
 
             switch (Mode)
             {
                 case "New":
+                    //驗証
+                    switch (pp_Change)
+                    {
+                        case "01":
+                            checkDt = PP_Db.checkLastStatus(pp_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["ppChange"].ToString() == "01")
+                                {
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已開始提繳勞工退休金');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                        case "03":
+                            checkDt = PP_Db.checkLastStatus(pp_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["ppChange"].ToString() == "03")
+                                {
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已停止提繳勞工退休金');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                    }
+
                     PP_Db._ppGuid = Guid.NewGuid().ToString();
                     PP_Db._ppPerGuid = pp_No;
                     PP_Db._ppChange = pp_Change;

@@ -23,6 +23,7 @@ public class InsuranceExport : IHttpHandler {
             string perGv = (context.Request["perGuid"] != null) ? context.Request["perGuid"].ToString() : "";
 
             //string FileName = DateTime.Now.ToString("yyyy-MM-dd");
+            string ToDate = ROC_Date(DateTime.Now.ToString("yyyy/MM/dd"));
             string FileName = string.Empty;
             string fileSpec = string.Empty;
             DataTable dt = new DataTable();
@@ -43,7 +44,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "加保三合一";
+                                    FileName += ToDate + "加保三合一";
                                     dt = LH_Db.LH_3in1_add(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -58,8 +59,6 @@ public class InsuranceExport : IHttpHandler {
                                             {
                                                 Xls.SetCellValue(i, 5, "2");
                                                 Xls.SetCellValue(i, 6, "1");
-                                                Xls.SetCellValue(i, 11, dt.Rows[i - 2]["minLaborLv"].ToString());
-                                                Xls.SetCellValue(i, 12, dt.Rows[i - 2]["minInsLv"].ToString());
                                                 Xls.SetCellValue(i, 20, "1");
                                             }
                                             else
@@ -79,6 +78,8 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
                                             Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
                                             Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
+                                            Xls.SetCellValue(i, 11, dt.Rows[i - 2]["minLaborLv"].ToString());
+                                            Xls.SetCellValue(i, 12, dt.Rows[i - 2]["minInsLv"].ToString());
                                             Xls.SetCellValue(i, 13, "1");
                                             if (dt.Rows[i - 2]["iiIdentityCode"].ToString() == "2")
                                                 Xls.SetCellValue(i, 14, "0");
@@ -88,9 +89,12 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 19, "1");
                                             Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["ChangeDate"].ToString()));
                                             Xls.SetCellValue(i, 23, dt.Rows[i - 2]["perPensionIdentity"].ToString());
-                                            Xls.SetCellValue(i, 24, dt.Rows[i - 2]["ppEmployerRatio"].ToString());
-                                            Xls.SetCellValue(i, 25, dt.Rows[i - 2]["ppLarboRatio"].ToString());
-                                            Xls.SetCellValue(i, 26, dt.Rows[i - 2]["ppChangeDate"].ToString());
+                                            string ColX = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString());
+                                            Xls.SetCellValue(i, 24, ColX);
+                                            string ColY = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString());
+                                            Xls.SetCellValue(i, 25, ColY);
+                                            if (dt.Rows[i - 2]["ppChangeDate"].ToString() != dt.Rows[i - 2]["plChangeDate"].ToString())
+                                                Xls.SetCellValue(i, 26, ROC_Date(dt.Rows[i - 2]["ppChangeDate"].ToString()));
                                         }
                                     }
                                 }
@@ -104,7 +108,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "退保三合一";
+                                    FileName += ToDate +"退保三合一";
                                     dt = LH_Db.LH_3in1_out(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -148,7 +152,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "保薪調整三合一";
+                                    FileName += ToDate +"保薪調整三合一";
                                     DataSet ds31 = LH_Db.LH_3in1_mod(perGv);
                                     dt = ds31.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
@@ -197,7 +201,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "加保二合一";
+                                    FileName += ToDate +"加保二合一";
                                     dt = LH_Db.LH_2in1_add(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -224,9 +228,12 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 11, "0");
                                             Xls.SetCellValue(i, 12, "1");
                                             Xls.SetCellValue(i, 14, dt.Rows[i - 2]["perPensionIdentity"].ToString());
-                                            Xls.SetCellValue(i, 15, dt.Rows[i - 2]["ppEmployerRatio"].ToString());
-                                            Xls.SetCellValue(i, 16, dt.Rows[i - 2]["ppLarboRatio"].ToString());
-                                            Xls.SetCellValue(i, 17, dt.Rows[i - 2]["ppChangeDate"].ToString());
+                                            string ColO = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString());
+                                            Xls.SetCellValue(i, 15, ColO);
+                                            string ColP = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString());
+                                            Xls.SetCellValue(i, 16, ColP);
+                                            if (dt.Rows[i - 2]["ppChangeDate"].ToString() != dt.Rows[i - 2]["plChangeDate"].ToString())
+                                                Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["ppChangeDate"].ToString()));
                                         }
                                     }
                                 }
@@ -240,7 +247,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "退保二合一";
+                                    FileName += ToDate +"退保二合一";
                                     dt = LH_Db.LH_2in1_out(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -273,7 +280,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += "保薪調整二合一";
+                                    FileName += ToDate +"保薪調整二合一";
                                     DataSet ds21 = LH_Db.LH_3in1_mod(perGv);
                                     dt = ds21.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
@@ -319,7 +326,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += "勞退提繳";
+                                FileName += ToDate +"勞退提繳";
                                 dt = PP_Db.pp_add(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -358,7 +365,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += "勞退提繳工資調整";
+                                FileName += ToDate +"勞退提繳工資調整";
                                 dt = PP_Db.pp_mod(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -393,7 +400,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += "勞退停繳";
+                                FileName += ToDate +"勞退停繳";
                                 dt = PP_Db.pp_stop(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -431,7 +438,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += "眷屬加保三合一";
+                                FileName += ToDate + "眷屬加保三合一";
                                 dt = FI_Db.FamilyHeal_3in1_add(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -462,7 +469,7 @@ public class InsuranceExport : IHttpHandler {
                                         Xls.SetCellValue(i, 15, dt.Rows[i - 2]["pfIDNumber"].ToString());
                                         Xls.SetCellValue(i, 16, dt.Rows[i - 2]["pfName"].ToString());
                                         Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["pfBirthday"].ToString()));
-                                        Xls.SetCellValue(i, 18,  dt.Rows[i - 2]["pfTitle"].ToString());
+                                        Xls.SetCellValue(i, 18, dt.Rows[i - 2]["pfTitle"].ToString());
                                         Xls.SetCellValue(i, 19, "1");
                                         Xls.SetCellValue(i, 20, "4");
                                         Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["pfiChangeDate"].ToString()));
@@ -470,6 +477,46 @@ public class InsuranceExport : IHttpHandler {
                                         Xls.SetCellValue(i, 24, dt.Rows[i - 2]["ppEmployerRatio"].ToString());
                                         Xls.SetCellValue(i, 25, dt.Rows[i - 2]["ppLarboRatio"].ToString());
                                         Xls.SetCellValue(i, 26, dt.Rows[i - 2]["ppChangeDate"].ToString());
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "02":
+                        if (perGv != "")
+                        {
+                            fileSpec = context.Server.MapPath("~/Template/out_3in1.xls");
+                            using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
+                            {
+                                Xls.Open(fileSpec);
+                                FileName += ToDate + "眷屬退保三合一";
+                                dt = FI_Db.FamilyHeal_3in1_out(perGv);
+                                TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
+                                if (dt.Rows.Count > 0)
+                                {
+                                    for (int i = 2; i < dt.Rows.Count + 2; i++)
+                                    {
+                                        Xls.SetCellValue(i, 1, "2");
+                                        Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                        Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
+                                        Xls.SetCellValue(i, 4, dt.Rows[i - 2]["GanBorID"].ToString());
+                                        Xls.SetCellValue(i, 5, "1");
+                                        Xls.SetCellValue(i, 6, "2");
+                                        Xls.SetCellValue(i, 7, "1");
+                                        //判斷外籍,身份證前兩碼為英文 
+                                        Regex reg1 = new Regex(@"^[A-Za-z]+$");
+                                        if (reg1.IsMatch(dt.Rows[i - 2]["perIDNumber"].ToString().Substring(0, 2)))
+                                        {
+                                            Xls.SetCellValue(i, 8, "2");
+                                            Xls.SetCellValue(i, 11, dt.Rows[i - 2]["perIDNumber"].ToString());
+                                        }
+                                        Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
+                                        Xls.SetCellValue(i, 10, dt.Rows[i - 2]["perIDNumber"].ToString());
+                                        Xls.SetCellValue(i, 12, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
+                                        Xls.SetCellValue(i, 13, "2");
+                                        Xls.SetCellValue(i, 14, dt.Rows[i - 2]["pfiDropOutReason"].ToString());
+                                        Xls.SetCellValue(i, 15, dt.Rows[i - 2]["DORStr"].ToString());
+                                        Xls.SetCellValue(i, 16, ROC_Date(dt.Rows[i - 2]["pfiChangeDate"].ToString()));
                                     }
                                 }
                             }

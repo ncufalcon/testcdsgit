@@ -295,4 +295,33 @@ order by perIDNumber ");
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable FamilyHeal_3in1_out(string pfGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode GanBorID,perPensionIdentity,
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
+pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,pfiDropOutReason,code_desc DORStr
+from sy_PersonFamily 
+left join sy_Person on pfPerGuid=perGuid
+left join sy_Company on perComGuid=comGuid
+left join sy_PersonFamilyInsurance on pfiChange='02' and pfiPfGuid=pfGuid and pfiStatus='A'
+	and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiChange='02' and pfiPfGuid=pfGuid and pfiStatus='A')
+left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
+left join sy_codetable on code_group='20' and code_value=pfiDropOutReason
+where pfGuid in (" + pfGuid + @") and pfStatus='A'
+order by perIDNumber ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }

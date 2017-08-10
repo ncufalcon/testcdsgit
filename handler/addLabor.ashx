@@ -20,10 +20,40 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
             string pl_Change = (context.Request.Form["pl_Change"] != null) ? context.Request.Form["pl_Change"].ToString() : "";
             string pl_LaborPayroll = (context.Request.Form["pl_LaborPayroll"] != null) ? context.Request.Form["pl_LaborPayroll"].ToString() : "";
             string pl_Ps = (context.Request.Form["pl_Ps"] != null) ? context.Request.Form["pl_Ps"].ToString() : "";
+            DataTable checkDt = new DataTable();
 
             switch (Mode)
             {
                 case "New":
+                    //驗証
+                    switch (pl_Change)
+                    {
+                        case "01":
+                            checkDt = LH_Db.checkLaborLastStatus(pl_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["plChange"].ToString() == "01" || checkDt.Rows[0]["plChange"].ToString() == "03")
+                                {
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已加保');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                        case "02":
+                        case "04":
+                            checkDt = LH_Db.checkLaborLastStatus(pl_No);
+                            if (checkDt.Rows.Count > 0)
+                            {
+                                if (checkDt.Rows[0]["plChange"].ToString() == "02" || checkDt.Rows[0]["plChange"].ToString() == "04")
+                                {
+                                    string changeStr = (checkDt.Rows[0]["plChange"].ToString() == "02") ? "退保" : "退休";
+                                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已" + changeStr + "');</script>");
+                                    return;
+                                }
+                            }
+                            break;
+                    }
+
                     LH_Db._plGuid = Guid.NewGuid().ToString();
                     LH_Db._plPerGuid = pl_No;
                     LH_Db._plSubsidyLevel = pl_SubsidyLevel;

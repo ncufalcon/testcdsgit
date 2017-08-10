@@ -566,6 +566,7 @@
                     $("#pi_eStatus").html("新增");
                     $("#pi_saveBtn").hide();
                     $("#pi_addBtn").show();
+                    $(".dor").hide();
                     getHealList();
                     break;
                 case "PP":
@@ -582,6 +583,7 @@
                     $("#pf_eStatus").html("新增");
                     $("#pf_saveBtn").hide();
                     $("#pf_addBtn").show();
+                    $(".pfidor").hide();
                     getFamilyInsList();
                     break;
                 case "PGI":
@@ -602,6 +604,9 @@
                     break;
                 case "exMsg":
                     alert("Error: " + decodeURIComponent(str));
+                    break;
+                case "MsgStr":
+                    alert(str);
                     break;
             }
         }
@@ -2208,6 +2213,7 @@
                                 <select id="ddlPfExport" name="ddlPfExport" onchange="getFamilyInsList()">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
+                                    <option value="02">退保</option>
                                 </select>
                             </div>
                         </div><br />

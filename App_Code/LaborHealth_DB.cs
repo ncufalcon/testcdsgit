@@ -527,19 +527,26 @@ where  piStatus<>'D' and piGuid=@piGuid  ");
 ,'' fID,'' fName,'' fBirth,'' fTitle,piChangeDate ChangeDate,ppEmployerRatio,ppLarboRatio,ppChangeDate,
 (select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
-iiIdentityCode,perPensionIdentity
+iiIdentityCode,perPensionIdentity,plChangeDate
 from sy_Person 
 left join sy_Company on perComGuid=comGuid
-left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid
-left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid 
+	and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piChange='01' and piStatus='A' and piPerGuid=perGuid)
+left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid 
+	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
+left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid 
+	and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + @")
 union
-select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',0,0,'',''
+select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
+(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,'','',''
 from sy_PersonFamily 
 left join sy_Person on pfPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
-left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
+left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A' 
+	and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A')
 where pfPerGuid in (" + perGuid + @") and pfStatus='A'
 order by perIDNumber,fID ");
 
@@ -566,7 +573,9 @@ code_desc DORStr,
 plChangeDate
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
+	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
 left join sy_PersonInsurance on piChange='02' and piStatus='A' and piPerGuid=perGuid
+	and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piChange='02' and piStatus='A' and piPerGuid=perGuid)
 left join sy_Company on comGuid=perComGuid
 left join sy_codetable on code_group='20' and code_value=piDropOutReason
 where perGuid in (" + perGuid + @")
@@ -589,11 +598,14 @@ order by plChangeDate desc,plCreateDate desc ");
 
         sb.Append(@"select perIDNumber,perName,perBirthday,perSex,perPensionIdentity,
 comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate,iiIdentityCode,
-(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv
+(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
+plChangeDate
 from sy_Person 
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
+	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+	and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + ") ");
 
@@ -615,6 +627,7 @@ where perGuid in (" + perGuid + ") ");
         sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
+	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
 left join sy_Company on perComGuid=comGuid
 where perGuid in (" + perGuid + ") ");
 
@@ -682,4 +695,42 @@ drop table #tmp_perguid
         return ds;
     }
 
+
+    public DataTable checkLaborLastStatus(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select * from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid 
+and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid) 
+and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkInsLastStatus(string perGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select * from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid 
+and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid) 
+and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
 }
