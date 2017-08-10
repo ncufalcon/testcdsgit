@@ -373,7 +373,8 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.pacChangeBegin = dt_pacdata.Rows[i]["pacChangeBegin"].ToString().Trim();
                         e.pacChangeEnd = dt_pacdata.Rows[i]["pacChangeEnd"].ToString().Trim();
                         e.pacVenifyDate = dt_pacdata.Rows[i]["pacVenifyDate"].ToString().Trim();
-                        e.pacVenify = dt_pacdata.Rows[i]["mbName"].ToString().Trim();//pacVenify是GUID 這邊要抓名字
+                        e.pacVenify = dt_pacdata.Rows[i]["pacVenify"].ToString().Trim();//pacVenify是GUID 
+                        e.mbNAme = dt_pacdata.Rows[i]["mbName"].ToString().Trim();//pacVenify是GUID 這邊要抓名字mbName
                         e.pacStatus = dt_pacdata.Rows[i]["pacStatus"].ToString().Trim();
                         e.pacPs = dt_pacdata.Rows[i]["pacPs"].ToString().Trim();
                         e.pacStatus_d = dt_pacdata.Rows[i]["pacStatus_d"].ToString().Trim();

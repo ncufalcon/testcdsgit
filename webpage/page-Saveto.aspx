@@ -150,6 +150,7 @@
             switch (type) {
                 case "CityBankSR":
                     $("#txt_paydate").val(str4);
+                    $("#txt_turnsavedate").val(str4);
                     $("#tmpRangeGuid").val(gv);
                     break;
             }

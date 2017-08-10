@@ -806,7 +806,7 @@
                         if (response != "nodata") {
                             str_html += "<thead>";
                             str_html += "<tr>";
-                            str_html += "<th class='width10' nowrap='nowrap'>給新假名稱</th>";
+                            str_html += "<th class='width10' nowrap='nowrap'>給薪假名稱</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>計算基準</th>";
                             str_html += "<th class='width10' nowrap='nowrap'>備註</th>";
                             str_html += "</tr>";
@@ -1565,7 +1565,7 @@
                                                 <input type="radio" name="txt_si_itemsup" checked="checked" value="Y" />是&nbsp;&nbsp;<input type="radio" name="txt_si_itemsup" value="N" />否
                                             </td>
                                             <td align="right">
-                                                <div class="font-title titlebackicon">對應欄位</div>
+                                                <div class="font-title titlebackicon">對應欄位(在勞健保比對使用)</div>
                                             </td>
                                             <td>
                                                 <select id="txt_si_itemrefcom">
@@ -1576,8 +1576,6 @@
                                                     <option value="04">健保減項</option>
                                                     <option value="05">勞退自提加項</option>
                                                     <option value="06">勞退自提減項</option>
-                                                    <option value="07">福利金</option>
-                                                    <option value="08">法扣</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -1637,7 +1635,7 @@
                             </table>
                         </div>-->
 
-                        <div style="margin-top: 20px;" class="font-size2 font-bold">加班費如係按底薪換算，每小時加班費係以每小時底薪乘以何比率</div>
+                        <div style="margin-top: 20px;" class="font-size2 font-bold">加班費以每小時薪資(底薪+職能加給)乘以加班比率<br /><br />平日加班費</div>
                         <div class="div-line" style="width: 450px">
                             <table class="table-margin">
                                 <tr>
@@ -1839,8 +1837,5 @@
         <!-- fixwidth -->
     </div>
     <!-- WrapperMain -->
-
-
-
 </asp:Content>
 

@@ -407,7 +407,7 @@
                             //$("#select_after").val(response[0].perNo);
                             if (response[0].pcStatus == "1") {
                                 $("#txt_person_chkdate").val(response[0].pcVenifyDate);
-                                $("#txt_person_chkpeople").val(response[0].pcVenify);
+                                $("#txt_person_chkpeople").val(response[0].mbName);
                                 $("#txt_person_chkpeople_guid").val(response[0].pcVenify);
                             } else {
                                 $("#txt_person_chkdate").val(today_ymd);
@@ -811,7 +811,7 @@
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pacChangeBegin + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pacChangeEnd + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pacVenifyDate + "</td>";
-                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pacVenify + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].mbNAme + "</td>";
                                 if (response[i].pacStatus == "0") {
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;color:red;'>待確認</td>";
                                 } else {
@@ -923,10 +923,12 @@
                         $("#hidden_pay_guid").val(response[0].pacGuid);
                         if (response[0].pacStatus == "1") {
                             $("#txt_pay_chkdate").val(response[0].pacVenifyDate);
-                            $("#txt_pay_chkpeople").val(response[0].pacVenify);
+                            $("#txt_pay_chkpeople").val(response[0].mbNAme);
+                            $("#txt_pay_chkpeople_guid").val(response[0].pacVenify);
                         } else {
                             $("#txt_pay_chkdate").val(today_ymd);
                             $("#txt_pay_chkpeople").val(now_user);
+                            $("#txt_pay_chkpeople_guid").val(now_user_guid);
                         }
                         $("#hidden_pay_refcode").val(response[0].siRef);
                     } else {
@@ -1437,6 +1439,7 @@
                                             </td>
                                             <td style="border-bottom-width: 0px;">
                                                 <input type="text" class="inputex width80" maxlength="200" id="txt_pay_chkpeople" disabled="disabled" />
+                                                <input type="text" class="inputex" id="txt_pay_chkpeople_guid" style="display:none;" />
                                             </td>
                                             <td align="right" style="border-bottom-width: 0px;">
                                                 <div class="font-title titlebackicon font-red">狀態</div>
