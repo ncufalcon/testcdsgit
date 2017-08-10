@@ -1798,7 +1798,7 @@
                                        <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>--%>
                                    </tr>
                                    <tr>
-                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例</div></td>
+                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例(%)</div></td>
                                        <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
                                        <td  align="right"><div class="font-title titlebackicon font-red">執行扣押金額</div></td>
                                        <td ><input id="pDetentionFee" name="pDetentionFee" type="text" class="inputex width100" /></td>
