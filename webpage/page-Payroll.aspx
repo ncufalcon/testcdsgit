@@ -275,8 +275,8 @@
                                         <td align="right"><div class="font-title titlebackicon">國定假加班免稅時數</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysDutyFree" /></td>                                       
                                         <td>&nbsp;</td>
-                                        <td align="right"><div class="font-title titlebackicon">假日加班免稅時數</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_pHolidaySumDutyFree" /></td>                                       
+                                        <td align="right"><div class="font-title titlebackicon" style="display:none">假日加班免稅時數</div></td>
+                                        <td><input style="display:none" type="text" class="inputex width95" id="txt_pHolidaySumDutyFree" /></td>                                       
                                         <td>&nbsp;</td>
                                     </tr>
                                     <tr>
@@ -286,8 +286,8 @@
                                         <td align="right"><div class="font-title titlebackicon">國定假加班課稅時數</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_pNationalholidaysTaxation" /></td>                                       
                                         <td>&nbsp;</td>
-                                        <td align="right"><div class="font-title titlebackicon">假日加班課稅時數</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_pHolidaySumTaxation" /></td>                                       
+                                        <td align="right"><div class="font-title titlebackicon " style="display:none">假日加班課稅時數</div></td>
+                                        <td><input type="text" style="display:none" class="inputex width95" id="txt_pHolidaySumTaxation" /></td>                                       
                                         <td>&nbsp;</td>
                                     </tr>
 

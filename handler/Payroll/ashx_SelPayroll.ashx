@@ -117,9 +117,13 @@ public class ashx_SelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySes
 
                         XmlStr += "<pHonoraryLeaveTimes>" + com.checkNumber(dv[i]["pHonoraryLeaveTimes"].ToString()) + "</pHonoraryLeaveTimes>";
                         XmlStr += "<pHonoraryLeaveSalary>" + com.checkNumber(dv[i]["pHonoraryLeaveSalary"].ToString()) + "</pHonoraryLeaveSalary>";
-
                         XmlStr += "<pAbortionLeaveTimes>" + com.checkNumber(dv[i]["pAbortionLeaveTimes"].ToString()) + "</pAbortionLeaveTimes>";
                         XmlStr += "<pAbortionLeaveSalary>" + com.checkNumber(dv[i]["pAbortionLeaveSalary"].ToString()) + "</pAbortionLeaveSalary>";
+                        XmlStr += "<pMilitaryLeaveTimes>" + com.checkNumber(dv[i]["pMilitaryLeaveTimes"].ToString()) + "</pMilitaryLeaveTimes>";
+                        XmlStr += "<pMilitaryLeaveSalary>" + com.checkNumber(dv[i]["pMilitaryLeaveSalary"].ToString()) + "</pMilitaryLeaveSalary>";
+                        XmlStr += "<pProductionLeaveTimes>" + com.checkNumber(dv[i]["pProductionLeaveTimes"].ToString()) + "</pProductionLeaveTimes>";
+                        XmlStr += "<pProductionLeaveSalary>" + com.checkNumber(dv[i]["pProductionLeaveSalary"].ToString()) + "</pProductionLeaveSalary>";
+
                         XmlStr += "<pTaxDeduction>" + com.checkNumber(dv[i]["pTaxDeduction"].ToString()) + "</pTaxDeduction>";
                         XmlStr += "<pPay>" + com.checkNumber(dv[i]["pPay"].ToString()) + "</pPay>";
                         XmlStr += "<pTaxation>" + com.checkNumber(dv[i]["pTaxation"].ToString()) + "</pTaxation>";

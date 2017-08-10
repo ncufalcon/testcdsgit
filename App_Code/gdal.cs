@@ -550,8 +550,8 @@ namespace payroll
         {
 
             string sql = @"select *
-                           ,(select sum(b.pPersonPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
-                           ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where a.pGuid=b.pGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
+                           ,(select sum(b.pPersonPension) from v_PaySalaryDetail as b where b.pPerGuid=a.pPerGuid and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
+                           ,(select sum(b.pCompanyPension) from v_PaySalaryDetail as b where b.pPerGuid=a.pPerGuid and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
                            from v_PaySalaryDetail as a where pStatus='A' ";
 
             if (!string.IsNullOrEmpty(p.pPerNo))
