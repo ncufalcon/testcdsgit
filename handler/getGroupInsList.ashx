@@ -10,9 +10,11 @@ public class getGroupInsList : IHttpHandler {
           try
         {
             string keyword = (context.Request["keyword"] != null) ? context.Request["keyword"].ToString() : "";
+            string ddlPgExport = (context.Request["ddlPgExport"] != null) ? context.Request["ddlPgExport"].ToString() : "";
 
             string xmlStr = "";
             GI_Db._KeyWord = keyword;
+            GI_Db._pgiChange = ddlPgExport;
             DataTable dt = GI_Db.SelectList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "pgiList", "pgi_item");
             xmlStr = "<root>" + xmlStr + "</root>";

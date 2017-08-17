@@ -15,7 +15,7 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
 
             string pgi_No = (context.Request.Form["pg_NoGuid"] != null) ? context.Request.Form["pg_NoGuid"].ToString() : "";
             string pgi_PfGuid = (context.Request.Form["pg_PfGuid"] != null) ? context.Request.Form["pg_PfGuid"].ToString() : "";
-            string pgi_Type = (context.Request.Form["pgi_Change"] != null) ? context.Request.Form["pgi_Change"].ToString() : "";
+            string pgi_Type = (context.Request.Form["pgi_Type"] != null) ? context.Request.Form["pgi_Type"].ToString() : "";
             string pgi_Change = (context.Request.Form["pgi_Change"] != null) ? context.Request.Form["pgi_Change"].ToString() : "";
             string pgi_ChangeDate = (context.Request.Form["pgi_ChangeDate"] != null) ? context.Request.Form["pgi_ChangeDate"].ToString() : "";
             string pgi_InsuranceCode= (context.Request.Form["pg_ICGuid"] != null) ? context.Request.Form["pg_ICGuid"].ToString() : "";
@@ -29,7 +29,10 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
                     switch (pgi_Change)
                     {
                         case "01":
-                            checkDt = GI_Db.checkLastStatus(pgi_No);
+                            if (pgi_Type == "01")
+                                checkDt = GI_Db.checkPerLastStatus(pgi_No);
+                            else
+                                checkDt = GI_Db.checkPFLastStatus(pgi_PfGuid);
                             if (checkDt.Rows.Count > 0)
                             {
                                 if (checkDt.Rows[0]["pgiChange"].ToString() == "01")
@@ -40,7 +43,10 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
                             }
                             break;
                         case "02":
-                            checkDt = GI_Db.checkLastStatus(pgi_No);
+                             if (pgi_Type == "01")
+                                checkDt = GI_Db.checkPerLastStatus(pgi_No);
+                            else
+                                checkDt = GI_Db.checkPFLastStatus(pgi_PfGuid);
                             if (checkDt.Rows.Count > 0)
                             {
                                 if (checkDt.Rows[0]["pgiChange"].ToString() == "02")
