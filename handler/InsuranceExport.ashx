@@ -17,8 +17,11 @@ public class InsuranceExport : IHttpHandler {
     {
         try
         {
+            //保險類別
             string category = (context.Request["category"] != null) ? context.Request["category"].ToString() : "";
+            //本人or眷屬
             string type = (context.Request["type"] != null) ? context.Request["type"].ToString() : "";
+            //匯出類別(加退保..等等)
             string item = (context.Request["item"] != null) ? context.Request["item"].ToString() : "";
             string perGv = (context.Request["perGuid"] != null) ? context.Request["perGuid"].ToString() : "";
 
@@ -108,7 +111,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += ToDate +"退保三合一";
+                                    FileName += ToDate + "退保三合一";
                                     dt = LH_Db.LH_3in1_out(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -152,7 +155,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += ToDate +"保薪調整三合一";
+                                    FileName += ToDate + "保薪調整三合一";
                                     DataSet ds31 = LH_Db.LH_3in1_mod(perGv);
                                     dt = ds31.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
@@ -201,7 +204,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += ToDate +"加保二合一";
+                                    FileName += ToDate + "加保二合一";
                                     dt = LH_Db.LH_2in1_add(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -247,7 +250,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += ToDate +"退保二合一";
+                                    FileName += ToDate + "退保二合一";
                                     dt = LH_Db.LH_2in1_out(perGv);
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -280,7 +283,7 @@ public class InsuranceExport : IHttpHandler {
                                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                                 {
                                     Xls.Open(fileSpec);
-                                    FileName += ToDate +"保薪調整二合一";
+                                    FileName += ToDate + "保薪調整二合一";
                                     DataSet ds21 = LH_Db.LH_3in1_mod(perGv);
                                     dt = ds21.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
@@ -326,7 +329,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += ToDate +"勞退提繳";
+                                FileName += ToDate + "勞退提繳";
                                 dt = PP_Db.pp_add(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -365,7 +368,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += ToDate +"勞退提繳工資調整";
+                                FileName += ToDate + "勞退提繳工資調整";
                                 dt = PP_Db.pp_mod(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -400,7 +403,7 @@ public class InsuranceExport : IHttpHandler {
                             using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                             {
                                 Xls.Open(fileSpec);
-                                FileName += ToDate +"勞退停繳";
+                                FileName += ToDate + "勞退停繳";
                                 dt = PP_Db.pp_stop(perGv);
                                 TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                 if (dt.Rows.Count > 0)
@@ -523,7 +526,46 @@ public class InsuranceExport : IHttpHandler {
                         }
                         break;
                 }
-            } //if category end
+            }
+            else if (category == "PGI")
+            {
+                fileSpec = context.Server.MapPath("~/Template/pgi_add.xls");
+                using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
+                {
+                    Xls.Open(fileSpec);
+                    string InsType = (item == "01") ? "加保" : "退保";
+                    FileName += ToDate + "團保" + InsType;
+                    dt = FI_Db.Pgi_Export(perGv);
+                    TXlsCellRange myRange = new TXlsCellRange("A4:Z4");
+                    if (dt.Rows.Count > 0)
+                    {
+                        for (int i = 4; i < dt.Rows.Count + 4; i++)
+                        {
+                            string birthYear = DateTime.Parse(dt.Rows[i - 4]["perBirthday"].ToString()).ToString("yyyy");
+                            Xls.SetCellValue(i, 1, dt.Rows[i - 4]["perDep"].ToString());
+                            Xls.SetCellValue(i, 2, dt.Rows[i - 4]["perNo"].ToString());
+                            Xls.SetCellValue(i, 3, dt.Rows[i - 4]["perName"].ToString());
+                            Xls.SetCellValue(i, 4, dt.Rows[i - 4]["perIDNumber"].ToString());
+                            Xls.SetCellValue(i, 5, ROC_Date(dt.Rows[i - 4]["perBirthday"].ToString()));
+                            Xls.SetCellValue(i, 6, dt.Rows[i - 4]["perPosition"].ToString());
+                            Xls.SetCellValue(i, 7, "B");
+                            Xls.SetCellValue(i, 8, ROC_Date(dt.Rows[i - 4]["startDate"].ToString()));
+                            if (item == "02")
+                                Xls.SetCellValue(i, 9, dt.Rows[i - 4]["pgiChangeDate"].ToString());
+                            if (dt.Rows[i - 4]["pgiType"].ToString() == "02")
+                            {
+                                Xls.SetCellValue(i, 10, dt.Rows[i - 4]["pfTitle"].ToString());
+                                Xls.SetCellValue(i, 11, dt.Rows[i - 4]["pfName"].ToString());
+                                Xls.SetCellValue(i, 12, dt.Rows[i - 4]["pfIDNumber"].ToString());
+                                Xls.SetCellValue(i, 13, ROC_Date(dt.Rows[i - 4]["pfBirthday"].ToString()));
+                                birthYear = DateTime.Parse(dt.Rows[i - 4]["pfBirthday"].ToString()).ToString("yyyy");
+                            }
+                            string age = (Int32.Parse(DateTime.Now.ToString("yyyy")) - Int32.Parse(birthYear)).ToString();
+                            Xls.SetCellValue(i, 14, age);
+                        }
+                    }
+                }
+            }//if category end
 
             string UpLoadPath = ConfigurationManager.AppSettings["UploadFileRootDir"];
             if (!Directory.Exists(UpLoadPath.Substring(0, UpLoadPath.LastIndexOf("\\"))))//如果上傳路徑中沒有該目錄，則自動新增

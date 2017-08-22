@@ -325,6 +325,33 @@ order by perIDNumber ");
         return ds;
     }
 
+    public DataTable Pgi_Export(string pgiGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select pgiType,
+(select cbName from sy_CodeBranches where cbStatus='I' and cbGuid=perDep) perDep,
+perNo,perName,perIDNumber,perBirthday,
+(select code_desc from sy_codetable where code_group='02' and code_value=perPosition) perPosition,perFirstDate,
+CONVERT(VARCHAR(10),(SELECT DATEADD(month, 1, perFirstDate)),111) startDate,
+(select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle,pfName,pfIDNumber,pfBirthday,pgiChangeDate
+from sy_PersonGroupInsurance
+left join sy_Person on pgiPerGuid=perGuid and perStatus='A'
+left join sy_PersonFamily on pgiPfGuid=pfGuid and pfStatus='A' 
+where pgiGuid in (" + pgiGuid + @") and pgiStatus='A'
+");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@pgiGuid", pgiGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
     public DataTable checkLastStatus(string perGuid)
     {
         SqlCommand oCmd = new SqlCommand();

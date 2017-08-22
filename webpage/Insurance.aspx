@@ -68,7 +68,7 @@
                 });
             });
 
-            $(document).on("click", "#L_ExportBtn,#H_ExportBtn,#ppExportBtn,#PfiExportBtn", function () {
+            $(document).on("click", "#L_ExportBtn,#H_ExportBtn,#ppExportBtn,#PfiExportBtn,#PgiExportBtn", function () {
                 var eType, eItem, cate, ckname;
                 switch (this.id) {
                     case "L_ExportBtn":
@@ -92,6 +92,11 @@
                         cate = "PFI";
                         ckname = "pfick";
                         eItem = $("#ddlPfExport").val();
+                        break;
+                    case "PgiExportBtn":
+                        cate = "PGI";
+                        ckname = "pgick";
+                        eItem = $("#ddlPgExport").val();
                         break;
                 }
 
@@ -1626,6 +1631,12 @@
                 if ($("input[name='pgi_Type']:checked").val() == "01") {
                     $("#pgi_FName").attr("disabled", "disabled");
                     $("#PGFnBox").hide();
+                    $("#pgi_FName").val("");
+                    $("#pg_PfGuid").val("");
+                    $("#pg_fName").html("");
+                    $("#pgi_IDNum").html("");
+                    $("#pgi_Birth").html("");
+                    $("#pgi_Title").html("");
                 }
                 else {
                     $("#pgi_FName").removeAttr("disabled");
@@ -1802,7 +1813,8 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getGroupInsList.ashx",
                 data: {
-                    keyword: $("#pg_keyword").val()
+                    keyword: $("#pg_keyword").val(),
+                    ddlPgExport: $("#ddlPgExport").val()
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -1834,7 +1846,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pgdelbtn" aid=' + $(this).children("pgiGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("code_desc").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pgiChange").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfName").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pfTitle").text() + '</td>';
                                 if ($(this).children("pgiType").text() == "01")
@@ -2292,6 +2304,14 @@
                             <div class="right">
                                 <a id="newPGbtn" href="javascript:void(0);" class="keybtn">新增</a>
                                 <a id="PG_SearchBtn" href="javascript:void(0);" sv="N" class="keybtn">查詢</a>
+                            </div>
+                            <div>
+                                <a href="javascript:void(0);" id="PgiExportBtn" class="keybtn">匯出</a>
+                                <select id="ddlPgExport" name="ddlPgExport" onchange="getGroupInsList()">
+                                    <option value="">--請選擇--</option>
+                                    <option value="01">加保</option>
+                                    <option value="02">退保</option>
+                                </select>
                             </div>
                         </div><br />
                         <div id="pg_searchDiv" style="display:none;">

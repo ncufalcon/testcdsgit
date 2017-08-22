@@ -6,6 +6,7 @@
     <%--Common--%>
     <script type="text/javascript">
         $(document).ready(function () {
+            getddl("02", "#pPosit");
             getddl("02", "#pPosition");
             getddl("17", "#pf_Title");
             getddl("18", "#pp_Identity");  
@@ -614,11 +615,16 @@
 
             //表頭排序
             $(document).on("click", "a[name='sortbtn']", function () {
+                $("a[name='sortbtn']").removeClass("asc desc")
                 $("#sortName").val($(this).attr("atp"));
-                if ($("#sortMethod").val() == "desc")
+                if ($("#sortMethod").val() == "desc") {
                     $("#sortMethod").val("asc");
-                else
+                    $(this).addClass('asc');
+                }
+                else {
                     $("#sortMethod").val("desc");
+                    $(this).addClass('desc');
+                }
                 getData();
             });
 
@@ -641,7 +647,12 @@
                 async: false, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getPersonList.ashx",
                 data: {
-                    keyword: $("#keyword").val(),
+                    pno: $("#pno").val(),
+                    pname: $("#pname").val(),
+                    pidno: $("#pidno").val(),
+                    pcomp: $("#pcomp").val(),
+                    pdep: $("#pdep").val(),
+                    pposit: $("#pPosit").val(),
                     sortMethod: $("#sortMethod").val(),
                     sortName: $("#sortName").val()
                 },
@@ -660,17 +671,17 @@
 
                     if (data != null) {
                         data = $.parseXML(data);
-                        $("#perlist").empty();
-                        var tabstr = '<thead><tr>';
-                        tabstr += '<th nowrap="nowrap">操作</th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perNo">編號</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perName">姓名</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="cbName">所屬分店</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perSex">性別</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentityCode">補助等級</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentity">投保身分</a></th>';
-                        tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perFirstDate">到職日</a></th>';
-                        tabstr += '</tr></thead><tbody>';
+                        $("#perlist tbody").empty();
+                        var tabstr = '';
+                        //tabstr += '<th nowrap="nowrap">操作</th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perNo">編號</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perName">姓名</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="cbName">所屬分店</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perSex">性別</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentityCode">補助等級</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentity">投保身分</a></th>';
+                        //tabstr += '<th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perFirstDate">到職日</a></th>';
+                        //tabstr += '</tr></thead><tbody>';
                         if ($(data).find("info_item").length > 0) {
                             $(data).find("info_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("perGuid").text() + '>';
@@ -690,8 +701,8 @@
                         }
                         else
                             tabstr += "<tr><td colspan='8'>查詢無資料</td></tr>";
-                        tabstr += '</tbody>';
-                        $("#perlist").append(tabstr);
+                        //tabstr += '</tbody>';
+                        $("#perlist tbody").append(tabstr);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
                         $(".fixTable").tableHeadFixer();
@@ -1490,6 +1501,12 @@
             border: 1px solid #000;
             color: #000;
         }
+        a.asc:after {
+            content: attr(data-content) '▲';
+        }
+        a.desc:after {
+            content: attr(data-content) '▼';
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -1514,12 +1531,37 @@
                 </div>
                 <br /><br />
                 <div id="searchDiv" class="fixwidth" style="display:none;">
-                    <span class="font-title">關鍵字：</span><input id="keyword" type="text" class="inputex" />
-                    <input type="button" value="查詢" class="keybtn" onclick="getData()" />
+                    <table width="100%">
+                        <tr>
+                            <td align="right">員編：</td><td><input id="pno" type="text" class="inputex" /></td>
+                            <td align="right">姓名：</td><td><input id="pname" type="text" class="inputex" /></td>
+                            <td align="right">身分證號：</td><td><input id="pidno" type="text" class="inputex" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right">公司別：</td><td><input id="pcomp" type="text" class="inputex" /></td>
+                            <td align="right">部門：</td><td><input id="pdep" type="text" class="inputex" /></td>
+                            <td align="right">職務：</td><td><select id="pPosit" name="pPosit" class="inputex"></select></td>
+                        </tr>
+                        <tr><td align="right" colspan="8"><input type="button" value="查詢" class="keybtn" onclick="getData()" /></td></tr>
+                    </table>
                 </div><br />
                 <div class="fixwidth">
                     <div class="stripeMe fixTable" style="height:175px;">
-                        <table id="perlist" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
+                        <table id="perlist" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th nowrap="nowrap">操作</th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perNo">編號</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perName">姓名</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="cbName">所屬分店</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perSex">性別</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentityCode">補助等級</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="iiIdentity">投保身分</a></th>
+                                    <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perFirstDate">到職日</a></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div><!-- overwidthblock -->
                 </div><!-- fixwidth -->
                 <div class="fixwidth" style="margin-top:10px;">

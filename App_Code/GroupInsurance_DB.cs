@@ -94,25 +94,30 @@ public class GroupInsurance_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 pgiGuid,pgiPerGuid,pgiPfGuid,perNo,perName,pfName,pfTitle
-,pgiInsuranceCode,pgiType,pgiChangeDate,code_desc
+        sb.Append(@"SELECT top 200 pgiGuid,pgiPerGuid,pgiPfGuid,perNo,perName,pfName,pgiInsuranceCode,pgiType,pgiChangeDate,
+(select code_desc from sy_codetable where code_group='14' and code_value=pgiChange) pgiChange,
+(select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle
 from sy_PersonGroupInsurance
 left join sy_Person on perGuid=pgiPerGuid
 left join sy_PersonFamily on pfGuid=pgiPfGuid
 left join sy_GroupInsurance on giGuid=pgiInsuranceCode
-left join sy_codetable on code_group='14' and code_value=pgiChange
-where pgiStatus<>'D' ");
+where pgiStatus<>'D'  ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
-            sb.Append(@"order by sy_PersonGroupInsurance.pgiChangeDate desc,pgiCreateDate desc ");
+        if (pgiChange != "")
+        {
+            sb.Append(@"and pgiChange=@pgiChange ");
+        }
+        sb.Append(@"order by sy_PersonGroupInsurance.pgiChangeDate desc,pgiCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@pgiChange", pgiChange);
         oda.Fill(ds);
         return ds;
     }
@@ -260,21 +265,40 @@ where  pgiStatus<>'D' and pgiGuid=@pgiGuid ");
         return ds;
     }
 
-    public DataTable checkLastStatus(string perGuid)
+    public DataTable checkPerLastStatus(string perGuid)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select * from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid 
-and pgiChangeDate=(select MAX(pgiChangeDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid) 
-and pgiCreateDate=(select MAX(pgiCreateDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid) ");
+        sb.Append(@"select * from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid and pgiType='01'
+and pgiChangeDate=(select MAX(pgiChangeDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid and pgiType='01') 
+and pgiCreateDate=(select MAX(pgiCreateDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPerGuid=@perGuid and pgiType='01') ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable checkPFLastStatus(string pfGuid)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select * from sy_PersonGroupInsurance where pgiStatus='A' and pgiPfGuid=@pgiPfGuid
+and pgiChangeDate=(select MAX(pgiChangeDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPfGuid=@pgiPfGuid) 
+and pgiCreateDate=(select MAX(pgiCreateDate) from sy_PersonGroupInsurance where pgiStatus='A' and pgiPfGuid=@pgiPfGuid) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@pgiPfGuid", pfGuid);
         oda.Fill(ds);
         return ds;
     }

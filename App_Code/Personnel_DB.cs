@@ -62,7 +62,6 @@ public class Personnel_DB
 	string perSyAccount = string.Empty;
 	string perReferenceNumber = string.Empty;
     decimal perDetentionRatio;
-    decimal perDetentionFee;    
     decimal perMonthPayroll;
     decimal perYearEndBonuses;
     decimal perYears;
@@ -252,11 +251,7 @@ public class Personnel_DB
 	{
 		set { perDetentionRatio = value; }
 	}
-    public decimal _perDetentionFee
-    {
-        set { perDetentionFee = value; }
-    }
-    public decimal _perMonthPayroll
+	public decimal _perMonthPayroll
 	{
 		set { perMonthPayroll = value; }
 	}
@@ -298,21 +293,37 @@ public class Personnel_DB
 	}
 	#endregion
 
-	public DataTable SelectList(string sortMethod,string sortName)
+	public DataTable SelectList(string sortMethod,string sortName,string compName,string cbName)
 	{
 		SqlCommand oCmd = new SqlCommand();
 		oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
 		StringBuilder sb = new StringBuilder();
 
-		sb.Append(@"SELECT top 200 perGuid,perNo,perName,cbName,perSex,iiIdentityCode,iiIdentity,perFirstDate from sy_Person 
+		sb.Append(@"SELECT top 200 perGuid,perNo,perName,cbName,perSex,iiIdentityCode,iiIdentity,perFirstDate
+from sy_Person 
 left join sy_Company on comGuid=perComGuid
 left join sy_CodeBranches on cbGuid=perDep
 left join sy_InsuranceIdentity on iiGuid=perInsuranceDes
 where perStatus<>'D' ");
-        if (KeyWord != "")
-        {
-            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
-        }
+        //       if (KeyWord != "")
+        //       {
+        //           sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(perIDNumber) LIKE '%' + upper(@KeyWord) + '%')) 
+        //or (upper(cbName) LIKE '%' + upper(@KeyWord) + '%')");
+        //       }
+
+        if (perNo != "")
+            sb.Append(@"and upper(perNo) LIKE '%' + upper(@perNo) + '%' ");
+        if (perName != "")
+            sb.Append(@"and upper(perName) LIKE '%' + upper(@perName) + '%' ");
+        if (perIDNumber != "")
+            sb.Append(@"and upper(perIDNumber) LIKE '%' + upper(@perIDNumber) + '%' ");
+        if (compName != "")
+            sb.Append(@"and upper(comAbbreviate) LIKE '%' + upper(@compName) + '%' ");
+        if (cbName != "")
+            sb.Append(@"and upper(cbName) LIKE '%' + upper(@cbName) + '%' ");
+        if (perPosition != "")
+            sb.Append(@"and perPosition=@perPosition ");
+
         if (sortName == "")
             sb.Append(@"order by perFirstDate desc,perCreateDate desc ");
         else
@@ -322,7 +333,12 @@ where perStatus<>'D' ");
 		oCmd.CommandType = CommandType.Text;
 		SqlDataAdapter oda = new SqlDataAdapter(oCmd);
 		DataTable ds = new DataTable();
-        oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
+        oCmd.Parameters.AddWithValue("@perNo", perNo);
+        oCmd.Parameters.AddWithValue("@perName", perName);
+        oCmd.Parameters.AddWithValue("@perIDNumber", perIDNumber);
+        oCmd.Parameters.AddWithValue("@comAbbreviate", compName);
+        oCmd.Parameters.AddWithValue("@cbName", cbName);
+        oCmd.Parameters.AddWithValue("@perPosition", perPosition);
         oda.Fill(ds);
 		return ds;
 	}
@@ -828,7 +844,7 @@ where perGuid=@perGuid ";
         }
 
         sb.Append(@"select * from (
-          select ROW_NUMBER() over (order by slSubsidyCode,slCreatDate) itemNo,
+          select ROW_NUMBER() over (order by slCreatDate) itemNo,
           * from sy_SubsidyLevel where slStatus<>'D' ");
 
         if (KeyWord != "")
@@ -1109,7 +1125,6 @@ where perGuid=@perGuid
         oCmd.CommandText = @"update sy_Person set
 perReferenceNumber=@perReferenceNumber,
 perDetentionRatio=@perDetentionRatio,
-perDetentionFee=@perDetentionFee,
 perMonthPayroll=@perMonthPayroll,
 perYearEndBonuses=@perYearEndBonuses,
 perModifyId=@perModifyId,
@@ -1121,7 +1136,6 @@ where perGuid=@perGuid
         oCmd.Parameters.AddWithValue("@perGuid", perGuid);
         oCmd.Parameters.AddWithValue("@perReferenceNumber", perReferenceNumber);
         oCmd.Parameters.AddWithValue("@perDetentionRatio", perDetentionRatio);
-        oCmd.Parameters.AddWithValue("@perDetentionFee", perDetentionFee);
         oCmd.Parameters.AddWithValue("@perMonthPayroll", perMonthPayroll);
         oCmd.Parameters.AddWithValue("@perYearEndBonuses", perYearEndBonuses);
         oCmd.Parameters.AddWithValue("@perModifyId", perModifyId);
