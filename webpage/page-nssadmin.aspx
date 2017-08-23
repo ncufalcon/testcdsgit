@@ -26,6 +26,9 @@
                         call_il_date();//投保級距設定 生效日期
                         call_ildata();//投保級距設定
                         break;
+                    case "li_5":
+                        call_ssi_data();//到職保薪設定
+                        break;
                     case "li_1_1":
                         call_ibdata();//保險基本設定
                         break;
@@ -342,6 +345,14 @@
                 });
             });
             //*****************投保級距設定 ENDT***************//
+
+            //*****************到職保薪設定  START***************//
+            $("#btn_ssi").click(function () {
+                if (chk_ssi_data()) {
+                    mod_ssidata();
+                }
+            });
+            //*****************到職保薪設定  END***************//
         });
         //撈保險基本設定 資料
         function call_ibdata() {
@@ -1258,10 +1269,107 @@
                         $("#div_date").hide();
                         str_html += "<tr><td colspan='6'>查無資料</td></tr>";
                     }
-                }//success end
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
             });//ajax end
         }
 
+        //撈到職保薪設定
+        function call_ssi_data() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/page-nssadmin.ashx",
+                data: {
+                    func: "load_SetStartInsurance"
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    $("#tbl_ssi").empty();
+                    var str_html = "";
+                    if (response != "nodata") {
+                        $("#txt_labor").val(response[0].ssi_labor);
+                        $("#txt_ganbor").val(response[0].ssi_ganbor);
+                        $("#txt_tahui").val(response[0].ssi_tahui);
+                    } else {
+                        $("#txt_labor").val("0");
+                        $("#txt_ganbor").val("0");
+                        $("#txt_tahui").val("0");
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //檢查到職保新設定輸入欄位
+        function chk_ssi_data() {
+            var str_txt_labor = $("#txt_labor").val();
+            var str_txt_ganbor = $("#txt_ganbor").val();
+            var str_txt_tahui = $("#txt_tahui").val();
+            if (str_txt_labor=="") {
+                alert("請輸入勞保金額");
+                return false;
+            }
+            if (str_txt_labor == "") {
+                alert("請輸入勞保金額");
+                return false;
+            }
+            if (str_txt_tahui == "") {
+                alert("請輸入勞退金額");
+                return false;
+            }
+            if (str_txt_labor!="" && isNaN(str_txt_labor)) {
+                alert("勞保只能輸入數字");
+                return false;
+            }
+            if (str_txt_ganbor != "" && isNaN(str_txt_ganbor)) {
+                alert("健保只能輸入數字");
+                return false;
+            }
+            if (str_txt_tahui != "" && isNaN(str_txt_tahui)) {
+                alert("勞退只能輸入數字");
+                return false;
+            }
+            return true;
+        }
+        //新增/修改 到職保薪設定
+        function mod_ssidata(){
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/page-nssadmin.ashx",
+                data: {
+                    func: "mod_SetStartInsurance",
+                    mod_labor: $("#txt_labor").val(),
+                    mod_ganbor: $("#txt_ganbor").val(),
+                    mod_tahui: $("#txt_tahui").val()
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    if (response != "ok") {
+                        alert(response);
+                    } else {
+                        alert("修改成功");
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
         //匯入
         function setReflash(str_date) {
             call_il_date();
@@ -1284,6 +1392,7 @@
                         <li><a class="li_clk" id="li_2" href="#tabs-2">投保身分設定</a></li>
                         <li><a class="li_clk" id="li_3" href="#tabs-3">補助等級設定</a></li>
                         <li><a class="li_clk" id="li_4" href="#tabs-4">投保級距設定</a></li>
+                        <li><a class="li_clk" id="li_5" href="#tabs-5">到職保薪設定</a></li>
                     </ul>
                     <div id="tabs-1">
                         <div class="statabs margin10T">
@@ -1790,6 +1899,43 @@
 
                     </div>
                     <!--tabs-4 end-->
+                    <div id="tabs-5">
+                        <div class="tbsfixwidth" style="margin-top: 20px;" name="div_ssi">
+                            <span class="font-size3 font-bold">底薪及職能加給預設值維護</span>
+                            <div class="twocol margin15TB" name="div_ssi">
+                                <div class="right">
+                                    <a href="javascript:void(0);" class="keybtn" id="btn_ssi">儲存</a>
+                                </div>
+                            </div>
+                            <div class="statabs margin10T">
+                                <div class="gentable fixTable">
+                                    <table border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                                        <tr>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">勞保</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="inputex width100" id="txt_labor" name="txt_num" />
+                                            </td>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">健保</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="inputex width100" id="txt_ganbor" name="txt_num" />
+                                            </td>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">勞退</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="inputex width100" id="txt_tahui" name="txt_num" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tabs-5 end-->
                 </div>
                 <!-- statabs -->
                 <!-- 詳細資料end -->

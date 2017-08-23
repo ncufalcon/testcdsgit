@@ -95,13 +95,20 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
     {
         public string ilEffectiveDate { get; set; }
     }
-
+    //sy_SetStartInsurance 到職保薪設定
+    public class ssiTooL
+    {
+        public string ssi_labor { get; set; }
+        public string ssi_ganbor { get; set; }
+        public string ssi_tahui { get; set; }
+    }
     sy_InsuranceBasic_DB ib_db = new sy_InsuranceBasic_DB();
     sy_GroupInsurance_DB gi_db = new sy_GroupInsurance_DB();
     sy_InsuranceIdentity_DB ii_db = new sy_InsuranceIdentity_DB();
     sy_GroupInsuranceIdentity_DB gii_db = new sy_GroupInsuranceIdentity_DB();
     sy_SubsidyLevel_DB sl_db = new sy_SubsidyLevel_DB();
     sy_InsuranceLevel_DB il_db = new sy_InsuranceLevel_DB();
+    sy_SetStartInsurance_DB ssi_db = new sy_SetStartInsurance_DB();
     public void ProcessRequest (HttpContext context) {
         string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
         string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
@@ -634,6 +641,65 @@ public class page_nssadmin : IHttpHandler, IRequiresSessionState
                 else {
                     context.Response.Write("nodata");
                 }
+                break;
+            //到職保薪設定
+            case "load_SetStartInsurance":
+                DataTable dt_ssi = new DataTable();
+                dt_ssi = ssi_db.SelectSetStartInsurance();
+                if (dt_ssi.Rows.Count > 0)
+                {
+                    //ssi_labor
+                    //ssi_ganbor
+                    //ssi_tahui
+                    List<ssiTooL> ssiList = new List<ssiTooL>();
+                    for (int i = 0; i < dt_ssi.Rows.Count; i++)
+                    {
+                        ssiTooL e = new ssiTooL();
+                        e.ssi_labor = dt_ssi.Rows[i]["ssi_labor"].ToString().Trim();
+                        e.ssi_ganbor = dt_ssi.Rows[i]["ssi_ganbor"].ToString().Trim();
+                        e.ssi_tahui = dt_ssi.Rows[i]["ssi_tahui"].ToString().Trim();
+                        ssiList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(ssiList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else {
+                    context.Response.Write("nodata");
+                }
+                break;
+
+            //新增/修改 到職保薪設定
+            case "mod_SetStartInsurance":
+                string mod_labor = string.IsNullOrEmpty(context.Request.Form["mod_labor"]) ? "0" : context.Request.Form["mod_labor"].ToString().Trim();
+                string mod_ganbor = string.IsNullOrEmpty(context.Request.Form["mod_ganbor"]) ? "0" : context.Request.Form["mod_ganbor"].ToString().Trim();
+                string mod_tahui = string.IsNullOrEmpty(context.Request.Form["mod_tahui"]) ? "0" : context.Request.Form["mod_tahui"].ToString().Trim();
+                try
+                {
+                    DateTime dt_now = DateTime.Now;
+                    ssi_db._ssi_labor = Convert.ToDecimal(mod_labor);
+                    ssi_db._ssi_ganbor = Convert.ToDecimal(mod_ganbor);
+                    ssi_db._ssi_tahui = Convert.ToDecimal(mod_tahui);
+                    ssi_db._ssi_CreateId = session_no;
+                    ssi_db._ssi_ModifyId = session_no;
+                    ssi_db._ssi_CreateDate = dt_now;
+                    ssi_db._ssi_ModifyDate = dt_now;
+                    DataTable dt_chkssi = new DataTable();
+                    dt_chkssi = ssi_db.SelectSetStartInsurance();
+                    if (dt_chkssi.Rows.Count > 0)
+                    {//修改
+                        ssi_db.UpdateSetStartInsurance();
+                    }
+                    else {//新增
+                        ssi_db.InsertSetStartInsurance();
+                    }
+                    context.Response.Write("ok");
+                }
+                catch {
+                    context.Response.Write("error");
+                }
+
                 break;
 
         }
