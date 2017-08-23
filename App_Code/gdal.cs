@@ -625,7 +625,7 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pDep))
                 sql += "and pDepGuid = @pDep ";
 
-            sql += "order by pPerNo desc ";
+            sql += "order by cbValue, pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));

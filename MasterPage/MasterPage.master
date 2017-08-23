@@ -67,7 +67,7 @@
                                 <li><a href="Page-PayrollPrint.aspx" target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
                                 <li><a href="Page-PayrollList.aspx" target='_self' title="薪資冊">薪資冊</a></li>
                                 <li><a href="page-SalaryBar.html" target='_self' title="電子薪資條">電子薪資條</a></li>
-                                <!--<li><a href='page-Salary.html' target='_self' title="薪資管理">薪資管理</a></li>-->
+                                <li><a href="page-IndividualTax.aspx" target='_self' title="申報所得稅">申報所得稅</a></li>
                             </ul>
                         </li>
                            <li>

@@ -494,6 +494,62 @@ public class Common
         else { return ""; }
 
     }
+
+
+    /// <summary>
+    /// 去小數點後的 0
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public string cutPointZero(string str)
+    {
+        try
+        {
+            if (str.IndexOf(".") > 0)
+            {
+                while (str.Substring(str.Length - 1, 1).Equals("0"))
+                {
+                    str = str.Substring(0, str.Length - 1);
+                }
+
+                if (str.Substring(str.Length - 1, 1).Equals("."))
+                    str = str.Substring(0, str.Length - 1);
+            }
+
+            return str;
+        }catch(Exception ex) { return "0"; }
+    }
+
+
+    /// <summary>
+    /// 去小數點後的 0 型態轉double
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
+    public double toDou(string str)
+    {
+        try
+        {
+            if (str.IndexOf(".") > 0)
+            {
+                while (str.Substring(str.Length - 1, 1).Equals("0"))
+                {
+                    str = str.Substring(0, str.Length - 1);
+                }
+
+                if (str.Substring(str.Length - 1, 1).Equals("."))
+                    str = str.Substring(0, str.Length - 1);
+            }
+
+            double dec = 0;
+            bool b = double.TryParse(str, out dec);
+            if (b == true)
+                return double.Parse(str);
+            else
+                return 0;
+        }
+        catch (Exception ex) { return 0; }
+    }
 }
 
 public class JavaScript
