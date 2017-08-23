@@ -66,9 +66,8 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             string pSyAccount = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pSyAccount"].ToString() : "";
             //法院執行命令
             string pReferenceNumber = (context.Request.Form["pReferenceNumber"] != null) ? context.Request.Form["pReferenceNumber"].ToString() : "";
-            string pDetentionRatio = (!string.IsNullOrEmpty(context.Request.Form["pDetentionRatio"])) ? context.Request.Form["pDetentionRatio"].ToString() : "0";
-            string pDetentionFee = (!string.IsNullOrEmpty(context.Request.Form["pDetentionFee"])) ? context.Request.Form["pDetentionFee"].ToString() : "0";
-
+            string pDetentionRatio = (context.Request.Form["pDetentionRatio"] != null) ? context.Request.Form["pDetentionRatio"].ToString() : "";
+            string pDetentionFee = (context.Request.Form["pDetentionFee"] != null) ? context.Request.Form["pDetentionFee"].ToString() : "";
             string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "";
             string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "";
 
