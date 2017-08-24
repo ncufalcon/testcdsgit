@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title>CDS薪資管理系統</title>
     <link href="../css/myITRIproject/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
     <link href="../css/jquery.mCustomScrollbar.css" rel="stylesheet" type="text/css" />
     <link href="../css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
@@ -52,6 +52,7 @@
     <a href='#' target='_self' title="人事資料管理">人事資料管理</a>
         <ul>
             <li><a href='PersonnelInfo.aspx' target='_self' title="基本資料管理">基本資料管理</a></li>
+            <li><a href='Insurance.aspx' target='_self' title="保險管理">保險管理</a></li>
             <li><a href='page-Modify.aspx' target='_self' title="異動管理">異動管理</a></li>
         </ul>
     </li>
