@@ -542,12 +542,12 @@ union
 select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate ChangeDate,0,0,'',
 (select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,'','',''
-from sy_PersonFamily 
-left join sy_Person on pfPerGuid=perGuid
+from sy_PersonFamilyInsurance 
+left join sy_Person on pfiPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
-left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A' 
-	and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A')
-where pfPerGuid in (" + perGuid + @") and pfStatus='A'
+left join sy_PersonFamily on pfPerGuid=perGuid and pfStatus='A'
+where pfiPerGuid in (" + perGuid + @") and pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A' 
+and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A')
 order by perIDNumber,fID ");
 
         oCmd.CommandText = sb.ToString();
