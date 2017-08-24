@@ -87,9 +87,9 @@
           <table  border="0" cellspacing="0" cellpadding="0">
               <tr>
                   <td class="width15" align="right"><div class="font-title titlebackicon">年度</div></td>
-                  <td class="width35"><input type="text" id="txt_yyyy" autofocus="autofocus" class="inputex width60"  /></td>
+                  <td class="width35"><input type="text" id="txt_yyyy_gen" autofocus="autofocus" class="inputex width60"  /></td>
                   <td  style="text-align:right">
-                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genPayroll();">開始所得稅資料</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genPayroll();">開始計算所得稅資料</a>
                       <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
                   </td>
               </tr>
@@ -104,7 +104,7 @@
                     <div class="twocol margin15T">
                             <div class="right">
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
-                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opGenPayroll();">計算薪資</a>
+                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opGenPayroll();">產生所得稅資料</a>
                             </div>
                         </div>
             <div class="fixwidth" style="margin-top:20px;">
@@ -124,7 +124,7 @@
                     <ul>
                         <li><a href="#tabs-1">計薪資料一</a></li>
                         <li><a href="#tabs-2">計薪資料二</a></li>
-                        <li><a href="#tabs-3" onclick="JsEven.BuckleList()">法扣</a></li>
+                        <li><a href="#tabs-3">計薪資料三</a></li>
                     </ul>
                     <div id="tabs-1">
                             <div class="twocol margin15TB">
@@ -135,27 +135,35 @@
                         <div class="gentable">
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">年度</div></td>
+                                    <td class="width15" id="td_yyyy"></td>
+                                </tr>
+                                <tr>
                                     <td class="width10" align="right"><div class="font-title titlebackicon">員工編號</div></td>
-                                    <td class="width15" id="td_PerNo"></td>
+                                    <td class="width15" id="td_iitPerNo"></td>
                                     <td class="width10" align="right"><div class="font-title titlebackicon">姓名</div></td>
-                                    <td class="width15" id="td_PerName"></td>
-                                    <td class="width10" align="right"><div class="font-title titlebackicon">申報公司</div></td>
-                                    <td class="width15" id="td_PerCom"></td>
+                                    <td class="width15" id="td_iitPerName"></td>
                                     <td class="width10" align="right"><div class="font-title titlebackicon">部門</div></td>
-                                    <td class="width15" id="td_PerDep"></td>
+                                    <td class="width15" id="td_iitPerDep"></td>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">身分證號</div></td>
+                                    <td class="width15" id="td_iitPerIDNumber"></td>
+                                </tr>
+                                <tr>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">申報公司</div></td>
+                                    <td class="width15" id="td_iitComName"></td>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">統一編號</div></td>
+                                    <td class="width15" id="td_iitComUniform"></td>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">稽徵機關代號</div></td>
+                                    <td class="width15" id="td_iitInstitutionCode"></td>
                                 </tr>
                                 </table><br /><br />
                                 <table width="98%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td style="width:15%" ></td>
+                                        <td style="width:15%"><div class="font-title">稽徵機關代號</div></td>
+                                        <td style="width:7%"><span id="sp_iitInstitutionCode"></span></td>
+
+                                        <td style="width:15%"><div class="font-title">年度</div></td>
                                         <td style="width:7%;text-align:center"><div class="font-title">時數</div></td>
-                                        <td style="width:7%;text-align:center"><div class="font-title">薪資</div></td>
-                                        <td style="width:15%"></td>
-                                        <td style="width:7%;text-align:center"><div class="font-title">時數</div></td>
-                                        <td style="width:7%;text-align:center"><div class="font-title">薪資</div></td>
-                                        <td style="width:15%"></td>
-                                        <td style="width:7%;text-align:center"><div class="font-title">時數</div></td>
-                                        <td style="width:7%;text-align:center"><div class="font-title">薪資</div></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">平日加班時數-1類</div></td>
