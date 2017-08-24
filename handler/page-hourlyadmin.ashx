@@ -119,6 +119,13 @@ public class page_hourlyadmin : IHttpHandler, IRequiresSessionState {
         public string code_value { get; set; }
         public string code_desc { get; set; }
     }
+    //sy_AnnualLeave 欄位
+    public class alTooL
+    {
+        public string alGuid { get; set; }
+        public string alYears { get; set; }
+        public string alDays { get; set; }
+    }
     sy_BasicSalary_DB bs_db = new sy_BasicSalary_DB();
     sy_SalaryFormula sf_db = new sy_SalaryFormula();
     sy_SalaryItem_DB si_db = new sy_SalaryItem_DB();
@@ -126,6 +133,7 @@ public class page_hourlyadmin : IHttpHandler, IRequiresSessionState {
     sy_Taxation_DB ti_db = new sy_Taxation_DB();
     CodeTable_DB code_db = new CodeTable_DB();
     sy_PayHoliday_DB ph_db = new sy_PayHoliday_DB();
+    sy_AnnualLeave_DB al_db = new sy_AnnualLeave_DB();
     public void ProcessRequest (HttpContext context)
     {
         string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
@@ -348,19 +356,14 @@ public class page_hourlyadmin : IHttpHandler, IRequiresSessionState {
                                     si_db.UpdateSalaryItem();
                                     context.Response.Write("ok");
                                 }
-
                             }
                             else {
                                 si_db._siModifyId = session_no;
                                 si_db.UpdateSalaryItem();
                                 context.Response.Write("ok");
                             }
-
-
                         }
-
                     }
-
                 }
                 catch (Exception ex) {
                     context.Response.Write("error");
@@ -722,6 +725,87 @@ public class page_hourlyadmin : IHttpHandler, IRequiresSessionState {
                 }
                 else {
                     context.Response.Write("nodata");
+                }
+                break;
+            //撈特休資料
+            case "load_spddata":
+                string mod_spd_guid = string.IsNullOrEmpty(context.Request.Form["sel_guid"]) ? "" : context.Request.Form["sel_guid"].ToString().Trim();
+                al_db._alGuid = mod_spd_guid;
+                DataTable dt_spd = al_db.SelectAnnualLeave();
+                if (dt_spd.Rows.Count > 0)
+                {
+                    List<alTooL> alList = new List<alTooL>();
+                    for (int i = 0; i < dt_spd.Rows.Count; i++)
+                    {
+                        alTooL e = new alTooL();
+                        e.alGuid = dt_spd.Rows[i]["alGuid"].ToString().Trim();
+                        e.alYears = dt_spd.Rows[i]["alYears"].ToString().Trim();
+                        e.alDays = dt_spd.Rows[i]["alDays"].ToString().Trim();
+                        alList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(alList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else {
+                    context.Response.Write("nodata");
+                }
+                break;
+            //刪除特休資料
+            case "del_spddata":
+                string del_alguid = string.IsNullOrEmpty(context.Request.Form["del_guid"]) ? "" : context.Request.Form["del_guid"].ToString().Trim();
+                try {
+                    al_db._alGuid = del_alguid;
+                    al_db.DeleteAnnualLeave();
+                    context.Response.Write("ok");
+                }
+                catch (Exception ex) {
+                    context.Response.Write("error");
+                }
+                break;
+            //新增/修改 特休資料
+            case "mod_spddata":
+                string mod_alguid = string.IsNullOrEmpty(context.Request.Form["mod_guid"]) ? "" : context.Request.Form["mod_guid"].ToString().Trim();
+                string mod_years = string.IsNullOrEmpty(context.Request.Form["mod_years"]) ? "" : context.Request.Form["mod_years"].ToString().Trim();
+                string mod_days = string.IsNullOrEmpty(context.Request.Form["mod_days"]) ? "" : context.Request.Form["mod_days"].ToString().Trim();
+                string mod_status = string.IsNullOrEmpty(context.Request.Form["mod_status"]) ? "" : context.Request.Form["mod_status"].ToString().Trim();
+                try {
+                    DateTime dt_now = DateTime.Now;
+                    al_db._alYears = Convert.ToDecimal(mod_years);
+                    al_db._alDays = Convert.ToDecimal(mod_days);
+                    al_db._alCreateId = session_no;
+                    al_db._alModifyId = session_no;
+                    al_db._alCreateDate = dt_now;
+                    al_db._alModifyDate = dt_now;
+                    al_db._alGuid = mod_alguid;
+                    DataTable dt_chk_year = al_db.SelectAnnualLeaveByYears();
+                    if (dt_chk_year.Rows.Count > 0)
+                    {
+                        context.Response.Write("已經有年資" + mod_years + "年的特別休假資料，請檢查您輸入的資料");
+                    }
+                    else {
+                        if (mod_status == "新增")
+                        {
+                            al_db._alGuid = Guid.NewGuid().ToString();
+                            al_db.InsertAnnualLeave();
+                            context.Response.Write("ok");
+                        }
+                        else if (mod_status == "修改")
+                        {
+                            al_db.UpdateAnnualLeave();
+                            context.Response.Write("ok");
+                        }
+                        else
+                        {
+                            context.Response.Write("error");
+                        }
+                    }
+
+
+                }
+                catch (Exception ex) {
+                    context.Response.Write("error");
                 }
                 break;
         }

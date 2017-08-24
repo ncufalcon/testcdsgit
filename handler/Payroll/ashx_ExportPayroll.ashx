@@ -108,7 +108,6 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                     row.CreateCell(33).SetCellValue(0);
                     row.CreateCell(34).SetCellValue(0);
                     row.CreateCell(35).SetCellValue(0);
-
                     row.CreateCell(36).SetCellValue(0);
                     row.CreateCell(37).SetCellValue(0);
                     row.CreateCell(38).SetCellValue(0);
