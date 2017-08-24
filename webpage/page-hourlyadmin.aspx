@@ -31,6 +31,9 @@
                     case "li_5":
                         load_phdata();//撈給薪假資料
                         break;
+                    case "li_6":
+                        load_spd();//撈特別休假資料
+                        break;
                     case "li_1-1":
                         $("#txt_hidden_sf_now").val("");
                         $("#txt_pay_valset_taxpercent").val("");
@@ -139,56 +142,7 @@
             $("#btn_payset").click(function () {
                 mod_paysetdata();
             });
-            //var row_count = 0;
-            //時薪設定-課稅所得 tr 點擊事件
-            //$(document).on("click", "#tbl_ti tbody tr", function () {
-            //    var this_id = $(this).attr("trguid");
-            //    $("#txt_hidden_ti_guid").val(this_id);
-            //    load_TaxationDetailbyGuid();
-            //});
 
-            ////時薪設定-課稅所得 下面輸入 新增 點擊事件
-            //$(document).on("click", "a[name='a_add_tf']", function () {
-            //    row_count = row_count + 1;
-            //    var add_html = "";
-            //    add_html += '<tr>';
-            //    add_html += '<td>';
-            //    add_html += '<input type="radio" name="radio_tf_class' + (row_count) + '" checked="checked" />參數選擇<input type="radio" name="radio_tf_class' + (row_count) + '" />自行輸入';
-            //    add_html += '</td>';
-            //    add_html += '<td>';
-            //    add_html += '<select>';
-            //    add_html += '<option>應稅項目加總</option>';
-            //    add_html += '<option>出勤天數</option>';
-            //    add_html += '</select>';
-            //    add_html += '</td>';
-            //    add_html += '<td>';
-            //    add_html += '<select>';
-            //    add_html += '<option>+</option>';
-            //    add_html += '<option>-</option>';
-            //    add_html += '<option>X</option>';
-            //    add_html += '<option>/</option>';
-            //    add_html += '</select>';
-            //    add_html += '</td>';
-            //    add_html += '<td align="center" nowrap="nowrap" class="font-normal">';
-            //    add_html += '<a href="javascript:void(0);" name="a_add_tf">新增</a>&nbsp;&nbsp;<a href="javascript:void(0);" name="a_del_tf">刪除</a>';
-            //    add_html += '</td>';
-            //    add_html += '</tr>';
-            //    $(this).parent().parent().after(add_html);
-            //});
-            ////時薪設定-課稅所得 下面輸入 刪除 點擊事件
-            //$(document).on("click", "a[name='a_del_tf']", function () {
-            //    $(this).parent().parent().remove();
-            //});
-            //radio
-            //$(document).on("click", "#tbl_tf input[type='radio']", function () {
-            //    $(this).parent().parent().children("td").eq(1).empty();
-            //    if ($(this).val() == "自行輸入") {
-            //        $(this).parent().parent().children("td").eq(1).append("<input type='text' />");
-            //    }
-            //    if ($(this).val() == "參數選擇") {
-            //        $(this).parent().parent().children("td").eq(1).append("<select></select>");
-            //    }
-            //});
             ////撈薪資計算公式 參數設定資料
             function load_paysetdata() {
                 $("#tbl_sf").empty();
@@ -365,114 +319,6 @@
                 }
             }
 
-            ////撈 薪資計算公式設定-課稅所得 公式資料 BY GUID
-            //function load_TaxationDetailbyGuid() {
-            //    $("#tbl_tf").empty();
-            //    $.ajax({
-            //        type: "POST",
-            //        async: true, //在沒有返回值之前,不會執行下一步動作
-            //        url: "../handler/page-hourlyadmin.ashx",
-            //        data: {
-            //            func: "load_tidata",
-            //            str_ti_guid: $("#txt_hidden_ti_guid").val()
-            //        },
-            //        error: function (xhr) {
-            //            alert("error");
-            //        },
-            //        beforeSend: function () {
-            //            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-            //        },
-            //        success: function (response) {
-            //            var str_html = "";
-            //            if (response != "nodata") {
-            //                if (response[0].tfTiGuid != "" && response[0].tfTiGuid != null) {
-            //                } else {
-            //                    row_count = 3;
-            //                    str_html += '<tr>';
-            //                    str_html += '<th>類別</th>';
-            //                    str_html += '<th>項目</th>';
-            //                    str_html += '<th>計算</th>';
-            //                    str_html += '<th>操作</th>';
-            //                    str_html += '</tr>';
-            //                    str_html += '<tr>';
-            //                    str_html += '<td>';
-            //                    str_html += '<input type="radio" name="radio_tf_class1" checked="checked" value="參數選擇" />參數選擇<input type="radio" name="radio_tf_class1" value="自行輸入" />自行輸入';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>應稅項目加總</option>';
-            //                    str_html += '<option>出勤天數</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>+</option>';
-            //                    str_html += '<option>-</option>';
-            //                    str_html += '<option>X</option>';
-            //                    str_html += '<option>/</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td align="center" nowrap="nowrap" class="font-normal">';
-            //                    str_html += '<a href="javascript:void(0);" name="a_add_tf">新增</a>&nbsp;&nbsp;<a href="javascript:void(0);" name="a_del_tf">刪除</a>';
-            //                    str_html += '</td>';
-            //                    str_html += '</tr>';
-            //                    str_html += '<tr>';
-            //                    str_html += '<td>';
-            //                    str_html += '<input type="radio" name="radio_tf_class2" checked="checked" value="參數選擇" />參數選擇<input type="radio" name="radio_tf_class2" value="自行輸入" />自行輸入';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>應稅項目加總</option>';
-            //                    str_html += '<option>出勤天數</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>+</option>';
-            //                    str_html += '<option>-</option>';
-            //                    str_html += '<option>X</option>';
-            //                    str_html += '<option>/</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td align="center" nowrap="nowrap" class="font-normal">';
-            //                    str_html += '<a href="javascript:void(0);" name="a_add_tf">新增</a>&nbsp;&nbsp;<a href="javascript:void(0);" name="a_del_tf">刪除</a>';
-            //                    str_html += '</td>';
-            //                    str_html += '</tr>';
-            //                    str_html += '<tr>';
-            //                    str_html += '<td>';
-            //                    str_html += '<input type="radio" name="radio_tf_class3" checked="checked" value="參數選擇" />參數選擇<input type="radio" name="radio_tf_class3" value="自行輸入" />自行輸入';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>應稅項目加總</option>';
-            //                    str_html += '<option>出勤天數</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td>';
-            //                    str_html += '<select>';
-            //                    str_html += '<option>+</option>';
-            //                    str_html += '<option>-</option>';
-            //                    str_html += '<option>X</option>';
-            //                    str_html += '<option>/</option>';
-            //                    str_html += '</select>';
-            //                    str_html += '</td>';
-            //                    str_html += '<td align="center" nowrap="nowrap" class="font-normal">';
-            //                    str_html += '<a href="javascript:void(0);" name="a_add_tf">新增</a>&nbsp;&nbsp;<a href="javascript:void(0);" name="a_del_tf">刪除</a>';
-            //                    str_html += '</td>';
-            //                    str_html += '</tr>';
-            //                }
-            //            }
-            //            $("#tbl_tf").append(str_html);
-            //            $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-            //            $(".stripeMe tr:even").addClass("alt");
-            //            $("#span_tf_desc").empty();
-            //            $("#span_tf_desc").append(response[0].tiItem + '(目前為' + response[0].sfBasicSalary + ')');
-            //        },//success end
-            //        complete: function () {
-            //            $.unblockUI();
-            //        }
-            //    });//ajax end
-            //}
             ////****************************************薪資計算公式設定 END****************************************//
 
             //****************************************薪資項目設定****************************************//
@@ -1345,7 +1191,204 @@
                 $("input[name='txt_si_siBuckle']").attr("disabled", false);
                 $("#btn_si_item").attr("disabled", false);//連儲存按鈕都不給點
             }
+
+            //****************************************特別休假設定 START****************************************//
+            //特別休假 新增
+            $("#btn_spd_add").click(function () {
+                $("#span_spd_Status").text("新增");
+                $("#hidden_spd_guid").val("");
+                $("#hidden_spd_years").val("");
+                $("#txt_spd_days").val("");
+                $("#txt_spd_years").val("");
+            });
+            //特別休假設定 刪除
+            $(document).on("click", "a[name='a_del_spd']", function () {
+                if (confirm("確定刪除?")) {
+                    $.ajax({
+                        type: "POST",
+                        async: true, //在沒有返回值之前,不會執行下一步動作
+                        url: "../handler/page-hourlyadmin.ashx",
+                        data: {
+                            func: "del_spddata",
+                            del_guid: $(this).attr("aguid")
+                        },
+                        error: function (xhr) {
+                            alert("error");
+                        },
+                        beforeSend: function () {
+                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                        },
+                        success: function (response) {
+                            if (response != "error") {
+                                alert("刪除成功");
+                                load_spd();
+                            }
+                        },//success end
+                        complete: function () {
+                            $.unblockUI();
+                        }
+                    });//ajax end
+                }
+
+            });
+            //tr點擊事件
+            $(document).on("click", "#tbl_spd tbody tr td:not(:nth-child(1))", function () {
+                $("#hidden_spd_guid").val($(this).closest('tr').attr("trguid"));//修改才會有
+                $("#hidden_spd_years").val($(this).closest('tr').attr("tryears"));//修改才會有
+                $("#span_spd_Status").text("修改");
+                load_spdbyguid();
+            });
+            //特別休假 儲存按鈕
+            $("#btn_spd").click(function () {
+                if (chk_spddata()) {
+                    mod_spd();
+                }
+            });
+            //****************************************特別休假設定 END****************************************//
         });
+        //撈特別休假資料
+        function load_spd() {
+            $("#tbl_spd").empty();
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/page-hourlyadmin.ashx",
+                data: {
+                    func: "load_spddata"
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    var str_html = "";
+                    if (response != "nodata") {
+                        str_html += "<thead>";
+                        str_html += "<tr>";
+                        str_html += "<th class='width10' nowrap='nowrap'>操作</th>";
+                        str_html += "<th class='width10' nowrap='nowrap'>年資(年)</th>";
+                        str_html += "<th class='width10' nowrap='nowrap'>特休天數</th>";
+                        str_html += "</tr>";
+                        str_html += "</thead>";
+                        str_html += "<tbody>";
+                        for (var i = 0; i < response.length; i++) {
+                            str_html += "<tr trguid='" + response[i].alGuid + "' tryears='" + response[i].alYears + "'>";
+                            str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='a_del_spd' aguid='" + response[i].alGuid + "'>刪除</a></td>";
+                            str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].alYears + "</td>";
+                            str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].alDays + "</td>";
+                            str_html += "</tr>";
+                        }
+                        str_html += "</tbody>";
+
+                    } else {
+                        str_html += "<tr><td>查無資料<td></tr>";
+                    }
+                    $("#tbl_spd").append(str_html);
+                    $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                    $(".stripeMe tr:even").addClass("alt");
+                    $(".fixTable").tableHeadFixer();
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //撈特別休假資料 by guid
+        function load_spdbyguid() {
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/page-hourlyadmin.ashx",
+                data: {
+                    func: "load_spddata",
+                    sel_guid:$("#hidden_spd_guid").val()
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    if (response != "nodata") {
+                        $("#txt_spd_years").val(response[0].alYears);
+                        $("#txt_spd_days").val(response[0].alDays);
+                    } else {
+                        alert("查無資料");
+                        $("#span_spd_Status").text("新增");
+                        $("#hidden_spd_guid").val("");
+                        $("#hidden_spd_years").val("");
+                        $("#txt_spd_days").val("");
+                        $("#txt_spd_years").val("");
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //新增/修改 特別休假
+        function mod_spd(){
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/page-hourlyadmin.ashx",
+                data: {
+                    func: "mod_spddata",
+                    mod_guid: $("#hidden_spd_guid").val(),
+                    mod_years: $("#txt_spd_years").val(),
+                    mod_days: $("#txt_spd_days").val(),
+                    mod_status: $("#span_spd_Status").text()
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    var str_html = "";
+                    if (response != "ok") {
+                        alert(response);
+                    } else {
+                        if ($("#span_spd_Status").text()=="新增") {
+                            alert("新增成功");
+                        }
+                        if ($("#span_spd_Status").text() == "修改") {
+                            alert("修改成功");
+                        }
+                        load_spd();
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //檢查特別休假輸入欄位
+        function chk_spddata(){
+            var chk_years = $("#txt_spd_years").val();
+            var chk_days = $("#txt_spd_days").val();
+            if (chk_years=="") {
+                alert("請輸入年資(年)");
+                return false;
+            }
+            if (chk_days == "") {
+                alert("請輸入特休天數");
+                return false;
+            }
+            if (chk_years != "" && isNaN(chk_years)) {
+                alert("年資(年)請勿輸入數字以外的東西");
+                return false;
+            }
+            if (chk_days != "" && isNaN(chk_days)) {
+                alert("特休天數請勿輸入數字以外的東西");
+                return false;
+            }
+            return true;
+        }
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -1363,6 +1406,7 @@
                         <li class="li_clk" id="li_3"><a href="#tabs-3">薪資項目設定</a></li>
                         <li class="li_clk" id="li_4"><a href="#tabs-4">加班費設定</a></li>
                         <li class="li_clk" id="li_5"><a href="#tabs-5">給薪假設定</a></li>
+                        <li class="li_clk" id="li_6"><a href="#tabs-6">特別休假設定</a></li>
                     </ul>
                     <!-- tabs-1 時薪設定-->
                     <div id="tabs-1">
@@ -1823,6 +1867,55 @@
                                         </tr>
                                     </table>
                                     <input type="text" id="hidden_ph_guid" style="display:none;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tabs-5 -->
+                    <!-- tabs-5 特別休假設定-->
+                    <div id="tabs-6">
+                        <div class="twocol margin15TB">
+                            <div class="right">
+                                <a href="Javascript:void(0);" class="keybtn fancybox" id="btn_spd_add" name="div_spd">新增</a>
+                            </div>
+                        </div>
+                        <div class="tabfixwidth" name="div_spd">
+                            <div class="stripeMe fixTable" style="max-height: 175px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tbl_spd"></table>
+                            </div>
+                        </div>
+                        <div class="twocol margin15TB" name="div_spd">
+                            <div class="right">
+                                <a href="javascript:void(0);" class="keybtn" id="btn_spd">儲存</a>
+                            </div>
+                        </div>
+                        <div class="tbsfixwidth" style="margin-top: 20px;" name="div_spd">
+                            <div class="statabs margin10T">
+                                <div class="gentable fixTable">
+                                    <table width="99%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">年資(年)</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="inputex width20" id="txt_spd_years" maxlength="4" />
+                                            </td>
+                                            <td align="right">
+                                                <div class="font-title titlebackicon">特休天數</div>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="inputex width20" id="txt_spd_days" maxlength="4" />
+                                            </td>
+                                            <td class="width10" colspan="3" align="right">
+                                                <div class="font-title titlebackicon">維護狀態</div>
+                                            </td>
+                                            <td class="width20" style="text-align:left;">
+                                                <span id="span_spd_Status">新增</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <input type="text" id="hidden_spd_guid" style="display:none;" />
+                                    <input type="text" id="hidden_spd_years" style="display:none;" />
                                 </div>
                             </div>
                         </div>
