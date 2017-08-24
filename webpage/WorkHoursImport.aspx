@@ -18,7 +18,7 @@
                     }
                     //parent.$(".fancybox-close").attr("disabled", "disabled");//匯入過程中不能關fancybox
                     //parent.$.blockUI({ message: '<img src="../images/loading.gif" />' });
-                    var exten = $("input[name='dataFilea']").val().replace(/^.*\./, '');
+                    var exten = $("input[name='dataFile']").val().replace(/^.*\./, '');
                     var PassExten = ["xls", "xlsx"];
                     if ($.inArray(exten, PassExten) == -1) {
                         alert("請上傳Excel檔");
