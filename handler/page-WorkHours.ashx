@@ -90,9 +90,10 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
         public string sr_Enddate_c { get; set; }//週期迄 yyyy-mm-dd yyyy-mm-dd 因為在SQL日期between 一定要yyyy-mm-dd
         public string sr_SalaryDate { get; set; }//發薪日
         public string sr_Ps { get; set; }//備註
-        //狀態目前不需要顯示在畫面上
-        //public string sr_Status { get; set; }//狀態
+                                         //狀態目前不需要顯示在畫面上
+                                         //public string sr_Status { get; set; }//狀態
     }
+    ErrorLog err = new ErrorLog();
     sy_Attendance_DB at_db = new sy_Attendance_DB();
     SalaryRange_DB sr_db = new SalaryRange_DB();
     public void ProcessRequest(HttpContext context)
@@ -100,13 +101,15 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
         string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
         string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
-        switch (str_func) {
+        switch (str_func)
+        {
             case "load_hoursdata":
                 string str_keywords = string.IsNullOrEmpty(context.Request.Form["str_keywords"]) ? "" : context.Request.Form["str_keywords"].ToString().Trim();
                 string str_dates = string.IsNullOrEmpty(context.Request.Form["str_dates"]) ? "" : context.Request.Form["str_dates"].ToString().Trim();
                 string str_datee = string.IsNullOrEmpty(context.Request.Form["str_datee"]) ? "" : context.Request.Form["str_datee"].ToString().Trim();
                 string str_guid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
-                try {
+                try
+                {
                     at_db._str_keyword = str_keywords;
                     at_db._str_dates = str_dates;
                     at_db._str_datee = str_datee;
@@ -157,11 +160,14 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                         context.Response.ContentType = "application/json";
                         context.Response.Write(ans);
                     }
-                    else {
+                    else
+                    {
                         context.Response.Write("nodata");
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -190,11 +196,14 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                         context.Response.ContentType = "application/json";
                         context.Response.Write(ans);
                     }
-                    else {
+                    else
+                    {
                         context.Response.Write("nodata");
                     }
                 }
-                catch {
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -205,7 +214,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                 string leave_date = string.IsNullOrEmpty(context.Request.Form["leave_date"]) ? "" : context.Request.Form["leave_date"].ToString().Trim();
                 try
                 {
-                    at_db._aperGuid =leave_perguid;
+                    at_db._aperGuid = leave_perguid;
                     at_db._aAttendanceDate = leave_date;
                     DataTable dt_leave = at_db.Selectleave();
                     if (dt_leave.Rows.Count > 0)
@@ -229,11 +238,14 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                         context.Response.ContentType = "application/json";
                         context.Response.Write(ans);
                     }
-                    else {
+                    else
+                    {
                         context.Response.Write("nodata");
                     }
                 }
-                catch (Exception ex){
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -248,11 +260,14 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     {
                         context.Response.Write(dt_p.Rows[0]["perGuid"].ToString().Trim() + "," + dt_p.Rows[0]["perName"].ToString().Trim());
                     }
-                    else {
+                    else
+                    {
                         context.Response.Write("nodata");
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -271,13 +286,16 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     at_db._str_dates = old_dates;
                     at_db._str_datee = old_datee;
                     at_db._ah_guid = old_ahguid;
-                    if (old_order_column=="cno") {
+                    if (old_order_column == "cno")
+                    {
                         at_db._str_order_column = "ah_perNo";
                     }
-                    if (old_order_column=="cname") {
+                    if (old_order_column == "cname")
+                    {
                         at_db._str_order_column = "perName";
                     }
-                    if (old_order_column=="cdate") {
+                    if (old_order_column == "cdate")
+                    {
                         at_db._str_order_column = "ah_AttendanceDate";
                     }
                     at_db._str_order_status = old_order_status;
@@ -306,11 +324,14 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                         context.Response.ContentType = "application/json";
                         context.Response.Write(ans);
                     }
-                    else {
+                    else
+                    {
                         context.Response.Write("nodata");
                     }
                 }
-                catch (Exception ex){
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -323,7 +344,9 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     at_db.DeleteAttendanceHours();
                     context.Response.Write("OK");
                 }
-                catch (Exception ex){
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -346,18 +369,22 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     at_db._ah_Remark = mod_aRemark;
                     at_db._ah_Itme = mod_aItme;
                     at_db._ah_ModdifyId = session_no;
-                    if (mod_type=="新增") {
+                    if (mod_type == "新增")
+                    {
                         at_db._ah_guid = Guid.NewGuid().ToString();
                         at_db._ah_CreateId = session_no;
                         at_db.InsertAttendanceHours();
                     }
-                    if (mod_type=="修改") {
+                    if (mod_type == "修改")
+                    {
                         at_db._ah_guid = mod_aGuid;
                         at_db.UpdateAttendanceHours();
                     }
                     context.Response.Write("OK");
                 }
-                catch (Exception ex){
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -366,7 +393,8 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                 string go_ranges = string.IsNullOrEmpty(context.Request.Form["str_ranges"]) ? "" : context.Request.Form["str_ranges"].ToString().Trim();
                 string go_rangee = string.IsNullOrEmpty(context.Request.Form["str_rangee"]) ? "" : context.Request.Form["str_rangee"].ToString().Trim();
                 string str_userid = session_no;
-                try {
+                try
+                {
                     //跑工時計算SP
                     SqlCommand oCmd2 = new SqlCommand();
                     oCmd2.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -386,7 +414,9 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     oCmd2.Dispose();
                     context.Response.Write("ok");
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
@@ -430,6 +460,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                 }
                 catch (Exception ex)
                 {
+                    err.InsErrorLog("WorkHoursImport.ashx", ex.Message, USERINFO.MemberName);
                     context.Response.Write("error");
                 }
                 break;
