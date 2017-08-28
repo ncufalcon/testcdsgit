@@ -664,7 +664,7 @@ from
 	where psmYear in (@day_1,@day_2,@day_3) and pStatus='A'
 	group by perGuid
 )#tmp
-where row_count=3
+where row_count>=3
 
 --撈出主檔guid
 select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2 
