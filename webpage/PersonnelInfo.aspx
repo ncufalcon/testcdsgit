@@ -1094,6 +1094,8 @@
                 if ($("#idtmp").val().trim() == "")
                     msg += "請選擇要修改的員工編號\n";
                 else {
+                    if ($("#pb_No").val().trim() == "")
+                        msg += "請輸序號\n";
                     if ($("#pb_Creditor").val().trim() == "")
                         msg += "請輸入債權人\n";
                     if ($("#pb_CreditorCost").val().trim() == "")
@@ -1280,6 +1282,7 @@
                         $("#pbTab").empty();
                         var tabstr = '<tr>';
                         tabstr += '<th width="60" nowrap="nowrap">操作</th>';
+                        tabstr += '<th nowrap="nowrap">序號</th>';
                         tabstr += '<th nowrap="nowrap">債權人</th>';
                         tabstr += '<th nowrap="nowrap">債權金額</th>';
                         tabstr += '<th nowrap="nowrap">移轉比例</th>';
@@ -1294,6 +1297,7 @@
                             $(data).find("pb_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("pbGuid").text() + '>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pbdelbtn" aid=' + $(this).children("pbGuid").text() + '>刪除</a></td>';
+                                tabstr += '<td  style="cursor: pointer;">' + $(this).children("pbNo").text() + '</td>';
                                 tabstr += '<td  style="cursor: pointer;">' + $(this).children("pbCreditor").text() + '</td>';
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + format_money($(this).children("pbCreditorCost").text()) + '</td>';//20170628 三位一逗點
                                 tabstr += '<td nowrap="nowrap" style="cursor: pointer;text-align:right;">' + $(this).children("pbRatio").text().trim() + '%</td>';
@@ -1840,7 +1844,7 @@
                                        <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>--%>
                                    </tr>
                                    <tr>
-                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例(%)</div></td>
+                                       <td  align="right"><div class="font-title titlebackicon font-red">執行扣押薪資比例(1/＊)</div></td>
                                        <td ><input id="pDetentionRatio" name="pDetentionRatio" type="text" class="inputex width100" /></td>
                                        <td  align="right"><div class="font-title titlebackicon font-red">執行扣押金額</div></td>
                                        <td ><input id="pDetentionFee" name="pDetentionFee" type="text" class="inputex width100" /></td>
@@ -1874,6 +1878,10 @@
                             <div class="gentable">
                                 <div class="gentable">
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td class="width15" align="right"><div class="font-title titlebackicon font-red" >序號</div></td>
+                                            <td class="width15"><input id="pb_No" name="pb_No" type="text" class="inputex width100 pbtxt" maxlength="20" /></td>
+                                        </tr>
                                         <tr>
                                             <td class="width15" align="right"><div class="font-title titlebackicon font-red" >債權人</div></td>
                                             <td class="width15"><input id="pb_Creditor" name="pb_Creditor" type="text" class="inputex width100 pbtxt" /></td>

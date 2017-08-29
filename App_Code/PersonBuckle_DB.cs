@@ -21,6 +21,7 @@ public class PersonBuckle_DB
     string pbGuid = string.Empty;
     string pbPerGuid = string.Empty;
     string pbCreditorNumber = string.Empty;
+    string pbNo = string.Empty;
     string pbCreditor = string.Empty;
     decimal pbCreditorCost;
     string pbRatio = string.Empty;
@@ -51,6 +52,10 @@ public class PersonBuckle_DB
     public string _pbCreditorNumber
     {
         set { pbCreditorNumber = value; }
+    }
+    public string _pbNo
+    {
+        set { pbNo = value; }
     }
     public string _pbCreditor
     {
@@ -148,6 +153,7 @@ public class PersonBuckle_DB
         oCmd.CommandText = @"insert into sy_PersonBuckle (
 pbGuid,
 pbPerGuid,
+pbNo,
 pbCreditor,
 pbCreditorCost,
 pbRatio,
@@ -166,6 +172,7 @@ pbStatus
 ) values (
 @pbGuid,
 @pbPerGuid,
+@pbNo,
 @pbCreditor,
 @pbCreditorCost,
 @pbRatio,
@@ -186,6 +193,7 @@ pbStatus
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         oCmd.Parameters.AddWithValue("@pbGuid", pbGuid);
         oCmd.Parameters.AddWithValue("@pbPerGuid", pbPerGuid);
+        oCmd.Parameters.AddWithValue("@pbNo", pbNo);
         oCmd.Parameters.AddWithValue("@pbCreditor", pbCreditor);
         oCmd.Parameters.AddWithValue("@pbCreditorCost", pbCreditorCost);
         oCmd.Parameters.AddWithValue("@pbRatio", pbRatio);
@@ -213,6 +221,7 @@ pbStatus
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oCmd.CommandText = @"update sy_PersonBuckle set
 pbCreditor=@pbCreditor,
+pbNo=@pbNo,
 pbCreditorCost=@pbCreditorCost,
 pbRatio=@pbRatio,
 pbIssued=@pbIssued,
@@ -230,6 +239,7 @@ where pbGuid=@pbGuid
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         oCmd.Parameters.AddWithValue("@pbGuid", pbGuid);
+        oCmd.Parameters.AddWithValue("@pbNo", pbNo);
         oCmd.Parameters.AddWithValue("@pbCreditor", pbCreditor);
         oCmd.Parameters.AddWithValue("@pbCreditorCost", pbCreditorCost);
         oCmd.Parameters.AddWithValue("@pbRatio", pbRatio);
