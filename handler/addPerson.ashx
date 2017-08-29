@@ -180,7 +180,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._plLaborNo = getLH_Code(id, "L");
                         LH_Db._plChange = "01";
                         LH_Db._plChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
-                        LH_Db._plLaborPayroll = decimal.Parse(getMinLV("ilItem2"));
+                        LH_Db._plLaborPayroll = decimal.Parse(getStartIns("ssi_labor"));
                         LH_Db._plModifyId = USERINFO.MemberGuid;
                         LH_Db.addLabor();
                     }
@@ -195,7 +195,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._piCardNo = getLH_Code(id, "H");
                         LH_Db._piChange = "01";
                         LH_Db._piChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
-                        LH_Db._piInsurancePayroll = decimal.Parse(getMinLV("ilItem4"));
+                        LH_Db._piInsurancePayroll = decimal.Parse(getStartIns("ssi_ganbor"));
                         LH_Db._piModifyId = USERINFO.MemberGuid;
                         LH_Db.addHeal();
                     }
@@ -209,7 +209,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         PP_Db._ppModifyId = USERINFO.MemberGuid;
                         PP_Db._ppChange = "01";
                         PP_Db._ppChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
-                        PP_Db._ppPayPayroll = decimal.Parse(getMinLV("ilItem2"));
+                        PP_Db._ppPayPayroll = decimal.Parse(getStartIns("ssi_tahui"));
                         string tmpEratio = getValue("sy_InsuranceIdentity", "iiGuid", pInsuranceDes, "iiRetirement","iiStatus");
                         tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
                         PP_Db._ppEmployerRatio = decimal.Parse(tmpEratio);
@@ -310,19 +310,17 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
 
 
     /// <summary>
-    /// <para>ColunmName : 欄位名稱</para>
-    /// <para>ilItem1 : 月投保薪資</para>
-    /// <para>ilItem2 : 勞保</para>
-    /// <para>ilItem3 : 勞退</para>
-    /// <para>ilItem4 : 健保</para>
+    /// <para>ssi_labor : 勞保</para>
+    /// <para>ssi_tahui : 勞退</para>
+    /// <para>ssi_ganbor : 健保</para>
     /// </summary>
-    private string getMinLV(string ColunmName)
+    private string getStartIns(string ColunmName)
     {
         string str = string.Empty;
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oCmd.Connection.Open();
-        oCmd.CommandText = "SELECT * from sy_InsuranceLevel with (nolock) order by ilItem3 "; //with (nolock) SqlTransaction不加會TimeOut
+        oCmd.CommandText = "SELECT * from sy_SetStartInsurance with (nolock) "; //with (nolock) SqlTransaction不加會TimeOut
 
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
