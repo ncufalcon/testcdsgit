@@ -176,17 +176,17 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
 
                     //勞保
                     oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(getMinLV("ilItem2"));
+                    oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(getStartIns("ssi_labor"));
                     //健保
                     oCmd.Parameters["@piGuid"].Value = Guid.NewGuid().ToString();
-                    oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(getMinLV("ilItem4"));
+                    oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(getStartIns("ssi_ganbor"));
                     //勞退
                     oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
                     string tmpEratio = getCnValue("sy_InsuranceIdentity", "iiIdentityCode", perInsuranceDes, "iiRetirement","iiStatus");
                     tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
                     oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse(tmpEratio);
                     //20170703修改 word上面說"員工到職勞退提撥，雇主提繳比率統一為6%、勞退月提繳工資應為11100" 原本撈ilItem3 現在改撈ilItem2勞保
-                    oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getMinLV("ilItem2"));
+                    oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getStartIns("ssi_tahui"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
                     //勞健保卡號
@@ -669,19 +669,17 @@ perStatus
     }
 
     /// <summary>
-    /// <para>ColunmName : 欄位名稱</para>
-    /// <para>ilItem1 : 月投保薪資</para>
-    /// <para>ilItem2 : 勞保</para>
-    /// <para>ilItem3 : 勞退</para>
-    /// <para>ilItem4 : 健保</para>
+    /// <para>ssi_labor : 勞保</para>
+    /// <para>ssi_tahui : 勞退</para>
+    /// <para>ssi_ganbor : 健保</para>
     /// </summary>
-    private string getMinLV(string ColunmName)
+    private string getStartIns(string ColunmName)
     {
         string str = string.Empty;
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oCmd.Connection.Open();
-        oCmd.CommandText = "SELECT * from sy_InsuranceLevel with (nolock) order by ilItem3 "; //with (nolock) SqlTransaction不加會TimeOut
+        oCmd.CommandText = "SELECT * from sy_SetStartInsurance with (nolock) "; //with (nolock) SqlTransaction不加會TimeOut
 
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
