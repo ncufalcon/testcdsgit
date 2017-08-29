@@ -1901,7 +1901,7 @@
                     <!--tabs-4 end-->
                     <div id="tabs-5">
                         <div class="tbsfixwidth" style="margin-top: 20px;" name="div_ssi">
-                            <span class="font-size3 font-bold">底薪及職能加給預設值維護</span>
+                            <span class="font-size3 font-bold">到職勞健保、勞退保薪預設值維護</span>
                             <div class="twocol margin15TB" name="div_ssi">
                                 <div class="right">
                                     <a href="javascript:void(0);" class="keybtn" id="btn_ssi">儲存</a>
