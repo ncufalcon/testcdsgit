@@ -74,7 +74,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
 
                     row.CreateCell(5).SetCellValue(com.toDou((decimal.Parse(dv[i]["pBasicSalary"].ToString()) + decimal.Parse(dv[i]["pAllowance"].ToString())).ToString()));//底薪
                     row.CreateCell(6).SetCellValue(com.toDou(dv[i]["pAttendanceDays"].ToString()));//出勤天數
-                    row.CreateCell(7).SetCellValue(com.toDou(dv[i]["pAttendanceTimes"].ToString()));//出勤時數
+                    row.CreateCell(7).SetCellValue(com.toDou(dv[i]["pGeneralTime"].ToString()));//出勤時數
                     row.CreateCell(8).SetCellValue(com.toDou(dv[i]["pWeekdayTime1"].ToString()));//平日加班一類
                     row.CreateCell(9).SetCellValue(com.toDou(dv[i]["pWeekdayTime2"].ToString()));//平日加班二類
                     row.CreateCell(10).SetCellValue(com.toDou((decimal.Parse(dv[i]["pOffDayTime1"].ToString()) + decimal.Parse(dv[i]["pOffDayTime2"].ToString()) + decimal.Parse(dv[i]["pOffDayTime3"].ToString())).ToString()));//休息加班
