@@ -78,8 +78,8 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 7, "2");
                                                 Xls.SetCellValue(i, 22, dt.Rows[i - 2]["perSex"].ToString());
                                             }
-                                            Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
-                                            Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
+                                            Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString().Trim());
+                                            Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString().Trim());
                                             Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
                                             Xls.SetCellValue(i, 11, dt.Rows[i - 2]["minLaborLv"].ToString());
                                             Xls.SetCellValue(i, 12, dt.Rows[i - 2]["minInsLv"].ToString());
@@ -87,7 +87,7 @@ public class InsuranceExport : IHttpHandler {
                                             if (dt.Rows[i - 2]["iiIdentityCode"].ToString() == "2")
                                                 Xls.SetCellValue(i, 14, "0");
                                             Xls.SetCellValue(i, 15, dt.Rows[i - 2]["fID"].ToString());
-                                            Xls.SetCellValue(i, 16, dt.Rows[i - 2]["fName"].ToString());
+                                            Xls.SetCellValue(i, 16, dt.Rows[i - 2]["fName"].ToString().Trim());
                                             Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["fBirth"].ToString()));
                                             Xls.SetCellValue(i, 19, "1");
                                             Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["ChangeDate"].ToString()));
@@ -533,8 +533,7 @@ public class InsuranceExport : IHttpHandler {
                 using (FileStream file = new FileStream(fileSpec, FileMode.Open, FileAccess.Read))
                 {
                     Xls.Open(fileSpec);
-                    string InsType = (item == "01") ? "加保" : "退保";
-                    FileName += ToDate + "團保" + InsType;
+                    FileName += ToDate + "團保";
                     dt = FI_Db.Pgi_Export(perGv);
                     TXlsCellRange myRange = new TXlsCellRange("A4:Z4");
                     if (dt.Rows.Count > 0)
@@ -549,8 +548,8 @@ public class InsuranceExport : IHttpHandler {
                             Xls.SetCellValue(i, 5, ROC_Date(dt.Rows[i - 4]["perBirthday"].ToString()));
                             Xls.SetCellValue(i, 6, dt.Rows[i - 4]["perPosition"].ToString());
                             Xls.SetCellValue(i, 7, "B");
-                            Xls.SetCellValue(i, 8, ROC_Date(dt.Rows[i - 4]["startDate"].ToString()));
-                            if (item == "02")
+                            Xls.SetCellValue(i, 8, dt.Rows[i - 4]["startDate"].ToString());
+                            if (dt.Rows[i - 4]["pgiChange"].ToString() == "02")
                                 Xls.SetCellValue(i, 9, dt.Rows[i - 4]["pgiChangeDate"].ToString());
                             if (dt.Rows[i - 4]["pgiType"].ToString() == "02")
                             {
@@ -561,7 +560,10 @@ public class InsuranceExport : IHttpHandler {
                                 birthYear = DateTime.Parse(dt.Rows[i - 4]["pfBirthday"].ToString()).ToString("yyyy");
                             }
                             string age = (Int32.Parse(DateTime.Now.ToString("yyyy")) - Int32.Parse(birthYear)).ToString();
-                            Xls.SetCellValue(i, 14, age);
+                            if (Int32.Parse(age) > 23 && dt.Rows[i - 4]["pfTitle"].ToString().Trim() == "子女")
+                                Xls.SetCellValue(i, 14, ">23歲");
+                            else
+                                Xls.SetCellValue(i, 14, age);
                         }
                     }
                 }

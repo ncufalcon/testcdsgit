@@ -531,10 +531,13 @@ iiIdentityCode,perPensionIdentity,plChangeDate
 from sy_Person 
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonInsurance on piChange='01' and piStatus='A' and piPerGuid=perGuid 
+	and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance where piChange='01' and piStatus='A' and piPerGuid=perGuid)
 	and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piChange='01' and piStatus='A' and piPerGuid=perGuid)
 left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid 
+	and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
 	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid 
+	and ppChangeDate=(select MAX(ppChangeDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
 	and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + @")
@@ -548,6 +551,7 @@ left join sy_Company on perComGuid=comGuid
 left join sy_PersonFamily on pfPerGuid=perGuid and pfStatus='A'
 where pfiPerGuid in (" + perGuid + @") and pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A' 
 and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
+and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
 order by perIDNumber,fID ");
 
         oCmd.CommandText = sb.ToString();
@@ -574,8 +578,10 @@ plChangeDate
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
 	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
+	and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
 left join sy_PersonInsurance on piChange='02' and piStatus='A' and piPerGuid=perGuid
 	and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piChange='02' and piStatus='A' and piPerGuid=perGuid)
+	and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance where piChange='02' and piStatus='A' and piPerGuid=perGuid)
 left join sy_Company on comGuid=perComGuid
 left join sy_codetable on code_group='20' and code_value=piDropOutReason
 where perGuid in (" + perGuid + @")
@@ -603,9 +609,11 @@ plChangeDate
 from sy_Person 
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonLabor on plChange='01' and plStatus='A' and plPerGuid=perGuid
+	and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
 	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
 left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
 	and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
+	and ppChangeDate=(select MAX(ppChangeDate) from sy_PersonPension where ppChange='01' and ppStatus='A' and ppPerGuid=perGuid)
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
 where perGuid in (" + perGuid + ") ");
 
@@ -628,6 +636,7 @@ where perGuid in (" + perGuid + ") ");
 from sy_Person 
 left join sy_PersonLabor on plChange='02' and plStatus='A' and plPerGuid=perGuid
 	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plChange='02' and plStatus='A' and plPerGuid=perGuid)
+	and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plChange='01' and plStatus='A' and plPerGuid=perGuid)
 left join sy_Company on perComGuid=comGuid
 where perGuid in (" + perGuid + ") ");
 

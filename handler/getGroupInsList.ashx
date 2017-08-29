@@ -14,7 +14,7 @@ public class getGroupInsList : IHttpHandler {
 
             string xmlStr = "";
             GI_Db._KeyWord = keyword;
-            GI_Db._pgiChange = ddlPgExport;
+            GI_Db._pgiChangeDate = ddlPgExport;
             DataTable dt = GI_Db.SelectList();
             xmlStr = DataTableToXml.ConvertDatatableToXML(dt, "pgiList", "pgi_item");
             xmlStr = "<root>" + xmlStr + "</root>";

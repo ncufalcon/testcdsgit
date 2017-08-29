@@ -6,6 +6,7 @@
     <%--Common--%>
     <script type="text/javascript">
         $(document).ready(function () {
+            ddl_GInsYM();
             getddl("11", "#pl_Change");
             getddl("12", "#pi_Change");
             getddl("13", "#pp_Change");
@@ -598,6 +599,7 @@
                     $("#pg_saveBtn").hide();
                     $("#pg_addBtn").show();
                     getGroupInsList();
+                    ddl_GInsYM();
                     break;
                 case "InsSalaryMod":
                     alert("完成");
@@ -614,6 +616,35 @@
                     alert(str);
                     break;
             }
+        }
+
+        function ddl_GInsYM() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/ddlGroupInsYM.ashx",
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("ddlGroupInsYM Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#ddlPgExport").empty();
+                        var ddlstr = '<option value="">--請選擇--</option>';
+                        if ($(data).find("code").length > 0) {
+                            $(data).find("code").each(function (i) {
+                                ddlstr += '<option value="' + $(this).attr("v") + '">' + $(this).attr("desc") + '</option>';
+                            });
+                        }
+                        $("#ddlPgExport").append(ddlstr);
+                    }
+                }
+            });
         }
     </script>
     <%--勞保--%>

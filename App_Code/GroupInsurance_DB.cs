@@ -106,9 +106,9 @@ where pgiStatus<>'D'  ");
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
-        if (pgiChange != "")
+        if (pgiChangeDate != "")
         {
-            sb.Append(@"and pgiChange=@pgiChange ");
+            sb.Append(@"and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate ");
         }
         sb.Append(@"order by sy_PersonGroupInsurance.pgiChangeDate desc,pgiCreateDate desc ");
 
@@ -117,7 +117,7 @@ where pgiStatus<>'D'  ");
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
-        oCmd.Parameters.AddWithValue("@pgiChange", pgiChange);
+        oCmd.Parameters.AddWithValue("@pgiChangeDate", pgiChangeDate);
         oda.Fill(ds);
         return ds;
     }
@@ -299,6 +299,23 @@ and pgiCreateDate=(select MAX(pgiCreateDate) from sy_PersonGroupInsurance where 
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@pgiPfGuid", pfGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable getGInsYM()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select distinct convert(varchar(7),pgiChangeDate,121) v from sy_PersonGroupInsurance order by v desc ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@pgiPfGuid", pfGuid);
         oda.Fill(ds);
         return ds;
     }
