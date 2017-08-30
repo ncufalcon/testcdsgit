@@ -94,7 +94,7 @@
             var link = "";
             switch ($(item).attr("id")) {
                 case "mPersonBox":
-                    link = "MutiSearch.aspx?v=" + $("#tmpUID").val();
+                    link = "MutiSearch.aspx?v=" + $(item).attr("id");
                     break;
             }
             $.fancybox({
@@ -109,8 +109,10 @@
         }
 
         function mutiReturn(str, str2) {
+            $("#tmpUID").val("");
+            $("#uName").html("");
             $("#tmpUID").val(str);
-            $("#tmpName").val(str2);
+            //$("#tmpName").val(str2);
             str2 = str2.replace(/,/g, "、");
             $("#uName").html(str2)
         }
