@@ -36,6 +36,12 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
         string LCstr = string.Empty;
+        if (Gid.Length == 1 && Gid[0] == "")
+        {
+            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('exMsg','無保薪調整資料');</script>");
+            return;
+        }
+
         SqlConnection oConn = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         oConn.Open();
         SqlCommand oCmd = new SqlCommand();

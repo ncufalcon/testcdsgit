@@ -1925,7 +1925,7 @@
                             data = $.parseXML(data);
                             $("#InsModifyTab").empty();
                             var tabstr = '<thead><tr>';
-                            tabstr += '<th width="80" nowrap="nowrap" rowspan="2">操作</th>';
+                            tabstr += '<th width="10" nowrap="nowrap" rowspan="2">刪除</th>';
                             tabstr += '<th nowrap="nowrap" rowspan="2">員工編號</th>';
                             tabstr += '<th nowrap="nowrap" rowspan="2">姓名</th>';
                             tabstr += '<th nowrap="nowrap" rowspan="2">平均月薪</th>';
@@ -1955,18 +1955,20 @@
                                     tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
                                     tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
                                     tabstr += '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_avg").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_labor").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_ganbor").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("b_tahui").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i2").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i3").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("pay_i4").text() + '</td>';
+                                    //tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
+                                    tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><input type="checkbox" name="cbdel" /></td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perNo").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_avg").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_labor").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_ganbor").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_tahui").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i2").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i3").text() + '</td>';
+                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i4").text() + '</td>';
                                     tabstr += '</tr>';
                                 });
+                                //$("#del_rowbtn").show();
                             }
                             else
                                 tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
@@ -1981,9 +1983,23 @@
             });
 
             //保薪調整 刪除
-            $(document).on("click", "a[name='IMdelbtn']", function () {
-                if (confirm('確定刪除 員工編號：' + $(this).attr("ano") + "？"))
-                    $(this).parent().parent().remove();
+            //$(document).on("click", "a[name='IMdelbtn']", function () {
+            //    if (confirm('確定刪除 員工編號：' + $(this).attr("ano") + "？"))
+            //        $(this).parent().parent().remove();
+            //});
+            $(document).on("click", "#del_rowbtn", function () {
+                if ($("input[name='cbdel']:checked").length > 0)
+                    $("#InsModifyTab tr").has('input[name="cbdel"]:checked').remove();
+                else
+                    alert("請勾選要刪除的項目")
+            });
+
+            //顯示&隱藏刪除按鈕
+            $(document).on("change", "input[name = 'cbdel']", function () {
+                if ($('input[name="cbdel"]:checked').length > 0)
+                    $("#del_rowbtn").show();
+                else
+                    $("#del_rowbtn").hide();
             });
 
             //執行保薪調整
@@ -2420,6 +2436,7 @@
                                 <a id="start_im" href="javascript:void(0);" class="keybtn">送出調整</a>
                             </div>
                         </div><br />
+                        <a id="del_rowbtn" href="javascript:void(0);" class="keybtn" style="display:none;">刪除</a>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:400px;">
                                 <table id="InsModifyTab" width="98%" border="0" cellspacing="0" cellpadding="0"></table>

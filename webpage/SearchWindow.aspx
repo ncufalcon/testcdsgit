@@ -7,67 +7,6 @@
 <script type="text/javascript" src="<%= ResolveUrl("~/js/downfile.js") %>"></script>
 <script type="text/javascript" src="<%= ResolveUrl("~/js/Pager.js") %>"></script>
 <head runat="server">
-
-        <style type="text/css">
-        .stripeMe table{border-collapse:collapse;}
-        .stripeMe td{padding:5px; border-collapse:collapse; border:1px solid #8f7c66; border-left-color:#d6d0c9;border-right-color:#d6d0c9; border-bottom-color:#d6d0c9; background-color:#f7f5f2;}
-        .stripeMe th{color:#242424; padding:8px; border-collapse:collapse; border:1px solid #8f7c66;border-left-color:#bcb0a1;border-right-color:#bcb0a1; background:#d4c8b9;}
-        .stripeMe tr td:first-child{border-left-color:#8f7c66;}
-        .stripeMe tr th:first-child{border-left-color:#8f7c66;}
-        .stripeMe tr td:last-child{border-right-color:#8f7c66;}
-        .stripeMe tr th:last-child{border-right-color:#8f7c66;}
-        .stripeMe tr:last-child td{border-bottom-color:#8f7c66;}
-        .stripeMe tr.alt td {background-color:#ebe4de;}
-        .stripeMe tr.over td { background-color:#fff;}
-        .stripeMe tr.total td { background-color:#FEEEB6}
-        .stripeMe tr td.total { background-color:#FEEEB6}
-        .keybtn{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; padding:5px 15px;*padding:5px;_padding:5px;color:#87712e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
-
-
-
-        /* 分頁 */
-div.pagination {overflow: hidden;font-size:9pt;padding:10px 0; }
-div.pagination ul {list-style: none;padding: 2px 0;line-height: 16px;}
-div.pagination li {display: inline;}
-div.pagination.sabrosus {
-	padding:3px;
-	margin:3px;
-	text-align:center;
-}
-
-div.pagination.sabrosus a {
-	padding: 2px 5px 2px 5px;
-	margin-right: 2px;
-	border: 1px solid #D4C8B9;
-	text-decoration: none;
-	color: #000000;
-}
-
-div.pagination.sabrosus a:hover, div.pagination.pagination a:active {
-	border: 1px solid #9A3500;
-	color: #000;
-	background-color: #CBE2EF;
-}
-
-div.pagination.sabrosus li.current {
-	padding: 2px 5px 2px 5px;
-	margin-right: 2px;
-	border: 1px solid navy;
-	font-weight: bold;
-	background-color: #CBE2EF;
-	color: #FFF;
-}
-
-div.pagination.sabrosus li.disabled {
-	padding: 2px 5px 2px 5px;
-	margin-right: 2px;
-	border: 1px solid #929292;
-	color: #929292;
-}
-    </style>
-
-
-
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <script type="text/javascript">
@@ -98,10 +37,6 @@ div.pagination.sabrosus li.disabled {
                         parent.$.fancybox.close();
                         break;
                     case "Branches":
-                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
-                        parent.$.fancybox.close();
-                        break;
-                    case "CityBankSR":
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
@@ -277,7 +212,7 @@ div.pagination.sabrosus li.disabled {
                                     });
                                 }
                                 else
-                                    tabstr += '<tr><td colspan="4">查詢無資料</td></tr>';
+                                    tabstr += '<tr><td colspan="5">查詢無資料</td></tr>';
                                 $("#sarchTab").append(tabstr);
                                 PageFun(p, $("total", data).text());
                                 break;
@@ -339,7 +274,7 @@ div.pagination.sabrosus li.disabled {
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + ' str3=' + $(this).children("siRef").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("siGuid").text() + ' str=' + $(this).children("siItemCode").text() + ' str2=' + $(this).children("siItemName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("siItemName").text() + '</td>';
                                         tabstr += '</tr>';
@@ -360,7 +295,7 @@ div.pagination.sabrosus li.disabled {
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_BeginDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + ' str3=' + $(this).children("sr_Year").text() + ' str4=' + $(this).children("sr_SalaryDate").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_SalaryDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Year").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_BeginDate").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Enddate").text() + '</td>';
@@ -396,14 +331,28 @@ div.pagination.sabrosus li.disabled {
         }
     </script>
 </head>
-
+    <style>
+        .stripeMe table{border-collapse:collapse;}
+        .stripeMe td{padding:5px; border-collapse:collapse; border:1px solid #8f7c66; border-left-color:#d6d0c9;border-right-color:#d6d0c9; border-bottom-color:#d6d0c9; background-color:#f7f5f2;}
+        .stripeMe th{color:#242424; padding:8px; border-collapse:collapse; border:1px solid #8f7c66;border-left-color:#bcb0a1;border-right-color:#bcb0a1; background:#d4c8b9;}
+        .stripeMe tr td:first-child{border-left-color:#8f7c66;}
+        .stripeMe tr th:first-child{border-left-color:#8f7c66;}
+        .stripeMe tr td:last-child{border-right-color:#8f7c66;}
+        .stripeMe tr th:last-child{border-right-color:#8f7c66;}
+        .stripeMe tr:last-child td{border-bottom-color:#8f7c66;}
+        .stripeMe tr.alt td {background-color:#ebe4de;}
+        .stripeMe tr.over td { background-color:#fff;}
+        .stripeMe tr.total td { background-color:#FEEEB6}
+        .stripeMe tr td.total { background-color:#FEEEB6}
+        .keybtn{background:url(../images/BginfoBtnOut.gif) repeat-x bottom #ffdd98; border:1px solid #ffdd98; padding:5px 15px;*padding:5px;_padding:5px;color:#87712e; font-size:15px; margin:0px 2px;-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;font-weight:bold;text-decoration:none;}
+    </style>
 <body>
     <form id="form1" runat="server">
     <div>關鍵字：<input type="text" id="SearchStr" />&nbsp;<input type="button" value="查詢" onclick="getData(0)" class="keybtn" /></div><br />
     <div class="stripeMe">
-        <table id="sarchTab" width="100%" border="0" cellspacing="0" cellpadding="0" ></table>
+        <table id="sarchTab" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
     </div><br />
-    <div id="changpage" style="text-align:center;margin-top:10px; " class="pagination sabrosus "></div>
+    <div id="changpage" style="text-align:center;"></div>
     </form>
 </body>
 </html>
