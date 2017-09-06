@@ -1179,5 +1179,98 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
 
         }
+
+
+
+
+        /// <summary>
+        /// 計算薪資
+        /// </summary>
+        /// <param name="Class"></param>
+        /// <param name="Region"></param>
+        /// <param name="Dep"></param>
+        /// <returns></returns>
+        public void GenTax(string yyyy, string UserInfo)
+        {
+            string sql = @"pr_GenTax";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
+            cmd.Parameters.AddWithValue("@@yyyy", yyyy);
+            cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                //DataTable dt = new DataTable();
+                //new SqlDataAdapter(cmd).Fill(dt);        
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                //return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
+
+
+        /// <summary>
+        /// 所得稅資料Top200
+        /// </summary>
+        public DataTable SelSy_TaxTop200()
+        {
+
+            string sql = @"select top 200 * from sy_IndividualIncomeTax where iitStatus='A' ";
+
+            //if (!string.IsNullOrEmpty(str))
+            //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
+
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            //cmd.Parameters.AddWithValue("@str", str);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+        /// <summary>
+        /// 所得稅資料
+        /// </summary>
+        public DataTable SelSy_Tax(payroll.model.sy_Tax p)
+        {
+
+            string sql = @"select * from sy_IndividualIncomeTax where iitStatus='A' ";
+
+            //if (!string.IsNullOrEmpty(str))
+            //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
+
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            //cmd.Parameters.AddWithValue("@str", str);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
     }
 }

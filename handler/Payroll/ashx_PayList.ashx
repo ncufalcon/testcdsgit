@@ -152,7 +152,7 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                         XmlStr += "<sr_BeginDate>" + context.Server.HtmlEncode(dv[i]["sr_BeginDate"].ToString()) + "</sr_BeginDate>";
                         XmlStr += "<sr_Enddate>" +context.Server.HtmlEncode( dv[i]["sr_Enddate"].ToString()) + "</sr_Enddate>";
                         XmlStr += "<sr_SalaryDate>" + context.Server.HtmlEncode(dv[i]["sr_SalaryDate"].ToString()) + "</sr_SalaryDate>";
-                            XmlStr += "<pSalary>" + dv[i]["pSalary"].ToString() + "</pSalary>";
+                        XmlStr += "<pSalary>" + dv[i]["pSalary"].ToString() + "</pSalary>";
                         XmlStr += "</dView>";
                     }
                     XmlStr += "</dList>";
@@ -165,8 +165,8 @@ public class ashx_PayList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
         }
         catch (Exception ex)
         {
-            //ErrorLog err = new ErrorLog();
-            //err.InsErrorLog("ashx_NewStaffList.ashx", ex.Message, USERINFO.MemberEmpno);
+            ErrorLog err = new ErrorLog();
+            err.InsErrorLog("ashx_PayList.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("<dList>error</dList>");
         }
 

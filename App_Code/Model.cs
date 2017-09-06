@@ -230,4 +230,57 @@ namespace payroll.model
 
     }
 
+
+
+    public class sy_Tax
+    {
+        public string iitGuid { get; set; }
+        public string iitComGuid { get; set; }
+        public string iitComName { get; set; }
+        public string iitComUniform { get; set; }
+        public string iitPerGuid { get; set; }
+        public string iitPerName { get; set; }
+        public string iitPerNo { get; set; }
+        public string iitPerIDNumber { get; set; }
+        public string iitPerAdds { get; set; }
+        public string iitPerDep { get; set; }
+        public string iitPassPort { get; set; }
+        public string iitMark { get; set; }
+        public string iitFormat { get; set; }
+        public decimal iiPayRatio { get; set; }
+        public decimal iitPaySum { get; set; }
+        public decimal iitPayAmount { get; set; }
+        public decimal iitPayTax { get; set; }
+        public string iitYearStart { get; set; }
+        public string iitYearEnd { get; set; }
+        public decimal iitStock { get; set; }
+        public string iitStockDate { get; set; }
+        public decimal iitStockPrice { get; set; }
+        public string iitTaxMark { get; set; }
+        public string iitManner { get; set; }
+        public string iitCountryCode { get; set; }
+        public string iitCode { get; set; }        
+        public string iitModdifyId { get; set; }
+        public string iitStatus { get; set; }
+
+        public string iitYyyy { get; set; }
+        public decimal iitPension { get; set; }
+        public string iitIdentify { get; set; }
+        public string iitErrMark { get; set; }
+        public string iitHouseTax { get; set; }
+        public string iitIndustryCode { get; set; }
+        public decimal iitDistribution { get; set; }
+        public decimal iitDividend { get; set; }
+        public decimal iitDeductedTax { get; set; }
+        public decimal iitDeductedRaito { get; set; }
+        public decimal iitNetAmount { get; set; }
+        public string iitInstitutionCode { get; set; }
+
+        public decimal iitStockNumber { get; set; }
+        public string iitBatchDate { get; set; }
+        public decimal iitBatchPrice { get; set; }
+        public string UserInfo { get; set; }
+
+    }
+
 }
