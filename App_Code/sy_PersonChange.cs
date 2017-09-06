@@ -132,6 +132,8 @@ public class sy_PersonChange
     string perGuid = string.Empty;
     string perDep = string.Empty;
     string perPosition = string.Empty;
+    string perFirstDate = string.Empty;
+    string perLastDate = string.Empty;
     #endregion
     #region sy_Person 公用
     public string _perNo
@@ -149,6 +151,14 @@ public class sy_PersonChange
     public string _perPosition
     {
         set { perPosition = value; }
+    }
+    public string _perFirstDate
+    {
+        set { perFirstDate = value; }
+    }
+    public string _perLastDate
+    {
+        set { perLastDate = value; }
     }
     #endregion
 
@@ -172,7 +182,7 @@ public class sy_PersonChange
             thisConnection.Open();
             show_value.Append(@"  
                 select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
-                        ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName
+                        ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
                 from sy_PersonChange
                 left join sy_Person on pcPerGuid = perGuid
                 left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
@@ -243,7 +253,7 @@ public class sy_PersonChange
         {
             thisConnection.Open();
             show_value.Append(@" 
-                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName,perFirstDate,perBasicSalary,perAllowance
+                select perGuid,perNo,perName,perPosition,code_desc as PositionName,perDep,cbName,perFirstDate,perBasicSalary,perAllowance,perLastDate
                 from sy_Person
                 left join sy_codetable on code_group = '02' and  perPosition = code_value
                 left join sy_CodeBranches on perDep = cbGuid
@@ -510,7 +520,7 @@ public class sy_PersonChange
                         insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
 	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,plPs,@str_creatid,'A'
 	                    from sy_PersonLabor 
-	                    where plPerGuid=@str_back_per_guid and plStatus='A' 
+	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='02')
 	                    order by plCreateDate DESC
                     end
 
@@ -523,7 +533,7 @@ public class sy_PersonChange
                         insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus)
                         select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'02',piInsurancePayroll,piPs,@str_creatid,'A'
 	                    from sy_PersonInsurance 
-	                    where piPerGuid=@str_back_per_guid and piStatus='A' 
+	                    where piPerGuid=@str_back_per_guid and piStatus='A' and (piChange='01' or piChange='03')
 	                    order by piCreateDate DESC
                     end
 
@@ -536,7 +546,7 @@ public class sy_PersonChange
                         insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
                         select top 1 NEWID(),pgiPerGuid,pgiType,'02',@str_date,pgiInsuranceCode,pgiPs,@str_creatid,'A'
 	                    from sy_PersonGroupInsurance 
-	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' 
+	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiChange='01'
 	                    order by pgiCreateDate DESC
                     end
 
@@ -549,7 +559,7 @@ public class sy_PersonChange
                         insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
                         select top 1 NEWID(),ppGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,@str_creatid,'A'
 	                    from sy_PersonPension 
-	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' 
+	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' and (ppChange='01' or ppChange='02')
 	                    order by ppCreateDate DESC
                     end
 
@@ -562,7 +572,7 @@ public class sy_PersonChange
                         insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus)
                         select NEWID(),pfiPerGuid,pfiPfGuid,'02',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,@str_creatid,'A'
 	                    from sy_PersonFamilyInsurance 
-	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' 
+	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and pfiChange='01'
 	                    order by pfiCreateDate DESC
                     end
                 ");
@@ -593,4 +603,202 @@ public class sy_PersonChange
 
     }
     #endregion
+
+    #region 判斷同一個人在同一個異動日期是否有重複的異動項目
+    public DataTable CheckPersonChangeIten()
+    {
+        DataTable dt = new DataTable();
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            thisConnection.Open();
+            if (pcGuid != null && pcGuid != "")
+            {
+                show_value.Append(@" 
+                    select * from sy_PersonChange
+                    where pcPerGuid=@pcPerGuid and pcChangeDate=@pcChangeDate and pcChangeName=@pcChangeName and pcGuid=@pcGuid
+                ");
+                thisCommand.Parameters.AddWithValue("@pcGuid", pcGuid);
+                thisCommand.Parameters.AddWithValue("@pcPerGuid", pcPerGuid);
+                thisCommand.Parameters.AddWithValue("@pcChangeDate", pcChangeDate);
+                thisCommand.Parameters.AddWithValue("@pcChangeName", pcChangeName);
+            }
+            else
+            {
+                show_value.Append(@" 
+                    select * from sy_PersonChange
+                    where pcPerGuid=@pcPerGuid and pcChangeDate=@pcChangeDate and pcChangeName=@pcChangeName
+                ");
+                thisCommand.Parameters.AddWithValue("@pcPerGuid", pcPerGuid);
+                thisCommand.Parameters.AddWithValue("@pcChangeDate", pcChangeDate);
+                thisCommand.Parameters.AddWithValue("@pcChangeName", pcChangeName);
+            }
+            
+
+            thisCommand.CommandType = CommandType.Text;
+            thisCommand.CommandText = show_value.ToString();
+            oda.SelectCommand = thisCommand;
+            oda.Fill(dt);
+        }
+        catch (Exception)
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        return dt;
+
+    }
+    #endregion
+
+    #region 更新人事資料 sy_Person. perLastDate
+    public void UpdatperLastdate()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person set perLastDate =@perLastDate 
+                where  perGuid=@perGuid              
+            ");
+
+            thisCommand.Parameters.AddWithValue("@perGuid", perGuid);
+            thisCommand.Parameters.AddWithValue("@perLastDate ", perLastDate);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 更新人事資料 sy_Person. perLastDate perFirstDate
+    public void UpdatperFirstdateLastdate()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                update sy_Person set perLastDate ='' ,perFirstDate=@perFirstDate
+                where  perGuid=@perGuid              
+            ");
+
+            thisCommand.Parameters.AddWithValue("@perGuid", perGuid);
+            thisCommand.Parameters.AddWithValue("@perFirstDate ", perFirstDate);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 回任加保  撈sy_SetStartInsurance
+    public void AddStartInsurance()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            show_value.Append(@" 
+                --新進到職勞保 健保 勞退預設值
+                declare @labor decimal(10, 0)
+                declare @ganbor decimal(10, 0)
+                declare @tahui decimal(10, 0)
+                select @labor=ssi_labor,@ganbor=ssi_ganbor,@tahui=ssi_tahui from sy_SetStartInsurance
+                --雇主提撥率
+                declare @EmployerRatio decimal(10, 0)
+                select @EmployerRatio=iiRetirement 
+                from sy_Person left join sy_InsuranceIdentity on perInsuranceDes=iiGuid 
+                where perGuid = @perGuid
+
+                --勞保加保
+                declare @add_perLaborID  nvarchar(50)
+                declare @add_perLaborProtection  nvarchar(20)
+                select @add_perLaborID =perLaborID from sy_Person where perGuid=@perGuid and perStatus<>'D'
+                select @add_perLaborProtection=comLaborProtectionCode from sy_Person left join  sy_Company on  perGuid=@perGuid  and perStatus<>'D' and  perComGuid=comGuid
+                insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
+	            values(NEWID(),@perGuid,@add_perLaborID ,@add_perLaborProtection,@perFirstDate,'01',@labor,'',@str_creatid,'A')
+                
+                --勞退加保
+                insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
+                values( NEWID(),@perGuid,'01',@perFirstDate,0,@EmployerRatio,@tahui,'',@str_creatid,'A')
+                
+            ");
+
+            thisCommand.Parameters.AddWithValue("@str_creatid", str_creatid);
+            thisCommand.Parameters.AddWithValue("@perGuid", perGuid);
+            thisCommand.Parameters.AddWithValue("@perFirstDate", perFirstDate);
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
 }
