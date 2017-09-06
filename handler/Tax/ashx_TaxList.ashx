@@ -40,7 +40,7 @@ public class ashx_TaxList : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 pModel.iitGuid = Guid;
                 if (sqlinj == "")
                 {
-                    if (typ == "Y") //代表第一次進入畫面 Top 200
+                    if (typ == "Y" && Guid=="") //代表第一次進入畫面 Top 200
                         dv = dal.SelSy_TaxTop200().DefaultView;
                     else
                         dv = dal.SelSy_Tax(pModel).DefaultView;

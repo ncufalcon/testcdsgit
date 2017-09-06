@@ -1196,8 +1196,8 @@ namespace payroll
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.CommandTimeout = 600;
-            cmd.Parameters.AddWithValue("@@yyyy", yyyy);
-            cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
+            cmd.Parameters.AddWithValue("@yyyy", yyyy);
+            cmd.Parameters.AddWithValue("@UserGuid", UserInfo);
             try
             {
                 cmd.Connection.Open();
@@ -1224,7 +1224,7 @@ namespace payroll
         public DataTable SelSy_TaxTop200()
         {
 
-            string sql = @"select top 200 * from sy_IndividualIncomeTax where iitStatus='A' ";
+            string sql = @"select top 100 * from sy_IndividualIncomeTax where iitStatus='A' ";
 
             //if (!string.IsNullOrEmpty(str))
             //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
@@ -1254,13 +1254,33 @@ namespace payroll
 
             string sql = @"select * from sy_IndividualIncomeTax where iitStatus='A' ";
 
-            //if (!string.IsNullOrEmpty(str))
-            //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
+            if (!string.IsNullOrEmpty(p.iitPerNo))
+                sql += "and iitPerNo like '%'+ @iitPerNo +'%' ";
 
-            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+            if (!string.IsNullOrEmpty(p.iitPerName))
+                sql += "and iitPerName like '%'+ @iitPerName +'%' ";
+
+            if (!string.IsNullOrEmpty(p.iitComName))
+                sql += "and iitComName like '%'+ @iitComName +'%' ";
+
+            if (!string.IsNullOrEmpty(p.iitPerDep))
+                sql += "and iitPerDep like '%'+ @iitPerDep +'%' ";
+
+            if (!string.IsNullOrEmpty(p.iitYyyy))
+                sql += "and iitYyyy=@iitYyyy ";
+
+            if (!string.IsNullOrEmpty(p.iitGuid))
+                sql += "and iitGuid = @iitGuid ";
+
+            sql += "order by iitYyyy desc, iitComName, iitPerDep ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
-            //cmd.Parameters.AddWithValue("@str", str);
+            cmd.Parameters.AddWithValue("@iitPerNo", p.iitPerNo);
+            cmd.Parameters.AddWithValue("@iitPerName", p.iitPerName);
+            cmd.Parameters.AddWithValue("@iitComName", p.iitComName);
+            cmd.Parameters.AddWithValue("@iitPerDep", p.iitPerDep);
+            cmd.Parameters.AddWithValue("@iitYyyy", p.iitYyyy);
+            cmd.Parameters.AddWithValue("@iitGuid", p.iitGuid);
             try
             {
                 cmd.Connection.Open();

@@ -9,13 +9,13 @@
       <thead>
         <tr>
           <th>
+            年度
+          </th>          
+          <th>
             員工編號
           </th>
           <th >
             姓名
-          </th>
-          <th>
-            發薪日
           </th>
           <th >
             申報公司
@@ -24,42 +24,42 @@
             部門
           </th>
           <th>
-            出勤天數
+            給付總額
           </th >
           <th>
-            出勤時數
+            扣繳稅額
           </th>
           <th>
-            實付金額
+            給付淨額
           </th>
         </tr>
       </thead>
       <tbody>
         <xsl:for-each select="dView">
           <tr guid="{pGuid}">
-            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pPerNo"/>
+            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitYyyy"/>
             </td>
-            <td style="text-align:left;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pPerName"/>
+            <td style="text-align:left;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPerNo"/>
             </td >
-            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="sr_SalaryDate"/>
+            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPerName"/>
             </td >
-            <td style="text-align:left;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pPerCompanyName"/>
+            <td style="text-align:left;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitComName"/>
             </td>
-            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pPerDep"/>
+            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPerDep"/>
             </td >
-            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pAttendanceDays"/>
+            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPaySum"/>
             </td>
-            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pAttendanceTimes"/>
+            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPayTax"/>
             </td>
-            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
-              <xsl:value-of select="pPay"/>
+            <td style="text-align:right;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
+              <xsl:value-of select="iitPayAmount"/>
             </td>
           </tr>
         </xsl:for-each>

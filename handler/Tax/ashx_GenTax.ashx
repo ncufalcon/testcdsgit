@@ -31,7 +31,7 @@ public class ashx_GenTax : IHttpHandler, System.Web.SessionState.IReadOnlySessio
         {
             //ErrorLog err = new ErrorLog();
             err.InsErrorLog("ashx_GenTax.ashx", ex.Message, USERINFO.MemberName);
-            context.Response.Write("error");
+            context.Response.Write("e");
         }
     }
 

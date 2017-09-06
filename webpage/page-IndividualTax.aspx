@@ -74,9 +74,9 @@
           <table  border="0" cellspacing="0" cellpadding="0">
               <tr>
                   <td class="width15" align="right"><div class="font-title titlebackicon">年度</div></td>
-                  <td class="width35"><input type="text" id="txt_yyyy_gen" autofocus="autofocus" maxlength="4" class="inputex width60"  /></td>
+                  <td class="width35"><input type="text" id="txt_yyyy_gen" autofocus="autofocus" maxlength="4" class="inputex width60"  /><span style="color:red">#2017</span></td>
                   <td  style="text-align:right">
-                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genPayroll();">開始計算所得稅資料</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genTax();">開始計算所得稅資料</a>
                       <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
                   </td>
               </tr>
@@ -141,11 +141,11 @@
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">戶籍地址</div></td>
-                                    <td id="td_iitPerResidentAddr"></td>
+                                    <td colspan="5" id="td_iitPerResidentAddr"></td>
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">通訊地址</div></td>
-                                    <td id="td_iitPerAdds"></td>
+                                    <td colspan="5" id="td_iitPerAdds"></td>
                                 </tr>
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">申報公司</div></td>
@@ -158,20 +158,25 @@
                                 </table><br /><br />
                                 <table width="98%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td style="width:15%"><div class="font-title">憑單格式</div></td>
-                                        <td style="width:7%"><select id="ddls_iitFormat" ></select></td>
-                                        <td style="width:15%"><div class="font-title">註記</div></td>
-                                        <td style="width:7%;text-align:center"><select id="ddls_iitMark" ></select></td>
-                                        <td style="width:15%"><div class="font-title">憑單填發方式</div></td>
-                                        <td style="width:7%;text-align:center"><select id="ddls_iitManner" ></select></td>
+                                        <td align="right"><div class="font-title titlebackicon">憑單格式</div></td>
+                                        <td colspan="5" ><select id="ddls_iitFormat" ></select></td>
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">給付總額</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitPaySum" /></td>             
-                                        <td align="right"><div class="font-title titlebackicon">扣繳稅額</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitPayTax"/></td>
-                                        <td align="right"><div class="font-title titlebackicon">給付淨額</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitPayAmount"/></td>
+                                        <td align="right"><div class="font-title titlebackicon">註記</div></td>
+                                        <td colspan="5"><select id="ddls_iitMark" ></select></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><div class="font-title titlebackicon">憑單填發方式</div></td>
+                                        <td colspan="5"><select id="ddls_iitManner" ></select></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">給付總額</div></td>
+                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPaySum" /></td>             
+                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">扣繳稅額</div></td>
+                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPayTax"/></td>
+                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">給付淨額</div></td>
+                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPayAmount"/></td>
                                    </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">所屬年月起</div></td>
@@ -185,7 +190,7 @@
                                         <td align="right"><div class="font-title titlebackicon">證號別</div></td>
                                         <td><input type="text" class="inputex width95" id="txt_iitIdentify" /></td>                                       
                                         <td align="right"><div class="font-title titlebackicon">錯誤註記</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_pSickLeaveTimes" /></td>
+                                        <td><input type="text" class="inputex width95" id="txt_iitErrMark" /></td>
                                     </tr>
                                       <tr>
                                         <td align="right"><div class="font-title titlebackicon">房屋稅及編號</div></td>
@@ -208,12 +213,9 @@
 
 
 
-    <input id="hid_perGuid" type="hidden" />
-    <input id="hid_pPsmGuid" type="hidden" />
-    <input id="hid_pGuid" type="hidden" />
+
+    <input id="hid_iitGuid" type="hidden" />
     
-    <input id="hid_EditType" type="hidden" />
-    <input id="hid_RangeType" type="hidden" />
     <script type="text/javascript">
         JsEven = {
 
@@ -252,9 +254,11 @@
                 txt_iitYearEnd: 'txt_iitYearEnd',
                 txt_iitStock: 'txt_iitStock',
                 txt_iitIdentify: 'txt_iitIdentify',
-                txt_pSickLeaveTimes: 'txt_pSickLeaveTimes',
+                txt_iitErrMark: 'txt_iitErrMark',
                 txt_iitHouseTax: 'txt_iitHouseTax',
-                txt_iitIndustryCode: 'txt_iitIndustryCode'
+                txt_iitIndustryCode: 'txt_iitIndustryCode',
+
+                hid_iitGuid:'hid_iitGuid'
             },
 
 
@@ -269,11 +273,11 @@
                 var PerName = $('#' + this.Id.txt_PerName_S).val();
                 var Com = $('#' + this.Id.txt_Comp_S).val()
                 var Dep = $('#' + this.Id.txt_Dep_S).val();
-                var rangDate = $('#' + this.Id.txt_SalaryRang_S).val();
+                var yyyy = $('#' + this.Id.txt_yyyy_S).val();
                 var typ = "";
 
 
-                if (PerNo == "" && PerName == "" && Com == "" && Dep == "" && rangDate == "") {
+                if (PerNo == "" && PerName == "" && Com == "" && Dep == "" && yyyy == "") {
                     typ = "Y";
                 }
 
@@ -285,20 +289,20 @@
                        '&PerName=' + PerName +
                        '&Company=' + Com +
                        '&Dep=' + Dep +
-                       '&SalaryRang=' + rangDate + '&typ=' + typ,
+                       '&yyyy=' + yyyy + '&typ=' + typ,
                     type: 'xml',
                     success: function (xmldoc) {
 
                         var msg = CommonEven.XmlNodeGetValue(xmldoc, "dList");
                         switch (msg) {
-                            case "DangerWord":
+                            case "d":
                                 CommonEven.goErrorPage();
                                 break;
-                            case "Timeout":
+                            case "t":
                                 alert('登入逾時');
                                 CommonEven.goLogin();
                                 break;
-                            case "error":
+                            case "e":
                                 alert('資料發生錯誤，請聯絡管理者');
                                 break;
                             default:
@@ -307,7 +311,7 @@
                                 var dView = xmldoc.getElementsByTagName('dView');
 
                                 if (dView.length != 0) {
-                                    CmFmCommon.Xsl(xmldoc, '../xslt/PayRoll/xsl_Payroll.xsl', div);
+                                    CmFmCommon.Xsl(xmldoc, '../xslt/Tax/xsl_Tax.xsl', div);
                                     LicEven.tblClass();
 
                                 } else { div.innerHTML = '目前無任何資料'; }
@@ -326,6 +330,7 @@
 
             view: function (a) {
                 var guid = a.getAttribute('guid');
+                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 $.ajax({
                     type: "POST",
                     url: '../handler/Tax/ashx_TaxList.ashx',
@@ -335,294 +340,80 @@
                         var CView = xmldoc.getElementsByTagName('dView');
                         if (CView.length == 1) {
                             var e = CView[0];
-                            var pGuid = CommonEven.XmlNodeGetValue(e, "pGuid");
-                            var perGuid = CommonEven.XmlNodeGetValue(e, "pPerGuid");
-                            var pPsmGuid = CommonEven.XmlNodeGetValue(e, "pPsmGuid");
+                            var Guid = CommonEven.XmlNodeGetValue(e, "iitGuid");
 
-                            $('#' + JsEven.Id.hid_perGuid).val(perGuid);
-                            $('#' + JsEven.Id.hid_pPsmGuid).val(pPsmGuid);
+                            
                             $('#' + JsEven.Id.hid_EditType).val("Edit");
-                            $('#' + JsEven.Id.hid_pGuid).val(pGuid);
+                            $('#' + JsEven.Id.td_yyyy).html(CommonEven.XmlNodeGetValue(e, "iitYyyy"));
+                            $('#' + JsEven.Id.td_iitPerNo).html(CommonEven.XmlNodeGetValue(e, "iitPerNo"));
+                            $('#' + JsEven.Id.td_iitPerName).html(CommonEven.XmlNodeGetValue(e, "iitPerName"));
+                            $('#' + JsEven.Id.td_iitPerDep).html(CommonEven.XmlNodeGetValue(e, "iitPerDep"));
+                            $('#' + JsEven.Id.td_iitPerIDNumber).html(CommonEven.XmlNodeGetValue(e, "iitPerIDNumber"));
+                            $('#' + JsEven.Id.td_iitPassPort).html(CommonEven.XmlNodeGetValue(e, "iitPassPort"));
+                            $('#' + JsEven.Id.td_iitPerResidentAddr).html(CommonEven.XmlNodeGetValue(e, "iitPerResidentAddr"));
+                            $('#' + JsEven.Id.td_iitPerAdds).html(CommonEven.XmlNodeGetValue(e, "iitPerAdds"));
+                            $('#' + JsEven.Id.td_iitComName).html(CommonEven.XmlNodeGetValue(e, "iitComName"));
+                            $('#' + JsEven.Id.td_iitInstitutionCode).html(CommonEven.XmlNodeGetValue(e, "iitInstitutionCode"));
+                            $('#' + JsEven.Id.ddls_iitFormat).val(CommonEven.XmlNodeGetValue(e, "iitFormat"));
+                            $('#' + JsEven.Id.ddls_iitMark).val(CommonEven.XmlNodeGetValue(e, "iitMark"));
+                            $('#' + JsEven.Id.ddls_iitManner).val(CommonEven.XmlNodeGetValue(e, "iitManner"));
+                            $('#' + JsEven.Id.txt_iitPaySum).val(CommonEven.XmlNodeGetValue(e, "iitPaySum"));
+                            $('#' + JsEven.Id.txt_iitPayTax).val(CommonEven.XmlNodeGetValue(e, "iitPayTax"));
+                            $('#' + JsEven.Id.txt_iitPayAmount).val(CommonEven.XmlNodeGetValue(e, "iitPayAmount"));
+                            $('#' + JsEven.Id.txt_iitYearStart).val(CommonEven.XmlNodeGetValue(e, "iitYearStart"));
+                            $('#' + JsEven.Id.txt_iitYearEnd).val(CommonEven.XmlNodeGetValue(e, "iitYearEnd"));
+                            $('#' + JsEven.Id.txt_iitStock).val(CommonEven.XmlNodeGetValue(e, "iitStock"));
+                            $('#' + JsEven.Id.txt_iitIdentify).val(CommonEven.XmlNodeGetValue(e, "iitIdentify"));
+                            $('#' + JsEven.Id.txt_iitErrMark).val(CommonEven.XmlNodeGetValue(e, "iitErrMark"));
+                            $('#' + JsEven.Id.txt_iitHouseTax).val(CommonEven.XmlNodeGetValue(e, "iitHouseTax"));
+                            $('#' + JsEven.Id.txt_iitIndustryCode).val(CommonEven.XmlNodeGetValue(e, "iitIndustryCode"));
 
-                            $('#' + JsEven.Page1Id.td_PerNo).html(CommonEven.XmlNodeGetValue(e, "pPerNo"));
-                            $('#' + JsEven.Page1Id.td_PerName).html(CommonEven.XmlNodeGetValue(e, "pPerName"));
-                            $('#' + JsEven.Page1Id.td_PerCom).html(CommonEven.XmlNodeGetValue(e, "pPerCompanyName"));
-                            $('#' + JsEven.Page1Id.td_PerDep).html(CommonEven.XmlNodeGetValue(e, "pPerDep"));
-
-                            $('#' + JsEven.Page1Id.txt_pWeekdayTime1).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime1"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdayTime2).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime2"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdayTime3).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime3"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary1).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary1"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary2).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary2"));
-                            $('#' + JsEven.Page1Id.txt_pWeekdaySalary3).val(CommonEven.XmlNodeGetValue(e, "pWeekdaySalary3"));
-
-                            $('#' + JsEven.Page1Id.txt_pOffDayTime1).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime1"));
-                            $('#' + JsEven.Page1Id.txt_pOffDayTime2).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime2"));
-                            $('#' + JsEven.Page1Id.txt_pOffDayTime3).val(CommonEven.XmlNodeGetValue(e, "pOffDayTime3"));
-                            $('#' + JsEven.Page1Id.txt_pOffDaySalary1).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary1"));
-                            $('#' + JsEven.Page1Id.txt_pOffDaySalary2).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary2"));
-                            $('#' + JsEven.Page1Id.txt_pOffDaySalary3).val(CommonEven.XmlNodeGetValue(e, "pOffDaySalary3"));
-
-                            $('#' + JsEven.Page1Id.txt_pHolidayTime1).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime1"));
-                            $('#' + JsEven.Page1Id.txt_pHolidayTime2).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime2"));
-                            $('#' + JsEven.Page1Id.txt_pHolidayTime3).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime3"));
-                            $('#' + JsEven.Page1Id.txt_pHolidayTime4).val(CommonEven.XmlNodeGetValue(e, "pHolidayTime4"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySalary1).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary1"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySalary2).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary2"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySalary3).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary3"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySalary4).val(CommonEven.XmlNodeGetValue(e, "pHolidaySalary4"));
-
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime1"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime2"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime3"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTime4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTime4"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary1).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary1"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary2).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary2"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary3).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary3"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysSalary4).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysSalary4"));
-
-                            $('#' + JsEven.Page1Id.txt_pAnnualLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pAnnualLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pAnnualLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pMarriageLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMarriageLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pMarriageLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMarriageLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pSickLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pSickLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pSickLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pSickLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pFuneralLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pFuneralLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pFuneralLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pFuneralLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pMaternityLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pMaternityLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMaternityLeaveSalary"));
-
-                            $('#' + JsEven.Page1Id.txt_pProductionLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pProductionLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pProductionLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pProductionLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pMilitaryLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pMilitaryLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pMilitaryLeaveSalary"));
-                            $('#' + JsEven.Page1Id.txt_pAbortionLeaveTimes).val(CommonEven.XmlNodeGetValue(e, "pAbortionLeaveTimes"));
-                            $('#' + JsEven.Page1Id.txt_pAbortionLeaveSalary).val(CommonEven.XmlNodeGetValue(e, "pAbortionLeaveSalary"));
-
-                            $('#' + JsEven.Page1Id.txt_pHolidayDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidayDutyFree"));
-                            $('#' + JsEven.Page1Id.txt_pHolidayTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidayTaxation"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysTaxation).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysTaxation"));
-                            $('#' + JsEven.Page1Id.txt_pNationalholidaysDutyFree).val(CommonEven.XmlNodeGetValue(e, "pNationalholidaysDutyFree"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySumDutyFree).val(CommonEven.XmlNodeGetValue(e, "pHolidaySumDutyFree"));
-                            $('#' + JsEven.Page1Id.txt_pHolidaySumTaxation).val(CommonEven.XmlNodeGetValue(e, "pHolidaySumTaxation"));
-                            $('#' + JsEven.Page1Id.txt_pAttendanceDays).val(CommonEven.XmlNodeGetValue(e, "pAttendanceDays"));
-                            $('#' + JsEven.Page1Id.txt_pAttendanceTimes).val(CommonEven.XmlNodeGetValue(e, "pAttendanceTimes"));
-
-
-                            //$('#' + JsEven.Page1Id.txt_pPayLeave).val(CommonEven.XmlNodeGetValue(e, "pPayLeave"));
-                            $('#' + JsEven.Page1Id.txt_pOverTimeDutyfree).val(CommonEven.XmlNodeGetValue(e, "pOverTimeDutyfree"));
-                            $('#' + JsEven.Page1Id.txt_pOverTimeTaxation).val(CommonEven.XmlNodeGetValue(e, "pOverTimeTaxation"));
-                            $('#' + JsEven.Page1Id.txt_pIntertemporal).val(CommonEven.XmlNodeGetValue(e, "pIntertemporal"));
-                            $('#' + JsEven.Page1Id.txt_pSalary).val(CommonEven.XmlNodeGetValue(e, "pSalary"));
-
-
-                            $('#' + JsEven.Page2Id.txt_pPay).val(CommonEven.XmlNodeGetValue(e, "pPay"));
-                            $('#' + JsEven.Page2Id.txt_pTaxation).val(CommonEven.XmlNodeGetValue(e, "pTaxation"));
-                            $('#' + JsEven.Page2Id.txt_pTax).val(CommonEven.XmlNodeGetValue(e, "pTax"));
-                            $('#' + JsEven.Page2Id.txt_pPremium).val(CommonEven.XmlNodeGetValue(e, "pPremium"));
-                            $('#' + JsEven.Page2Id.txt_pPersonInsurance).val(CommonEven.XmlNodeGetValue(e, "pPersonInsurance"));
-                            $('#' + JsEven.Page2Id.txt_pPersonLabor).val(CommonEven.XmlNodeGetValue(e, "pPersonLabor"));
-                            $('#' + JsEven.Page2Id.txt_pPersonPension).val(CommonEven.XmlNodeGetValue(e, "pPersonPension"));
-                            $('#' + JsEven.Page2Id.txt_pCompanyPension).val(CommonEven.XmlNodeGetValue(e, "pCompanyPension"));
-                            $('#' + JsEven.Page2Id.txt_pPersonPensionSum).val(CommonEven.XmlNodeGetValue(e, "pPersonPensionSum"));
-                            $('#' + JsEven.Page2Id.txt_pCompanyPensionSum).val(CommonEven.XmlNodeGetValue(e, "pCompanyPensionSum"));
-
-
-                            JsEven.AllList(perGuid, pPsmGuid);
                         }
                         else {
                             alert('資料發生錯誤')
                         }
+                        $.unblockUI();
                     },
                     error: function (xhr, statusText) {
                         //alert(xhr.status);
+                        $.unblockUI();
                         alert('資料發生錯誤');
                     }
+
                 });
             },
 
-            Del: function (a) {
-                if (confirm('刪除後無法回復，您確定要刪除嗎?')) {
-                    var guid = a.getAttribute('Guid');
-                    $.ajax({
-                        type: "POST",
-                        url: '',
-                        data: 'guid=' + guid + '&typ=Del',
-                        dataType: 'text',  //xml, json, script, text, html
-                        success: function (msg) {
-                            switch (msg) {
-                                case "ok":
-                                    alert('刪除成功');
-                                    JsEven.Ins();
-                                    JsEven.List('Y');
-                                    break;
-                                case "e":
-                                    alert('程式發生錯誤，請聯絡相關管理人員');
-                                    break;
-                                case "t":
-                                    alert('登入逾時');
-                                    CommonEven.goLogin();
-                                    break;
-                                case "d":
-                                    CommandEven.goErrorPage();
-                                    break;
-                            }
-                        },
-                        error: function (xhr, statusText) {
-                            //alert(xhr.status);
-                            alert('資料發生錯誤');
-                        }
-                    });
-                }
-            },
 
             Edit: function () {
 
-                var pGuid = $('#' + this.Id.hid_pGuid).val();
-                if (pGuid != "") {
-                    var pWeekdayTime1 = $('#' + this.Page1Id.txt_pWeekdayTime1).val();
-                    var pWeekdayTime2 = $('#' + this.Page1Id.txt_pWeekdayTime2).val();
-                    var pWeekdayTime3 = $('#' + this.Page1Id.txt_pWeekdayTime3).val();
-                    var pWeekdaySalary1 = $('#' + this.Page1Id.txt_pWeekdaySalary1).val();
-                    var pWeekdaySalary2 = $('#' + this.Page1Id.txt_pWeekdaySalary2).val();
-                    var pWeekdaySalary3 = $('#' + this.Page1Id.txt_pWeekdaySalary3).val();
-                    var pOffDayTime1 = $('#' + this.Page1Id.txt_pOffDayTime1).val();
-                    var pOffDayTime2 = $('#' + this.Page1Id.txt_pOffDayTime2).val();
-                    var pOffDayTime3 = $('#' + this.Page1Id.txt_pOffDayTime3).val();
-                    var pOffDaySalary1 = $('#' + this.Page1Id.txt_pOffDaySalary1).val();
-                    var pOffDaySalary2 = $('#' + this.Page1Id.txt_pOffDaySalary2).val();
-                    var pOffDaySalary3 = $('#' + this.Page1Id.txt_pOffDaySalary3).val();
-                    var pHolidayTime1 = $('#' + this.Page1Id.txt_pHolidayTime1).val();
-                    var pHolidayTime2 = $('#' + this.Page1Id.txt_pHolidayTime2).val();
-                    var pHolidayTime3 = $('#' + this.Page1Id.txt_pHolidayTime3).val();
-                    var pHolidayTime4 = $('#' + this.Page1Id.txt_pHolidayTime4).val();
-                    var pHolidaySalary1 = $('#' + this.Page1Id.txt_pHolidaySalary1).val();
-                    var pHolidaySalary2 = $('#' + this.Page1Id.txt_pHolidaySalary2).val();
-                    var pHolidaySalary3 = $('#' + this.Page1Id.txt_pHolidaySalary3).val();
-                    var pHolidaySalary4 = $('#' + this.Page1Id.txt_pHolidaySalary4).val();
-                    var pHolidayDutyFree = $('#' + this.Page1Id.txt_pHolidayDutyFree).val();
-                    var pHolidayTaxation = $('#' + this.Page1Id.txt_pHolidayTaxation).val();
-                    var pNationalholidaysTime1 = $('#' + this.Page1Id.txt_pNationalholidaysTime1).val();
-                    var pNationalholidaysTime2 = $('#' + this.Page1Id.txt_pNationalholidaysTime2).val();
-                    var pNationalholidaysTime3 = $('#' + this.Page1Id.txt_pNationalholidaysTime3).val();
-                    var pNationalholidaysTime4 = $('#' + this.Page1Id.txt_pNationalholidaysTime4).val();
-                    var pNationalholidaysSalary1 = $('#' + this.Page1Id.txt_pNationalholidaysSalary1).val();
-                    var pNationalholidaysSalary2 = $('#' + this.Page1Id.txt_pNationalholidaysSalary2).val();
-                    var pNationalholidaysSalary3 = $('#' + this.Page1Id.txt_pNationalholidaysSalary3).val();
-                    var pNationalholidaysSalary4 = $('#' + this.Page1Id.txt_pNationalholidaysSalary4).val();
-                    var pNationalholidaysTaxation = $('#' + this.Page1Id.txt_pNationalholidaysTaxation).val();
-                    var pNationalholidaysDutyFree = $('#' + this.Page1Id.txt_pNationalholidaysDutyFree).val();
-
-                    var pHolidaySumDutyFree = $('#' + this.Page1Id.txt_pHolidaySumDutyFree).val();
-                    var pHolidaySumTaxation = $('#' + this.Page1Id.txt_pHolidaySumTaxation).val();
-                    var pAnnualLeaveTimes = $('#' + this.Page1Id.txt_pAnnualLeaveTimes).val();
-                    var pAnnualLeaveSalary = $('#' + this.Page1Id.txt_pAnnualLeaveSalary).val();
-                    var pMarriageLeaveTimes = $('#' + this.Page1Id.txt_pMarriageLeaveTimes).val();
-                    var pMarriageLeaveSalary = $('#' + this.Page1Id.txt_pMarriageLeaveSalary).val();
-                    var pSickLeaveTimes = $('#' + this.Page1Id.txt_pSickLeaveTimes).val();
-                    var pSickLeaveSalary = $('#' + this.Page1Id.txt_pSickLeaveSalary).val();
-                    var pFuneralLeaveTimes = $('#' + this.Page1Id.txt_pFuneralLeaveTimes).val();
-                    var pFuneralLeaveSalary = $('#' + this.Page1Id.txt_pFuneralLeaveSalary).val();
-                    var pMaternityLeaveTimes = $('#' + this.Page1Id.txt_pMaternityLeaveTimes).val();
-                    var pMaternityLeaveSalary = $('#' + this.Page1Id.txt_pMaternityLeaveSalary).val();
-
-                    var pProductionLeaveTimes = $('#' + this.Page1Id.txt_pProductionLeaveTimes).val();
-                    var pProductionLeaveSalary = $('#' + this.Page1Id.txt_pProductionLeaveSalary).val();
-                    var pMilitaryLeaveTimes = $('#' + this.Page1Id.txt_pMilitaryLeaveTimes).val();
-                    var pMilitaryLeaveSalary = $('#' + this.Page1Id.txt_pMilitaryLeaveSalary).val();
-                    var pAbortionLeaveTimes = $('#' + this.Page1Id.txt_pAbortionLeaveTimes).val();
-                    var pAbortionLeaveSalary = $('#' + this.Page1Id.txt_pAbortionLeaveSalary).val();
-
-                    var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
-                    var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
-                    var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
-                    var pOverTimeTaxation = $('#' + this.Page1Id.txt_pOverTimeTaxation).val();
-                    var pIntertemporal = $('#' + this.Page1Id.txt_pIntertemporal).val();
-                    var pSalary = $('#' + this.Page1Id.txt_pSalary).val();
-
-                    var pPay = $('#' + this.Page2Id.txt_pPay).val();
-                    var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
-                    var pTax = $('#' + this.Page2Id.txt_pTax).val();
-                    var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
-                    var pPersonInsurance = $('#' + this.Page2Id.txt_pPersonInsurance).val();
-                    var pPersonLabor = $('#' + this.Page2Id.txt_pPersonLabor).val();
-                    var pPersonPension = $('#' + this.Page2Id.txt_pPersonPension).val();
-                    var pCompanyPension = $('#' + this.Page2Id.txt_pCompanyPension).val();
-
+                var iitGuid = $('#' + this.Id.hid_iitGuid).val();
+                if (iitGuid != "") {
+                    var iitPaySum = $('#' + this.Id.txt_iitPaySum).val();
+                    var iitPayTax = $('#' + this.Id.txt_iitPayTax).val();
+                    var iitPayAmount = $('#' + this.Id.txt_iitPayAmount).val();
+                    var iitYearStart = $('#' + this.Id.txt_iitYearStart).val();
+                    var iitYearEnd = $('#' + this.Id.txt_iitYearEnd).val();
+                    var iitStock = $('#' + this.Id.txt_iitStock).val();
+                    var iitIdentify = $('#' + this.Id.txt_iitIdentify).val();
+                    var iitErrMark = $('#' + this.Id.txt_iitErrMark).val();
+                    var iitHouseTax = $('#' + this.Id.txt_iitHouseTax).val();
+                    var iitIndustryCode = $('#' + this.Id.txt_iitIndustryCode).val();
 
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     $.ajax({
                         type: "POST",
                         url: '../handler/Payroll/ashx_PayEdit.ashx',
-                        data: 'pGuid=' + pGuid +
-                              '&pWeekdayTime1=' + pWeekdayTime1 +
-                              '&pWeekdayTime2=' + pWeekdayTime2 +
-                              '&pWeekdayTime3=' + pWeekdayTime3 +
-                              '&pWeekdaySalary1=' + pWeekdaySalary1 +
-                              '&pWeekdaySalary2=' + pWeekdaySalary2 +
-                              '&pWeekdaySalary3=' + pWeekdaySalary3 +
-
-                              '&pOffDayTime1=' + pOffDayTime1 +
-                              '&pOffDayTime2=' + pOffDayTime2 +
-                              '&pOffDayTime3=' + pOffDayTime3 +
-                              '&pOffDaySalary1=' + pOffDaySalary1 +
-                              '&pOffDaySalary2=' + pOffDaySalary2 +
-                              '&pOffDaySalary3=' + pOffDaySalary3 +
-
-                              '&pHolidayTime1=' + pHolidayTime1 +
-                              '&pHolidayTime2=' + pHolidayTime2 +
-                              '&pHolidayTime3=' + pHolidayTime3 +
-                              '&pHolidayTime4=' + pHolidayTime4 +
-                              '&pHolidaySalary1=' + pHolidaySalary1 +
-                              '&pHolidaySalary2=' + pHolidaySalary2 +
-                              '&pHolidaySalary3=' + pHolidaySalary3 +
-                              '&pHolidaySalary4=' + pHolidaySalary4 +
-
-                              '&pNationalholidaysTime1=' + pNationalholidaysTime1 +
-                              '&pNationalholidaysTime2=' + pNationalholidaysTime2 +
-                              '&pNationalholidaysTime3=' + pNationalholidaysTime3 +
-                              '&pNationalholidaysTime4=' + pNationalholidaysTime4 +
-                              '&pNationalholidaysSalary1=' + pNationalholidaysSalary1 +
-                              '&pNationalholidaysSalary2=' + pNationalholidaysSalary2 +
-                              '&pNationalholidaysSalary3=' + pNationalholidaysSalary3 +
-                              '&pNationalholidaysSalary4=' + pNationalholidaysSalary4 +
-                              '&pAnnualLeaveTimes=' + pAnnualLeaveTimes +
-                              '&pAnnualLeaveSalary=' + pAnnualLeaveSalary +
-                              '&pMarriageLeaveTimes=' + pMarriageLeaveTimes +
-                              '&pMarriageLeaveSalary=' + pMarriageLeaveSalary +
-                              '&pSickLeaveTimes=' + pSickLeaveTimes +
-                              '&pSickLeaveSalary=' + pSickLeaveSalary +
-                              '&pFuneralLeaveTimes=' + pFuneralLeaveTimes +
-                              '&pFuneralLeaveSalary=' + pFuneralLeaveSalary +
-                              '&pMaternityLeaveTimes=' + pMaternityLeaveTimes +
-                              '&pMaternityLeaveSalary=' + pMaternityLeaveSalary +
-                              '&pProductionLeaveTimes=' + pProductionLeaveTimes +
-                              '&pProductionLeaveSalary=' + pProductionLeaveSalary +
-                              '&pMilitaryLeaveTimes=' + pMilitaryLeaveTimes +
-                              '&pMilitaryLeaveSalary=' + pMilitaryLeaveSalary +
-                              '&pAbortionLeaveTimes=' + pAbortionLeaveTimes +
-                              '&pAbortionLeaveSalary=' + pAbortionLeaveSalary +
-
-                              '&pHolidayDutyFree=' + pHolidayDutyFree +
-                              '&pHolidayTaxation=' + pHolidayTaxation +
-                              '&pNationalholidaysTaxation=' + pNationalholidaysTaxation +
-                              '&pNationalholidaysDutyFree=' + pNationalholidaysDutyFree +
-                              '&pHolidaySumDutyFree=' + pHolidaySumDutyFree +
-                              '&pHolidaySumTaxation=' + pHolidaySumTaxation +
-                              '&pAttendanceDays=' + pAttendanceDays +
-                              '&pAttendanceTimes=' + pAttendanceTimes +
-                              '&pOverTimeDutyfree=' + pOverTimeDutyfree +
-                              '&pOverTimeTaxation=' + pOverTimeTaxation +
-                              '&pIntertemporal=' + pIntertemporal +
-                              '&pPay=' + pPay +
-                              '&pTaxation=' + pTaxation +
-                              '&pTax=' + pTax +
-                              '&pPremium=' + pPremium +
-                              '&pPersonInsurance=' + pPersonInsurance +
-                              '&pPersonLabor=' + pPersonLabor +
-                              '&pPersonPension=' + pPersonPension +
-                              '&pCompanyPension=' + pCompanyPension +
-                              '&pSalary=' + pSalary,
+                        data: 'iitGuid=' + iitGuid +
+                              '&iitPaySum=' + iitPaySum +
+                              '&iitPayTax=' + iitPayTax +
+                              '&iitPayAmount=' + iitPayAmount +
+                              '&iitYearStart=' + iitYearStart +
+                              '&iitYearEnd=' + iitYearEnd +
+                              '&iitStock=' + iitStock +
+                              '&iitIdentify=' + iitIdentify +
+                              '&iitErrMark=' + iitErrMark +
+                              '&iitHouseTax=' + iitHouseTax +
+                              '&iitIndustryCode=' + iitIndustryCode,
                         dataType: 'text',  //xml, json, script, text, html
                         success: function (msg) {
                             switch (msg) {
@@ -654,15 +445,6 @@
 
             },
 
-            countCost: function () {
-                var p = $('#' + JsEven.Page2Id.txt_Pric_m).val();
-                var q = $('#' + JsEven.Page2Id.txt_Quantity_m).val();
-
-                p = (p != "") ? p : 0;
-                q = (q != "") ? q : 0;
-                $('#' + JsEven.Page2Id.txt_Cost_m).val(p * q);
-
-            },
 
             reSearch: function () {
                 document.getElementById(JsEven.Id.div_Search).style.display = "block";
@@ -715,13 +497,13 @@
 
             },
 
-            genPayroll: function () {
+            genTax: function () {
 
                 var yyyy = $('#' + this.Id.txt_yyyy_gen).val();
-                if (yyyy != "") {
+                if (yyyy != "" && yyyy.length == 4) {
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     var opt = {
-                        url: '../handler/Payroll/ashx_GenTax.ashx',
+                        url: '../handler/Tax/ashx_GenTax.ashx',
                         v: 'yyyy=' + yyyy,
                         type: 'text',
                         success: function (msg) {
@@ -742,17 +524,50 @@
                                     document.getElementById(JsEven.Id.div_GenTax).style.display = "none";
                                     document.getElementById(JsEven.Id.div_Search).style.display = "none";
                                     document.getElementById(JsEven.Id.div_Data).style.display = "block";
-                                    alert('薪資計算完成');
+                                    alert('所得稅資料產生完成');
                                     break;
                             }
                             $.unblockUI();
                         }
                     }
                     CmFmCommon.ajax(opt);
-                } else { alert('請選擇計薪週期'); }
+                } else { alert('請輸入年度'); }
 
             },
 
+
+            //DDL
+            getddl: function (gno, tagName) {
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/GetDDL.ashx",
+                    data: {
+                        Group: gno
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("GetDDL Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            data = $.parseXML(data);
+                            $(tagName).empty();
+                            var ddlstr = '<option value="">請選擇</option>';
+                            if ($(data).find("code").length > 0) {
+                                $(data).find("code").each(function (i) {
+                                    ddlstr += '<option value="' + $(this).attr("v") + '">' + $(this).attr("desc") + '</option>';
+                                });
+                            }
+                            $(tagName).append(ddlstr);
+                        }
+                    }
+                })
+            },
         }
 
 
@@ -796,19 +611,22 @@
         }
 
         document.body.onload = function () {
-            //JsEven.Inin();
-            $("#" + JsEven.Page2Id.hid_EditType).val("Ins");
-            $("#" + JsEven.Page2Id.txt_Date_m + ",#" + JsEven.Page2Id.txt_Date_s + ",#" + JsEven.Page2Id.txt_Date_e).datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'yy/mm/dd',
-                dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-                monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-                yearRange: '-100:+0',
-                onClose: function (dateText, inst) {
-                    $(this).datepicker('option', 'dateFormat', 'yy/mm/dd');
-                }
-            });
+
+            JsEven.getddl("22", "#" + JsEven.Id.ddls_iitMark);
+            JsEven.getddl("23", "#" + JsEven.Id.ddls_iitFormat);
+            JsEven.getddl("24", "#" + JsEven.Id.ddls_iitManner);
+            JsEven.Inin();
+            //$("#" + JsEven.Page2Id.txt_Date_m + ",#" + JsEven.Page2Id.txt_Date_s + ",#" + JsEven.Page2Id.txt_Date_e).datepicker({
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    dateFormat: 'yy/mm/dd',
+            //    dayNamesMin: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            //    monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            //    yearRange: '-100:+0',
+            //    onClose: function (dateText, inst) {
+            //        $(this).datepicker('option', 'dateFormat', 'yy/mm/dd');
+            //    }
+            //});
         }
     </script>
 
