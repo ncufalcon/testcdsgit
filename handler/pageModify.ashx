@@ -40,6 +40,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string begin_name { get; set; }//
         public string end_name { get; set; }//
         public string mbName { get; set; }//
+        public string perLastDate { get; set; }//
     }
     //sy_Person 欄位 人事資料
     public class pTooL
@@ -54,6 +55,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string perFirstDate { get; set; }//到職日期
         public string perBasicSalary { get; set; }//底薪
         public string perAllowance { get; set; }//職能加給
+        public string perLastDate { get; set; }//離職日期
     }
     //sy_PersonAllowanceChang1e 欄位 薪資異動資料
     public class pacTooL
@@ -201,8 +203,8 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                             e.begin_name = dt_personchange.Rows[i]["pcChangeBegin"].ToString().Trim();//
                             e.end_name = dt_personchange.Rows[i]["pcChangeEnd"].ToString().Trim();//
                         }
-                        
 
+                        e.perLastDate = dt_personchange.Rows[i]["perLastDate"].ToString().Trim();//
                         pcList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -238,6 +240,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.perFirstDate =  dt_thispeopledata.Rows[0]["perFirstDate"].ToString().Trim();//到職日期
                         e.perBasicSalary =  dt_thispeopledata.Rows[0]["perBasicSalary"].ToString().Trim();//底薪
                         e.perAllowance =  dt_thispeopledata.Rows[0]["perAllowance"].ToString().Trim();//職能加給
+                        e.perLastDate =  dt_thispeopledata.Rows[0]["perLastDate"].ToString().Trim();//離職日期
                         pList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -267,11 +270,16 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string mod_hidden_pcguid = string.IsNullOrEmpty(context.Request.Form["mod_hidden_pcguid"]) ? "" : context.Request.Form["mod_hidden_pcguid"].ToString().Trim();
 
                 try{
+                    //先判對異動日期為同一天的 不能繼續異動
+                    //EX: 異動日期2017/07/01  王一二 離職 那接下來只要是王一二選異動日期2017/07/01的離職都不能改
+                    //EX: 異動日期2017/07/01  王一二 職務異動 那接下來只要是王一二選異動日期2017/07/01的職務異動都不能改
+                    //EX: 異動日期2017/07/01  王一二 部門異動 那接下來只要是王一二選異動日期2017/07/01的部門異動都不能改
                     pc_db._pcPerGuid = mod_person_guid;
                     pc_db._pcChangeDate = mod_change_date;
                     pc_db._pcChangeName = mod_change_pro;
                     pc_db._pcChangeBegin = mod_before;
                     pc_db._pcChangeEnd = mod_after;
+                    pc_db._str_creatid = session_no;
                     if (mod_status == "1")
                     {
                         pc_db._pcVenifyDate = mod_chkdate;
@@ -285,10 +293,45 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     pc_db._pcStatus = mod_status;
                     pc_db._pcPs = mod_ps;
                     pc_db._pcCreateId = mod_chkpeople;
+                    DataTable dt_chk_change = new DataTable();
+                    dt_chk_change = pc_db.CheckPersonChangeIten();
                     if (mod_addormod == "新增")
                     {
-                        pc_db._pcGuid = Guid.NewGuid().ToString();
-                        pc_db.InsertPersonChange();
+                        if (dt_chk_change.Rows.Count > 0)
+                        {
+                            context.Response.Write("notonly");
+                        }
+                        else
+                        {
+                            if (mod_status == "1")//已確認
+                            {
+                                pc_db._perGuid = mod_person_guid;
+                                if (mod_change_pro == "01") {
+                                    pc_db._perDep = mod_after;
+                                    pc_db.UpdatperDep();
+                                }
+                                if (mod_change_pro == "02")
+                                {//職務調動已確認
+                                 //更新人事資料 sy_Person. perPosition
+                                    pc_db._perPosition = mod_after;
+                                    pc_db.UpdatperPosition();
+                                }
+                                if (mod_change_pro == "04") {
+                                    //離職
+                                    //更新人事資料 sy_Person. perLastDate
+                                    pc_db._perLastDate = mod_change_date;
+                                    pc_db.UpdatperLastdate();
+                                }
+                                if (mod_change_pro == "06") {
+                                    //回任
+                                    //更新人事資料 sy_Person. perFirstDate,perLastDate (年資 特休?)
+                                    pc_db._perFirstDate = mod_change_date;
+                                    pc_db.UpdatperFirstdateLastdate();
+                                }
+                            }
+                            pc_db._pcGuid = Guid.NewGuid().ToString();
+                            pc_db.InsertPersonChange();
+                        }
                     }
                     else
                     {//修改
@@ -296,22 +339,41 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         {
                             pc_db._pcGuid = mod_hidden_pcguid;
                             pc_db._pcModifyId = mod_chkpeople;
-                            pc_db.UpdatePersonChange();
-                            pc_db._perGuid = mod_person_guid;
-                            if (mod_change_pro == "01" && mod_status == "1")
-                            {//部門調動已確認
-                             //更新人事資料 sy_Person. perDep
-                                pc_db._perDep = mod_after;
-                                pc_db.UpdatperDep();
+                            DataTable dt_chk_change_guid = pc_db.CheckPersonChangeIten();
+                            //表示修改並沒有調整異動項目 || 有調整異動項目但沒有重複
+                            if ((dt_chk_change.Rows.Count>0 && dt_chk_change_guid.Rows.Count == 1) || (dt_chk_change.Rows.Count==0 && dt_chk_change_guid.Rows.Count==0)) {
+                                pc_db.UpdatePersonChange();
+                                pc_db._perGuid = mod_person_guid;
+                                if (mod_change_pro == "01" && mod_status == "1")
+                                {//部門調動已確認
+                                 //更新人事資料 sy_Person. perDep
+                                    pc_db._perDep = mod_after;
+                                    pc_db.UpdatperDep();
 
+                                }
+                                if (mod_change_pro == "02" && mod_status == "1")
+                                {//職務調動已確認
+                                 //更新人事資料 sy_Person. perPosition
+                                    pc_db._perPosition = mod_after;
+                                    pc_db.UpdatperPosition();
+                                }
+                                if (mod_change_pro == "04" && mod_status == "1")
+                                {//離職
+                                 //更新人事資料 sy_Person. perLastDate
+                                    pc_db._perPosition = mod_after;
+                                    pc_db.UpdatperLastdate();
+                                }
+                                if (mod_change_pro == "06") {
+                                    //回任
+                                    //更新人事資料 sy_Person. perFirstDate=異動日期,perLastDate='' (年資=0 特休=0)
+                                    pc_db._perFirstDate = mod_change_date;
+                                    pc_db.UpdatperFirstdateLastdate();
+                                }
+                                context.Response.Write("ok");
+                            } else {
+                                context.Response.Write("notonly");
                             }
-                            if (mod_change_pro == "02" && mod_status == "1")
-                            {//職務調動已確認
-                             //更新人事資料 sy_Person. perPosition
-                                pc_db._perPosition = mod_after;
-                                pc_db.UpdatperPosition();
-                            }
-                            context.Response.Write("ok");
+
                         }
                         catch (Exception ex) { }
 
@@ -349,7 +411,22 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     context.Response.Write("error");
                 }
                 break;
-
+            //回任加保
+            case "per_add":
+                string add_person_guid = string.IsNullOrEmpty(context.Request.Form["add_person_guid"]) ? "" : context.Request.Form["add_person_guid"].ToString().Trim();
+                string add_date = string.IsNullOrEmpty(context.Request.Form["add_date"]) ? "" : context.Request.Form["add_date"].ToString().Trim();
+                try {
+                    //加保
+                    pc_db._str_creatid = session_no;
+                    pc_db._perGuid = add_person_guid;
+                    pc_db._perFirstDate = add_date;
+                    pc_db.AddStartInsurance();
+                    context.Response.Write("ok");
+                }
+                catch (Exception ex) {
+                    context.Response.Write("error");
+                }
+                break;
             //撈薪資異動
             case "load_paychangedata":
                 string str_search_pay_date = string.IsNullOrEmpty(context.Request.Form["str_pay_date"]) ? "" : context.Request.Form["str_pay_date"].ToString().Trim();
@@ -518,6 +595,31 @@ public class pageModify : IHttpHandler, IRequiresSessionState
 
                 }
 
+                break;
+
+            //撈離職資訊
+            case "load_lastdate":
+                string lastdate_thisno = string.IsNullOrEmpty(context.Request.Form["str_thisno"]) ? "" : context.Request.Form["str_thisno"].ToString().Trim();
+                pc_db._perNo = lastdate_thisno;
+                DataTable dt_lastdatedata = pc_db.SelectPersonByperNo();
+                if (dt_lastdatedata.Rows.Count > 0)
+                {
+                    List<pTooL> pList = new List<pTooL>();
+                    for (int i = 0; i < dt_lastdatedata.Rows.Count; i++)
+                    {
+                        pTooL e = new pTooL();
+                        e.perLastDate =  dt_lastdatedata.Rows[0]["perLastDate"].ToString().Trim();//離職日期
+                        pList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(pList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else
+                {
+                    context.Response.Write("nodata");
+                }
                 break;
 
         }

@@ -17,7 +17,8 @@
             //人事異動 工號欄位 change事件
             $(document).on("change", "#txt_person_empno", function () {
                 //alert($(this).val());
-                load_thispeopledata($(this).val(),"person");
+                sel_lastdate($(this).val());
+                //load_thispeopledata($(this).val(),"person");
             });
             $(".li_clk").click(function () {
                 switch ($(this).attr("id")) {
@@ -88,6 +89,8 @@
                 $("#td_person_after").removeAttr('disabled');
                 $("#txt_person_ps").removeAttr('disabled');
                 $("input[name='txt_person_status']").removeAttr('disabled');
+                $("#span_person_Status").text("新增");
+                $("#lastdate").val("");
             });
             //人事異動 儲存按鈕
             $("#btn_person_submit").click(function () {
@@ -116,11 +119,11 @@
                         call_prodata();
                         load_thispeopledata($("#txt_person_empno").val(), "person");
                     }
-                    if (change_type == "03" || change_type == "04" || change_type == "05") {
+                    if (change_type == "03" || change_type == "04" || change_type == "05" || change_type == "06") {
                         if (change_type == "04") {
                             $("#td_person_before,#td_person_after").empty();
                             $("#td_person_after").append("<input type='text' id='select_after' class='inputex width60' maxlength='50' />");
-                            load_thispeopledata($("#txt_person_empno"), "person");
+                            load_thispeopledata($("#txt_person_empno").val(), "person");
                             $("#select_after").datetimepicker({
                                 format: 'Y/m/d',//'Y-m-d H:i:s'
                                 timepicker: false,    //false關閉時間選項 
@@ -142,16 +145,22 @@
             //人事異動 tr 點擊事件
             $(document).on("click", "#div_person_list tbody tr td:not(:nth-child(1))", function () {
                 if ($(this).closest('tr').attr("trstat") == "0") {//未確認
-                    $("#txt_person_empno").removeAttr('disabled');
+                    $("#txt_person_empno").attr('disabled', 'disabled');
+                    $("#Pbox").attr('disabled', 'disabled');
+                    $("#Pbox").prop("onclick", false);
                     $("#txt_person_change_date").removeAttr('disabled');
                     $("#txt_person_change_pro").removeAttr('disabled');
                     $("#td_person_before").removeAttr('disabled');
                     $("#td_person_after").removeAttr('disabled');
                     $("#txt_person_ps").removeAttr('disabled');
                     $("input[name='txt_person_status']").removeAttr('disabled');
-
-                    $("#Pbox").removeAttr('disabled');
-                    $("#Pbox").attr("onclick", "openfancybox(this);");
+                    if ($(this).closest('tr').attr("trlastdate") != null && $(this).closest('tr').attr("trlastdate") != "") {
+                        $("#lastdate").val($(this).closest('tr').attr("trlastdate"));
+                    } else {
+                        $("#lastdate").val("");
+                    }
+                    //$("#Pbox").removeAttr('disabled');
+                    //$("#Pbox").attr("onclick", "openfancybox(this);");
                     $("#txt_person_change_pro").removeAttr('disabled');
                 } else {//已確認
                     $("#txt_person_empno").attr('disabled', 'disabled'); 
@@ -164,7 +173,9 @@
                     $("#Pbox").attr('disabled', 'disabled');
                     $("#Pbox").prop("onclick", false);
                     $("#txt_person_change_pro").attr('disabled', 'disabled');
+                    $("#lastdate").val("");
                 }
+                
                 $("#td_person_before,#td_person_after").empty();
                 $("#txt_person_empno").val("");
                 $("#txt_hidden_person_guid").val("");
@@ -179,38 +190,10 @@
                 $("#txt_person_ps").val("");
                 $("#span_person_Status").text("修改");
                 $("#hidden_pcguid").val($(this).closest('tr').attr("trguid"));//修改才會有
+                call_changedata();
                 call_personchangedata_byguid();
             });
-            //撈人事異動的異動項目
-            function call_changedata() {
-                $("#txt_person_change_pro").empty();
-                $.ajax({
-                    type: "POST",
-                    async: true, //在沒有返回值之前,不會執行下一步動作
-                    url: "../handler/pageModify.ashx",
-                    data: {
-                        func: "load_person_changedata"
-                    },
-                    error: function (xhr) {
-                        alert("error");
-                    },
-                    beforeSend: function () {
-                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-                    },
-                    success: function (response) {
-                        var str_html = "<option value=''>----請選擇----</option>";
-                        if (response != "nodata") {
-                            for (var i = 0; i < response.length; i++) {
-                                str_html += "<option value='" + response[i].code_value + "'>" + response[i].code_desc + "</option>";
-                            }
-                        }
-                        $("#txt_person_change_pro").append(str_html);
-                    },//success end
-                    complete: function () {
-                        $.unblockUI();
-                    }
-                });//ajax end
-            }
+            
             //撈分店的下拉選單項目
             function call_storedata() {
                 $("#select_after_store").empty();
@@ -319,7 +302,7 @@
                                 str_html += "</thead>";
                                 str_html += "<tbody>";
                                 for (var i = 0; i < response.length; i++) {
-                                    str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "'>";
+                                    str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "' trlastdate='" + response[i].perLastDate + "'  >";
                                     str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
                                     str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
@@ -462,7 +445,13 @@
                                 $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                             },
                             success: function (response) {
-                                if (response != "error") {
+                                if (response == "error") {
+                                    alert("error");
+                                }
+                                else if (response == "notonly") {
+                                    alert("該人員在同一個日期已有相同的異動項目，請重新選擇");
+                                }
+                                else  {
                                     if ($("#span_person_Status").text() == "新增") {
                                         alert("新增成功");
                                     } else {
@@ -471,7 +460,8 @@
                                     $("#search_person_keyword").val("");
                                     $("#search_person_date").val("");
                                     $("input[name='search_person_status']").removeAttr("checked");
-                                    if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "04") {
+                                    if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "04")
+                                    {
                                         //如果選"離職"而且"已確認"
                                         if (confirm("是否要退保?")) {
                                             $.ajax({
@@ -501,7 +491,49 @@
                                             });//ajax end
                                         }
                                     }
+                                    if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "06") {
+                                        //如果選"離職"而且"已確認"
+                                        if (confirm("是否要加保?")) {
+                                            $.ajax({
+                                                type: "POST",
+                                                async: true, //在沒有返回值之前,不會執行下一步動作
+                                                url: "../handler/pageModify.ashx",
+                                                data: {
+                                                    func: "per_add",
+                                                    add_person_guid: $("#txt_hidden_person_guid").val(),
+                                                    add_date: $("#txt_person_change_date").val()
+                                                },
+                                                error: function (xhr) {
+                                                    alert("error");
+                                                },
+                                                beforeSend: function () {
+                                                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                                                },
+                                                success: function (response) {
+                                                    if (response != "error") {
+                                                        alert("加保成功");
+                                                        call_personchangedata();
+                                                    }
+                                                },//success end
+                                                complete: function () {
+                                                    $.unblockUI();
+                                                }
+                                            });//ajax end
+                                        }
+                                    }
                                     $("#hidden_person_status").val($("input[name='txt_person_status']:checked").val());
+                                    if ($("input[name='txt_person_status']:checked").val() == "1") {
+                                        $("#txt_person_empno").attr('disabled', 'disabled');
+                                        $("#txt_person_change_date").attr('disabled', 'disabled');
+                                        $("#txt_person_change_pro").attr('disabled', 'disabled');
+                                        $("#td_person_before").attr('disabled', 'disabled');
+                                        $("#td_person_after").attr('disabled', 'disabled');
+                                        $("#txt_person_ps").attr('disabled', 'disabled');
+                                        $("input[name='txt_person_status']").attr('disabled', 'disabled');
+                                        $("#Pbox").attr('disabled', 'disabled');
+                                        $("#Pbox").prop("onclick", false);
+                                        $("#txt_person_change_pro").attr('disabled', 'disabled');
+                                    }
                                     call_personchangedata();
                                 }
                             },//success end
@@ -963,22 +995,26 @@
                     if (response != "nodata") {
                         switch (txttype) {
                             case "person":
-                                if ($("#txt_person_change_pro").val() == "01") {
-                                    $("#select_before").empty();
-                                    $("#select_before").append("<option value='" + response[0].perDep + "'>" + response[0].cbName + "</option>");
-                                }
-                                else if ($("#txt_person_change_pro").val() == "02") {
-                                    $("#select_before").empty();
-                                    $("#select_before").append("<option value='" + response[0].perPosition + "'>" + response[0].PositionName + "</option>");
-                                }
-                                else if ($("#txt_person_change_pro").val() == "04") {
-                                    $("#td_person_before").empty();
-                                    $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' value='" + response[0].perFirstDate + "' disabled='disabled' />");
-                                }
-                                else {
-                                    $("#txt_person_empno").val(response[0].perNo);
-                                    $("#txt_person_cname").text(response[0].perName);
-                                    $("#txt_hidden_person_guid").val(response[0].perGuid);
+                                if (response[0].perLastDate != null && response[0].perLastDate != "") {
+                                    $("#lastdate").val(response[0].perLastDate);
+                                } else {
+                                    if ($("#txt_person_change_pro").val() == "01") {
+                                        $("#select_before").empty();
+                                        $("#select_before").append("<option value='" + response[0].perDep + "'>" + response[0].cbName + "</option>");
+                                    }
+                                    else if ($("#txt_person_change_pro").val() == "02") {
+                                        $("#select_before").empty();
+                                        $("#select_before").append("<option value='" + response[0].perPosition + "'>" + response[0].PositionName + "</option>");
+                                    }
+                                    else if ($("#txt_person_change_pro").val() == "04") {
+                                        $("#td_person_before").empty();
+                                        $("#td_person_before").append("<input type='text' id='select_before' class='inputex width60' maxlength='50' value='" + response[0].perFirstDate + "' disabled='disabled' />");
+                                    }
+                                    else {
+                                        $("#txt_person_empno").val(response[0].perNo);
+                                        $("#txt_person_cname").text(response[0].perName);
+                                        $("#txt_hidden_person_guid").val(response[0].perGuid);
+                                    }
                                 }
                                 break;
                             case "pay":
@@ -1177,6 +1213,8 @@
                     $("#txt_person_empno").val(pno);
                     $("#txt_person_cname").text(pname);
                     $("#txt_hidden_person_guid").val(gv);
+                    load_thispeopledata(pno, "person");
+                    sel_lastdate(pno);
                     break;
                 case "Personnel2":
                     $("#txt_pay_empno").val(pno);
@@ -1192,15 +1230,88 @@
             }
 
         }
+        //撈人事異動的異動項目
+        function call_changedata() {
+            $("#txt_person_change_pro").empty();
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_person_changedata"
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    var str_html = "<option value=''>----請選擇----</option>";
+                    if (response != "nodata") {
+                        for (var i = 0; i < response.length; i++) {
+                            if ($("#lastdate").val() != "") {
+                                //如果是離職 只有回任選項
+                                if (response[i].code_desc == "回任") {
+                                    str_html += "<option value='" + response[i].code_value + "'>" + response[i].code_desc + "</option>";
+                                }
+                            } else {
+                                if (response[i].code_desc != "回任") {
+                                    str_html += "<option value='" + response[i].code_value + "'>" + response[i].code_desc + "</option>";
+                                }
+                            }
+                        }
+                    }
+                    $("#txt_person_change_pro").append(str_html);
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
         //批次匯入 回傳
         function setReflash() {
             call_paychangedata();
+        }
+        //撈離職資訊
+        function sel_lastdate(thisno){
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_lastdate",
+                    str_thisno: thisno
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    if (response != "nodata") {
+                        if (response[0].perLastDate != null && response[0].perLastDate != "") {
+                            $("#lastdate").val(response[0].perLastDate);
+                        } else {
+                            $("#lastdate").val("");
+                        }
+                        call_changedata();
+                    } else {
+                        
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
         }
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <input type="hidden" id="idtmp" name="idtmp" class="inputex" />
     <input type="hidden" id="pfid" name="pfid" class="inputex" />
+    <input type="hidden" id="lastdate" name="lastdate" class="inputex" />
     <div class="WrapperMain">
         <div class="fixwidth">
             <div class="twocol underlineT1 margin10T">
