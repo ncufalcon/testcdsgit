@@ -1292,5 +1292,56 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
 
         }
+
+
+        /// <summary>
+        /// 修改個人津貼
+        /// </summary>
+        public void Upsy_Tax(payroll.model.sy_Tax p)
+        {
+            string sql = @"update sy_IndividualIncomeTax set                                                               
+                                iitFormat=@iitFormat
+                                ,iitMark=@iitMark
+                                ,iitManner=@iitManner
+                                ,iitPaySum=@iitPaySum
+                                ,iitPayTax=@iitPayTax
+                                ,iitPayAmount=@iitPayAmount
+                                ,iitYearStart=@iitYearStart
+                                ,iitYearEnd=@iitYearEnd
+                                ,iitStock=@iitStock
+                                ,iitIdentify=@iitIdentify
+                                ,iitErrMark=@iitErrMark
+                                ,iitHouseTax=@iitHouseTax
+                                ,iitIndustryCode=@iitIndustryCode 
+                                ,iitCode=@iitCode 
+                            where iitGuid=@iitGuid";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@iitGuid", p.iitGuid);
+            cmd.Parameters.AddWithValue("@iitFormat", p.iitFormat);
+            cmd.Parameters.AddWithValue("@iitMark", p.iitMark);
+            cmd.Parameters.AddWithValue("@iitManner", p.iitManner);
+            cmd.Parameters.AddWithValue("@iitPaySum", p.iitPaySum);
+            cmd.Parameters.AddWithValue("@iitPayTax", p.iitPayTax);
+            cmd.Parameters.AddWithValue("@iitPayAmount", p.iitPayAmount);
+            cmd.Parameters.AddWithValue("@iitYearStart", p.iitYearStart);
+            cmd.Parameters.AddWithValue("@iitYearEnd", p.iitYearEnd);
+            cmd.Parameters.AddWithValue("@iitStock", p.iitStock);
+            cmd.Parameters.AddWithValue("@iitIdentify", p.iitIdentify);
+            cmd.Parameters.AddWithValue("@iitErrMark", p.iitErrMark);
+            cmd.Parameters.AddWithValue("@iitHouseTax", p.iitHouseTax)                ;
+            cmd.Parameters.AddWithValue("@iitIndustryCode", p.iitIndustryCode);
+            cmd.Parameters.AddWithValue("@iitCode", p.iitCode);       
+
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
     }
 }

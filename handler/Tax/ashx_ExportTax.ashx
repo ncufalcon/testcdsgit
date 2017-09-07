@@ -2,6 +2,7 @@
 
 using System;
 using System.Web;
+using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -11,103 +12,81 @@ public class ashx_ExportTax : IHttpHandler, System.Web.SessionState.IReadOnlySes
 
     NpoiExcel Npo = new NpoiExcel();
     payroll.gdal dal = new payroll.gdal();
+    Common com = new Common();
     public void ProcessRequest(HttpContext context)
     {
-        string sr_guid = (!string.IsNullOrEmpty(context.Request.QueryString["sr_guid"])) ? context.Request.QueryString["sr_guid"].ToString() : "";
-        string sDate = (!string.IsNullOrEmpty(context.Request.QueryString["sDate"])) ? context.Request.QueryString["sDate"].ToString() : "";
-        string eDate = (!string.IsNullOrEmpty(context.Request.QueryString["eDate"])) ? context.Request.QueryString["eDate"].ToString() : "";
-        string PerNo = (!string.IsNullOrEmpty(context.Request.QueryString["PerNo"])) ? context.Request.QueryString["PerNo"].ToString() : "";
-        string Company = (!string.IsNullOrEmpty(context.Request.QueryString["Company"])) ? context.Request.QueryString["Company"].ToString() : "";
-        string Dep = (!string.IsNullOrEmpty(context.Request.QueryString["Dep"])) ? context.Request.QueryString["Dep"].ToString() : "";
-        string Position = (!string.IsNullOrEmpty(context.Request.QueryString["Position"])) ? context.Request.QueryString["Position"].ToString() : "";
-
-
-
-        if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
+        try
         {
-            DataView dv = dal.Call_pr_LeaveExport(sr_guid, PerNo, Company, Dep, Position).DefaultView;
+            string yyyy = (!string.IsNullOrEmpty(context.Request.QueryString["yyyy"])) ? context.Request.QueryString["yyyy"].ToString() : "";
 
 
-            FileStream fs = new FileStream(context.Server.MapPath("~/Excel_sample/LeaveExport.xlsx"), FileMode.Open, FileAccess.Read);
-            XSSFWorkbook wk = new XSSFWorkbook(fs);
-            XSSFSheet sh = (XSSFSheet)wk.GetSheetAt(0);
+            string[] str = { yyyy };
+            string sqlinj = com.CheckSqlInJection(str);
 
-            IRow HeaderRow = sh.CreateRow(0);
-            ICell DateCell = HeaderRow.CreateCell(0);
+            payroll.model.sy_Tax pModel = new payroll.model.sy_Tax();
+            pModel.iitPerNo = "";
+            pModel.iitPerName = "";
+            pModel.iitComName = "";
+            pModel.iitPerDep = "";
+            pModel.iitYyyy = yyyy;
+            pModel.iitGuid = "";
 
-            XSSFCellStyle cellStyle = (XSSFCellStyle)wk.CreateCellStyle();
-            XSSFFont font = (XSSFFont)wk.CreateFont();
-
-            DateCell.CellStyle = cellStyle;
-            font.FontHeightInPoints = 10;
-            //font.Color = NPOI.HSSF.Util.HSSFColor.RED.index;
-            cellStyle.SetFont(font);
-            DateCell.SetCellValue("請假期間：" + sDate + "~" + eDate);
-            for (int i = 0; i < dv.Count; i++)
+            if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-                int cellN = i + 2;
-                if (dv[i]["PerGuid"].ToString() == "Sum")//加總
+                DataView dv = dal.SelSy_Tax(pModel).DefaultView;
+
+
+                FileStream fs = new FileStream(context.Server.MapPath("~/Excel_sample/Tax.xlsx"), FileMode.Open, FileAccess.Read);
+                XSSFWorkbook wk = new XSSFWorkbook(fs);
+                XSSFSheet sh = (XSSFSheet)wk.GetSheetAt(1);
+
+                //IRow HeaderRow = sh.CreateRow(0);
+                //ICell DateCell = HeaderRow.CreateCell(0);
+
+                for (int i = 0; i < dv.Count; i++)
                 {
-                    HeaderRow.CreateCell(3).SetCellValue(dv[i]["Duration1"].ToString());
-                    HeaderRow.CreateCell(4).SetCellValue(dv[i]["Duration14"].ToString());
-                    HeaderRow.CreateCell(5).SetCellValue(dv[i]["Duration9"].ToString());
-                    HeaderRow.CreateCell(6).SetCellValue(dv[i]["Duration4"].ToString());
-                    HeaderRow.CreateCell(7).SetCellValue(dv[i]["Duration10"].ToString());
-                    HeaderRow.CreateCell(8).SetCellValue(dv[i]["Duration13"].ToString());
-                    HeaderRow.CreateCell(9).SetCellValue(dv[i]["Duration5"].ToString());
-                    HeaderRow.CreateCell(10).SetCellValue(dv[i]["Duration7"].ToString());
-                    HeaderRow.CreateCell(11).SetCellValue(dv[i]["sickLavelSum"].ToString());//病假加總
-                    HeaderRow.CreateCell(12).SetCellValue(dv[i]["Duration11"].ToString());
-                    HeaderRow.CreateCell(13).SetCellValue(dv[i]["Duration2"].ToString());
-                    HeaderRow.CreateCell(14).SetCellValue(dv[i]["Duration3"].ToString());
-                    HeaderRow.CreateCell(15).SetCellValue(dv[i]["Duration8"].ToString());
-                    HeaderRow.CreateCell(16).SetCellValue(dv[i]["Duration12"].ToString());
-                    HeaderRow.CreateCell(17).SetCellValue(dv[i]["AnnualLeaveProportion"].ToString());
-                    HeaderRow.CreateCell(18).SetCellValue(dv[i]["AnnualLeave"].ToString());
-                    HeaderRow.CreateCell(19).SetCellValue(dv[i]["P1"].ToString());
-                    HeaderRow.CreateCell(20).SetCellValue(dv[i]["SickLeavePayroll"].ToString());
-                    HeaderRow.CreateCell(21).SetCellValue(dv[i]["MarriageLeavePayroll"].ToString());
-                    HeaderRow.CreateCell(22).SetCellValue(dv[i]["FuneralLeavePayroll"].ToString());
-                    HeaderRow.CreateCell(23).SetCellValue(dv[i]["MaternityLeavePayroll"].ToString());
-                    cellN = cellN - 1;
-                }
-                else
-                {
+                    int cellN = i + 5;
+
                     //IRow row = sh.GetRow(cellN);
                     IRow row = sh.CreateRow(cellN);
-                    row.CreateCell(0).SetCellValue(dv[i]["PerNo"].ToString());
-                    row.CreateCell(1).SetCellValue(dv[i]["cbValue"].ToString());
-                    row.CreateCell(2).SetCellValue(dv[i]["perName"].ToString());
-                    row.CreateCell(3).SetCellValue(dv[i]["Duration1"].ToString());
-                    row.CreateCell(4).SetCellValue(dv[i]["Duration14"].ToString());
-                    row.CreateCell(5).SetCellValue(dv[i]["Duration9"].ToString());
-                    row.CreateCell(6).SetCellValue(dv[i]["Duration4"].ToString());
-                    row.CreateCell(7).SetCellValue(dv[i]["Duration10"].ToString());
-                    row.CreateCell(8).SetCellValue(dv[i]["Duration13"].ToString());
-                    row.CreateCell(9).SetCellValue(dv[i]["Duration5"].ToString());
-                    row.CreateCell(10).SetCellValue(dv[i]["Duration7"].ToString());
-                    row.CreateCell(11).SetCellValue(dv[i]["sickLavelSum"].ToString());//病假加總
-                    row.CreateCell(12).SetCellValue(dv[i]["Duration11"].ToString());
-                    row.CreateCell(13).SetCellValue(dv[i]["Duration2"].ToString());
-                    row.CreateCell(14).SetCellValue(dv[i]["Duration3"].ToString());
-                    row.CreateCell(15).SetCellValue(dv[i]["Duration8"].ToString());
-                    row.CreateCell(16).SetCellValue(dv[i]["Duration12"].ToString());
-                    row.CreateCell(17).SetCellValue(dv[i]["AnnualLeaveProportion1"].ToString());
-                    row.CreateCell(18).SetCellValue(dv[i]["AnnualLeave"].ToString());
-                    row.CreateCell(19).SetCellValue(dv[i]["P1"].ToString());
-                    row.CreateCell(20).SetCellValue(dv[i]["SickLeavePayroll"].ToString());
-                    row.CreateCell(21).SetCellValue(dv[i]["MarriageLeavePayroll"].ToString());
-                    row.CreateCell(22).SetCellValue(dv[i]["FuneralLeavePayroll"].ToString());
-                    row.CreateCell(23).SetCellValue(dv[i]["MaternityLeavePayroll"].ToString());
+                    row.CreateCell(0).SetCellValue("");
+                    row.CreateCell(1).SetCellValue(dv[i]["iitFormat"].ToString());
+                    row.CreateCell(2).SetCellValue(dv[i]["iitPerIDNumber"].ToString());
+                    row.CreateCell(3).SetCellValue(dv[i]["iitIdentify"].ToString());
+                    row.CreateCell(4).SetCellValue(dv[i]["iitPaySum"].ToString());
+                    row.CreateCell(5).SetCellValue(dv[i]["iitPayTax"].ToString());
+                    row.CreateCell(6).SetCellValue(dv[i]["iitPayAmount"].ToString());
+                    row.CreateCell(7).SetCellValue(dv[i]["iitPerNo"].ToString());
+                    row.CreateCell(8).SetCellValue(dv[i]["iitErrMark"].ToString());
+                    row.CreateCell(9).SetCellValue(dv[i]["iitPerName"].ToString());
+                    row.CreateCell(10).SetCellValue(dv[i]["iitPerResidentAddr"].ToString());
+                    row.CreateCell(11).SetCellValue((!string.IsNullOrEmpty(dv[i]["iitYearStart"].ToString())) ? dv[i]["iitYearStart"].ToString().Substring(0, 3) : "");//病假加總     iitYearStart
+                    row.CreateCell(12).SetCellValue((!string.IsNullOrEmpty(dv[i]["iitYearStart"].ToString())) ? dv[i]["iitYearStart"].ToString().Substring(4, 2) : "");
+                    row.CreateCell(13).SetCellValue((!string.IsNullOrEmpty(dv[i]["iitYearEnd"].ToString())) ? dv[i]["iitYearEnd"].ToString().Substring(0, 3) : "");
+                    row.CreateCell(14).SetCellValue((!string.IsNullOrEmpty(dv[i]["iitYearEnd"].ToString())) ? dv[i]["iitYearEnd"].ToString().Substring(4, 2) : "");
+                    row.CreateCell(15).SetCellValue(dv[i]["iitPension"].ToString());
+                    row.CreateCell(16).SetCellValue("");//dv[i]["iitBatchDate"].ToString()
+                    row.CreateCell(17).SetCellValue("");//dv[i]["iitBatchPrice"].ToString()
+                    row.CreateCell(18).SetCellValue(dv[i]["iitTaxMark"].ToString());
+                    row.CreateCell(19).SetCellValue(dv[i]["iitManner"].ToString());
+                    row.CreateCell(20).SetCellValue(dv[i]["iitCountryCode"].ToString());
+                    row.CreateCell(21).SetCellValue(dv[i]["iitCode"].ToString());
                 }
+
+
+                Npo.ExporkExcelNew(wk, yyyy + "度申報所得稅資料");//下載excel
             }
+            else
+            {
 
-
-            Npo.ExporkExcelNew(wk, "給薪假紀錄");//下載excel
+                context.Response.Write("TimeOut");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            context.Response.Write("TimeOut");
+            ErrorLog err = new ErrorLog();
+            err.InsErrorLog("ashx_ExportTax.ashx", ex.Message, USERINFO.MemberName);
+            context.Response.Write("程式發生錯誤，請聯絡相關管理人員");
         }
     }
 

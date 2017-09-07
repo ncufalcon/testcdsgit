@@ -192,7 +192,12 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                 context.Response.Write("TimeOut");
             }
         }
-        catch (Exception ex) { context.Response.Write("程式發生錯誤，請聯絡相關管理人員"); }
+        catch (Exception ex) {
+            ErrorLog err = new ErrorLog();
+            err.InsErrorLog("ashx_ExportPayroll.ashx", ex.Message, USERINFO.MemberName);
+            context.Response.Write("程式發生錯誤，請聯絡相關管理人員");
+
+        }
     }
 
     public bool IsReusable

@@ -162,11 +162,8 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
         }
         catch (Exception ex)
         {
-            //變數名稱 '@pHolidayDutyFree' 已經宣告。變數名稱在一個查詢批次或預存程序內必須是唯一的。
-            //必須宣告純量變數 "@UserInfo"。
-            //必須宣告純量變數 "@pNationalholidaysDutyFree"。
-            //ErrorLog err = new ErrorLog();
-            //err.InsErrorLog("ashx_NewStaffList.ashx", ex.Message, USERINFO.MemberEmpno);
+            ErrorLog err = new ErrorLog();
+            err.InsErrorLog("ashx_PayEdit.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("e");
         }
 

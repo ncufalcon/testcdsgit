@@ -91,7 +91,7 @@
                   <td class="width15" align="right"><div class="font-title titlebackicon">年度</div></td>
                   <td class="width35"><input type="text" id="txt_yyyy_rep" autofocus="autofocus" maxlength="4" class="inputex width60"  /><span style="color:red">#2017</span></td>
                   <td  style="text-align:right">
-                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genTax();">依年度匯出所得稅資料</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.ExportExcel();">依年度匯出所得稅資料</a>
                       <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
                   </td>
               </tr>
@@ -194,9 +194,9 @@
                                    </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">所屬年月起</div></td>
-                                        <td><input type="text" class="inputex width50" id="txt_iitYearStart" maxlength="7" /><span style="color:red">#2017/01</span></td>                                   
+                                        <td><input type="text" class="inputex width50" id="txt_iitYearStart" maxlength="7" /><span style="color:red">#106/01</span></td>                                   
                                         <td align="right"><div class="font-title titlebackicon">所屬年月迄</div></td>
-                                        <td><input type="text" class="inputex width50" id="txt_iitYearEnd" maxlength="7" /><span style="color:red">#2017/12</span></td>
+                                        <td><input type="text" class="inputex width50" id="txt_iitYearEnd" maxlength="7" /><span style="color:red">#106/12</span></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">自提退休金加總</div></td>
@@ -212,7 +212,14 @@
                                         <td align="right"><div class="font-title titlebackicon">執行業別代號</div></td>
                                         <td><input type="text" class="inputex width50" id="txt_iitIndustryCode" /></td>                                       
                                     </tr>  
-
+                                    <tr>
+                                        <td align="right"><div class="font-title titlebackicon">國家代碼</div></td>
+                                        <td colspan="5"><select id="ddls_iitCountryCode" ></select></td>     
+                                    </tr> 
+                                    <tr>                                
+                                        <td align="right"><div class="font-title titlebackicon">租稅協定代碼</div></td>
+                                        <td colspan="5"><select id="ddls_iitCode" ></select></td>                                       
+                                    </tr>
                                 </table>
                         </div><br /><br />
 
@@ -274,6 +281,8 @@
                 txt_iitErrMark: 'txt_iitErrMark',
                 txt_iitHouseTax: 'txt_iitHouseTax',
                 txt_iitIndustryCode: 'txt_iitIndustryCode',
+                ddls_iitCountryCode: 'ddls_iitCountryCode',
+                ddls_iitCode: 'ddls_iitCode',
 
                 hid_iitGuid:'hid_iitGuid'
             },
@@ -360,6 +369,7 @@
                             var Guid = CommonEven.XmlNodeGetValue(e, "iitGuid");
 
                             
+                            $('#' + JsEven.Id.hid_iitGuid).val(Guid);
                             $('#' + JsEven.Id.hid_EditType).val("Edit");
                             $('#' + JsEven.Id.td_yyyy).html(CommonEven.XmlNodeGetValue(e, "iitYyyy"));
                             $('#' + JsEven.Id.td_iitPerNo).html(CommonEven.XmlNodeGetValue(e, "iitPerNo"));
@@ -385,7 +395,8 @@
                             $('#' + JsEven.Id.txt_iitErrMark).val(CommonEven.XmlNodeGetValue(e, "iitErrMark"));
                             $('#' + JsEven.Id.txt_iitHouseTax).val(CommonEven.XmlNodeGetValue(e, "iitHouseTax"));
                             $('#' + JsEven.Id.txt_iitIndustryCode).val(CommonEven.XmlNodeGetValue(e, "iitIndustryCode"));
-
+                            $('#' + JsEven.Id.ddls_iitCountryCode).val(CommonEven.XmlNodeGetValue(e, "iitCountryCode"));
+                            $('#' + JsEven.Id.ddls_iitCode).val(CommonEven.XmlNodeGetValue(e, "iitCode"));
                         }
                         else {
                             alert('資料發生錯誤')
@@ -406,6 +417,9 @@
 
                 var iitGuid = $('#' + this.Id.hid_iitGuid).val();
                 if (iitGuid != "") {
+                    var iitFormat = $('#' + this.Id.ddls_iitFormat).val();
+                    var iitMark = $('#' + this.Id.ddls_iitMark).val();
+                    var iitManner = $('#' + this.Id.ddls_iitManner).val();
                     var iitPaySum = $('#' + this.Id.txt_iitPaySum).val();
                     var iitPayTax = $('#' + this.Id.txt_iitPayTax).val();
                     var iitPayAmount = $('#' + this.Id.txt_iitPayAmount).val();
@@ -416,13 +430,17 @@
                     var iitErrMark = $('#' + this.Id.txt_iitErrMark).val();
                     var iitHouseTax = $('#' + this.Id.txt_iitHouseTax).val();
                     var iitIndustryCode = $('#' + this.Id.txt_iitIndustryCode).val();
-
+                    var iitCountryCode = $('#' + this.Id.ddls_iitCountryCode).val();
+                    var iitCode = $('#' + this.Id.txt_iitCode).val();
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     $.ajax({
                         type: "POST",
-                        url: '../handler/Payroll/ashx_PayEdit.ashx',
+                        url: '../handler/Tax/ashx_TaxEdit.ashx',
                         data: 'iitGuid=' + iitGuid +
-                              '&iitPaySum=' + iitPaySum +
+                            '&iitFormat=' + iitFormat +
+                              '&iitMark=' + iitMark +
+                              '&iitManner=' + iitManner +
+                            '&iitPaySum=' + iitPaySum +
                               '&iitPayTax=' + iitPayTax +
                               '&iitPayAmount=' + iitPayAmount +
                               '&iitYearStart=' + iitYearStart +
@@ -431,7 +449,8 @@
                               '&iitIdentify=' + iitIdentify +
                               '&iitErrMark=' + iitErrMark +
                               '&iitHouseTax=' + iitHouseTax +
-                              '&iitIndustryCode=' + iitIndustryCode,
+                              '&iitIndustryCode=' + iitIndustryCode +
+                              '&iitCode=' + iitCode,
                         dataType: 'text',  //xml, json, script, text, html
                         success: function (msg) {
                             switch (msg) {
@@ -602,8 +621,7 @@
             ExportExcel: function () {
                 var yyyy = $('#' + this.Id.txt_yyyy_rep).val();
                 if (yyyy != '') {
-
-                    window.location = "../handler/Payroll/ashx_ExportPayroll.ashx?yyyy=" + yyyy;
+                    window.location = "../handler/Tax/ashx_ExportTax.ashx?yyyy=" + yyyy;
                 } else { alert('請輸入要匯出的年度'); }
             }
         }
@@ -653,6 +671,8 @@
             JsEven.getddl("22", "#" + JsEven.Id.ddls_iitMark);
             JsEven.getddl("23", "#" + JsEven.Id.ddls_iitFormat);
             JsEven.getddl("24", "#" + JsEven.Id.ddls_iitManner);
+            JsEven.getddl("25", "#" + JsEven.Id.ddls_iitCountryCode);
+            JsEven.getddl("26", "#" + JsEven.Id.ddls_iitCode);
             JsEven.Inin();
             //$("#" + JsEven.Page2Id.txt_Date_m + ",#" + JsEven.Page2Id.txt_Date_s + ",#" + JsEven.Page2Id.txt_Date_e).datepicker({
             //    changeMonth: true,
