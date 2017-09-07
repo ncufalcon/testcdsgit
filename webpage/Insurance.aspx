@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Insurance.aspx.cs" Inherits="webpage_Insurance" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Insurance.aspx.cs"  Inherits="webpage_Insurance" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script type="text/javascript" src="<%= ResolveUrl("~/js/fancybox/jquery.fancybox.js?v=2.1.5") %>"></script>
@@ -2051,7 +2051,8 @@
                         <li><a href="#tabs-3" name="aTab">勞退</a></li> 
                         <li><a href="#tabs-4" name="aTab">眷屬健保</a></li>
                         <li><a href="#tabs-5" name="aTab">團保</a></li>  
-                        <li><a href="#tabs-6" name="aTab">保薪調整</a></li>  
+                        <li><a href="#tabs-6" name="aTab">保薪調整</a></li>
+                        <li><a href="#tabs-7" name="aTab">服務年資進行勞退加碼提撥</a></li>    
                     </ul>
                     <div id="tabs-1">
                         <div class="twocol margin15T">
@@ -2442,6 +2443,69 @@
                                 <table id="InsModifyTab" width="98%" border="0" cellspacing="0" cellpadding="0"></table>
                             </div><!-- overwidthblock -->
                         </div>
+                    </div>
+                    <div id="tabs-7">
+                        <div class="twocol margin15T">
+                            <div class="right">
+                               
+                                <a href="javascript:void(0);" class="keybtn">查詢</a>   
+                                                   
+                            </div>
+                            <div>
+                                異動日期:<input type="text" />
+                                <a  href="javascript:void(0);" class="keybtn">將以勾選資料調整勞工自提比率</a>             
+                            </div>
+
+                        </div><br />
+                        <div class="stripeMe fixTable" style="max-height:175px;">
+                        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <th><input type="checkbox" /></th>
+                                <th>員工代號</th>
+                                <th>員工姓名</th>
+                                <th>部門</th>
+                                <th>年資</th>
+                                <th>調整前提撥率</th>
+                                <th>調整號提撥率</th>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>112233</td>
+                                <td>Test1</td>
+                                <td>中壢店</td>
+                                <td style="text-align:right">2</td>
+                                <td style="text-align:right">6</td>
+                                <td style="text-align:right">6.5</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>112233</td>
+                                <td>Test1</td>
+                                <td>中壢店</td>
+                                <td style="text-align:right">2</td>
+                                <td style="text-align:right">6</td>
+                                <td style="text-align:right">6.5</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>112233</td>
+                                <td>Test1</td>
+                                <td>中壢店</td>
+                                <td style="text-align:right">3</td>
+                                <td style="text-align:right">6.5</td>
+                                <td style="text-align:right">7</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>112233</td>
+                                <td>Test1</td>
+                                <td>中壢店</td>
+                                <td style="text-align:right">3</td>
+                                <td style="text-align:right">6.5</td>
+                                <td style="text-align:right">7</td>
+                            </tr>
+                        </table>
+                            </div>
                     </div>
                 <!-- 詳細資料end -->
             </div><!-- fixwidth -->         

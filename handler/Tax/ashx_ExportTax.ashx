@@ -8,7 +8,7 @@ using NPOI.XSSF.UserModel;
 using System.Data;
 
 public class ashx_ExportTax : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
-    
+
     NpoiExcel Npo = new NpoiExcel();
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
@@ -109,7 +109,8 @@ public class ashx_ExportTax : IHttpHandler, System.Web.SessionState.IReadOnlySes
         {
             context.Response.Write("TimeOut");
         }
- 
+    }
+
     public bool IsReusable {
         get {
             return false;
