@@ -85,13 +85,27 @@
 
         </div>
 
+        <div id="div_reportTax" class=" gentable font-normal" style="display:none; height:200px">
+          <table  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                  <td class="width15" align="right"><div class="font-title titlebackicon">年度</div></td>
+                  <td class="width35"><input type="text" id="txt_yyyy_rep" autofocus="autofocus" maxlength="4" class="inputex width60"  /><span style="color:red">#2017</span></td>
+                  <td  style="text-align:right">
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genTax();">依年度匯出所得稅資料</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
+                  </td>
+              </tr>
 
+          </table> 
+
+        </div>
 
         <div id="div_Data">
                     <div class="twocol margin15T">
                             <div class="right">
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.reSearch();">查詢</a>
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opGenPayroll();">產生所得稅資料</a>
+                                <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.opReportPayroll();">匯出所得稅資料</a>
                             </div>
                         </div>
             <div class="fixwidth" style="margin-top:20px;">
@@ -171,32 +185,32 @@
 
                                     </tr>
                                     <tr>
-                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">給付總額</div></td>
-                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPaySum" /></td>             
-                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">扣繳稅額</div></td>
-                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPayTax"/></td>
-                                        <td style="width:15%" align="right"><div class="font-title titlebackicon">給付淨額</div></td>
-                                        <td style="width:7%" ><input type="text" class="inputex width95" id="txt_iitPayAmount"/></td>
+                                        <td style="width:10%" align="right"><div class="font-title titlebackicon">給付總額</div></td>
+                                        <td style="width:15%" ><input type="text" class="inputex width50" id="txt_iitPaySum" /></td>             
+                                        <td style="width:10%" align="right"><div class="font-title titlebackicon">扣繳稅額</div></td>
+                                        <td style="width:15%" ><input type="text" class="inputex width50" id="txt_iitPayTax"/></td>
+                                        <td style="width:10%" align="right"><div class="font-title titlebackicon">給付淨額</div></td>
+                                        <td style="width:15%" ><input type="text" class="inputex width50" id="txt_iitPayAmount"/></td>
                                    </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">所屬年月起</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitYearStart" /></td>                                   
+                                        <td><input type="text" class="inputex width50" id="txt_iitYearStart" maxlength="7" /><span style="color:red">#2017/01</span></td>                                   
                                         <td align="right"><div class="font-title titlebackicon">所屬年月迄</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitYearEnd" /></td>
+                                        <td><input type="text" class="inputex width50" id="txt_iitYearEnd" maxlength="7" /><span style="color:red">#2017/12</span></td>
                                     </tr>
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">自提退休金加總</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitStock" /></td>                                     
+                                        <td><input type="text" class="inputex width50" id="txt_iitStock" /></td>                                     
                                         <td align="right"><div class="font-title titlebackicon">證號別</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitIdentify" /></td>                                       
+                                        <td><input type="text" class="inputex width50" id="txt_iitIdentify" /></td>                                       
                                         <td align="right"><div class="font-title titlebackicon">錯誤註記</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitErrMark" /></td>
+                                        <td><input type="text" class="inputex width50" id="txt_iitErrMark" /></td>
                                     </tr>
                                       <tr>
                                         <td align="right"><div class="font-title titlebackicon">房屋稅及編號</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitHouseTax" /></td>                                     
+                                        <td><input type="text" class="inputex width50" id="txt_iitHouseTax" /></td>                                     
                                         <td align="right"><div class="font-title titlebackicon">執行業別代號</div></td>
-                                        <td><input type="text" class="inputex width95" id="txt_iitIndustryCode" /></td>                                       
+                                        <td><input type="text" class="inputex width50" id="txt_iitIndustryCode" /></td>                                       
                                     </tr>  
 
                                 </table>
@@ -229,6 +243,9 @@
 
                 div_GenTax: 'div_GenTax',
                 txt_yyyy_gen: 'txt_yyyy_gen',
+
+                div_reportTax: 'div_reportTax',
+                txt_yyyy_rep: 'txt_yyyy_rep',
 
                 div_Data: 'div_Data',
                 div_MList: 'div_MList',
@@ -353,6 +370,7 @@
                             $('#' + JsEven.Id.td_iitPerResidentAddr).html(CommonEven.XmlNodeGetValue(e, "iitPerResidentAddr"));
                             $('#' + JsEven.Id.td_iitPerAdds).html(CommonEven.XmlNodeGetValue(e, "iitPerAdds"));
                             $('#' + JsEven.Id.td_iitComName).html(CommonEven.XmlNodeGetValue(e, "iitComName"));
+                            $('#' + JsEven.Id.td_iitComUniform).html(CommonEven.XmlNodeGetValue(e, "iitComUniform"));                            
                             $('#' + JsEven.Id.td_iitInstitutionCode).html(CommonEven.XmlNodeGetValue(e, "iitInstitutionCode"));
                             $('#' + JsEven.Id.ddls_iitFormat).val(CommonEven.XmlNodeGetValue(e, "iitFormat"));
                             $('#' + JsEven.Id.ddls_iitMark).val(CommonEven.XmlNodeGetValue(e, "iitMark"));
@@ -490,8 +508,17 @@
 
             },
 
+            opReportPayroll: function () {
+
+                document.getElementById(JsEven.Id.div_reportTax).style.display = "block";
+                document.getElementById(JsEven.Id.div_Search).style.display = "none";
+                document.getElementById(JsEven.Id.div_Data).style.display = "none";
+
+            },
+
             Cancel: function () {
                 document.getElementById(JsEven.Id.div_GenTax).style.display = "none";
+                document.getElementById(JsEven.Id.div_reportTax).style.display = "none";
                 document.getElementById(JsEven.Id.div_Search).style.display = "none";
                 document.getElementById(JsEven.Id.div_Data).style.display = "block";
 
@@ -568,6 +595,17 @@
                     }
                 })
             },
+
+
+
+
+            ExportExcel: function () {
+                var yyyy = $('#' + this.Id.txt_yyyy_rep).val();
+                if (yyyy != '') {
+
+                    window.location = "../handler/Payroll/ashx_ExportPayroll.ashx?yyyy=" + yyyy;
+                } else { alert('請輸入要匯出的年度'); }
+            }
         }
 
 
