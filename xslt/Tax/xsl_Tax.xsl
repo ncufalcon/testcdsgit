@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
 >
-    <xsl:output method="xml" indent="no"/>
+    <xsl:output method="html" indent="no"/>
 
   <xsl:template match="/dList">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tbl_List">
@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <xsl:for-each select="dView">
-          <tr guid="{pGuid}">
+          <tr guid="{iitGuid}">
             <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{iitGuid}">
               <xsl:value-of select="iitYyyy"/>
             </td>
