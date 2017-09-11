@@ -6,7 +6,7 @@ using System.Web;
 public class USERINFO
 {
     /// <summary>
-    /// 使用者工號
+    /// 使用Guid
     /// </summary>
     public static string MemberGuid
     {
@@ -44,7 +44,7 @@ public class USERINFO
 
 
     /// <summary>
-    /// 使用者電子信箱
+    /// 使用者角色
     /// </summary>
     public static string MemberClass
     {

@@ -47,63 +47,72 @@
 <!--{* 選單start *}-->
 <div class="nav">
   <ul id='nav_js' >
-  	<li><a href='#' title="首頁">首頁</a></li>
+  	<%--<li><a href="Javascript:void(0)" title="首頁">首頁</a></li>--%>
     <li>
-    <a href='#' target='_self' title="人事資料管理">人事資料管理</a>
+    <a id="a_PersonMag" runat="server" href="Javascript:void(0)" target='_self' title="人事資料管理" visible="false" >人事資料管理</a>
         <ul>
-            <li><a href='PersonnelInfo.aspx' target='_self' title="基本資料管理">基本資料管理</a></li>
-            <li><a href='page-Modify.aspx' target='_self' title="異動管理">異動管理</a></li>
+            <li><a id="a_Person" runat="server" href="~/webpage/PersonnelInfo.aspx" target="_self" title="基本資料管理" visible="false">基本資料管理</a></li>
+            <li><a id="a_Modify" runat="server" href="~/webpage/page-Modify.aspx" target="_self" title="異動管理" visible="false">異動管理</a></li>
         </ul>
     </li>
-    <li><a href='Insurance.aspx' target='_self' title="保險管理">保險管理</a></li>
-                        <li>
-                            <a href="Javascript:void(0)" target="_self" title="薪資管理">薪資管理</a>
-                            <ul>
-                                <li><a href="page-Allowance.aspx" target="_self" title="津貼管理">津貼管理</a></li>
-                                <li><a href="page-Gifts.aspx" target='_self' title="年節禮金計算">年節禮金計算</a></li>
-                                <li><a href="page-SalaryHoliday.aspx" target='_self' title="給薪假計算">給薪假計算</a></li>
-                                <li><a href="page-Payroll.aspx" target='_self' title="發薪紀錄建立">發薪紀錄建立</a></li>
-                                <li><a href="page-Saveto.aspx" target='_self' title="薪資轉存花旗媒體產生">薪資轉存花旗媒體產生</a></li>
-                                <li><a href="Page-PayrollPrint.aspx" target='_self' title="保密薪資條列印">保密薪資條列印</a></li>
-                                <li><a href="Page-PayrollList.aspx" target='_self' title="薪資冊">薪資冊</a></li>
-                                <li><a href="page-SalaryBar.html" target='_self' title="電子薪資條">電子薪資條</a></li>
-                                <li><a href="page-IndividualTax.aspx" target='_self' title="申報所得稅">申報所得稅</a></li>
-                            </ul>
-                        </li>
-                           <li>
-                            <a href='Javascript:void(0)' target='_self' title="出勤管理">出勤管理</a>
-                            <ul>
-                                <!--<li><a href='page-Attendance.html' target='_self' title="出勤管理">出勤管理</a></li>-->
-                                <li><a href="page-WorkHours.aspx" target='_self' title="時數管理">時數管理</a></li>
-                                <li><a href="page-Seniority.aspx" target='_self' title="年資與特休天數計算">年資與特休天數計算</a></li>
-                                <li><a href="page-Attendance.aspx" target='_self' title="請假資料維護">請假資料維護</a></li>
-                                <li><a href="file/SA List 統計資料.xlsx" target='_self' title="月出勤報表">月出勤報表</a></li>
-                            </ul>
-                        </li>
-                        <li><a href='#' target='_self' title="報表輸出管理">報表輸出管理</a></li>
-                        <li>
-                            <a href='#' target='_self' title="統計查詢">統計查詢</a>
-                            <ul>
-                                <li><a href='#' target='_self' title="管理查詢">管理查詢</a></li>
-                                <li><a href='#' target='_self' title="離職人員列表">統計表</a></li>
-                            </ul>
-                        </li>
-    <li><a href='#' target='_self' title="系統設定">系統設定</a>
+    <li><a id="a_Insurance" runat="server" href="~/webpage/Insurance.aspx" target='_self' title="保險管理" visible="false">保險管理</a></li>
+    <li>
+        <a id="a_PayrollMag" runat="server" href="Javascript:void(0)" target="_self" title="薪資管理" visible="false">薪資管理</a>
+        <ul>
+            <li><a id="a_Allowance" runat="server" href="~/webpage/page-Allowance.aspx" target="_self" title="津貼管理" visible="false">津貼管理</a></li>
+            <li><a id="a_Gifts" runat="server" href="~/webpage/page-Gifts.aspx" target='_self' title="年節禮金計算" visible="false">年節禮金計算</a></li>
+            <li><a id="a_SalaryHoliday" runat="server" href="~/webpage/page-SalaryHoliday.aspx" target='_self' title="給薪假計算" visible="false">給薪假計算</a></li>
+            <li><a id="a_Payroll" runat="server" href="~/webpage/page-Payroll.aspx" target='_self' title="發薪紀錄建立" visible="false">發薪紀錄建立</a></li>
+            <li><a id="a_Saveto" runat="server" href="~/webpage/page-Saveto.aspx" target='_self' title="薪資轉存花旗媒體產生" visible="false">薪資轉存花旗媒體產生</a></li>
+            <li><a id="a_PayrollPrint" runat="server" href="~/webpage/Page-PayrollPrint.aspx" target='_self' title="保密薪資條列印" visible="false">保密薪資條列印</a></li>
+            <li><a id="a_PayrollList" runat="server" href="~/webpage/Page-PayrollList.aspx" target='_self' title="薪資冊" visible="false">薪資冊</a></li>
+            <li><a id="a_PayrollElectronic" runat="server" href="~/webpage/Page-PayrollElectronic.aspx" target='_self' title="電子薪資條" visible="false">電子薪資條</a></li>
+            <li><a id="a_IndividualTax" runat="server" href="~/webpage/page-IndividualTax.aspx" target='_self' title="申報所得稅" visible="false">申報所得稅</a></li>
+        </ul>
+    </li>
+    <li>
+        <a id="a_WorkHoursMsg" runat="server" href="Javascript:void(0)" target='_self' title="出勤管理" visible="false">出勤管理</a>
+        <ul>
+            <li><a id="a_WorkHours" runat="server" href="~/webpage/page-WorkHours.aspx" target='_self' title="時數管理" visible="false">時數管理</a></li>
+            <li><a id="a_Seniority" runat="server" href="~/webpage/page-Seniority.aspx" target='_self' title="年資與特休天數計算" visible="false">年資與特休天數計算</a></li>
+            <li><a id="a_Attendance" runat="server" href="~/webpage/page-Attendance.aspx" target='_self' title="請假資料維護" visible="false">請假資料維護</a></li>
+           <%-- <li><a href="file/SA List 統計資料.xlsx" target='_self' title="月出勤報表">月出勤報表</a></li>--%>
+        </ul>
+    </li>
+     <li>
+         <a id="a_Report" runat="server" href="Javascript:void(0)" target='_self' title="報表輸出管理" visible="false">報表輸出管理</a>
+         <ul>
+             <li><a id="a_InsuranceFee" runat="server" href="~/webpage/Page-InsuranceFee.aspx" target='_self' title="勞健保保費計算表" visible="false">勞健保保費計算表</a></li>                                
+             <li><a id="a_AttendanceDetail" runat="server" href="~/webpage/Page-AttendanceDetail.aspx" target='_self' title="員工出勤明細表" visible="false">員工出勤明細表</a></li>
+             <li><a id="a_PensionReport" runat="server" href="~/webpage/Page-PensionReport.aspx" target='_self' title="勞退提繳工資調整報表" visible="false">勞退提繳工資調整報表</a></li>
+             <li><a id="a_InsuranceReport" runat="server" href="~/webpage/Page-InsuranceReport.aspx" target='_self' title="保險人名冊LI/NHI" visible="false">保險人名冊LI/NHI</a></li>
+             <%--<li><a href="file/SA List 統計資料.xlsx" target='_self' title="月出勤報表">月出勤報表</a></li>--%>
+         </ul>
+
+     </li>
+     <li>
+         <a id="a_StatisticsMag" runat="server" href="Javascript:void(0)" target='_self' title="統計查詢" visible="false">統計查詢</a>
+         <ul>
+            <li><a id="a_AnnualLeaveRepor" runat="server" href="~/webpage/Page-AnnualLeaveReport.aspx" target='_self' title="員工特休統計表" visible="false">員工特休統計表</a></li>
+            <%-- <li><a href='#' target='_self' title="離職人員列表">統計表</a></li>--%>
+         </ul>
+     </li>
+    <li><a id="a_SystemMag" runat="server" href="Javascript:void(0)" target='_self' title="系統設定" visible="false">系統設定</a>
     	<ul>
-            <li><a href='../webpage/page-company.aspx' target='_self' title="公司資料設定">公司資料設定</a></li>
-            <li><a href='#' target='_self'>管理者資料管理</a>
+            <li><a id="a_Company" runat="server" href="~/webpage/page-company.aspx" target='_self' title="公司資料設定" visible="false">公司資料設定</a></li>
+            <li><a id="a_ManageMsg" runat="server" href="Javascript:void(0)" target='_self' visible="false">管理者資料管理</a>
                 <ul>
-                    <li><a href='../webpage/page-admin.aspx' target='_self' title="管理者資料">管理者資料</a></li>
-                    <li><a href='../webpage/page-Competence.aspx' target='_self' title="角色管理">角色管理</a></li>
+                    <li><a id="a_Admin" runat="server" href="~/webpage/page-admin.aspx" target='_self' title="管理者資料" visible="false">管理者資料</a></li>
+                    <li><a id="a_Competence" runat="server" href="~/webpage/page-Competence.aspx" target='_self' title="角色管理" visible="false">角色管理</a></li>
                 </ul>
             </li>
-            <li><a href='../webpage/page-regionadmin.aspx' target='_self' title="分店管理">分店管理</a></li>
-            <li><a href='../webpage/page-calendaradmin.aspx' target='_self' title="行事曆設定">行事曆設定</a></li>
-            <li><a href='../webpage/page-hourlyadmin.aspx' target='_self' title="薪資管理設定">薪資管理設定</a></li> 
-            <li><a href='../webpage/page-nssadmin.aspx' target='_self' title="保險設定">保險設定</a></li>     
+            <li><a id="a_regionadmin" runat="server" href="~/webpage/page-regionadmin.aspx" target='_self' title="分店管理" visible="false">分店管理</a></li>
+            <li><a id="a_calendaradmin" runat="server" href="~/webpage/page-calendaradmin.aspx" target='_self' title="行事曆設定" visible="false">行事曆設定</a></li>
+            <li><a id="a_hourlyadmin" runat="server" href="~/webpage/page-hourlyadmin.aspx" target='_self' title="薪資管理設定" visible="false">薪資管理設定</a></li> 
+            <li><a id="a_nssadmin" runat="server" href="~/webpage/page-nssadmin.aspx" target='_self' title="保險設定" visible="false">保險設定</a></li>     
       </ul>
     </li>
-      <li><a href="../webpage/Page-ModifyPd.aspx" title="修改個人密碼">修改個人密碼</a></li>
+      <li><a href="Page-ModifyPd.aspx" title="修改個人密碼">修改個人密碼</a></li>
     
   </ul>
   </div>

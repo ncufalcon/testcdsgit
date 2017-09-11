@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="webpage_Insurance_aspx" xml:space="preserve">
+    <value>02</value>
+    <comment>保險管理</comment>
+  </data>
+  <data name="webpage_page_admin_aspx" xml:space="preserve">
+    <value>22</value>
+    <comment>管理者資料</comment>
+  </data>
+  <data name="webpage_page_Allowance_aspx" xml:space="preserve">
+    <value>04</value>
+    <comment>津貼管理</comment>
+  </data>
+  <data name="webpage_Page_AnnualLeaveReport_aspx" xml:space="preserve">
+    <value>20</value>
+    <comment>員工特休統計表</comment>
+  </data>
+  <data name="webpage_Page_AttendanceDetail_aspx" xml:space="preserve">
+    <value>17</value>
+    <comment>員工出勤明細表</comment>
+  </data>
+  <data name="webpage_page_Attendance_aspx" xml:space="preserve">
+    <value>15</value>
+    <comment>請假資料維護</comment>
+  </data>
+  <data name="webpage_page_calendaradmin_aspx" xml:space="preserve">
+    <value>25</value>
+    <comment>行事曆設定</comment>
+  </data>
+  <data name="webpage_page_company_aspx" xml:space="preserve">
+    <value>21</value>
+    <comment>公司資料設定</comment>
+  </data>
+  <data name="webpage_page_Competence_aspx" xml:space="preserve">
+    <value>23</value>
+    <comment>角色管理</comment>
+  </data>
+  <data name="webpage_page_Gifts_aspx" xml:space="preserve">
+    <value>05</value>
+    <comment>年節禮金計算</comment>
+  </data>
+  <data name="webpage_page_hourlyadmin_aspx" xml:space="preserve">
+    <value>26</value>
+    <comment>薪資管理設定</comment>
+  </data>
+  <data name="webpage_page_IndividualTax_aspx" xml:space="preserve">
+    <value>12</value>
+    <comment>申報所得稅</comment>
+  </data>
+  <data name="webpage_Page_InsuranceFee_aspx" xml:space="preserve">
+    <value>16</value>
+    <comment>勞健保保費計算表</comment>
+  </data>
+  <data name="webpage_Page_InsuranceReport_aspx" xml:space="preserve">
+    <value>19</value>
+    <comment>保險人名冊LI/NHI</comment>
+  </data>
+  <data name="webpage_page_Modify_aspx" xml:space="preserve">
+    <value>03</value>
+    <comment>人事異動</comment>
+  </data>
+  <data name="webpage_page_nssadmin_aspx" xml:space="preserve">
+    <value>27</value>
+    <comment>保險設定</comment>
+  </data>
+  <data name="webpage_Page_PayrollElectronic_aspx" xml:space="preserve">
+    <value>11</value>
+    <comment>電子薪資條</comment>
+  </data>
+  <data name="webpage_Page_PayrollList_aspx" xml:space="preserve">
+    <value>10</value>
+    <comment>薪資冊</comment>
+  </data>
+  <data name="webpage_Page_PayrollPrint_aspx" xml:space="preserve">
+    <value>09</value>
+    <comment>保密薪資條列印</comment>
+  </data>
+  <data name="webpage_page_Payroll_aspx" xml:space="preserve">
+    <value>07</value>
+    <comment>發薪紀錄建立</comment>
+  </data>
+  <data name="webpage_Page_PensionReport_aspx" xml:space="preserve">
+    <value>18</value>
+    <comment>勞退提繳工資調整報表</comment>
+  </data>
+  <data name="webpage_page_regionadmin_aspx" xml:space="preserve">
+    <value>24</value>
+    <comment>分店管理</comment>
+  </data>
+  <data name="webpage_page_SalaryHoliday_aspx" xml:space="preserve">
+    <value>06</value>
+    <comment>給薪假計算</comment>
+  </data>
+  <data name="webpage_page_Saveto_aspx" xml:space="preserve">
+    <value>08</value>
+    <comment>薪資轉存花旗媒體產生</comment>
+  </data>
+  <data name="webpage_page_Seniority_aspx" xml:space="preserve">
+    <value>14</value>
+    <comment>年資與特休天數計算</comment>
+  </data>
+  <data name="webpage_page_WorkHours_aspx" xml:space="preserve">
+    <value>13</value>
+    <comment>時數管理</comment>
+  </data>
+  <data name="webpage_PersonnelInfo_aspx" xml:space="preserve">
+    <value>01</value>
+    <comment>基本資料管理</comment>
+  </data>
+</root>

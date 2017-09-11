@@ -48,7 +48,32 @@ namespace payroll
         }
 
 
+        public DataTable SelMemberGroup(payroll.model.sy_Member m)
+        {
 
+            //string sql = @"select * from v_MbList where 1=1 ";
+
+            string sql = @"SELECT * FROM sy_MemberGroup where 1=1 ";
+
+            if (!string.IsNullOrEmpty(m.gpCode))
+                sql += "and gpCode=@gpCode ";
+
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@gpCode", m.gpCode);
+
+
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
 
         /// <summary>
         /// 修改個人密碼

@@ -68,7 +68,7 @@
     <div class="WrapperMain">
         <div class="fixwidth">
             <div class="twocol underlineT1 margin10TB">
-                <div class="left font-light">首頁 / 薪資管理 /<span class="font-black font-bold">薪資冊</span></div>
+                <div class="left font-light">首頁 / 薪資管理 /<span class="font-black font-bold">保密薪資條列印</span></div>
             </div>
 
         </div>

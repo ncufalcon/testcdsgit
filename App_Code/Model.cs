@@ -283,4 +283,15 @@ namespace payroll.model
 
     }
 
+
+    public class sy_Member
+    {
+        public string gpCode { get; set; }
+        public string gpName { get; set; }
+        public string gpCName { get; set; }
+        public string gpIndex { get; set; }
+
+
+    }
+
 }
