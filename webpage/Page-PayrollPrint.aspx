@@ -73,7 +73,7 @@
 
         </div>
         <!-- fixwidth -->
-        <div id="div_List" style="display:none">
+        <div id="div_List" >
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
@@ -153,7 +153,7 @@
             </div>
         </div>
         <div id="div_design" class="fixwidth ">
-            <table style="height:500px" >
+            <%--<table style="height:500px" >
                 <tr>
                     <td>
                         <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  >
@@ -176,7 +176,7 @@
      
                     </td>
                 </tr>
-            </table>
+            </table>--%>
         </div>
         </div>
     </div>

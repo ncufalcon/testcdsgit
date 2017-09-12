@@ -18,9 +18,11 @@ public partial class MasterPage_MasterPage : System.Web.UI.MasterPage
         else { sp_MemberName.InnerText = "您好  " + USERINFO.MemberName; };
 
         if (!IsPostBack)
+        {
             CheckUI();
 
-        CheckIdenn();
+            CheckIdenn();
+        }
     }
 
     protected void lkb_out_Click(object sender, EventArgs e)

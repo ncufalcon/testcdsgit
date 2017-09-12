@@ -49,7 +49,7 @@
                             <!--{* 選單start *}-->
                             <div class="nav">
                                 <ul id='nav_js'>
-                                    <li><a href="~/webpage/Page-Login.aspx" title="管理者登入">管理者登入</a></li>
+                                    <li><a href="~/webpage/Page-Login.aspx" title="使用者登入">使用者登入</a></li>
                                 </ul>
                             </div>
                             <!--{* 選單end *}-->
@@ -60,13 +60,13 @@
                     <!-- WrapperHeader -->
                     <div class="fixwidth">
                         <div class="twocol underlineT1 margin10T">
-                            <div class="left font-light"><span class="font-black font-bold">管理者登入</span></div>
+                            <div class="left font-light"><span class="font-black font-bold">使用者登入</span></div>
                         </div>
                         <div class="gentable" style="margin-top: 100px">
                             <table width="35%" border="0" cellspacing="0" cellpadding="0" style="margin-left: 350px">
                                 <tr>
                                     <td class="width25" colspan="2">
-                                        <div class="font-bold font-size5 ">管理者登入</div>
+                                        <div class="font-bold font-size5 ">使用者登入</div>
                                     </td>
                               
                                 </tr>
