@@ -2845,7 +2845,7 @@
                             <div class="right"><a id="start_del" href="javascript:void(0);" class="keybtn">執行批次刪除</a></div>
                         </div>
                         <div class="tabfixwidth margin15T">
-                            <div class="stripeMe fixTable" style="max-height:400px;">
+                            <div class="stripeMe fixTable" style="max-height:330px;">
                                 <table id="InsModifyTab" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
                                 <table id="DelInsSalaryTab" width="100%" border="0" cellspacing="0" cellpadding="0" style="display:none;">
                                     <thead>
@@ -2903,20 +2903,22 @@
                                 <a  href="javascript:void(0);" id="ModppRatioBtn" class="keybtn">調整勞工自提比率</a>
                             </div>
                         </div><br />
-                        <div class="stripeMe fixTable ppRatioView" style="max-height:175px; display:none;">
-                            <table id="ppRatioTab" width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox" id="cball_ppRario" /></th>
-                                        <th>員工代號</th>
-                                        <th>員工姓名</th>
-                                        <th>部門</th>
-                                        <th>年資</th>
-                                        <th>調整前提撥率</th>
-                                        <th>調整號提撥率</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                        <div  class="tabfixwidth margin15T ">
+                            <div class="stripeMe fixTable ppRatioView" style="max-height: 330px;">
+                                <table id="ppRatioTab" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" id="cball_ppRario" /></th>
+                                            <th>員工代號</th>
+                                            <th>員工姓名</th>
+                                            <th>部門</th>
+                                            <th>年資</th>
+                                            <th>調整前提撥率</th>
+                                            <th>調整號提撥率</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 <!-- 詳細資料end -->
