@@ -2204,7 +2204,7 @@
                             //$("#del_rowbtn").show();
                         }
                         else
-                            tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
+                            tabstr += "<tr><td colspan='13'>查詢無資料</td></tr>";
                         tabstr += '</tbody>';
                         $("#InsModifyTab").show();
                         $("#DelInsSalaryTab").hide();
