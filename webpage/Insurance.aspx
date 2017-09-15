@@ -2054,6 +2054,7 @@
                     alert("請輸入異動日期");
                     return false;
                 }
+
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
                 var form = $("form")[0];
 
@@ -2066,7 +2067,7 @@
                 form.setAttribute("enctype", "multipart/form-data");
                 form.setAttribute("encoding", "multipart/form-data");
                 form.setAttribute("target", "postiframe");
-                form.submit();
+                //form.submit();
             });
             
             //批次刪除表頭排序
@@ -2134,10 +2135,13 @@
 
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/sp_payModify.ashx",
                 data: {
                     SalaryRange: $("#ism_gv").val()
+                },
+                beforeSend: function () {
+                    $("#loadtr").show();
                 },
                 error: function (xhr) {
                     alert(xhr);
@@ -2215,6 +2219,7 @@
                         $("#InsModifyTab tr:even").addClass("alt");
                         $(".fixTable").tableHeadFixer();
                         $.fancybox.close();
+                        $("#loadtr").hide();
                     }
                 }
             });
@@ -2873,6 +2878,7 @@
                                         <td><input id="is_StartDate" type="text" /></td>
                                     </tr>
                                     <tr><td colspan="2" align="center"><textarea id="RangeMsg" disabled="disabled" style="width:90%; height:100px;"></textarea></td></tr>
+                                    <tr id="loadtr" style="display:none;"><td colspan="2" align="center"><img src="../images/loading.gif" />處理中，請稍待</td></tr>
                                     <tr><td colspan="2" align="right"><input type="button" onclick="InsSalaryModify();" class="keybtn" value="查詢" /></td></tr>
                                 </table>
                             </div>
