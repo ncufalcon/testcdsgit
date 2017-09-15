@@ -656,12 +656,15 @@ where perGuid in (" + perGuid + ") ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"
-declare @day_1 nvarchar(6);
-declare @day_2 nvarchar(6);
-declare @day_3 nvarchar(6);
-select @day_1=(select CONVERT(varchar(6),DATEADD(MONTH, -1,GETDATE()),112));
-select @day_2=(select CONVERT(varchar(6),DATEADD(MONTH, -2,GETDATE()),112));
-select @day_3=(select CONVERT(varchar(6),DATEADD(MONTH, -3,GETDATE()),112));
+--Top 3 計薪週期
+select psmGuid 
+into #tmp_psmguid
+from 
+(
+	select psmGuid from sy_PaySalaryMain where 
+	psmSalaryRange in (select top 3 sr_Guid from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc)
+)#tmp
+
 --撈出連續三個月都有資料的人類guid
 select perGuid 
 into #tmp_perguid
@@ -670,9 +673,9 @@ from
 	select perGuid,COUNT(perName) as row_count from sy_PaySalaryDetail
 	left join sy_PaySalaryMain on psmGuid=pPsmGuid
 	left join sy_Person on perGuid=pPerGuid
-	where psmYear in (@day_1,@day_2,@day_3) and pStatus='A'
+	where pPsmGuid in (select * from #tmp_psmguid) and pStatus='A'
 	group by perGuid
-)#tmp
+)#tmp2
 where row_count>=3
 
 --撈出主檔guid
@@ -681,19 +684,19 @@ from sy_PaySalaryDetail
 left join sy_PaySalaryMain on psmGuid=pPsmGuid
 left join sy_Person on perGuid=pPerGuid
 left join sy_Company on comGuid=perComGuid
-where psmYear in (@day_1,@day_2,@day_3) and perGuid in (select perGuid from #tmp_perguid) and pStatus='A' ");
+where pPsmGuid in (select * from #tmp_psmguid) and perGuid in (select perGuid from #tmp_perguid) and pStatus='A'");
 
         if (perGuid != "")
             sb.Append(@"and perGuid in (" + perGuid + ")");
 
-        sb.Append(@"group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
+sb.Append(@"group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
 
 select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate from sy_PersonInsurance 
 where piPerGuid in (select perGuid from #tmp_perguid) and (piChange='01' or piChange='03')  and piStatus='A'
 order by piChangeDate desc,piCreateDate desc
 
-drop table #tmp_perguid 
-");
+drop table #tmp_psmguid 
+drop table #tmp_perguid  ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -739,6 +742,46 @@ and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piStatu
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable getDelInsSalary(string changedate,string sortName, string sortMethod)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select plGuid gv,perGuid,perNo,perName,
+(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
+plLaborPayroll Pay,plChangeDate ChangeDate,'L' TypeName,'勞保' cnName
+from sy_PersonLabor
+left join sy_Person on plPerGuid=perGuid
+where perGuid=plPerGuid and plChange='03' and plChangeDate=@changedate 
+	and (select MAX(plCreateDate) from sy_PersonLabor where perGuid=plPerGuid)=plCreateDate and plStatus='A'
+union
+select piGuid gv,perGuid,perNo,perName,
+(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
+piInsurancePayroll Pay,piChangeDate ChangeDate,'H' TypeName,'健保' cnName
+from sy_PersonInsurance
+left join sy_Person on piPerGuid=perGuid
+where perGuid=piPerGuid and piChange='03' and piChangeDate=@changedate 
+	and (select MAX(piCreateDate) from sy_PersonInsurance where perGuid=piPerGuid)=piCreateDate and piStatus='A'
+union
+select ppGuid gv,perGuid,perNo,perName,
+(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
+ppPayPayroll Pay,ppChangeDate ChangeDate,'P' TypeName,'勞退' cnName
+from sy_PersonPension
+left join sy_Person on ppPerGuid=perGuid
+where perGuid=ppPerGuid and ppChange='02' and ppChangeDate=@changedate 
+	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid)=ppCreateDate and ppStatus='A' ");
+        sb.Append(@"order by " + sortName + " " + sortMethod + " ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@changedate", changedate);
         oda.Fill(ds);
         return ds;
     }

@@ -58,7 +58,7 @@ public class LHCompImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@P_PersonPay", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@P_Date", SqlDbType.NVarChar);
 
-                for (int j = 13; j <= Xls.GetRowCount(4) - 6; j++)
+                for (int j = 13; j <= Xls.GetRowCount(4); j++)
                 {
                     string P_Date = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString().Trim() : "";
                     string P_ID = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString().Trim() : "";

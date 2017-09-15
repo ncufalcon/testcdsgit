@@ -345,4 +345,48 @@ and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppStatus=
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable getPPRatio(string pNo, string pName, string pDep, string pYear)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT perGuid,perNo,perName,
+(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
+perYears,ppLarboRatio,ppEmployerRatio,ppPayPayroll
+from sy_Person
+left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid)=ppChangeDate
+	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid)=ppCreateDate and ppStatus='A'
+where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A' 
+ and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3 and CONVERT(float,ppLarboRatio)<=6) or 
+(CONVERT(int,perYears)>=3 and CONVERT(float,ppLarboRatio)<=6.5)) ");
+        if (pNo != "")
+        {
+            sb.Append(@"and (upper(perNo) LIKE '%' + upper(@pNo) + '%') ");
+        }
+        if (pName != "")
+        {
+            sb.Append(@"and (upper(perName) LIKE '%' + upper(@pName) + '%') ");
+        }
+        if (pDep != "")
+        {
+            sb.Append(@"and (upper((select cbName from sy_CodeBranches where cbGuid=perDep)) LIKE '%' + upper(@pDep) + '%') ");
+        }
+        if (pYear != "")
+        {
+            sb.Append(@"and (upper(perYears) LIKE '%' + upper(@pYear) + '%') ");
+        }
+        sb.Append(@"order by perNo ");
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@pNo", pNo);
+        oCmd.Parameters.AddWithValue("@pName", pName);
+        oCmd.Parameters.AddWithValue("@pDep", pDep);
+        oCmd.Parameters.AddWithValue("@pYear", pYear);
+        oda.Fill(ds);
+        return ds;
+    }
 }

@@ -13,6 +13,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         bool status = true;
         string exStr = string.Empty;
+        string ChangeDate = (context.Request.Form["InsModChangeDate"] != null) ? context.Request.Form["InsModChangeDate"].ToString() : "";
         string IM_Guid = (context.Request.Form["im_gv"] != null) ? context.Request.Form["im_gv"].ToString() : "";
         string L_SL = (context.Request.Form["im_lSL"] != null) ? context.Request.Form["im_lSL"].ToString() : "";
         string H_SL = (context.Request.Form["im_hSL"] != null) ? context.Request.Form["im_hSL"].ToString() : "";
@@ -94,7 +95,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@plPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@plSubsidyLevel"].Value = L_SLAry[i];
                 oCmd.Parameters["@plLaborNo"].Value = LaborIDary[i];
-                oCmd.Parameters["@plChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
+                oCmd.Parameters["@plChangeDate"].Value = ChangeDate;
                 oCmd.Parameters["@plChange"].Value = "03";
                 oCmd.Parameters["@plLaborPayroll"].Value = decimal.Parse(af_Lary[i].ToString());
                 oCmd.Parameters["@plCreateId"].Value = USERINFO.MemberGuid;
@@ -135,7 +136,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@piPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@piSubsidyLevel"].Value = H_SLAry[i];
                 oCmd.Parameters["@piCardNo"].Value = GanborIDary[i];
-                oCmd.Parameters["@piChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
+                oCmd.Parameters["@piChangeDate"].Value = ChangeDate;
                 oCmd.Parameters["@piChange"].Value = "03";
                 oCmd.Parameters["@piInsurancePayroll"].Value = decimal.Parse(af_Hary[i].ToString());
                 oCmd.Parameters["@piCreateId"].Value = USERINFO.MemberGuid;
@@ -175,7 +176,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
                 oCmd.Parameters["@ppPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@ppChange"].Value = "02";
-                oCmd.Parameters["@ppChangeDate"].Value = DateTime.Now.ToString("yyyy/MM/dd");
+                oCmd.Parameters["@ppChangeDate"].Value = ChangeDate;
                 oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(af_Pary[i].ToString());
                 oCmd.Parameters["@ppLarboRatio"].Value = decimal.Parse("6");
                 oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse("6");

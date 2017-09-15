@@ -329,4 +329,24 @@ and (select COUNT(*) from sy_SalaryRange where sr_Status='A' and CONVERT(datetim
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable getSalaryThreeByPerson(string sr_gv,string pv)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select pPerGuid,pPay,sr_BeginDate,sr_Enddate,sr_SalaryDate from sy_SalaryRange 
+left join sy_PaySalaryMain on sr_Guid=psmSalaryRange
+left join sy_PaySalaryDetail on pPsmGuid=psmGuid
+where sr_Guid in (" + sr_gv + @") and pPerGuid=@perGuid");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@perGuid", pv);
+        oda.Fill(ds);
+        return ds;
+    }
 }
