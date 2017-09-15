@@ -23,7 +23,8 @@
                             //str_year: $("#txt_year").val(),
                             str_date: $("#txt_date").val(),
                             str_perguid: $("#tmpUID").val(),
-                            str_updatetype: $("input[name='cbox_updatetype']:checked").val()
+                            str_updatetype: $("input[name='cbox_updatetype']:checked").val(),
+                            str_outtype: $("input[name='cbox_outtype']:checked").val()
                         },
                         error: function (xhr) {
                             alert("error");
@@ -45,7 +46,17 @@
                         }
                     });//ajax end 
                 }
-
+            });
+            //離職人員更新 勾選
+            $("#cbox_outtype").change(function () {
+                if ($(this)[0].checked) {
+                    //如果勾選離職人員更新
+                    $("#txt_date").attr("disabled", "disabled");
+                    $("input[name='cbox_updatetype']").attr("disabled", "disabled");
+                } else {
+                    $("#txt_date").removeAttr("disabled");
+                    $("input[name='cbox_updatetype']").removeAttr("disabled");
+                }
             });
         });
         //檢查查詢欄位
@@ -53,40 +64,33 @@
             //var chk_year = $("#txt_year").val();
             var chk_date = $("#txt_date").val();
             var chk_empno = $("#tmpUID").val();
-            //if (chk_year == "") {
-            //    alert("請輸入計算年度");
-            //    return false;
-            //}
-            if (chk_date == "") {
+            if (chk_date == "" && $("input[name='cbox_outtype']:checked").val() != "Y") {
                 alert("請選擇年資認定截止日期");
                 return false;
             }
-            if (chk_empno == "") {
-                alert("請挑選人員");
-                return false;
-            }
-            //if (isNaN(chk_year)) {
-            //    alert("計算年度只能輸入識字");
+            //if (chk_empno == "") {
+            //    alert("請挑選人員");
             //    return false;
             //}
-            if (chk_date.length != 10) {
-                alert("請選擇正確的年資認定截止日期yyyy/mm/dd");
-                return false;
-            } else {
-                var regExp = /^[\d]+$/;
-                var chk_date1 = chk_date.substr(0, 4);
-                var chk_date2 = chk_date.substr(4, 1);
-                var chk_date3 = chk_date.substr(5, 2);
-                var chk_date4 = chk_date.substr(7, 1);
-                var chk_date5 = chk_date.substr(8, 2);
-                if (regExp.test(chk_date1) && regExp.test(chk_date3) && regExp.test(chk_date5) && chk_date2 == "/" && chk_date4 == "/") {
-                }
-                else {
+            if ($("input[name='cbox_outtype']:checked").val() != "Y") {
+                if (chk_date.length != 10) {
                     alert("請選擇正確的年資認定截止日期yyyy/mm/dd");
                     return false;
+                } else {
+                    var regExp = /^[\d]+$/;
+                    var chk_date1 = chk_date.substr(0, 4);
+                    var chk_date2 = chk_date.substr(4, 1);
+                    var chk_date3 = chk_date.substr(5, 2);
+                    var chk_date4 = chk_date.substr(7, 1);
+                    var chk_date5 = chk_date.substr(8, 2);
+                    if (regExp.test(chk_date1) && regExp.test(chk_date3) && regExp.test(chk_date5) && chk_date2 == "/" && chk_date4 == "/") {
+                    }
+                    else {
+                        alert("請選擇正確的年資認定截止日期yyyy/mm/dd");
+                        return false;
+                    }
                 }
             }
-            
             return true;
         }
         //多選查詢視窗
@@ -145,20 +149,27 @@
                             </td>
                             <td class="width13">
                                 <input type="text" class="inputex width95" value="" maxlength="4" id="txt_year" /></td>-->
-                            <td class="width15" align="right">
+                            <td class="width25" align="right">
                                 <div class="font-title titlebackicon">選擇年資認定截止日期</div>
                             </td>
-                            <td class="width13">
-                                <input type="text" class="inputex width95" value="" id="txt_date" /></td>
-                            <td class="width15" align="right">
+                            <td class="width25">
+                                <input type="text" class="inputex width80" value="" id="txt_date" /></td>
+                            <td class="width25" align="right">
                                 <div class="font-title titlebackicon">僅更新員工年資欄位</div>
                             </td>
                             <td class="width13">
-                                <input type="checkbox" name="cbox_updatetype" value="Y" /></td>
+                                <input type="checkbox" name="cbox_updatetype" value="Y" />
+                            </td>
+                            <td class="width25" align="right">
+                                <div class="font-title titlebackicon">離職人員更新</div>
+                            </td>
+                            <td>
+                                <input type="checkbox" id="cbox_outtype" name="cbox_outtype" value="Y" />
+                            </td>
                         </tr>
                         <tr>
                             <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
-                            <td colspan="2">
+                            <td colspan="4">
                                 <img id="mPersonBox" src="../images/btn-search.gif" onclick="openMutiBox(this)" style="cursor: pointer;" />
                                 <span id="uName"></span>
                             </td>

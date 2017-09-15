@@ -635,7 +635,7 @@ public class Member
       ,mbPassword
       ,mbPs
       ,mbCom
-      ,cmCompetence FROM sy_Member left join sy_MemberCom on mbCom=cmClass where mbId=@mbId and mbPassword=@mbPassword";
+      ,cmCompetence FROM sy_Member left join sy_MemberCom on mbCom=cmClass where mbId=@mbId and mbPassword=@mbPassword and mbStatus<>'D' ";
 
         SqlCommand cmd = new SqlCommand(sql, Sqlconn);
         cmd.Parameters.AddWithValue("@mbId", id);

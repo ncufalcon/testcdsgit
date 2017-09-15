@@ -39,11 +39,9 @@
 
 
 
-    <script type="text/javascript">
+<%--    <script type="text/javascript">
         $(document).ready(function(){
             $('#div_design').fancybox({
-                href: 'page-WorkHours.aspx',
-                type: "iframe",
                 minHeight: "400",
                 closeClick: false,
                 openEffect: 'elastic',
@@ -53,7 +51,7 @@
  
             });
         });
-     </script>
+     </script>--%>
 
             <script type="text/javascript">
         //確認公司&部門
@@ -73,7 +71,7 @@
 
         </div>
         <!-- fixwidth -->
-        <div id="div_List" style="display:none">
+        <div id="div_List" >
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
@@ -138,6 +136,226 @@
             </div>
         </div>
         </div>
+        <br />
+        <div class="fixwidth ">
+                <table width="99%" border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td colspan="7">應發項目</td>
+            <td colspan="2">應扣項目</td>
+        </tr>
+        <tr>
+            <td>項目</td>
+            <td>時數/天數</td>
+            <td>金額</td>
+            <td>加班別</td>
+            <td>倍率</td>
+            <td>時數</td>
+            <td>金額</td>
+            <td>勞工自負額</td>
+            <td>金額</td>
+        </tr>
+        <tr>
+            <td>基本薪資</td>
+            <td></td>
+            <td></td>
+            <td>平日加班1類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>代扣勞保費</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>津貼項目</td>
+            <td></td>
+            <td></td>
+            <td>平日加班2類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>代扣健保費</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>平日加班3類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>代扣福利金</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>休息加班1類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>勞退自提</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>休息加班2類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>代扣補充保費</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>休息加班3類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>其它津貼扣項</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>例假日加班1類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>例假日加班2類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>例假日加班3類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>例假日加班4類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>國定假日加班1類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>國定假日加班2類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>國定假日加班3類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>國定假日加班4類</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+        </div>
 
 
 
@@ -163,17 +381,75 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="font-size4 ">
-                    <span class="font-title titlebackicon">加項</span><br />
-                         時薪:[A001]  基本薪資:[A002]  免稅加班費:[A003]  應稅加班費:[A004] 津貼項目(加項):[A005] <br />
-                    <span class="font-title titlebackicon">檢項</span><br />
-                         代扣健保費:[B001]  代扣勞保費:[B002]  勞退自提:[B003]  補充保費:[B004] 津貼項目(減項):[B005]<br />
-                    <span class="font-title titlebackicon">其它</span><br />
-                         基本時數:[C001]  加班時數(一):[C002]  加班時數(二):[C003]  加班時數(三):[C004] 公司勞退提繳:[C004]<br />
-
-
-     
-     
+                    <td >
+                     <div class="font-size3 stripeMe">
+                     <table  width="99%" border="0" cellspacing="0" cellpadding="0" style="vertical-align:top;">
+                         <tr>
+                             <th>加項1</th>
+                             <th>加項2</th>
+                             <th>扣項</th>
+                             <th>其它</th>
+                         </tr>
+                         <tr>
+                             <td>                                     
+                                基本薪資時數:[A001]<br />  
+                                基本薪資金額:[A002]<br />                                  
+                                津貼項目(加項):[A003]<br />
+                                加項1金額合計:[A004]<br />
+                             </td>
+                             <td>
+                                平日加班1類時數:[B003]<br />
+                                平日加班1類金額:[B004]<br />  
+                                平日加班2類時數:[B005]<br />  
+                                平日加班2類金額:[B006]<br />  
+                                平日加班3類時數:[B007]<br />  
+                                平日加班3類金額:[B008]<br />  
+                                休息加班1類時數:[B009]<br />  
+                                休息加班1類金額:[B010]<br />  
+                                休息加班2類時數:[B011]<br />  
+                                休息加班2類金額:[B012]<br />                                   
+                                休息加班3類時數:[B013]<br />  
+                                休息加班3類金額:[B014]<br />   
+                                例假日加班1類時數:[B015]<br />  
+                                例假日加班1類金額:[B016]<br />  
+                                例假日加班2類時數:[B017]<br />  
+                                例假日加班2類金額:[B018]<br />                                   
+                                例假日加班3類時數:[B019]<br />  
+                                例假日加班3類金額:[B020]<br /> 
+                                國定假日加班1類時數:[B021]<br />  
+                                國定假日加班1類金額:[B022]<br />  
+                                國定假日加班2類時數:[B023]<br />  
+                                國定假日加班2類金額:[B024]<br />                                   
+                                國定假日加班3類時數:[B025]<br />  
+                                國定假日加班3類金額:[B026]<br /> 
+                                加項2金額合計:[B027]<br /> 
+                             </td>
+                             <td>
+                                 代扣健保費:[C001]<br />  
+                                 代扣勞保費:[C002]<br /> 
+                                 代扣福利金:[C003]<br /> 
+                                 勞退自提:[C004]<br />  
+                                 代扣補充保費:[C005]<br />  
+                                 津貼項目(減項):[C006]<br />
+                                 應扣合計:[C007]<br />
+                             </td>
+                             <td>
+                                 姓名:[D001]<br />
+                                 工號:[D002]<br />
+                                 部門:[D003]<br />
+                                 部門代號:[D004]<br />  
+                                 年月:[D005]<br />  
+                                 計薪區間:[D006]<br />
+                                 可請休期間:[D007]<br />                                 
+                                 可休日數:[D008]<br />
+                                 以休日數:[D009]<br />
+                                 勞保/健保投保級距:[D010]<br />
+                                 勞退提撥工資:[D011]<br />
+                                 提撥金額:[D012]<br />
+                             </td>
+                         </tr>
+                     </table>
+                    </div>
                     </td>
                 </tr>
             </table>
@@ -183,7 +459,7 @@
 
 
 
-
+    <br /><br /><br /><br />
 
 
 
