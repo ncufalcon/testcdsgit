@@ -93,7 +93,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
 
                     payroll.model.sy_PayAllowance paModel = new payroll.model.sy_PayAllowance();
                     paModel.psaPerGuid = dv[i]["pPerGuid"].ToString();
-                    paModel.psaPsmGuid = "";
+                    paModel.psaPsmGuid = dv[i]["pPsmGuid"].ToString();
                     DataView adv = dal.Selsy_PaySalaryAllowance(paModel).DefaultView;
                     row.CreateCell(13).SetCellValue(0);
                     row.CreateCell(21).SetCellValue(0);
