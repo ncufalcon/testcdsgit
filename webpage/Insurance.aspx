@@ -33,12 +33,15 @@
                         case "#tabs-5":
                             getGroupInsList();
                             break;
+                        case "#tabs-7":
+                            getPensionRatio();
+                            break;
                     }
                 }
             });
 
             //datepicker
-            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate").datepicker({
+            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate,#ppRatioChangeDate,#im_changedate,#InsModChangeDate,#is_StartDate").datepicker({
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy/mm/dd',
@@ -69,6 +72,7 @@
                 });
             });
 
+            //匯出Excel
             $(document).on("click", "#L_ExportBtn,#H_ExportBtn,#ppExportBtn,#PfiExportBtn,#PgiExportBtn", function () {
                 var eType, eItem, cate, ckname;
                 switch (this.id) {
@@ -603,8 +607,21 @@
                     break;
                 case "InsSalaryMod":
                     alert("完成");
-                    $("#InsModifyTab").empty();
+                    $("#InsModifyTab").hide();
+                    $(".iModBtn").hide();
                     $(".statabs").tabs({ active: 0 });
+                    getLaborList();
+                    getHealList();
+                    getPensionList();
+                    break;
+                case "DeleteInsSalary":
+                    alert("完成");
+                    $("#DelInsSalaryTab").hide();
+                    $(".delBtn").hide();
+                    $(".statabs").tabs({ active: 0 });
+                    getLaborList();
+                    getHealList();
+                    getPensionList();
                     break;
                 case "error":
                     alert(str + " Error");
@@ -618,6 +635,7 @@
             }
         }
 
+        //團保選擇年月
         function ddl_GInsYM() {
             $.ajax({
                 type: "POST",
@@ -1903,81 +1921,47 @@
     <%--保薪調整--%>
     <script type="text/javascript">
         $(document).ready(function () {
-            //保薪調整
-            $(document).on("click", "#InsModBtn", function () {
-                $.ajax({
-                    type: "POST",
-                    async: false, //在沒有返回值之前,不會執行下一步動作
-                    url: "../handler/sp_payModify.ashx",
-                    data: {
-                        //Group: gno
-                    },
-                    error: function (xhr) {
-                        alert(xhr);
-                    },
-                    success: function (data) {
-                        if (data == "error") {
-                            alert("sp_payModify Error");
-                            return false;
-                        }
+            //checkBox check all
+            $(document).on("click", "#cball_InsMod", function () {
+                if ($("#cball_InsMod").prop("checked")) {
+                    $("input[name='cb_InsMod']").each(function () {
+                        $(this).prop("checked", true);
+                    });
+                } else {
+                    $("input[name='cb_InsMod']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+            });
 
-                        if (data != null) {
-                            data = $.parseXML(data);
-                            $("#InsModifyTab").empty();
-                            var tabstr = '<thead><tr>';
-                            tabstr += '<th width="10" nowrap="nowrap" rowspan="2">刪除</th>';
-                            tabstr += '<th nowrap="nowrap" rowspan="2">員工編號</th>';
-                            tabstr += '<th nowrap="nowrap" rowspan="2">姓名</th>';
-                            tabstr += '<th nowrap="nowrap" rowspan="2">平均月薪</th>';
-                            tabstr += '<th nowrap="nowrap" colspan="3">調整前級距金額</th>';
-                            tabstr += '<th nowrap="nowrap" colspan="3">調整後級距金額</th>';
-                            tabstr += '</tr><tr>';
-                            tabstr += '<th nowrap="nowrap">勞保</th>';
-                            tabstr += '<th nowrap="nowrap">健保</th>';
-                            tabstr += '<th nowrap="nowrap">勞退</th>';
-                            tabstr += '<th nowrap="nowrap">勞保</th>';
-                            tabstr += '<th nowrap="nowrap">健保</th>';
-                            tabstr += '<th nowrap="nowrap">勞退</th></tr></thead>';
-                            tabstr += '<tbody>';
-                            if ($(data).find("data_item").length > 0) {
-                                $(data).find("data_item").each(function (i) {
-                                    tabstr += '<tr aid=' + $(this).children("pPerGuid").text() + '>';
-                                    tabstr += '<td style="display:none">';
-                                    tabstr += '<input type="hidden" name="im_gv" value="' + $(this).children("pPerGuid").text() + '" />';
-                                    tabstr += '<input type="hidden" name="im_lSL" value="' + $(this).children("L_SL").text() + '" />';
-                                    tabstr += '<input type="hidden" name="im_hSL" value="' + $(this).children("H_SL").text() + '" />';
-                                    tabstr += '<input type="hidden" name="bf_L" value="' + $(this).children("b_labor").text() + '" />';
-                                    tabstr += '<input type="hidden" name="bf_H" value="' + $(this).children("b_ganbor").text() + '" />';
-                                    tabstr += '<input type="hidden" name="bf_P" value="' + $(this).children("b_tahui").text() + '" />';
-                                    tabstr += '<input type="hidden" name="af_L" value="' + $(this).children("pay_i2").text() + '" />';
-                                    tabstr += '<input type="hidden" name="af_H" value="' + $(this).children("pay_i3").text() + '" />';
-                                    tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i4").text() + '" />';
-                                    tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
-                                    tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
-                                    tabstr += '</td>';
-                                    //tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
-                                    tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><input type="checkbox" name="cbdel" /></td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perNo").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_avg").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_labor").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_ganbor").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_tahui").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i2").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i3").text() + '</td>';
-                                    tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i4").text() + '</td>';
-                                    tabstr += '</tr>';
-                                });
-                                //$("#del_rowbtn").show();
-                            }
-                            else
-                                tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
-                            tabstr += '</tbody>';
-                            $("#InsModifyTab").append(tabstr);
-                            $("#InsModifyTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                            $("#InsModifyTab tr:even").addClass("alt");
-                            $(".fixTable").tableHeadFixer();
-                        }
+            $(document).on("click", "#cball_batchdel", function () {
+                if ($("#cball_batchdel").prop("checked")) {
+                    $("input[name='cb_batchdel']").each(function () {
+                        $(this).prop("checked", true);
+                    });
+                } else {
+                    $("input[name='cb_batchdel']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+            });
+
+            //保薪調整 button
+            $(document).on("click", "#InsModBtn", function () {
+                $("#is_StartDate").val("");
+                $("#RangeMsg").val("");
+                $.fancybox({
+                    href: "#im_InsSalaryblock",
+                    minWidth: "320",
+                    minHeight: "50",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        //getData();
+                    },
+                    helpers: {
+                        overlay: { closeClick: true } // prevents closing when clicking OUTSIDE fancybox
                     }
                 });
             });
@@ -1987,23 +1971,89 @@
             //    if (confirm('確定刪除 員工編號：' + $(this).attr("ano") + "？"))
             //        $(this).parent().parent().remove();
             //});
+
+            //保薪調整,勾選刪除
             $(document).on("click", "#del_rowbtn", function () {
-                if ($("input[name='cbdel']:checked").length > 0)
-                    $("#InsModifyTab tr").has('input[name="cbdel"]:checked').remove();
+                if ($("input[name='cb_InsMod']:checked").length > 0)
+                    $("#InsModifyTab tr").has('input[name="cb_InsMod"]:checked').remove();
+                else
+                    alert("請勾選要刪除的項目")
+            });
+            //批次刪除,勾選刪除
+            $(document).on("click", "#batchdel_rowbtn", function () {
+                if ($("input[name='cb_batchdel']:checked").length > 0)
+                    $("#InsModifyTab tr").has('input[name="cb_batchdel"]:checked').remove();
                 else
                     alert("請勾選要刪除的項目")
             });
 
-            //顯示&隱藏刪除按鈕
-            $(document).on("change", "input[name = 'cbdel']", function () {
-                if ($('input[name="cbdel"]:checked').length > 0)
-                    $("#del_rowbtn").show();
-                else
-                    $("#del_rowbtn").hide();
+            //保薪調整 起始日期 change
+            $(document).on("change", "#is_StartDate", function () {
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/getSalaryRange.ashx",
+                    data: {
+                        sDate: $("#is_StartDate").val()
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("getSalaryRange Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            data = $.parseXML(data);
+                            var gv = "";
+                            var tmpstr = "計算週期如下：\n";
+                            if ($(data).find("data_item").length > 0) {
+                                $(data).find("data_item").each(function (i) {
+                                    tmpstr += $(this).children("sr_BeginDate").text() + "-" + $(this).children("sr_Enddate").text() + "\n";
+                                    if (gv != "") gv += ",";
+                                    gv += "'" + $(this).children("sr_Guid").text() + "'";
+
+                                    //用於列表顯示三個月薪資
+                                    switch (i) {
+                                        case 0:
+                                            $("#Pay_1").val($(this).children("sr_BeginDate").text() + "\n" + $(this).children("sr_Enddate").text());
+                                            break;
+                                        case 1:
+                                            $("#Pay_2").val($(this).children("sr_BeginDate").text() + "\n" + $(this).children("sr_Enddate").text());
+                                            break;
+                                        case 2:
+                                            $("#Pay_3").val($(this).children("sr_BeginDate").text() + "\n" + $(this).children("sr_Enddate").text());
+                                            break;
+                                    }
+                                });
+
+                                if ($(data).find("data_item").length < 3) {
+                                    tmpstr += "\nError：\n計薪週期不足三個月";
+                                    $("#ism_Status").val("N");
+                                }
+                                else {
+                                    $("#ism_gv").val(gv);
+                                    $("#ism_Status").val("Y");
+                                }
+                            }
+                            else {
+                                tmpstr = "Error：\n計薪週期中查無此起始日期，請重新選擇";
+                                $("#ism_Status").val("N");
+                            }
+                            $("#RangeMsg").val(tmpstr);
+                        }
+                    }
+                });
             });
 
             //執行保薪調整
             $(document).on("click", "#start_im", function () {
+                if ($("#InsModChangeDate").val() == "") {
+                    alert("請輸入異動日期");
+                    return false;
+                }
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
                 var form = $("form")[0];
 
@@ -2018,7 +2068,342 @@
                 form.setAttribute("target", "postiframe");
                 form.submit();
             });
+            
+            //批次刪除表頭排序
+            $(document).on("click", "a[name='sortbtn']", function () {
+                $("a[name='sortbtn']").removeClass("asc desc")
+                $("#sortName").val($(this).attr("atp"));
+                if ($("#sortMethod").val() == "desc") {
+                    $("#sortMethod").val("asc");
+                    $(this).addClass('asc');
+                }
+                else {
+                    $("#sortMethod").val("desc");
+                    $(this).addClass('desc');
+                }
+                delInsSalary();
+            });
+
+            //批次刪除 button
+            $(document).on("click", "#InsDelBtn", function () {
+                $("#im_changedate").val("");
+                $.fancybox({
+                    href: "#im_delblock",
+                    minWidth: "320",
+                    minHeight: "50",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        //getData();
+                    },
+                    helpers: {
+                        overlay: { closeClick: true } // prevents closing when clicking OUTSIDE fancybox
+                    }
+                });
+            });
+
+            //執行批次刪除
+            $(document).on("click", "#start_del", function () {
+                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                var form = $("form")[0];
+
+                $("#postiframe").remove();
+
+                form.appendChild(iframe[0]);
+
+                form.setAttribute("action", "../handler/delInsSalary.ashx");
+                form.setAttribute("method", "post");
+                form.setAttribute("enctype", "multipart/form-data");
+                form.setAttribute("encoding", "multipart/form-data");
+                form.setAttribute("target", "postiframe");
+                form.submit();
+            });
         });
+
+        function InsSalaryModify() {
+            if ($("#is_StartDate").val() == "") {
+                alert("請輸入起始日期");
+                return false;
+            }
+
+            if ($("#ism_Status").val() == "N") {
+                alert("狀態異常，請重新確認");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/sp_payModify.ashx",
+                data: {
+                    SalaryRange: $("#ism_gv").val()
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("sp_payModify Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#InsModifyTab").empty();
+                        var tabstr = '<thead><tr>';
+                        tabstr += '<th width="30" rowspan="2">刪除<br /><input type="checkbox" id="cball_InsMod" class="imdelbtn" /></th>';
+                        tabstr += '<th nowrap="nowrap" rowspan="2">員工代號</th>';
+                        tabstr += '<th nowrap="nowrap" rowspan="2">姓名</th>';
+                        tabstr += '<th rowspan="2">' + $("#Pay_3").val() + '</th>';
+                        tabstr += '<th rowspan="2">' + $("#Pay_2").val() + '</th>';
+                        tabstr += '<th rowspan="2">' + $("#Pay_1").val() + '</th>';
+                        tabstr += '<th nowrap="nowrap" rowspan="2">平均月薪</th>';
+                        tabstr += '<th nowrap="nowrap" colspan="3">調整前級距金額</th>';
+                        tabstr += '<th nowrap="nowrap" colspan="3">調整後級距金額</th>';
+                        tabstr += '</tr><tr>';
+                        tabstr += '<th nowrap="nowrap">勞保</th>';
+                        tabstr += '<th nowrap="nowrap">健保</th>';
+                        tabstr += '<th nowrap="nowrap">勞退</th>';
+                        tabstr += '<th nowrap="nowrap">勞保</th>';
+                        tabstr += '<th nowrap="nowrap">健保</th>';
+                        tabstr += '<th nowrap="nowrap">勞退</th></tr></thead>';
+                        tabstr += '<tbody>';
+                        if ($(data).find("data_item").length > 0) {
+                            $(data).find("data_item").each(function (i) {
+                                tabstr += '<tr aid=' + $(this).children("pPerGuid").text() + '>';
+                                tabstr += '<td style="display:none">';
+                                tabstr += '<input type="hidden" name="im_gv" value="' + $(this).children("pPerGuid").text() + '" />';
+                                tabstr += '<input type="hidden" name="im_lSL" value="' + $(this).children("L_SL").text() + '" />';
+                                tabstr += '<input type="hidden" name="im_hSL" value="' + $(this).children("H_SL").text() + '" />';
+                                tabstr += '<input type="hidden" name="bf_L" value="' + $(this).children("b_labor").text() + '" />';
+                                tabstr += '<input type="hidden" name="bf_H" value="' + $(this).children("b_ganbor").text() + '" />';
+                                tabstr += '<input type="hidden" name="bf_P" value="' + $(this).children("b_tahui").text() + '" />';
+                                tabstr += '<input type="hidden" name="af_L" value="' + $(this).children("pay_i2").text() + '" />';
+                                tabstr += '<input type="hidden" name="af_H" value="' + $(this).children("pay_i3").text() + '" />';
+                                tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i4").text() + '" />';
+                                tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
+                                tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
+                                tabstr += '</td>';
+                                //tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
+                                tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><input type="checkbox" name="cb_InsMod" class="imdelbtn" /></td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perNo").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("Pay3").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("Pay2").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("Pay1").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_avg").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_labor").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_ganbor").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_tahui").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i2").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i3").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i4").text() + '</td>';
+                                tabstr += '</tr>';
+                            });
+                            //$("#del_rowbtn").show();
+                        }
+                        else
+                            tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
+                        tabstr += '</tbody>';
+                        $("#InsModifyTab").show();
+                        $("#DelInsSalaryTab").hide();
+                        $(".iModBtn").show();
+                        $(".delBtn").hide();
+                        $("#InsModifyTab").append(tabstr);
+                        $("#InsModifyTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#InsModifyTab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
+                        $.fancybox.close();
+                    }
+                }
+            });
+        }
+
+        function delInsSalary() {
+            if ($("#im_changedate").val() == "") {
+                alert("請選擇異動日期");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/getDelInsSalary.ashx",
+                data: {
+                    sortMethod: $("#sortMethod").val(),
+                    sortName: $("#sortName").val(),
+                    changedate: $("#im_changedate").val()
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("getDelInsSalary Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#DelInsSalaryTab tr").has("td").empty();
+                        var  tabstr = '<tbody>';
+                        if ($(data).find("data_item").length > 0) {
+                            $(data).find("data_item").each(function (i) {
+                                tabstr += '<tr aid=' + $(this).children("pPerGuid").text() + '>';
+                                tabstr += '<td style="display:none">';
+                                tabstr += '<input type="hidden" name="gv" value="' + $(this).children("gv").text() + '" />';
+                                tabstr += '<input type="hidden" name="tp_name" value="' + $(this).children("TypeName").text() + '" />';
+                                tabstr += '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><input type="checkbox" name="cb_batchdel" /></td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perNo").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perDep").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("cnName").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("Pay").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("ChangeDate").text() + '</td>';
+                                tabstr += '</tr>';
+                            });
+                            //$("#del_rowbtn").show();
+                        }
+                        else
+                            tabstr += "<tr><td colspan='7'>查詢無資料</td></tr>";
+                        tabstr += '</tbody>';
+                        $("#DelInsSalaryTab").show();
+                        $("#InsModifyTab").hide();
+                        $(".iModBtn").hide();
+                        $(".delBtn").show();
+                        $("#DelInsSalaryTab").append(tabstr);
+                        $("#DelInsSalaryTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#DelInsSalaryTab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
+                        $.fancybox.close();
+                    }
+                }
+            });
+        }
+    </script>
+    <%--勞退加碼提撥--%>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //checkBox check all
+            $(document).on("click", "#cball_ppRario", function () {
+                if ($("#cball_ppRario").prop("checked")) {
+                    $("input[name='cb_ppratio']").each(function () {
+                        $(this).prop("checked", true);
+                    });
+                } else {
+                    $("input[name='cb_ppratio']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+            });
+
+            $(document).on("click", "#ppRatio_SearchBtn", function () {
+                getPensionRatio();
+            });
+
+            //調整比率 button
+            $(document).on("click", "#ModppRatioBtn", function () {
+                var msg = "";
+                if ($("#ppRatioChangeDate").val() == "")
+                    msg += "請輸入異動日期\n";
+                if ($("input[name='cb_ppratio']:checked").length ==0)
+                    msg += "請勾選需調整人員\n";
+
+                if (msg != "") {
+                    alert(msg);
+                    return false;
+                }
+
+                var perGuid = "";
+                $("input[name='cb_ppratio']:checked").each(function () {
+                    if (perGuid != "") perGuid += ",";
+                    perGuid += this.value;
+                });
+
+                $.ajax({
+                    type: "POST",
+                    async: false, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/modPpRatio.ashx",
+                    data: {
+                        pGuid: perGuid,
+                        ChangeDate: $("#ppRatioChangeDate").val(),
+                        xmlstr: encodeURIComponent($("#ppRatioXml").val())
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                    },
+                    success: function (data) {
+                        if (data == "error") {
+                            alert("modPpRatio Error");
+                            return false;
+                        }
+
+                        if (data != null) {
+                            if (data == "succeed") {
+                                getPensionList();
+                                getPensionRatio();
+                            }
+                        }
+                    }
+                });
+            });
+        });
+
+        function getPensionRatio() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/getPPratio.ashx",
+                data: {
+                    pNo: $("#pr_pNo").val(),
+                    pName: $("#pr_pName").val(),
+                    pDep: $("#pr_pDep").val(),
+                    pYear: $("#pr_pYear").val()
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("getPPratio Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        $("#ppRatioXml").val(data);
+                        data = $.parseXML(data);
+                        $(".ppRatioView").show();
+                        var tabstr = "<tbody>";
+                        $("#ppRatioTab tr").has("td").empty();
+                        if ($(data).find("data_item").length > 0) {
+                            $(data).find("data_item").each(function (i) {
+                                tabstr += '<tr>';
+                                tabstr += '<td align="center"><input type="checkbox" name="cb_ppratio" value=' + $(this).children("perGuid").text()+' /></td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perNo").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perDep").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perYears").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("ppLarboRatio").text() + '%</td>';
+                                if (parseFloat($(this).children("perYears").text()) >= 2 && parseFloat($(this).children("perYears").text()) < 3)
+                                    tabstr += '<td align="center" nowrap="nowrap">6.5%</td>';
+                                if (parseFloat($(this).children("perYears").text()) >= 3)
+                                    tabstr += '<td align="center" nowrap="nowrap">7.0%</td>';
+                                tabstr += '</tr>';
+                            });
+                        }
+                        else
+                            tabstr += "<tr><td colspan='7'>查詢無資料</td></tr>";
+                        tabstr += '</tbody>';
+                        $("#ppRatioTab").append(tabstr);
+                        $("#ppRatioTab tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $("#ppRatioTab tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
+                    }
+                }
+            });
+        }
     </script>
     <%--datepicker--%>
     <style type="text/css">
@@ -2027,10 +2412,18 @@
             border: 1px solid #000;
             color: #000;
         }
+        a.asc:after {
+            content: attr(data-content) '▲';
+        }
+        a.desc:after {
+            content: attr(data-content) '▼';
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <input type="hidden" id="idtmp" name="idtmp" class="inputex" />
+    <input type="hidden" id="sortMethod" name="sortMethod" value="asc" />
+    <input type="hidden" id="sortName" name="sortName" value="perNo" />
    <div class="WrapperMain">
             <div class="fixwidth">
                 <div class="twocol underlineT1 margin10T">
@@ -2431,81 +2824,100 @@
                         </div>
                     </div><!-- tabs-5 -->
                     <div id="tabs-6">
+                        <input type="hidden" id="Pay_1" />
+                        <input type="hidden" id="Pay_2" />
+                        <input type="hidden" id="Pay_3" />
                         <div class="twocol margin15T">
                             <div class="right">
-                                <a id="InsModBtn" href="javascript:void(0);" class="keybtn">執行保薪調整</a>
-                                <a id="start_im" href="javascript:void(0);" class="keybtn">送出調整</a>
+                                <a id="InsDelBtn" href="javascript:void(0);" class="keybtn">批次刪除</a>
+                                <a id="InsModBtn" href="javascript:void(0);" class="keybtn">保薪調整</a>
                             </div>
                         </div><br />
-                        <a id="del_rowbtn" href="javascript:void(0);" class="keybtn" style="display:none;">刪除</a>
+                         <div class="twocol margin15T iModBtn" style="display:none;">
+                            <div class="left"><a id="del_rowbtn" href="javascript:void(0);" class="keybtn">刪除</a></div>
+                            <div class="right">
+                                <span style="color:red;">*</span>異動日期:<input type="text" id="InsModChangeDate" name="InsModChangeDate" />
+                                <a id="start_im" href="javascript:void(0);" class="keybtn">執行保薪調整</a>
+                            </div>
+                        </div>
+                         <div class="twocol margin15T delBtn" style="display:none;">
+                            <div class="left"><a id="batchdel_rowbtn" href="javascript:void(0);" class="keybtn">刪除</a></div>
+                            <div class="right"><a id="start_del" href="javascript:void(0);" class="keybtn">執行批次刪除</a></div>
+                        </div>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:400px;">
-                                <table id="InsModifyTab" width="98%" border="0" cellspacing="0" cellpadding="0"></table>
+                                <table id="InsModifyTab" width="100%" border="0" cellspacing="0" cellpadding="0"></table>
+                                <table id="DelInsSalaryTab" width="100%" border="0" cellspacing="0" cellpadding="0" style="display:none;">
+                                    <thead>
+                                        <tr>
+                                            <th width="30">刪除<br /><input type="checkbox" id="cball_batchdel" /></th>
+                                            <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perNo">員工代號</a></th>
+                                            <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perName">姓名</a></th>
+                                            <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="perDep">部門</a></th>
+                                            <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="cnName">保險類別</a></th>
+                                            <th nowrap="nowrap"><a href="javascript:void(0);" name="sortbtn" atp="Pay">投保薪資</a></th>
+                                            <th nowrap="nowrap">異動日期</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div><!-- overwidthblock -->
+                        </div>
+                        <div id="im_InsSalaryblock" style="display:none;">
+                            <input type="hidden" id="ism_Status" />
+                            <input type="hidden" id="ism_gv" />
+                            <div class="gentable" style="margin-top:10px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr><th colspan="2" style="font-size:12pt; ">請選擇計薪週期起始日期</th></tr>
+                                    <tr>
+                                        <th>起始日期</th>
+                                        <td><input id="is_StartDate" type="text" /></td>
+                                    </tr>
+                                    <tr><td colspan="2" align="center"><textarea id="RangeMsg" disabled="disabled" style="width:90%; height:100px;"></textarea></td></tr>
+                                    <tr><td colspan="2" align="right"><input type="button" onclick="InsSalaryModify();" class="keybtn" value="查詢" /></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="im_delblock" style="display:none;">
+                            <div style="margin-top:10px;">
+                                異動日期:<input id="im_changedate" type="text" />&nbsp;<input type="button" onclick="delInsSalary();" class="keybtn" value="查詢" />
+                            </div>
                         </div>
                     </div>
                     <div id="tabs-7">
+                        <input id="ppRatioXml" type="hidden" />
                         <div class="twocol margin15T">
                             <div class="right">
-                               
-                                <a href="javascript:void(0);" class="keybtn">查詢</a>   
-                                                   
+                                <a href="javascript:void(0);" id="ppRatio_SearchBtn" class="keybtn">查詢</a>   
                             </div>
                             <div>
-                                異動日期:<input type="text" />
-                                <a  href="javascript:void(0);" class="keybtn">將以勾選資料調整勞工自提比率</a>             
+                                員工代號:<input id="pr_pNo" type="text" />&nbsp;
+                                員工姓名:<input id="pr_pName" type="text" />&nbsp;
+                                部門:<input id="pr_pDep" type="text" />&nbsp;
+                                年資:<input id="pr_pYear" type="text" />&nbsp;
                             </div>
-
+                        </div>
+                        <div style="margin-top:20px; border-top:1px solid #AAAAAA;"></div>
+                        <div class="twocol margin15T ppRatioView" style="display:none;">
+                            <div class="left"><span style="color:red;">*</span>異動日期:<input type="text" id="ppRatioChangeDate" /></div>
+                            <div class="right">
+                                <a  href="javascript:void(0);" id="ModppRatioBtn" class="keybtn">調整勞工自提比率</a>
+                            </div>
                         </div><br />
-                        <div class="stripeMe fixTable" style="max-height:175px;">
-                        <table width="98%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <th><input type="checkbox" /></th>
-                                <th>員工代號</th>
-                                <th>員工姓名</th>
-                                <th>部門</th>
-                                <th>年資</th>
-                                <th>調整前提撥率</th>
-                                <th>調整號提撥率</th>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td>112233</td>
-                                <td>Test1</td>
-                                <td>中壢店</td>
-                                <td style="text-align:right">2</td>
-                                <td style="text-align:right">6</td>
-                                <td style="text-align:right">6.5</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td>112233</td>
-                                <td>Test1</td>
-                                <td>中壢店</td>
-                                <td style="text-align:right">2</td>
-                                <td style="text-align:right">6</td>
-                                <td style="text-align:right">6.5</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td>112233</td>
-                                <td>Test1</td>
-                                <td>中壢店</td>
-                                <td style="text-align:right">3</td>
-                                <td style="text-align:right">6.5</td>
-                                <td style="text-align:right">7</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox" /></td>
-                                <td>112233</td>
-                                <td>Test1</td>
-                                <td>中壢店</td>
-                                <td style="text-align:right">3</td>
-                                <td style="text-align:right">6.5</td>
-                                <td style="text-align:right">7</td>
-                            </tr>
-                        </table>
-                            </div>
+                        <div class="stripeMe fixTable ppRatioView" style="max-height:175px; display:none;">
+                            <table id="ppRatioTab" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="cball_ppRario" /></th>
+                                        <th>員工代號</th>
+                                        <th>員工姓名</th>
+                                        <th>部門</th>
+                                        <th>年資</th>
+                                        <th>調整前提撥率</th>
+                                        <th>調整號提撥率</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 <!-- 詳細資料end -->
             </div><!-- fixwidth -->         

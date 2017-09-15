@@ -1316,7 +1316,7 @@
                             });
                         }
                         else
-                            tabstr += "<tr><td colspan='10'>查詢無資料</td></tr>";
+                            tabstr += "<tr><td colspan='11'>查詢無資料</td></tr>";
                         $("#pbTab").append(tabstr);
                         $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
                         $(".stripeMe tr:even").addClass("alt");
@@ -1645,7 +1645,7 @@
                                         <td align="right"><div class="font-title titlebackicon">居留證到期日</div></td>
                                         <td><input type="text" id="pResidentPermitDate" name="pResidentPermitDate" class="inputex width100" /></td>
                                         <td align="right"><div class="font-title titlebackicon">年資</div></td>
-                                        <td ><input type="text" id="pYears" name="pYears" class="inputex width100" /></td>
+                                        <td ><input type="text" id="pYears" name="pYears" class="inputex width100 num" /></td>
                                         <td align="right"><div class="font-title titlebackicon">特休天數</div></td>
                                         <td ><input type="text" id="pAnnualLeave" name="pAnnualLeave" class="inputex width100" /></td>
                                     </tr>
