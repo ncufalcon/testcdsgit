@@ -175,26 +175,26 @@ public class ashx_LIReport : IHttpHandler, System.Web.SessionState.IReadOnlySess
 
 
             //    Npo.ExporkExcelNew(wk, "payroll_" + DateTime.Now.ToString("yyyyMMdd"));//下載excel
+            //}
+            //    else
+            //    {
+            //    context.Response.Write("TimeOut");
+            //}
         }
-            else
-            {
-            context.Response.Write("TimeOut");
-        }
-    }
         catch (Exception ex) {
             ErrorLog err = new ErrorLog();
-    err.InsErrorLog("ashx_ExportPayroll.ashx", ex.Message, USERINFO.MemberName);
+            err.InsErrorLog("ashx_LIReport.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("程式發生錯誤，請聯絡相關管理人員");
 
         }
     }
 
     public bool IsReusable
-{
-    get
     {
-        return false;
+        get
+        {
+            return false;
+        }
     }
-}
 
 }
