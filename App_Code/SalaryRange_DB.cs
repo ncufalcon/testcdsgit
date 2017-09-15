@@ -302,4 +302,31 @@ public class SalaryRange_DB
         oda.Fill(ds);
         return ds;
     }
+
+    public DataTable getSalaryThree(string sdate)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"
+declare @rStart nvarchar(10)
+set @rStart=(select sr_BeginDate from sy_SalaryRange where sr_BeginDate=@sdate)
+
+select * from(
+select ROW_NUMBER() over (order by sr_BeginDate desc) itemNo,
+sr_Guid,sr_BeginDate,sr_Enddate,sr_SalaryDate from sy_SalaryRange 
+where sr_Status='A' and CONVERT(datetime,sr_BeginDate)>=CONVERT(datetime,@rStart) 
+)#tmp where itemNo 
+between ((select COUNT(*) from sy_SalaryRange where sr_Status='A' and CONVERT(datetime,sr_BeginDate)>=CONVERT(datetime,@rStart))-2)
+and (select COUNT(*) from sy_SalaryRange where sr_Status='A' and CONVERT(datetime,sr_BeginDate)>=CONVERT(datetime,@rStart)) ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@sdate", sdate);
+        oda.Fill(ds);
+        return ds;
+    }
 }
