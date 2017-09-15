@@ -49,7 +49,7 @@ public class page_Seniority : IHttpHandler, IRequiresSessionState {
                 {
 
 
-                    sb.Append(@"sp_yearandspecial_test");
+                    sb.Append(@"sp_yearandspecial_new");
                     oCmd.CommandTimeout = 120;
                     oCmd.CommandText = sb.ToString();
                     oCmd.CommandType = CommandType.StoredProcedure;
