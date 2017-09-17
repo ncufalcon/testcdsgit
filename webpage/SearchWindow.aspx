@@ -40,6 +40,10 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
+                    case "CityBankSR":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
+                        parent.$.fancybox.close();
+                        break;
                 }
             });
         });
@@ -255,7 +259,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("giGuid").text() + ' str=' + $(this).children("giInsuranceCode").text() + ' str2=' + $(this).children("giInsuranceName").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("giGuid").text() + ' str=' + $(this).children("giInsuranceCode").text() + ' str2=' + $(this).children("giInsuranceName").text() + ' str3=' + $(this).children("sr_Year").text() + ' str4=' + $(this).children("sr_SalaryDate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giAge").text() + '</td>';
