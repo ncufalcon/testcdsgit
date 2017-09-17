@@ -311,7 +311,7 @@ public class SalaryRange_DB
 
         sb.Append(@"
 declare @rStart nvarchar(10)
-set @rStart=(select sr_BeginDate from sy_SalaryRange where sr_BeginDate=@sdate)
+set @rStart=(select sr_BeginDate from sy_SalaryRange where sr_BeginDate=@sdate and sr_Status='A')
 
 select * from(
 select ROW_NUMBER() over (order by sr_BeginDate desc) itemNo,
@@ -339,7 +339,8 @@ and (select COUNT(*) from sy_SalaryRange where sr_Status='A' and CONVERT(datetim
         sb.Append(@"select pPerGuid,pPay,sr_BeginDate,sr_Enddate,sr_SalaryDate from sy_SalaryRange 
 left join sy_PaySalaryMain on sr_Guid=psmSalaryRange
 left join sy_PaySalaryDetail on pPsmGuid=psmGuid
-where sr_Guid in (" + sr_gv + @") and pPerGuid=@perGuid");
+where sr_Guid in (" + sr_gv + @") and pPerGuid=@perGuid
+order by pPerGuid,sr_BeginDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
