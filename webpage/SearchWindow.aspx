@@ -259,7 +259,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("giGuid").text() + ' str=' + $(this).children("giInsuranceCode").text() + ' str2=' + $(this).children("giInsuranceName").text() + ' str3=' + $(this).children("sr_Year").text() + ' str4=' + $(this).children("sr_SalaryDate").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("giGuid").text() + ' str=' + $(this).children("giInsuranceCode").text() + ' str2=' + $(this).children("giInsuranceName").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceCode").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giInsuranceName").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("giAge").text() + '</td>';
@@ -299,7 +299,7 @@
                                 tabstr += '</tr>';
                                 if ($(data).find("data_item").length > 0) {
                                     $(data).find("data_item").each(function (i) {
-                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_BeginDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + '>';
+                                        tabstr += '<tr gv=' + $(this).children("sr_Guid").text() + ' str=' + $(this).children("sr_BeginDate").text() + ' str2=' + $(this).children("sr_Enddate").text() + ' str3=' + $(this).children("sr_Year").text() + ' str4=' + $(this).children("sr_SalaryDate").text() + '>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Year").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_BeginDate").text() + '</td>';
                                         tabstr += '<td nowrap="nowrap" style="cursor: pointer;">' + $(this).children("sr_Enddate").text() + '</td>';
