@@ -6,6 +6,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using System.Management;
+using System.Text;
+using System.Web.Security;
+using System.Security.Principal;
+
 public partial class webpage_Page_Login : System.Web.UI.Page
 {
     Common com = new Common();
@@ -13,27 +17,9 @@ public partial class webpage_Page_Login : System.Web.UI.Page
     payroll.gdal dal = new payroll.gdal();
     protected void Page_Load(object sender, EventArgs e)
     {
-        //System.Security.Principal.WindowsIdentity wi = System.Security.Principal.WindowsIdentity.GetCurrent();
-        //string[] a = wi.Name.Split('\\');
-        //string aa = a[0];
-        //string bb = a[1];
-        //System.DirectoryServices.DirectoryEntry ADEntry = new System.DirectoryServices.DirectoryEntry("WinNT://" + a[0] + "/" + a[1]);
-        //string Name = ADEntry.Properties["FullName"].Value.ToString();
-        //string ddd = Environment.GetEnvironmentVariable("COMPUTERNAME");
-        //string d = Environment.UserDomainName;
-        //string dddd = Request.ServerVariables["REMOTE_HOST"].ToString();
-        //ManagementObjectSearcher RAM = new ManagementObjectSearcher("select * from Win32_ComputerSystem");
-        //string ABC = "";
-        //foreach (ManagementObject Memory in RAM.Get())
-        //{
-        //    ABC += "電腦名稱：" + Memory["Name"] + "<br />";
-        //}
 
-        //string aaa = System.Environment.MachineName;
-        //ABC += aaa;
-
-        //Response.Write(ABC);
     }
+
 
     protected void lkb_Send_Click(object sender, EventArgs e)
     {
