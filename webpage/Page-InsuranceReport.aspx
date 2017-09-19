@@ -44,6 +44,7 @@
                                     <td style="width:150px" ><span class="font-title titlebackicon">日期迄</span><span id="sp_eDate"></span></td>
                                     <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                         <input id="hid_SalaryRangeGuid" type="hidden"  />
+                                        <input id="hid_SalaryDate" type="hidden"  />
                                     </td>
                                 </tr>
                             </table>                                 
@@ -97,6 +98,7 @@
                 sp_sDate: 'sp_sDate',
                 sp_eDate: 'sp_eDate',
                 hid_SalaryRangeGuid: 'hid_SalaryRangeGuid',
+                hid_SalaryDate:'hid_SalaryDate',
                 rad_LI: 'rad_LI',
                 rad_NHI: 'rad_NHI',
                 sp_PerName: 'sp_PerName',
@@ -165,16 +167,25 @@
                 var srGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
                 if (srGuid != '') {
                     var PerGuid = $('#' + this.Id.hid_PerGuid).val();
-                    var eClass = ($("#" + this.Id.rad_LI).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
+                    var eClass = (document.getElementById(this.Id.rad_LI).checked) ? "Y" : "";
                     var Company = $('#' + this.Id.hid_CGuid).val();
                     var Dep = $('#' + this.Id.hid_DepGuid).val();
-                  
-                    window.location = "../Report/Payroll/ashx_LIReport.ashx?sr_guid=" + arGuid
-                        + "&PerGuid=" + PerGuid
-                        + "&eClass=" + eClass
-                        + "&Company=" + Company
-                        + "&Dep=" + Dep
-                        + "&srGuid=" + srGuid;
+                    var SalaryDate = $('#' + this.Id.hid_SalaryDate).val();
+                    if (eClass == "Y") {
+                        window.location = "../handler/Report/ashx_LIReport.ashx?sr_guid=" + srGuid
+                            + "&PerGuid=" + PerGuid
+                            + "&Company=" + Company
+                            + "&Dep=" + Dep
+                            + "&srGuid=" + srGuid
+                            + "&SalaryDate=" + SalaryDate;
+                    } else
+                    {
+                        window.location = "../handler/Report/ashx_NHIReport.ashx?sr_guid=" + srGuid
+                            + "&PerGuid=" + PerGuid
+                            + "&Company=" + Company
+                            + "&Dep=" + Dep
+                            + "&srGuid=" + srGuid + "&SalaryDate=" + SalaryDate;;
+                    }
                 } else { alert('請選擇計薪週期'); }
             }
 
@@ -182,7 +193,7 @@
 
 
         //fancybox回傳
-        function setReturnValue(type, gv, str, str2) {
+        function setReturnValue(type, gv, str, str2, str3, str4) {
             switch (type) {
                 case "Personnel":
                     $("#" + JsEven.Id.txt_PerNo).val(str);
@@ -193,6 +204,7 @@
                     $("#" + JsEven.Id.sp_sDate).html(str);
                     $("#" + JsEven.Id.sp_eDate).html(str2);
                     $("#" + JsEven.Id.hid_SalaryRangeGuid).val(gv);
+                    $("#" + JsEven.Id.hid_SalaryDate).val(str4);                    
                     break;
                 case "Comp":
                     $("#" + JsEven.Id.txt_CompanyNo).val(str);

@@ -294,4 +294,23 @@ namespace payroll.model
 
     }
 
+
+
+    public class sy_Person
+    {
+        public string perGuid { get; set; }
+        public string perNo { get; set; }
+        public string perName { get; set; }
+        public string perComGuid { get; set; }
+        public string perCompanyName { get; set; }
+        public string perDep { get; set; }
+
+        public string pfPerGuid { get; set; }
+        public string pfName { get; set; }
+
+
+        
+
+    }
+
 }
