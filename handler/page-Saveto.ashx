@@ -201,7 +201,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += dt_a.Rows[i]["strOther"].ToString();
                                 text += "@@@@";
                                 //text += dt_a.Rows[i]["perSyAccount"].ToString().Trim();//受款人帳號
-                                text += dt_a.Rows[i]["psbIntoAccount"].ToString().Trim();//受款人帳號
+                                text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();//受款人帳號
                                 text += "@@@@@@@";
                                 text += dt_a.Rows[i]["syNumber"].ToString().Trim();//銀行代碼
                                 text += "@@@@";
