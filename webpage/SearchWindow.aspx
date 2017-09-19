@@ -44,6 +44,11 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
+                    case "SalaryRange":
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
+                        parent.$.fancybox.close();
+                        break;
+                        
                 }
             });
         });

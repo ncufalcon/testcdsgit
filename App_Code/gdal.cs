@@ -650,7 +650,7 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pDep))
                 sql += "and pDepGuid = @pDep ";
 
-            sql += "order by cbValue, pPerNo ";
+            sql += "order by pPerDepCode, pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
@@ -1368,5 +1368,55 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
 
         }
+
+
+
+
+        /// <summary>
+        /// 查詢家屬健保
+        /// </summary>
+        public DataTable Selsy_PersonFamily(payroll.model.sy_Person p)
+        {
+
+            string sql = @"select * from (
+                           select pfGuid
+                                 ,pfPerGuid
+                                 ,pfName
+                                 ,pfTitle
+                                 ,code_desc as pfTitleCht
+                                 ,pfBirthday
+                                 ,pfIDNumber
+                                 ,pfHealthInsurance
+                                 ,pfCode
+                                 ,pfGroupInsurance
+                                 ,pfCreateId
+                                 ,pfCreateDate
+                                 ,pfModifyId
+                                 ,pfModifyDate
+                                 ,pfStatus
+                                 ,(select top 1 pfiChange from sy_PersonFamilyInsurance where pfGuid=pfiPfGuid and pfiChangeDate <= convert(varchar, getdate(), 111) and pfiStatus='A' order by pfiChangeDate desc) as pfiChange
+                             from sy_PersonFamily
+                             left join sy_codetable on pfTitle=code_value and code_group='17') #tmp
+                             where pfStatus='A' and isnull(rtrim(pfiChange),'')<>'' ";
+
+            if (!string.IsNullOrEmpty(p.perGuid))
+                sql += "and pfPerGuid=@perGuid ";
+
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@perGuid", p.perGuid);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
     }
 }
