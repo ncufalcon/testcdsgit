@@ -408,6 +408,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     oCmd2.Parameters.AddWithValue("@create_id", str_userid);
                     oCmd2.Parameters.AddWithValue("@ranges", go_ranges);
                     oCmd2.Parameters.AddWithValue("@rangee", go_rangee);
+                    oCmd2.CommandTimeout = 600;//(秒) 延長sql server time out 
                     oCmd2.ExecuteNonQuery();
                     oCmd2.Connection.Close();
                     oCmd2.Connection.Dispose();
