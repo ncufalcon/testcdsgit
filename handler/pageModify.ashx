@@ -608,6 +608,9 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     for (int i = 0; i < dt_lastdatedata.Rows.Count; i++)
                     {
                         pTooL e = new pTooL();
+                        e.perNo  =  dt_lastdatedata.Rows[0]["perNo"].ToString().Trim();
+                        e.perName  =  dt_lastdatedata.Rows[0]["perName"].ToString().Trim();
+                        e.perGuid =  dt_lastdatedata.Rows[0]["perGuid"].ToString().Trim();
                         e.perLastDate =  dt_lastdatedata.Rows[0]["perLastDate"].ToString().Trim();//離職日期
                         pList.Add(e);
                     }

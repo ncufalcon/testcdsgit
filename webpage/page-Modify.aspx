@@ -1296,6 +1296,9 @@
                         } else {
                             $("#lastdate").val("");
                         }
+                        $("#txt_person_empno").val(response[0].perNo);
+                        $("#txt_person_cname").text(response[0].perName);
+                        $("#txt_hidden_person_guid").val(response[0].perGuid);
                         call_changedata();
                     } else {
                         
