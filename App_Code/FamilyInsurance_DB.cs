@@ -332,7 +332,7 @@ order by perIDNumber ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select pgiType,
-(select cbName from sy_CodeBranches where cbStatus='I' and cbGuid=perDep) perDep,
+(select cbName from sy_CodeBranches where cbStatus='M' and cbGuid=perDep) perDep,
 perNo,perName,perIDNumber,perBirthday,
 (select code_desc from sy_codetable where code_group='02' and code_value=perPosition) perPosition,perFirstDate,
 CONVERT(VARCHAR(10),(SELECT DATEADD(month, 1, perFirstDate)),111) startDate,
