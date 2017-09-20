@@ -67,19 +67,20 @@ public class ashx_NHIReport : IHttpHandler, System.Web.SessionState.IReadOnlySes
                     row.CreateCell(7).SetCellValue(com.toDou(dv[i]["pComLabor"].ToString()));//資方負擔 
 
 
-                    payroll.model.sy_Person pfModel = new payroll.model.sy_Person();
-                    pfModel.perGuid = dv[i]["pPerGuid"].ToString();
-                    DataView fdv = dal.Selsy_PersonFamily(pfModel).DefaultView;
+                    payroll.model.sy_FamilyInsurance pfModel = new payroll.model.sy_FamilyInsurance();
+                    pfModel.psfiPerGuid = dv[i]["pPerGuid"].ToString();
+                        pfModel.srGuid = srGuid;
+                    DataView fdv = dal.Sel_sy_PaySalaryFamilyInsurance(pfModel).DefaultView;
                     row.CreateCell(5).SetCellValue(com.toDou((fdv.Count + 1).ToString()));//眷保人數
                     for (int j = 0; j < fdv.Count; j++)
                     {
                         cellN += 1;
                         IRow rowf = sh.CreateRow(cellN);
 
-                        rowf.CreateCell(8).SetCellValue(fdv[j]["pfName"].ToString());//眷屬姓名
-                        rowf.CreateCell(9).SetCellValue(fdv[j]["pfIDNumber"].ToString());//眷屬身分證
-                        rowf.CreateCell(10).SetCellValue(fdv[j]["pfbirthday"].ToString());//出生年月日
-                        rowf.CreateCell(11).SetCellValue(fdv[j]["pfTitleCht"].ToString());//關係
+                        rowf.CreateCell(8).SetCellValue(fdv[j]["psfiName"].ToString());//眷屬姓名
+                        rowf.CreateCell(9).SetCellValue(fdv[j]["psfiIDNumber"].ToString());//眷屬身分證
+                        rowf.CreateCell(10).SetCellValue(fdv[j]["psfibirthday"].ToString());//出生年月日
+                        rowf.CreateCell(11).SetCellValue(fdv[j]["psfiTitleCht"].ToString());//關係
                     }
 
 

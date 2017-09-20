@@ -1418,5 +1418,60 @@ namespace payroll
         }
 
 
+
+        /// <summary>
+        /// 查詢家屬健保
+        /// </summary>
+        public DataTable Sel_sy_PaySalaryFamilyInsurance(payroll.model.sy_FamilyInsurance p)
+        {
+
+            string sql = @"select psfiGuid
+                          ,psfiPfGuid
+                          ,psfiPsmGuid
+                          ,psfiPerGuid
+                          ,psfiName
+                          ,psfiTitle
+                          ,psfiTitleCht
+                          ,psfibirthday
+                          ,psfiIDNumber
+                          ,psfiHealthInsurance
+                          ,psfiCode
+                          ,psfiCodeCht
+                          ,psfiStatus
+                          ,psfiChange
+                          ,psfiChangeCht
+                          ,psfiChangeDate
+                          ,psfiSubsidyLevel
+                          ,psfiSubsidyLevelCht
+                          ,psfiCardNo
+                          ,psfiAreaPerson
+                          ,psfiCreateDate
+                          ,psfiGroupInsurance
+                          ,psmSalaryRange
+                      FROM sy_PaySalaryFamilyInsurance
+                      left join sy_PaySalaryMain on psfiPsmGuid=psmGuid where 1=1 ";
+
+            if (!string.IsNullOrEmpty(p.psfiPerGuid))
+                sql += "and psfiPerGuid=@psfiPerGuid ";
+
+            if (!string.IsNullOrEmpty(p.srGuid))
+                sql += "and psmSalaryRange=@srGuid ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@psfiPerGuid", p.psfiPerGuid);
+            cmd.Parameters.AddWithValue("@srGuid", p.srGuid);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
     }
 }
