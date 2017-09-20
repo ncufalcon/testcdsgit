@@ -313,4 +313,16 @@ namespace payroll.model
 
     }
 
+
+
+    public class sy_FamilyInsurance
+    {
+        public string psfiPfGuid { get; set; }
+        public string psfiPsmGuid { get; set; }
+        public string psfiPerGuid { get; set; }
+
+        public string srGuid { get; set; }
+
+
+    }
 }
