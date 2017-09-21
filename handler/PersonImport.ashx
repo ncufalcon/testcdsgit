@@ -448,6 +448,7 @@ perStatus
                     oCmd.ExecuteNonQuery();
                 }
 
+                //眷屬資料
                 oCmd.Parameters.Clear();
                 Xls.ActiveSheet = 2;
 
