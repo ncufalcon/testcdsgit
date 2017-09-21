@@ -557,7 +557,10 @@ public class InsuranceExport : IHttpHandler {
                                 Xls.SetCellValue(i, 11, dt.Rows[i - 4]["pfName"].ToString());
                                 Xls.SetCellValue(i, 12, dt.Rows[i - 4]["pfIDNumber"].ToString());
                                 Xls.SetCellValue(i, 13, ROC_Date(dt.Rows[i - 4]["pfBirthday"].ToString()));
-                                birthYear = DateTime.Parse(dt.Rows[i - 4]["pfBirthday"].ToString()).ToString("yyyy");
+                                if (dt.Rows[i - 4]["pfBirthday"].ToString() != "")
+                                    birthYear = DateTime.Parse(dt.Rows[i - 4]["pfBirthday"].ToString()).ToString("yyyy");
+                                else
+                                    birthYear = "0";
                             }
                             string age = (Int32.Parse(DateTime.Now.ToString("yyyy")) - Int32.Parse(birthYear)).ToString();
                             if (Int32.Parse(age) > 23 && dt.Rows[i - 4]["pfTitle"].ToString().Trim() == "子女")

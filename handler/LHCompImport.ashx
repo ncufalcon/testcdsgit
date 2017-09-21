@@ -62,6 +62,8 @@ public class LHCompImport : IHttpHandler,IRequiresSessionState {
                 {
                     string P_Date = (Xls.GetCellValue(j, 8) != null) ? Xls.GetCellValue(j, 8).ToString().Trim() : "";
                     string P_ID = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString().Trim() : "";
+                    //if (P_ID == "")
+                    //    continue;
                     string P_Salary = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString() : "0";
                     P_Salary = (P_Salary.ToString().Trim() != "") ? P_Salary.ToString() : "0";
                     string P_PersonPay = (Xls.GetCellValue(j, 7) != null) ? Xls.GetCellValue(j, 7).ToString() : "0";
@@ -151,6 +153,8 @@ L_Date
                 {
                     string H_Date = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString().Trim() : "";
                     string H_ID = (Xls.GetCellValue(j, 5) != null) ? Xls.GetCellValue(j, 5).ToString().Trim() : "";
+                    if (H_ID == "")
+                        continue;
                     string H_Salary = (Xls.GetCellValue(j, 4) != null) ? Xls.GetCellValue(j, 4).ToString() : "0";
                     H_Salary = (H_Salary.ToString().Trim() != "") ? H_Salary.ToString() : "0";
                     string H_PersonPay = (Xls.GetCellValue(j, 19) != null) ? Xls.GetCellValue(j, 19).ToString() : "0";
@@ -216,11 +220,12 @@ H_Date
         }
         finally
         {
+            context.Server.ClearError();
             oCmd.Connection.Close();
             oConn.Close();
             context.Response.ContentType = "text/html";
             if (status == false)
-                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('比對失敗，請聯絡系統管理員');</script>");
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('Error：比對失敗，請聯絡系統管理員');</script>");
             else
             {
                 if (result == "succeed")
