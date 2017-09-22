@@ -235,14 +235,15 @@
                         type: 'text',
                         success: function (msg) {
                             switch (msg) {
-                                case "Timeout":
+                                case "t":
                                     alert("請重新登入");
-                                    window.location.href = "index.aspx";
+                                    CommonEven.goLogin();
                                     break;
                                 case "sign":
                                     alert("請勿輸入特殊符號");
+                                    CommonEven.goErrorPage();
                                     break;
-                                case "error":
+                                case "e":
                                     alert("程式發生錯誤，儲存失敗");
                                     break;
                                 case "repeat":
@@ -328,15 +329,16 @@
                     type: 'text',
                     success: function (msg) {
                         switch (msg) {
-                            //case "Timeout":
-                            //    alert("請重新登入");
-                            //    window.location.href = "index.aspx";
-                            //    break;
-                            //case "sign":
-                            //    alert("請勿輸入特殊符號");
-                            //    break;
-                            case "error":
-                                alert("刪除失敗");
+                            case "t":
+                                alert("請重新登入");
+                                CommonEven.goLogin();
+                                break;
+                            case "sign":
+                                alert("請勿輸入特殊符號");
+                                CommonEven.goErrorPage();
+                                break;
+                            case "e":
+                                alert("程式發生錯誤，儲存失敗");
                                 break;
                             default:
                                 alert("刪除成功");

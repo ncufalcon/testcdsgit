@@ -1473,5 +1473,38 @@ namespace payroll
         }
 
 
+        /// <summary>
+        /// 出勤明細表
+        /// </summary>
+        public DataTable Sel_pr_AttendanceReport(payroll.model.sy_Person p)
+        {
+
+            string sql = @"pr_AttendanceReport ";
+
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@sDate", p.sDate);
+            cmd.Parameters.AddWithValue("@eDate", p.eDate);
+            cmd.Parameters.AddWithValue("@perNo", p.perNo);
+            cmd.Parameters.AddWithValue("@perName", p.perName);
+            cmd.Parameters.AddWithValue("@perCompanyName", p.perCompanyName);
+            cmd.Parameters.AddWithValue("@perDep", p.perDep);
+            try
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
+
+
+
+
+
+
     }
 }

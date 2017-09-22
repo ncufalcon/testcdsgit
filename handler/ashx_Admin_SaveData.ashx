@@ -4,7 +4,7 @@ using System;
 using System.Web;
 using System.Data;
 
-public class ashx_Admin_SaveData : IHttpHandler {
+public class ashx_Admin_SaveData : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
 
     Dal dal = new Dal();
     Common com = new Common();
@@ -13,6 +13,8 @@ public class ashx_Admin_SaveData : IHttpHandler {
         context.Response.ContentType = "text/plain";
         try
         {
+            if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
             if (!string.IsNullOrEmpty(context.Request.Form["mbName"])
                 && !string.IsNullOrEmpty(context.Request.Form["mbJobNumber"])
                 && !string.IsNullOrEmpty(context.Request.Form["mbId"])
@@ -36,7 +38,7 @@ public class ashx_Admin_SaveData : IHttpHandler {
                 string msg = CheckSqlInJection(mbName, mbJobNumber, mbId, mbPassword, mbCom, mbPs);
 
                 string passw = com.desEncryptBase64(mbPassword);
-                string Id = "12345";
+                string Id = USERINFO.MemberGuid;
                 DateTime Date = DateTime.Now;
 
 
@@ -77,7 +79,9 @@ public class ashx_Admin_SaveData : IHttpHandler {
                 //context.Response.Write("OK");
 
             }
-            else { context.Response.Write("Timeout"); }
+            else { context.Response.Write("e"); }
+            }
+            else { context.Response.Write("t"); }
         }
         catch (Exception ex) { context.Response.Write("error"); }
     }

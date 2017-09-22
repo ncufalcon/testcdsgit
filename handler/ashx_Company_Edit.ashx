@@ -4,7 +4,7 @@ using System;
 using System.Web;
 using System.Data;
 
-public class ashx_Company_Edit : IHttpHandler {
+public class ashx_Company_Edit : IHttpHandler,System.Web.SessionState.IReadOnlySessionState {
     
     Dal dal = new Dal();
     public void ProcessRequest (HttpContext context) {

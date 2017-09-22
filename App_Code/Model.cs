@@ -309,7 +309,8 @@ namespace payroll.model
         public string pfName { get; set; }
 
 
-        
+        public string sDate { get; set; }
+        public string eDate { get; set; }
 
     }
 
@@ -325,4 +326,6 @@ namespace payroll.model
 
 
     }
+
+
 }

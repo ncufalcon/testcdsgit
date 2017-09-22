@@ -405,14 +405,15 @@
                         type: 'text',
                         success: function (msg) {
                             switch (msg) {
-                                case "Timeout":
+                                case "t":
                                     alert("請重新登入");
-                                    window.location.href = "login.aspx";
+                                    CommonEven.goLogin();
                                     break;
                                 case "sign":
                                     alert("請勿輸入特殊符號");
+                                    CommonEven.goErrorPage();
                                     break;
-                                case "error":
+                                case "e":
                                     alert("程式發生錯誤，儲存失敗");
                                     break;
                                 default:
@@ -458,11 +459,15 @@
                                 //    alert("請重新登入");
                                 //    window.location.href = "index.aspx";
                                 //    break;
-                                //case "sign":
-                                //    alert("請勿輸入特殊符號");
-                                //    break;
-                                case "error":
+                                case "sign":
+                                    CommonEven.goErrorPage();
+                                    break;
+                                case "e":
                                     alert("刪除失敗");
+                                    break;
+                                case "t":
+                                    alert("請重新登入");
+                                    CommonEven.goLogin();
                                     break;
                                 default:
                                     alert("刪除成功");
