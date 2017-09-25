@@ -257,7 +257,7 @@ public class sy_PersonChange
                 from sy_Person
                 left join sy_codetable on code_group = '02' and  perPosition = code_value
                 left join sy_CodeBranches on perDep = cbGuid
-                where perNo=@perNo
+                where perNo=@perNo and perStatus<>'D'
             ");
             thisCommand.Parameters.AddWithValue("@perNo", perNo);
 

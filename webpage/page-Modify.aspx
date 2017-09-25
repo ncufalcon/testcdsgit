@@ -1301,7 +1301,8 @@
                         $("#txt_hidden_person_guid").val(response[0].perGuid);
                         call_changedata();
                     } else {
-                        
+                        $("#txt_person_cname").text("無資料");
+                        $("#txt_hidden_person_guid").val("");
                     }
                 },//success end
                 complete: function () {
