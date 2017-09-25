@@ -566,7 +566,7 @@
 
             //設定合約/試用期滿日
             $(document).on("change", "#pFirstDate,input[name='pContract']", function () {
-                if ($("input[name='pContract']:checked").length > 0 && $("#pFirstDate").val() != "") {
+                //if ($("input[name='pContract']:checked").length > 0 && $("#pFirstDate").val() != "") {
                     if ($("#pFirstDate").val().substring(4, 5) == "/" && $("#pFirstDate").val().substring(7, 8) == "/") {
                         var sday = new Date($("#pFirstDate").val());
                         //if ($("input[name='pContract']:checked").val() == "01")
@@ -575,7 +575,7 @@
                         sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate() - 1);
                         $("#pContractDeadline").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
                     }
-                }
+                //}
             });
 
             //設定體檢到期日
