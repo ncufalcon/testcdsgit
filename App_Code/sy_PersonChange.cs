@@ -510,6 +510,7 @@ public class sy_PersonChange
         try
         {
             //順序 勞保 健保 團保 勞退 眷屬
+            //20170926調整  健保&團保是轉出piChange='07' pfiChange='03'  勞保 團保 勞退 三個依舊維持是退保
             show_value.Append(@" 
                 declare @rowcounts int;
                 select @rowcounts=COUNT(*) 
@@ -521,7 +522,7 @@ public class sy_PersonChange
 	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,plPs,@str_creatid,'A'
 	                    from sy_PersonLabor 
 	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='02')
-	                    order by plCreateDate DESC
+	                    order by plChangeDate,plCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -531,10 +532,10 @@ public class sy_PersonChange
                 if @rowcounts>0
                     begin
                         insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus)
-                        select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'02',piInsurancePayroll,piPs,@str_creatid,'A'
+                        select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'07',piInsurancePayroll,piPs,@str_creatid,'A'
 	                    from sy_PersonInsurance 
 	                    where piPerGuid=@str_back_per_guid and piStatus='A' and (piChange='01' or piChange='03')
-	                    order by piCreateDate DESC
+	                    order by piChangeDate,piCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -547,7 +548,7 @@ public class sy_PersonChange
                         select top 1 NEWID(),pgiPerGuid,pgiType,'02',@str_date,pgiInsuranceCode,pgiPs,@str_creatid,'A'
 	                    from sy_PersonGroupInsurance 
 	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiChange='01'
-	                    order by pgiCreateDate DESC
+	                    order by pgiChangeDate,pgiCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -560,7 +561,7 @@ public class sy_PersonChange
                         select top 1 NEWID(),ppGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,@str_creatid,'A'
 	                    from sy_PersonPension 
 	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' and (ppChange='01' or ppChange='02')
-	                    order by ppCreateDate DESC
+	                    order by ppChangeDate,ppCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -570,10 +571,10 @@ public class sy_PersonChange
                 if @rowcounts>0
                     begin
                         insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus)
-                        select NEWID(),pfiPerGuid,pfiPfGuid,'02',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,@str_creatid,'A'
+                        select NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,@str_creatid,'A'
 	                    from sy_PersonFamilyInsurance 
 	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and pfiChange='01'
-	                    order by pfiCreateDate DESC
+	                    order by pfiChangeDate,pfiCreateDate DESC
                     end
                 ");
 
