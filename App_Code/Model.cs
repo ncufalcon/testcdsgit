@@ -183,7 +183,9 @@ namespace payroll.model
         public string pShouldPayStatus { get; set; }
         public string pLeaveStatus { get; set; }
         public string pCompany { get; set; }
+        public string pCompanyName { get; set; }
         public string pDep { get; set; }
+        public string pDepCode { get; set; }
 
         public decimal pSalary { get; set; }
         

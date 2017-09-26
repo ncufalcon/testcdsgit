@@ -98,7 +98,7 @@
 
             document.body.onload = function () {
 
-                $("#" + JsEven.id.txt_eDate + ",#" + JsEven.id.txt_sDate).datepicker({
+                $("#" + JsEven.Id.txt_eDate + ",#" + JsEven.Id.txt_sDate).datepicker({
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy/mm/dd',

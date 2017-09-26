@@ -46,6 +46,11 @@
                                         <input id="hid_SalaryRangeGuid" type="hidden"  />
                                         <input id="hid_SalaryDate" type="hidden"  />
                                     </td>
+
+                            <td class="width13" align="right"><div class="font-title titlebackicon">類別</div></td>
+                            <td class="width20">
+                                <input type="radio" class="inputex" id="rad_LI" name="Insurance" checked="checked"/>LI
+                                <input type="radio" class="inputex" id="rad_NHI" name="Insurance"/>NHI</td>
                                 </tr>
                             </table>                                 
                             </td>
@@ -54,28 +59,31 @@
                             <td class="width13" align="right"><div class="font-title titlebackicon">工號</div></td>
                             <td class="width20">
                                 <input type="text" class="inputex" id="txt_PerNo"/>
-                                <img src="../images/btn-search.gif" id="img_Per" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+   <%--                             <img src="../images/btn-search.gif" id="img_Per" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                 <span id="sp_PerName"></span>
-                                <input id="hid_PerGuid" type="hidden" /> 
+                                <input id="hid_PerGuid" type="hidden" /> --%>
                             </td>
-                            <td class="width13" align="right"><div class="font-title titlebackicon">類別</div></td>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">姓名</div></td>
                             <td class="width20">
-                                <input type="radio" class="inputex" id="rad_LI" name="Insurance" checked="checked"/>LI
-                                <input type="radio" class="inputex" id="rad_NHI" name="Insurance"/>NHI</td>
+                                <input type="text" class="inputex" id="txt_PerName"/>
+   <%--                             <img src="../images/btn-search.gif" id="img_Per" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+                                <span id="sp_PerName"></span>
+                                <input id="hid_PerGuid" type="hidden" /> --%>
+                            </td>
                         </tr>                        
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
                             <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" name="txt_CompanyNo"/>
-                                <img src="../images/btn-search.gif" id="img_Company" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+<%--                                <img src="../images/btn-search.gif" id="img_Company" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                 <span id="sp_CName"></span>
-                                <input id="hid_CGuid" type="hidden" />                     
+                                <input id="hid_CGuid" type="hidden" />    --%>                 
                             </td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
                             <td class="width20">
                                 <input type="text" class="inputex" id="txt_Dep" name="txt_Dep"/>
-                                <img src="../images/btn-search.gif" id="img_Dep" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+<%--                                <img src="../images/btn-search.gif" id="img_Dep" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                 <span id="sp_DepName"></span>
-                                <input id="hid_DepGuid" type="hidden" />                 
+                                <input id="hid_DepGuid" type="hidden" />  --%>               
                             </td>
                         </tr>
 
@@ -98,22 +106,24 @@
                 sp_sDate: 'sp_sDate',
                 sp_eDate: 'sp_eDate',
                 hid_SalaryRangeGuid: 'hid_SalaryRangeGuid',
-                hid_SalaryDate:'hid_SalaryDate',
+                hid_SalaryDate: 'hid_SalaryDate',
+
+
                 rad_LI: 'rad_LI',
                 rad_NHI: 'rad_NHI',
                 sp_PerName: 'sp_PerName',
-
+                txt_PerName:'txt_PerName',
                 txt_CompanyNo: 'txt_CompanyNo',
-                sp_CName: 'sp_CName',
-                hid_CGuid: 'hid_CGuid',
+                //sp_CName: 'sp_CName',
+                //hid_CGuid: 'hid_CGuid',
 
                 txt_Dep: 'txt_Dep',
-                sp_DepName: 'sp_DepName',
-                hid_DepGuid: 'hid_DepGuid',
+                //sp_DepName: 'sp_DepName',
+                //hid_DepGuid: 'hid_DepGuid',
 
                 txt_PerNo: 'txt_PerNo',
-                sp_PerName: 'sp_PerName',
-                hid_PerGuid: 'hid_PerGuid'
+                //sp_PerName: 'sp_PerName',
+                //hid_PerGuid: 'hid_PerGuid'
             },
 
 
@@ -166,14 +176,18 @@
             ExportExcel: function () {
                 var srGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
                 if (srGuid != '') {
-                    var PerGuid = $('#' + this.Id.hid_PerGuid).val();
+                    var PerNo = $('#' + this.Id.txt_PerNo).val();
+                    var PerName = $('#' + this.Id.txt_PerName).val();                    
+                    var Company = $('#' + this.Id.txt_CompanyNo).val();
+                    var Dep = $('#' + this.Id.txt_Dep).val();
+
                     var eClass = (document.getElementById(this.Id.rad_LI).checked) ? "Y" : "";
-                    var Company = $('#' + this.Id.hid_CGuid).val();
-                    var Dep = $('#' + this.Id.hid_DepGuid).val();
                     var SalaryDate = $('#' + this.Id.hid_SalaryDate).val();
+
                     if (eClass == "Y") {
                         window.location = "../handler/Report/ashx_LIReport.ashx?sr_guid=" + srGuid
-                            + "&PerGuid=" + PerGuid
+                            + "&PerNo=" + PerNo
+                            + "&PerName=" + PerName
                             + "&Company=" + Company
                             + "&Dep=" + Dep
                             + "&srGuid=" + srGuid
@@ -181,10 +195,12 @@
                     } else
                     {
                         window.location = "../handler/Report/ashx_NHIReport.ashx?sr_guid=" + srGuid
-                            + "&PerGuid=" + PerGuid
+                            + "&PerNo=" + PerNo
+                            + "&PerName=" + PerName
                             + "&Company=" + Company
                             + "&Dep=" + Dep
-                            + "&srGuid=" + srGuid + "&SalaryDate=" + SalaryDate;;
+                            + "&srGuid=" + srGuid
+                            + "&SalaryDate=" + SalaryDate;
                     }
                 } else { alert('請選擇計薪週期'); }
             }

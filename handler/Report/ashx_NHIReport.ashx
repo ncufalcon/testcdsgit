@@ -18,16 +18,18 @@ public class ashx_NHIReport : IHttpHandler, System.Web.SessionState.IReadOnlySes
         try
         {
             string srGuid = (!string.IsNullOrEmpty(context.Request.QueryString["srGuid"])) ? context.Request.QueryString["srGuid"].ToString() : "";
-            string PerGuid = (!string.IsNullOrEmpty(context.Request.QueryString["PerGuid"])) ? context.Request.QueryString["PerGuid"].ToString() : "";
+            string PerNo = (!string.IsNullOrEmpty(context.Request.QueryString["PerNo"])) ? context.Request.QueryString["PerNo"].ToString() : "";
+            string PerName = (!string.IsNullOrEmpty(context.Request.QueryString["PerName"])) ? context.Request.QueryString["PerName"].ToString() : "";
             string Company = (!string.IsNullOrEmpty(context.Request.QueryString["Company"])) ? context.Request.QueryString["Company"].ToString() : "";
             string Dep = (!string.IsNullOrEmpty(context.Request.QueryString["Dep"])) ? context.Request.QueryString["Dep"].ToString() : "";
             string SalaryDate = (!string.IsNullOrEmpty(context.Request.QueryString["SalaryDate"])) ? context.Request.QueryString["SalaryDate"].ToString() : "";
 
             payroll.model.sy_PayRoll pModel = new payroll.model.sy_PayRoll();
             pModel.sr_Guid = srGuid;
-            pModel.pPerGuid = PerGuid;
-            pModel.pCompany = Company;
-            pModel.pDep = Dep;
+            pModel.pPerNo = PerNo;
+                pModel.pPerName = PerName;
+            pModel.pCompanyName = Company;
+            pModel.pDepCode = Dep;
 
 
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))

@@ -637,12 +637,17 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pPerGuid))
                 sql += "and pPerGuid=@pPerGuid ";
 
-            if (p.pLeaveStatus != "Y")
+            if (!string.IsNullOrEmpty(p.pPerNo))
+                sql += "and pPerNo=@pPerNo ";
+
+            if (!string.IsNullOrEmpty(p.pPerName))
+                sql += "and pPerName=@pPerName ";
+
+            if (p.pLeaveStatus != "Y" && p.pLeaveStatus != null)
                 sql += "and isnull(rtrim(perLastDate),'') = '' ";
 
-            if (p.pShouldPayStatus != "Y")
+            if (p.pShouldPayStatus != "Y" && p.pShouldPayStatus != null)
                 sql += "and pShouldPay <> 0 ";
-
 
             if (!string.IsNullOrEmpty(p.pCompany))
                 sql += "and pCompanyGuid= @pCompany ";
@@ -650,13 +655,23 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pDep))
                 sql += "and pDepGuid = @pDep ";
 
+            if (!string.IsNullOrEmpty(p.pCompanyName))
+                sql += "and pPerCompanyName like '%' + @pCompanyName +'%' ";
+
+            if (!string.IsNullOrEmpty(p.pDepCode))
+                sql += "and ((pPerDepCode = @pDepCode) or (pPerDep like '%' + @pDepCode +'%')) ";
+
             sql += "order by pPerDepCode, pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
             cmd.Parameters.AddWithValue("@pPerGuid", com.cSNull(p.pPerGuid));
+            cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));
+            cmd.Parameters.AddWithValue("@pPerName", com.cSNull(p.pPerName));
             cmd.Parameters.AddWithValue("@pCompany", com.cSNull(p.pCompany));
             cmd.Parameters.AddWithValue("@pDep", com.cSNull(p.pDep));
+            cmd.Parameters.AddWithValue("@pCompanyName", com.cSNull(p.pCompanyName));
+            cmd.Parameters.AddWithValue("@pDepCode", com.cSNull(p.pDepCode));
             try
             {
                 cmd.Connection.Open();
@@ -1479,7 +1494,7 @@ namespace payroll
         public DataTable Sel_pr_AttendanceReport(payroll.model.sy_Person p)
         {
 
-            string sql = @"pr_AttendanceReport ";
+            string sql = @"pr_AttendanceReport";
 
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);

@@ -84,35 +84,24 @@
                                     <td><input type="text" class="inputex width95" id="txt_comNTB"/></td>
                                     <td align="right"><div class="font-title titlebackicon">所屬國稅局分局代號</div></td>
                                     <td><input type="text" class="inputex width95" id="txt_comNTBCode"/></td>
-                                    <td align="right"><div class="font-title titlebackicon">勞工保險業別代號</div></td>
-                                    <td><input type="text" class="inputex width95" id="txt_comLaborProtectionCode"/></td>
-                                </tr>
-                                <tr>
-    
-                                    <td align="right" style="display:none"><div class="font-title titlebackicon" >所屬縣市別代號</div></td>
-                                    <td style="display:none">
-                                        <select id="ddlist_comCity">
-
-                                        </select>
-                                    </td>
-                                    <td align="right"><div class="font-title titlebackicon">健保投保單位代號</div></td>
-                                    <td><input type="text" class="inputex width95" id="txt_comHealthInsuranceCode"/></td>
-                                    <td align="right"></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-  
-                                </tr>
-                                <tr>
-                                    <td align="right"><div class="font-title titlebackicon">負責人</div></td>
-                                    <td><input type="text" class="inputex width95" id="txt_comResponsible"/></td>
                                     <td class="width15" align="right"><div class="font-title titlebackicon">所屬國稅局</div></td>
                                     <td class="width20"><input type="text" class="inputex width95" id="txt_comNTA"/></td>
 
-                                    <td class="width15" align="right"><div class="font-title titlebackicon">勞工保險證號</div></td>
-                                    <td class="width20"><input type="text" class="inputex width60" id="txt_comLaborProtection1" />-<input type="text" class="inputex width15" id="txt_comLaborProtection2"/></td>
                                 </tr>
                                 <tr>
+                                    <td align="right"><div class="font-title titlebackicon">勞工保險業別代號</div></td>
+                                    <td><input type="text" class="inputex width95" id="txt_comLaborProtectionCode"/></td>    
+                                    <td align="right" style="display:none"><div class="font-title titlebackicon" >所屬縣市別代號</div></td>
+                                    <td style="display:none"><select id="ddlist_comCity"></select></td>
+                                    <td align="right"><div class="font-title titlebackicon">健保投保單位代號</div></td>
+                                    <td><input type="text" class="inputex width95" id="txt_comHealthInsuranceCode"/></td>
+                                    <td class="width15" align="right"><div class="font-title titlebackicon">勞工保險證號</div></td>
+                                    <td class="width20"><input type="text" class="inputex width60" id="txt_comLaborProtection1" />-<input type="text" class="inputex width15" id="txt_comLaborProtection2"/></td>             
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><div class="font-title titlebackicon">負責人</div></td>
+                                    <td><input type="text" class="inputex width95" id="txt_comResponsible"/></td>
                                     <td align="right"><div class="font-title titlebackicon">電話號碼</div></td>
                                     <td><input type="text" class="inputex width95" id="txt_comTel" /></td>
                                 </tr>
@@ -136,8 +125,6 @@
                                 <tr>
                                     <td align="right"><div class="font-title titlebackicon">薪資轉存局號</div></td>
                                     <td ><input type="text" class="inputex width99" id="txt_comOfficeNumber" /></td>
-                                </tr>
-                                <tr>
                                     <td align="right"><div class="font-title titlebackicon">薪資轉存帳號</div></td>
                                     <td ><input type="text" class="inputex width99" id="txt_comAccountNumber"/></td>
                                 </tr>
