@@ -11,6 +11,12 @@ using System.Configuration;
 public class delInsSalary : IHttpHandler,IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
+        if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+        {
+            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
+            return;
+        }
+
         bool status = true;
         string exStr = string.Empty;
         string gv = (context.Request.Form["gv"] != null) ? context.Request.Form["gv"].ToString() : "";

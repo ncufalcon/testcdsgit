@@ -68,6 +68,11 @@
                     alert(xhr);
                 },
                 success: function (data) {
+                    if (data == "LoginFailed") {
+                        reLogin();
+                        return false;
+                    }
+
                     if (data == "error") {
                         alert("SearchDialog Error");
                         return false;
@@ -322,6 +327,11 @@
                     }
                 }
             });
+        }
+
+        function reLogin() {
+            alert("請重新登入");
+            parent.location.href = "../webpage/Page-Login.aspx";
         }
 
         var nowPage = 0; //當前頁

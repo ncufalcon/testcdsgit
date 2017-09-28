@@ -267,13 +267,12 @@ where  ppStatus<>'D' and ppGuid=@ppGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select perIDNumber,perName,perBirthday,perFirstDate,perPensionIdentity,comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate,
-(select min(ilItem3) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem3<>'0') ppLv,
+        sb.Append(@"select perIDNumber,perName,perBirthday,perFirstDate,perPensionIdentity,perYears,comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate,ppPayPayroll,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>'0') InsLv
-from sy_Person 
+from sy_PersonPension
+left join sy_Person on perGuid=ppPerGuid 
 left join sy_Company on comGuid=perComGuid
-left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
-where perGuid in (" + perGuid + @") ");
+where ppGuid in (" + perGuid + @") ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -291,10 +290,10 @@ where perGuid in (" + perGuid + @") ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2,ppEmployerRatio,ppLarboRatio,ppChangeDate
-from sy_Person 
+from sy_PersonPension 
+left join sy_Person on perGuid=ppPerGuid
 left join sy_Company on comGuid=perComGuid
-left join sy_PersonPension on ppChange='03' and ppStatus='A' and ppPerGuid=perGuid
-where perGuid in (" + perGuid + @") ");
+where ppGuid in (" + perGuid + @") ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -313,10 +312,10 @@ where perGuid in (" + perGuid + @") ");
 
         sb.Append(@"select perIDNumber,perName,perBirthday,comLaborProtection1,comLaborProtection2,ppPayPayroll,
 (select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>'0') InsLv
-from sy_Person 
+from sy_PersonPension
+left join sy_Person on perGuid=ppPerGuid
 left join sy_Company on comGuid=perComGuid
-left join sy_PersonPension on ppChange='02' and ppStatus='A' and ppPerGuid=perGuid
-where perGuid in (" + perGuid + @") ");
+where ppGuid in (" + perGuid + @") ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

@@ -2,13 +2,20 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 
-public class editGroupIns : IHttpHandler {
+public class editGroupIns : IHttpHandler,IRequiresSessionState {
     GroupInsurance_DB GI_Db = new GroupInsurance_DB();
     public void ProcessRequest (HttpContext context) {
-         try
+        try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("LoginFailed");
+                return;
+            }
+
             string Mode = (context.Request["Mode"] != null) ? context.Request["Mode"].ToString() : "";
             string id = (context.Request["id"] != null) ? context.Request["id"].ToString() : "";
 
@@ -30,7 +37,7 @@ public class editGroupIns : IHttpHandler {
         }
         catch (Exception ex) { context.Response.Write("error"); }
     }
- 
+
     public bool IsReusable {
         get {
             return false;

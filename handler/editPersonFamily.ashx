@@ -2,12 +2,19 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
-public class editPersonFamily : IHttpHandler {
+public class editPersonFamily : IHttpHandler,IRequiresSessionState {
     PersonFamily_DB PF_DB = new PersonFamily_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("LoginFailed");
+                return;
+            }
+
             string Mode = (context.Request["Mode"] != null) ? context.Request["Mode"].ToString() : "";
             string id = (context.Request["id"] != null) ? context.Request["id"].ToString() : "";
 

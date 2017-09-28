@@ -293,7 +293,7 @@ public class SalaryRange_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT * from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc ");
+        sb.Append(@"SELECT top 24 * from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

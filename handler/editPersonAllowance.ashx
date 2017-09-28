@@ -2,13 +2,20 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 
-public class editPersonAllowance : IHttpHandler {
+public class editPersonAllowance : IHttpHandler,IRequiresSessionState {
     PersonAllowance_DB PA_Db = new PersonAllowance_DB();
     public void ProcessRequest (HttpContext context) {
          try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("LoginFailed");
+                return;
+            }
+
             string Mode = (context.Request["Mode"] != null) ? context.Request["Mode"].ToString() : "";
             string id = (context.Request["id"] != null) ? context.Request["id"].ToString() : "";
 
