@@ -118,7 +118,10 @@ where pfiStatus<>'D' ");
         }
         if (pfiChange != "")
         {
-            sb.Append(@"and pfiChange=@pfiChange ");
+            if (pfiChange == "02")
+                sb.Append(@"and pfiChange='02' or pfiChange='03' ");
+            else
+                sb.Append(@"and pfiChange=@pfiChange ");
         }
             sb.Append(@"order by sy_PersonFamilyInsurance.pfiChangeDate desc,pfiCreateDate desc ");
 
@@ -268,23 +271,29 @@ where  pfiStatus<>'D' and pfiGuid=@pfiGuid  ");
         return ds;
     }
 
-    public DataTable FamilyHeal_3in1_add(string pfGuid)
+    public DataTable FamilyHeal_3in1_add(string pfiGuid)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode GanBorID,perPensionIdentity,
-(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
-(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
-pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,ppEmployerRatio,ppLarboRatio,ppChangeDate
-from sy_PersonFamily 
-left join sy_Person on pfPerGuid=perGuid
+plLaborPayroll,piInsurancePayroll,pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,ppEmployerRatio,ppLarboRatio,ppChangeDate
+from sy_PersonFamilyInsurance 
+left join sy_Person on perGuid=pfiPerGuid
+left join sy_PersonFamily on pfGuid=pfiPfGuid
 left join sy_Company on perComGuid=comGuid
-left join sy_PersonFamilyInsurance on pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A'
-left join sy_PersonPension on ppChange='01' and ppStatus='A' and ppPerGuid=perGuid
+left join sy_PersonLabor on (plChange='01' or plChange='03') and plStatus='A' and plPerGuid=perGuid
+	and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where (plChange='01' or plChange='03') and plStatus='A' and plPerGuid=perGuid)
+	and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where (plChange='01' or plChange='03') and plStatus='A' and plPerGuid=perGuid)	
+left join sy_PersonInsurance on (piChange='01' or piChange='03' or piChange='05') and piStatus='A' and piPerGuid=perGuid
+	and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where (piChange='01' or piChange='03' or piChange='05') and piStatus='A' and piPerGuid=perGuid)
+	and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance where (piChange='01' or piChange='03' or piChange='05') and piStatus='A' and piPerGuid=perGuid)
+left join sy_PersonPension on (ppChange='01' or ppChange='02') and ppStatus='A' and ppPerGuid=perGuid
+	and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where (ppChange='01' or ppChange='02') and ppStatus='A' and ppPerGuid=perGuid)
+	and ppChangeDate=(select MAX(ppChangeDate) from sy_PersonPension where (ppChange='01' or ppChange='02') and ppStatus='A' and ppPerGuid=perGuid)
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
-where pfGuid in (" + pfGuid + @") and pfStatus='A'
+where pfiGuid in (" + pfiGuid + @")
 order by perIDNumber ");
 
         oCmd.CommandText = sb.ToString();
@@ -296,24 +305,22 @@ order by perIDNumber ");
         return ds;
     }
 
-    public DataTable FamilyHeal_3in1_out(string pfGuid)
+    public DataTable FamilyHeal_3in1_out(string pfiGuid)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select perIDNumber,perName,perBirthday,perSex,comLaborProtection1,comLaborProtection2,comHealthInsuranceCode GanBorID,perPensionIdentity,
-(select min(ilItem2) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem2<>0) minLaborLv,
-(select min(ilItem4) from sy_InsuranceLevel where ilEffectiveDate=(select MAX(ilEffectiveDate) from sy_InsuranceLevel) and ilItem4<>0) minInsLv,
-pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,pfiDropOutReason,code_desc DORStr
-from sy_PersonFamily 
-left join sy_Person on pfPerGuid=perGuid
+pfIDNumber,pfName,pfBirthday,pfTitle,pfiChangeDate,iiIdentityCode,pfiDropOutReason,a.code_desc DORStr1,b.code_desc DORStr2
+from sy_PersonFamilyInsurance 
+left join sy_Person on pfiPerGuid=perGuid
+left join sy_PersonFamily on pfGuid=pfiPfGuid
 left join sy_Company on perComGuid=comGuid
-left join sy_PersonFamilyInsurance on pfiChange='02' and pfiPfGuid=pfGuid and pfiStatus='A'
-	and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiChange='02' and pfiPfGuid=pfGuid and pfiStatus='A')
 left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
-left join sy_codetable on code_group='20' and code_value=pfiDropOutReason
-where pfGuid in (" + pfGuid + @") and pfStatus='A'
+left join sy_codetable a on a.code_group='20' and a.code_value=pfiDropOutReason
+left join sy_codetable b on b.code_group='21' and b.code_value=pfiDropOutReason
+where pfiGuid in (" + pfiGuid + @") 
 order by perIDNumber ");
 
         oCmd.CommandText = sb.ToString();
@@ -340,7 +347,7 @@ CONVERT(VARCHAR(10),(SELECT DATEADD(month, 1, perFirstDate)),111) startDate,
 from sy_PersonGroupInsurance
 left join sy_Person on pgiPerGuid=perGuid and perStatus='A'
 left join sy_PersonFamily on pgiPfGuid=pfGuid and pfStatus='A' 
-where pgiGuid in (" + pgiGuid + @") and pgiStatus='A'
+where pgiGuid in (" + pgiGuid + @")
 order by perDep,perNo,pfTitle
 ");
 

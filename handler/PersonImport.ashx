@@ -15,6 +15,12 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
     Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest(HttpContext context)
     {
+        if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+        {
+            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed');</script>");
+            return;
+        }
+
         bool status = true;
         string exStr = string.Empty; //錯誤訊息
         int PerCount = 0; //人員計數

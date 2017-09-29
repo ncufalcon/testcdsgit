@@ -13,7 +13,7 @@ public class sp_payModify : IHttpHandler {
         try
         {
             string SalaryRange = (context.Request.Form["SalaryRange"] != null) ? context.Request.Form["SalaryRange"].ToString() : "";
-
+            
             SqlCommand oCmd = new SqlCommand();
             oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
             StringBuilder sb = new StringBuilder();

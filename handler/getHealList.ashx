@@ -2,9 +2,10 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 
-public class getHealList : IHttpHandler {
+public class getHealList : IHttpHandler,IRequiresSessionState {
     LaborHealth_DB LH_Db = new LaborHealth_DB();
     public void ProcessRequest (HttpContext context) {
         try

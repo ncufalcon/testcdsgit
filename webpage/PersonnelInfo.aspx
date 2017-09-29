@@ -346,7 +346,15 @@
                     PaNewClick();
                     $("#PaStr").html("");
                     break;
+                case "LoginFailed":
+                    reLogin();
+                    break;
             }
+        }
+
+        function reLogin() {
+            alert("請重新登入");
+            location.href = "../webpage/Page-Login.aspx";
         }
     </script>
     <%--基本資料--%>
@@ -447,6 +455,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editPerson Error");
                                 return false;
@@ -477,6 +490,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPerson Error");
                             return false;
@@ -905,6 +923,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editPersonFamily Error");
                                 return false;
@@ -935,6 +958,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPersonFamily Error");
                             return false;
@@ -1161,6 +1189,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editPersonBuckle Error");
                                 return false;
@@ -1191,6 +1224,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPersonBuckle Error");
                             return false;
@@ -1384,6 +1422,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editPersonAllowance Error");
                                 return false;
@@ -1414,6 +1457,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPersonAllowance Error");
                             return false;

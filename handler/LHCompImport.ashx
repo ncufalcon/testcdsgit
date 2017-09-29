@@ -14,6 +14,12 @@ using System.Text;
 public class LHCompImport : IHttpHandler,IRequiresSessionState {
     ErrorLog err = new ErrorLog();
     public void ProcessRequest(HttpContext context) {
+        if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+        {
+            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed');</script>");
+            return;
+        }
+
         bool status = true;
         string YearMonth = string.Empty;
         string result = string.Empty;

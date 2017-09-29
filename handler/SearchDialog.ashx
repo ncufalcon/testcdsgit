@@ -2,9 +2,10 @@
 
 using System;
 using System.Web;
+using System.Web.SessionState;
 using System.Data;
 
-public class SearchDialog : IHttpHandler {
+public class SearchDialog : IHttpHandler,IRequiresSessionState {
     Personnel_DB Personnel_Db = new Personnel_DB();
     sy_SalaryItem_DB si_db = new sy_SalaryItem_DB();
     payroll.gdal dal = new payroll.gdal();
@@ -12,6 +13,12 @@ public class SearchDialog : IHttpHandler {
     {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("LoginFailed");
+                return;
+            }
+
             string type = (context.Request["type"] != null) ? context.Request["type"].ToString() : "";
             string pgid = (context.Request["perguid"] != null) ? context.Request["perguid"].ToString() : "";
             string SearchStr = (context.Request["SearchStr"] != null) ? context.Request["SearchStr"].ToString() : "";

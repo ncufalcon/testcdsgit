@@ -41,7 +41,7 @@
             });
 
             //datepicker
-            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate,#ppRatioChangeDate,#im_changedate,#InsModChangeDate,#is_StartDate").datepicker({
+            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate,#ppRatioChangeDate,#im_changedate,#InsModChangeDate").datepicker({
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy/mm/dd',
@@ -77,16 +77,16 @@
                 var eType, eItem, cate, ckname;
                 switch (this.id) {
                     case "L_ExportBtn":
-                        cate = "LH";
+                        cate = "L";
                         ckname = "lbck"
                         eItem = $("#ddlLaborExport").val();
                         eType = $("input[name='rbLaborOut']:checked").val();
                         break;
                     case "H_ExportBtn":
-                        cate = "LH";
+                        cate = "H";
                         ckname = "hck";
                         eItem = $("#ddlHealExport").val();
-                        eType = $("input[name='HealOut']:checked").val();
+                        eType = "3";
                         break;
                     case "ppExportBtn":
                         cate = "Pension";
@@ -105,13 +105,13 @@
                         break;
                 }
 
-                var perGuid = "";
+                var itemGuid = "";
                 $("input[name='" + ckname + "']:checked").each(function () {
-                    if (perGuid != "") perGuid += ",";
-                    perGuid += "'" + this.value + "'";
+                    if (itemGuid != "") itemGuid += ",";
+                    itemGuid += "'" + this.value + "'";
                 });
 
-                if (perGuid == "") {
+                if (itemGuid == "") {
                     alert("請勾選要匯出的人員");
                     return false;
                 }
@@ -129,10 +129,11 @@
                         category: cate,
                         type: eType,
                         item: eItem,
-                        perGuid: perGuid
+                        itemGuid: itemGuid
                     },
                     error: function (xhr) {
                         alert(xhr);
+                        $.unblockUI();
                     },
 
                     beforeSend: function () {
@@ -269,7 +270,7 @@
                                         $("#pfi_Birth").html($("pfBirthday", data).text());
                                         $("#pfi_Title").html($("pfTitle", data).text());
                                         $("#pf_fName").css("color", "");
-                                        $("#pf_NoStatus").val("Y");
+                                        $("#pf_fStatus").val("Y");
                                     }
                                     break;
                                 case "PF_SL":
@@ -632,6 +633,9 @@
                 case "MsgStr":
                     alert(str);
                     break;
+                case "LoginFailed":
+                    reLogin();
+                    break;
             }
         }
 
@@ -663,6 +667,11 @@
                     }
                 }
             });
+        }
+
+        function reLogin() {
+            alert("請重新登入");
+            location.href = "../webpage/Page-Login.aspx";
         }
     </script>
     <%--勞保--%>
@@ -753,6 +762,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editLabor Error");
                                 return false;
@@ -802,6 +816,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPerson Error");
                             return false;
@@ -868,7 +887,7 @@
                         if ($(data).find("lb_item").length > 0) {
                             $(data).find("lb_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("plGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="lbck" type="checkbox" value="' + $(this).children("plPerGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="lbck" type="checkbox" value="' + $(this).children("plGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="lbdelbtn" aid=' + $(this).children("plGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -994,6 +1013,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editHeal Error");
                                 return false;
@@ -1044,6 +1068,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editHeal Error");
                             return false;
@@ -1125,7 +1154,7 @@
                         if ($(data).find("h_item").length > 0) {
                             $(data).find("h_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("piGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="hck" type="checkbox" value="' + $(this).children("piPerGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="hck" type="checkbox" value="' + $(this).children("piGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="hdelbtn" aid=' + $(this).children("piGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1235,6 +1264,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editPension Error");
                                 return false;
@@ -1282,6 +1316,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editPension Error");
                             return false;
@@ -1346,7 +1385,7 @@
                         if ($(data).find("pp_item").length > 0) {
                             $(data).find("pp_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("ppGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="ppck" type="checkbox" value="' + $(this).children("ppPerGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="ppck" type="checkbox" value="' + $(this).children("ppGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="ppdelbtn" aid=' + $(this).children("ppGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1481,6 +1520,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editFamilyIns Error");
                                 return false;
@@ -1538,6 +1582,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editFamilyIns Error");
                             return false;
@@ -1628,7 +1677,7 @@
                         if ($(data).find("pfi_item").length > 0) {
                             $(data).find("pfi_item").each(function (i) {
                                 tabstr += '<tr aid=' + $(this).children("pfiGuid").text() + '>';
-                                tabstr += '<td align="center"><input name="pfick" type="checkbox" value="' + $(this).children("pfiPfGuid").text() + '" /></td>';
+                                tabstr += '<td align="center"><input name="pfick" type="checkbox" value="' + $(this).children("pfiGuid").text() + '" /></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="pfidelbtn" aid=' + $(this).children("pfiGuid").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perNo").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap" style="cursor: pointer;">' + $(this).children("perName").text() + '</td>';
@@ -1761,6 +1810,11 @@
                             alert(xhr);
                         },
                         success: function (data) {
+                            if (data == "LoginFailed") {
+                                reLogin();
+                                return false;
+                            }
+
                             if (data == "error") {
                                 alert("editGroupIns Error");
                                 return false;
@@ -1818,6 +1872,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("editGroupIns Error");
                             return false;
@@ -1948,7 +2007,7 @@
 
             //保薪調整 button
             $(document).on("click", "#InsModBtn", function () {
-                $("#is_StartDate").val("");
+                ddl_SalaryRange();
                 $("#RangeMsg").val("");
                 $.fancybox({
                     href: "#im_InsSalaryblock",
@@ -1987,7 +2046,7 @@
                     alert("請勾選要刪除的項目")
             });
 
-            //保薪調整 起始日期 change
+            //保薪調整 計薪週期 change
             $(document).on("change", "#is_StartDate", function () {
                 $.ajax({
                     type: "POST",
@@ -2038,10 +2097,6 @@
                                     $("#ism_Status").val("Y");
                                 }
                             }
-                            else {
-                                tmpstr = "Error：\n計薪週期中查無此起始日期，請重新選擇";
-                                $("#ism_Status").val("N");
-                            }
                             $("#RangeMsg").val(tmpstr);
                         }
                     }
@@ -2067,7 +2122,7 @@
                 form.setAttribute("enctype", "multipart/form-data");
                 form.setAttribute("encoding", "multipart/form-data");
                 form.setAttribute("target", "postiframe");
-                //form.submit();
+                form.submit();
             });
             
             //批次刪除表頭排序
@@ -2124,7 +2179,7 @@
 
         function InsSalaryModify() {
             if ($("#is_StartDate").val() == "") {
-                alert("請輸入起始日期");
+                alert("請選擇計薪週期");
                 return false;
             }
 
@@ -2287,6 +2342,35 @@
                 }
             });
         }
+
+        function ddl_SalaryRange() {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/ddlSalaryRange.ashx",
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("ddlSalaryRange Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $("#is_StartDate").empty();
+                        var ddlstr = '<option value="">-----------請選擇-----------</option>';
+                        if ($(data).find("data_item").length > 0) {
+                            $(data).find("data_item").each(function (i) {
+                                ddlstr += '<option value="' + $(this).children("sr_BeginDate").text() + '">' + $(this).children("sr_BeginDate").text() + " - " + $(this).children("sr_Enddate").text() + '</option>';
+                            });
+                        }
+                        $("#is_StartDate").append(ddlstr);
+                    }
+                }
+            });
+        }
     </script>
     <%--勞退加碼提撥--%>
     <script type="text/javascript">
@@ -2340,6 +2424,11 @@
                         alert(xhr);
                     },
                     success: function (data) {
+                        if (data == "LoginFailed") {
+                            reLogin();
+                            return false;
+                        }
+
                         if (data == "error") {
                             alert("modPpRatio Error");
                             return false;
@@ -2530,7 +2619,6 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="H_ExportBtn" class="keybtn">匯出</a>
-                                <input type="radio" name="HealOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="HealOut" value="2" class="ep" />二合一
                                 <select id="ddlHealExport" name="ddlHealExport" onchange="getHealList()">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
@@ -2872,10 +2960,9 @@
                             <input type="hidden" id="ism_gv" />
                             <div class="gentable" style="margin-top:10px;">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                    <tr><th colspan="2" style="font-size:12pt; ">請選擇計薪週期起始日期</th></tr>
+                                    <tr><th colspan="2" style="font-size:12pt; ">請選擇計薪週期</th></tr>
                                     <tr>
-                                        <th>起始日期</th>
-                                        <td><input id="is_StartDate" type="text" /></td>
+                                        <td colspan="2" align="center"><select id="is_StartDate"></select></td>
                                     </tr>
                                     <tr><td colspan="2" align="center"><textarea id="RangeMsg" disabled="disabled" style="width:90%; height:100px;"></textarea></td></tr>
                                     <tr id="loadtr" style="display:none;"><td colspan="2" align="center"><img src="../images/loading.gif" />處理中，請稍待</td></tr>

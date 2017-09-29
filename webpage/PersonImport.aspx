@@ -95,13 +95,25 @@
         function feedbackFun(msg) {
             switch ($.getParamValue('tp')) {
                 case "Person":
-                    $("#loadblock").hide();
-                    $("#consoleStr").show();
-                    $("#consoleStr").append(decodeURIComponent(msg) + '<div style="text-align:right;"><input type="button" value="關閉" class="keybtn" onclick="javascript:parent.$.fancybox.close();" /></div>');
+                    if (msg == "LoginFailed") {
+                        alert("請重新登入");
+                        parent.location.href = "../webpage/Page-Login.aspx";
+                    }
+                    else {
+                        $("#loadblock").hide();
+                        $("#consoleStr").show();
+                        $("#consoleStr").append(decodeURIComponent(msg) + '<div style="text-align:right;"><input type="button" value="關閉" class="keybtn" onclick="javascript:parent.$.fancybox.close();" /></div>');
+                    }
                     break;
                 case "LH_Compare":
-                    alert(msg);
-                    parent.$.fancybox.close();
+                    if (msg == "LoginFailed") {
+                        alert("請重新登入");
+                        parent.location.href = "../webpage/Page-Login.aspx";
+                    }
+                    else {
+                        alert(msg);
+                        parent.$.fancybox.close();
+                    }
                     break;
             }
         }

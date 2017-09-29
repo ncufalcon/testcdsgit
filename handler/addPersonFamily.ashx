@@ -12,6 +12,12 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
+                return;
+            }
+
             string Mode = (context.Request.Form["mode"] != null) ? context.Request.Form["mode"].ToString() : "";
             string PerID = (context.Request.Form["idtmp"] != null) ? context.Request.Form["idtmp"].ToString() : "";
             string id = (context.Request.Form["pfid"] != null) ? context.Request.Form["pfid"].ToString() : "";

@@ -11,6 +11,12 @@ public class modPpRatio : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("LoginFailed");
+                return;
+            }
+
             string pGuid = (context.Request.Form["pGuid"] != null) ? context.Request.Form["pGuid"].ToString() : "";
             string ChangeDate = (context.Request.Form["ChangeDate"] != null) ? context.Request.Form["ChangeDate"].ToString() : "";
             string xmlstr = (context.Request.Form["xmlstr"] != null) ? context.Request.Form["xmlstr"].ToString() : "";

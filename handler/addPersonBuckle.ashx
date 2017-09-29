@@ -9,6 +9,12 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
+                return;
+            }
+
             string Mode = (context.Request.Form["mode"] != null) ? context.Request.Form["mode"].ToString() : "";
             string PerID = (context.Request.Form["idtmp"] != null) ? context.Request.Form["idtmp"].ToString() : "";
             string id = (context.Request.Form["pbid"] != null) ? context.Request.Form["pbid"].ToString() : "";
@@ -24,7 +30,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
             string pb_Contractor = (context.Request.Form["pb_Contractor"] != null) ? context.Request.Form["pb_Contractor"].ToString() : "";
             string pb_Tel = (context.Request.Form["pb_Tel"] != null) ? context.Request.Form["pb_Tel"].ToString() : "";
             string pb_Fee = (context.Request.Form["pb_Fee"] != null) ? context.Request.Form["pb_Fee"].ToString() : "";
-                string pb_No = (context.Request.Form["pb_Fee"] != null) ? context.Request.Form["pb_No"].ToString() : "";
+
 
             switch (Mode)
             {
@@ -42,7 +48,6 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbContractor = pb_Contractor;
                     PB_Db._pbTel = pb_Tel;
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
-                        PB_Db._pbNo = pb_No;
                     PB_Db._pbCreateId = USERINFO.MemberGuid;
                     PB_Db._pbModifyId = USERINFO.MemberGuid;
                     PB_Db.addPersonBuckle();
@@ -59,7 +64,6 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbPayment = pb_Payment;
                     PB_Db._pbContractor = pb_Contractor;
                     PB_Db._pbTel = pb_Tel;
-                         PB_Db._pbNo = pb_No;
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
                     PB_Db._pbModifyId = USERINFO.MemberGuid;
                     PB_Db.modPersonBuckle();

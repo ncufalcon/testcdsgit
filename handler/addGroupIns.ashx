@@ -10,6 +10,12 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
     public void ProcessRequest (HttpContext context) {
         try
         {
+            if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+            {
+                context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
+                return;
+            }
+
             string Mode = (context.Request.Form["mode"] != null) ? context.Request.Form["mode"].ToString() : "";
             string id = (context.Request.Form["idtmp"] != null) ? context.Request.Form["idtmp"].ToString() : "";
 
@@ -43,7 +49,7 @@ public class addGroupIns : IHttpHandler,IRequiresSessionState {
                             }
                             break;
                         case "02":
-                             if (pgi_Type == "01")
+                            if (pgi_Type == "01")
                                 checkDt = GI_Db.checkPerLastStatus(pgi_No);
                             else
                                 checkDt = GI_Db.checkPFLastStatus(pgi_PfGuid);
