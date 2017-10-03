@@ -30,7 +30,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
             string pb_Contractor = (context.Request.Form["pb_Contractor"] != null) ? context.Request.Form["pb_Contractor"].ToString() : "";
             string pb_Tel = (context.Request.Form["pb_Tel"] != null) ? context.Request.Form["pb_Tel"].ToString() : "";
             string pb_Fee = (context.Request.Form["pb_Fee"] != null) ? context.Request.Form["pb_Fee"].ToString() : "";
-
+            string pb_No = (context.Request.Form["pb_No"] != null) ? context.Request.Form["pb_No"].ToString() : "";
 
             switch (Mode)
             {
@@ -50,6 +50,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
                     PB_Db._pbCreateId = USERINFO.MemberGuid;
                     PB_Db._pbModifyId = USERINFO.MemberGuid;
+                    PB_Db._pbNo = pb_No;
                     PB_Db.addPersonBuckle();
                     break;
                 case "Modify":
@@ -66,6 +67,7 @@ public class addPersonBuckle : IHttpHandler,IRequiresSessionState {
                     PB_Db._pbTel = pb_Tel;
                     PB_Db._pbFee = decimal.Parse(pb_Fee);
                     PB_Db._pbModifyId = USERINFO.MemberGuid;
+                    PB_Db._pbNo = pb_No;
                     PB_Db.modPersonBuckle();
                     break;
             }

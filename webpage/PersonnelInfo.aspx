@@ -1255,6 +1255,8 @@
                                 $("#pb_Contractor").val($(this).children("pbContractor").text().trim());
                                 $("#pb_Tel").val($(this).children("pbTel").text().trim());
                                 $("#pb_Fee").val($(this).children("pbFee").text().trim());
+                                $("#pb_No").val($(this).children("pbNo").text().trim());
+
                             });
                         }
                     }
