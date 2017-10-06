@@ -141,7 +141,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                             case "S104":
                                 row.CreateCell(43).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣福利金
                                 break;
-                            case "AAAAA":
+                            case "F005":
                                 row.CreateCell(31).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//未休特休假  項目待補
                                 break;
                             case "A007":
@@ -151,13 +151,25 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                 row.CreateCell(33).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//資遣費
                                 break;
                             case "A004":
-                                row.CreateCell(34).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣勞保費調整
+                            case "A104":
+                                if (adv[j]["siItemCode"].ToString() == "A004")
+                                    row.CreateCell(34).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣勞保費調整
+                                if (adv[j]["siItemCode"].ToString() == "A104")
+                                    row.CreateCell(34).SetCellValue(com.toDou("-" +adv[j]["psaCost"].ToString()));//代扣勞保費調整
                                 break;
                             case "A005":
-                                row.CreateCell(35).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣健保費調整
+                            case "A105":
+                                if (adv[j]["siItemCode"].ToString() == "A005")
+                                    row.CreateCell(35).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣健保費調整
+                                if (adv[j]["siItemCode"].ToString() == "A105")
+                                    row.CreateCell(35).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣健保費調整
                                 break;
-                            case "F005":
-                                row.CreateCell(36).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
+                            case "A010":
+                            case "A110":
+                                if (adv[j]["siItemCode"].ToString() == "A010")
+                                    row.CreateCell(36).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
+                                if (adv[j]["siItemCode"].ToString() == "A110")
+                                    row.CreateCell(36).SetCellValue( com.toDou("-" +adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
                                 break;
                             case "A101":
                                 row.CreateCell(37).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代法院執行
@@ -169,6 +181,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                         }
 
                     }
+
 
 
                     row.CreateCell(26).SetCellValue(com.toDou(dv[i]["pTaxation"].ToString()));//課稅所得
@@ -192,7 +205,8 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                 context.Response.Write("TimeOut");
             }
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             ErrorLog err = new ErrorLog();
             err.InsErrorLog("ashx_ExportPayroll.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("程式發生錯誤，請聯絡相關管理人員");
