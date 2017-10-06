@@ -2392,7 +2392,7 @@
                 getPensionRatio();
             });
 
-            //調整比率 button
+            //調整 button
             $(document).on("click", "#ModppRatioBtn", function () {
                 var msg = "";
                 if ($("#ppRatioChangeDate").val() == "")
@@ -2438,6 +2438,7 @@
                             if (data == "succeed") {
                                 getPensionList();
                                 getPensionRatio();
+                                alert("調整完成");
                             }
                         }
                     }
@@ -2479,7 +2480,7 @@
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perName").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perDep").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("perYears").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("ppLarboRatio").text() + '%</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("ppEmployerRatio").text() + '%</td>';
                                 if (parseFloat($(this).children("perYears").text()) >= 2 && parseFloat($(this).children("perYears").text()) < 3)
                                     tabstr += '<td align="center" nowrap="nowrap">6.5%</td>';
                                 if (parseFloat($(this).children("perYears").text()) >= 3)
@@ -2993,7 +2994,7 @@
                         <div class="twocol margin15T ppRatioView" style="display:none;">
                             <div class="left"><span style="color:red;">*</span>異動日期:<input type="text" id="ppRatioChangeDate" /></div>
                             <div class="right">
-                                <a  href="javascript:void(0);" id="ModppRatioBtn" class="keybtn">調整勞工自提比率</a>
+                                <a  href="javascript:void(0);" id="ModppRatioBtn" class="keybtn">調整公司退休金提撥</a>
                             </div>
                         </div><br />
                         <div  class="tabfixwidth margin15T ">
