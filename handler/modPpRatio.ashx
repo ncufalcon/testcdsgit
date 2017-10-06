@@ -37,10 +37,10 @@ public class modPpRatio : IHttpHandler,IRequiresSessionState {
                     pp_db._ppChange = "02";
                     pp_db._ppChangeDate = ChangeDate;
                     if (double.Parse(childNode["perYears"].InnerText) >= 2 && double.Parse(childNode["perYears"].InnerText) < 3)
-                        pp_db._ppLarboRatio = decimal.Parse("6.5");
+                        pp_db._ppEmployerRatio = decimal.Parse("6.5");
                     else if(double.Parse(childNode["perYears"].InnerText) >= 3)
-                        pp_db._ppLarboRatio = decimal.Parse("7");
-                    pp_db._ppEmployerRatio = decimal.Parse(childNode["ppEmployerRatio"].InnerText);
+                        pp_db._ppEmployerRatio = decimal.Parse("7");
+                    pp_db._ppLarboRatio = decimal.Parse(childNode["ppLarboRatio"].InnerText);
                     pp_db._ppPayPayroll = decimal.Parse(childNode["ppPayPayroll"].InnerText);
                     pp_db._ppCreateId = USERINFO.MemberGuid;
                     pp_db._ppModifyId = USERINFO.MemberGuid;

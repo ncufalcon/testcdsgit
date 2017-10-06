@@ -65,6 +65,8 @@ public class InsuranceExport : IHttpHandler {
                                             {
                                                 Xls.SetCellValue(i, 5, "2");
                                                 Xls.SetCellValue(i, 6, "1");
+                                                Xls.SetCellValue(i, 11, dt.Rows[i - 2]["plLaborPayroll"].ToString());
+                                                Xls.SetCellValue(i, 12, dt.Rows[i - 2]["piInsurancePayroll"].ToString());
                                                 Xls.SetCellValue(i, 20, "1");
                                             }
                                             else
@@ -84,8 +86,6 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString().Trim());
                                             Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString().Trim());
                                             Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                            Xls.SetCellValue(i, 11, dt.Rows[i - 2]["plLaborPayroll"].ToString());
-                                            Xls.SetCellValue(i, 12, dt.Rows[i - 2]["piInsurancePayroll"].ToString());
                                             Xls.SetCellValue(i, 13, "1");
                                             if (dt.Rows[i - 2]["iiIdentityCode"].ToString() == "2")
                                                 Xls.SetCellValue(i, 14, "0");

@@ -358,8 +358,8 @@ from sy_Person
 left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid)=ppChangeDate
 	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid)=ppCreateDate and ppStatus='A'
 where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A' 
- and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3 and CONVERT(float,ppLarboRatio)<=6) or 
-(CONVERT(int,perYears)>=3 and CONVERT(float,ppLarboRatio)<=6.5)) ");
+ and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3 and CONVERT(float,ppEmployerRatio)<=6) or 
+(CONVERT(int,perYears)>=3 and CONVERT(float,ppEmployerRatio)<=6.5)) ");
         if (pNo != "")
         {
             sb.Append(@"and (upper(perNo) LIKE '%' + upper(@pNo) + '%') ");
