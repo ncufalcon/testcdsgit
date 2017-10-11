@@ -11,6 +11,7 @@ using System.Data;
 public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlySessionState
 {
     NpoiExcel Npo = new NpoiExcel();
+ Common com = new Common();
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
     {
@@ -46,36 +47,38 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
                 //font.Color = NPOI.HSSF.Util.HSSFColor.RED.index;
                 cellStyle.SetFont(font);
                 DateCell.SetCellValue("請假期間：" + sDate + "~" + eDate);
+                int cellN = 1;
+
                 for (int i = 0; i < dv.Count; i++)
                 {
-                    int cellN = i + 2;
+                  cellN =cellN + 1;
                     if (dv[i]["PerGuid"].ToString() == "Sum")//加總
                     {
-                        HeaderRow.CreateCell(3).SetCellValue(dv[i]["Duration1"].ToString()); //事假／家庭照顧假
-                        HeaderRow.CreateCell(4).SetCellValue(dv[i]["Duration14"].ToString());//彈性休假
-                        HeaderRow.CreateCell(5).SetCellValue(dv[i]["Duration9"].ToString());//產假
-                        HeaderRow.CreateCell(6).SetCellValue(dv[i]["Duration15"].ToString());//流產假
-                        HeaderRow.CreateCell(7).SetCellValue(dv[i]["Duration4"].ToString());//公傷病假
-                        HeaderRow.CreateCell(8).SetCellValue(dv[i]["Duration10"].ToString());//安胎假
-                        HeaderRow.CreateCell(9).SetCellValue(dv[i]["Duration13"].ToString());//住院病假
-                        HeaderRow.CreateCell(10).SetCellValue(dv[i]["Duration5"].ToString());//普通病假
-                        HeaderRow.CreateCell(11).SetCellValue(dv[i]["Duration7"].ToString());//生理假
-                        HeaderRow.CreateCell(12).SetCellValue(dv[i]["sickLavelSum"].ToString());//病假加總
-                        HeaderRow.CreateCell(13).SetCellValue(dv[i]["Duration11"].ToString());//兵役假
-                        HeaderRow.CreateCell(14).SetCellValue(dv[i]["Duration2"].ToString());//婚假
-                        HeaderRow.CreateCell(15).SetCellValue(dv[i]["Duration3"].ToString());//喪假
-                        HeaderRow.CreateCell(16).SetCellValue(dv[i]["Duration8"].ToString());//產檢假／陪產假
-                        HeaderRow.CreateCell(17).SetCellValue(dv[i]["Duration12"].ToString());//特休
-                        HeaderRow.CreateCell(18).SetCellValue(dv[i]["pAnnualLeavePro"].ToString());//特休假工時比例
-                        HeaderRow.CreateCell(19).SetCellValue(dv[i]["pAnnualLeaveSalary"].ToString());//特休假代金
-                        HeaderRow.CreateCell(20).SetCellValue(dv[i]["pP1Time"].ToString());//P1工時
-                        HeaderRow.CreateCell(21).SetCellValue(dv[i]["pSickLeaveSalary"].ToString());//病假薪資
-                        HeaderRow.CreateCell(22).SetCellValue(dv[i]["pMarriageLeaveSalary"].ToString());//婚假薪資
-                        HeaderRow.CreateCell(23).SetCellValue(dv[i]["pFuneralLeaveSalary"].ToString());//喪假薪資
-                        HeaderRow.CreateCell(24).SetCellValue(dv[i]["pProductionLeaveSalary"].ToString());//產檢/陪產
-                        HeaderRow.CreateCell(25).SetCellValue(dv[i]["pMaternityLeaveSalary"].ToString());//產假薪資
-                        HeaderRow.CreateCell(26).SetCellValue(dv[i]["pAbortionLeaveSalary"].ToString());//流產假薪資
-                        HeaderRow.CreateCell(27).SetCellValue(dv[i]["pMilitaryLeaveSalary"].ToString());//兵役薪資
+                        HeaderRow.CreateCell(3).SetCellValue(com.toDou(dv[i]["Duration1"].ToString())); //事假／家庭照顧假
+                        HeaderRow.CreateCell(4).SetCellValue(com.toDou(dv[i]["Duration14"].ToString()));//彈性休假
+                        HeaderRow.CreateCell(5).SetCellValue(com.toDou(dv[i]["Duration9"].ToString()));//產假
+                        HeaderRow.CreateCell(6).SetCellValue(com.toDou(dv[i]["Duration15"].ToString()));//流產假
+                        HeaderRow.CreateCell(7).SetCellValue(com.toDou(dv[i]["Duration4"].ToString()));//公傷病假
+                        HeaderRow.CreateCell(8).SetCellValue(com.toDou(dv[i]["Duration10"].ToString()));//安胎假
+                        HeaderRow.CreateCell(9).SetCellValue(com.toDou(dv[i]["Duration13"].ToString()));//住院病假
+                        HeaderRow.CreateCell(10).SetCellValue(com.toDou(dv[i]["Duration5"].ToString()));//普通病假
+                        HeaderRow.CreateCell(11).SetCellValue(com.toDou(dv[i]["Duration7"].ToString()));//生理假
+                        HeaderRow.CreateCell(12).SetCellValue(com.toDou(dv[i]["sickLavelSum"].ToString()));//病假加總
+                        HeaderRow.CreateCell(13).SetCellValue(com.toDou(dv[i]["Duration11"].ToString()));//兵役假
+                        HeaderRow.CreateCell(14).SetCellValue(com.toDou(dv[i]["Duration2"].ToString()));//婚假
+                        HeaderRow.CreateCell(15).SetCellValue(com.toDou(dv[i]["Duration3"].ToString()));//喪假
+                        HeaderRow.CreateCell(16).SetCellValue(com.toDou(dv[i]["Duration8"].ToString()));//產檢假／陪產假
+                        HeaderRow.CreateCell(17).SetCellValue(com.toDou(dv[i]["Duration12"].ToString()));//特休
+                        HeaderRow.CreateCell(18).SetCellValue(com.toDou(dv[i]["pAnnualLeavePro"].ToString()));//特休假工時比例
+                        HeaderRow.CreateCell(19).SetCellValue(com.toDou(dv[i]["pAnnualLeaveSalary"].ToString()));//特休假代金
+                        HeaderRow.CreateCell(20).SetCellValue(com.toDou(dv[i]["pP1Time"].ToString()));//P1工時
+                        HeaderRow.CreateCell(21).SetCellValue(com.toDou(dv[i]["pSickLeaveSalary"].ToString()));//病假薪資
+                        HeaderRow.CreateCell(22).SetCellValue(com.toDou(dv[i]["pMarriageLeaveSalary"].ToString()));//婚假薪資
+                        HeaderRow.CreateCell(23).SetCellValue(com.toDou(dv[i]["pFuneralLeaveSalary"].ToString()));//喪假薪資
+                        HeaderRow.CreateCell(24).SetCellValue(com.toDou(dv[i]["pProductionLeaveSalary"].ToString()));//產檢/陪產
+                        HeaderRow.CreateCell(25).SetCellValue(com.toDou(dv[i]["pMaternityLeaveSalary"].ToString()));//產假薪資
+                        HeaderRow.CreateCell(26).SetCellValue(com.toDou(dv[i]["pAbortionLeaveSalary"].ToString()));//流產假薪資
+                        HeaderRow.CreateCell(27).SetCellValue(com.toDou(dv[i]["pMilitaryLeaveSalary"].ToString()));//兵役薪資
                         cellN = cellN - 1;
                     }
                     else
@@ -86,31 +89,31 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
                         row.CreateCell(1).SetCellValue(dv[i]["cbValue"].ToString());
                         row.CreateCell(2).SetCellValue(dv[i]["perName"].ToString());
 
-                        row.CreateCell(3).SetCellValue(dv[i]["Duration1"].ToString()); //事假／家庭照顧假
-                        row.CreateCell(4).SetCellValue(dv[i]["Duration14"].ToString());//彈性休假
-                        row.CreateCell(5).SetCellValue(dv[i]["Duration9"].ToString());//產假
-                        row.CreateCell(6).SetCellValue(dv[i]["Duration15"].ToString());//流產假
-                        row.CreateCell(7).SetCellValue(dv[i]["Duration4"].ToString());//公傷病假
-                        row.CreateCell(8).SetCellValue(dv[i]["Duration10"].ToString());//安胎假
-                        row.CreateCell(9).SetCellValue(dv[i]["Duration13"].ToString());//住院病假
-                        row.CreateCell(10).SetCellValue(dv[i]["Duration5"].ToString());//普通病假
-                        row.CreateCell(11).SetCellValue(dv[i]["Duration7"].ToString());//生理假
-                        row.CreateCell(12).SetCellValue(dv[i]["sickLavelSum"].ToString());//病假加總
-                        row.CreateCell(13).SetCellValue(dv[i]["Duration11"].ToString());//兵役假
-                        row.CreateCell(14).SetCellValue(dv[i]["Duration2"].ToString());//婚假
-                        row.CreateCell(15).SetCellValue(dv[i]["Duration3"].ToString());//喪假
-                        row.CreateCell(16).SetCellValue(dv[i]["Duration8"].ToString());//產檢假／陪產假
-                        row.CreateCell(17).SetCellValue(dv[i]["Duration12"].ToString());//特休
-                        row.CreateCell(18).SetCellValue(dv[i]["pAnnualLeavePro"].ToString());//特休假工時比例
-                        row.CreateCell(19).SetCellValue(dv[i]["pAnnualLeaveSalary"].ToString());//特休假代金
-                        row.CreateCell(20).SetCellValue(dv[i]["pP1Time"].ToString());//P1工時
-                        row.CreateCell(21).SetCellValue(dv[i]["pSickLeaveSalary"].ToString());//病假薪資
-                        row.CreateCell(22).SetCellValue(dv[i]["pMarriageLeaveSalary"].ToString());//婚假薪資
-                        row.CreateCell(23).SetCellValue(dv[i]["pFuneralLeaveSalary"].ToString());//喪假薪資
-                        row.CreateCell(24).SetCellValue(dv[i]["pProductionLeaveSalary"].ToString());//產檢/陪產
-                        row.CreateCell(25).SetCellValue(dv[i]["pMaternityLeaveSalary"].ToString());//產假薪資
-                        row.CreateCell(26).SetCellValue(dv[i]["pAbortionLeaveSalary"].ToString());//流產假薪資
-                        row.CreateCell(27).SetCellValue(dv[i]["pMilitaryLeaveSalary"].ToString());//兵役薪資
+                        row.CreateCell(3).SetCellValue(com.toDou(dv[i]["Duration1"].ToString())); //事假／家庭照顧假
+                        row.CreateCell(4).SetCellValue(com.toDou(dv[i]["Duration14"].ToString()));//彈性休假
+                        row.CreateCell(5).SetCellValue(com.toDou(dv[i]["Duration9"].ToString()));//產假
+                        row.CreateCell(6).SetCellValue(com.toDou(dv[i]["Duration15"].ToString()));//流產假
+                        row.CreateCell(7).SetCellValue(com.toDou(dv[i]["Duration4"].ToString()));//公傷病假
+                        row.CreateCell(8).SetCellValue(com.toDou(dv[i]["Duration10"].ToString()));//安胎假
+                        row.CreateCell(9).SetCellValue(com.toDou(dv[i]["Duration13"].ToString()));//住院病假
+                        row.CreateCell(10).SetCellValue(com.toDou(dv[i]["Duration5"].ToString()));//普通病假
+                        row.CreateCell(11).SetCellValue(com.toDou(dv[i]["Duration7"].ToString()));//生理假
+                        row.CreateCell(12).SetCellValue(com.toDou(dv[i]["sickLavelSum"].ToString()));//病假加總
+                        row.CreateCell(13).SetCellValue(com.toDou(dv[i]["Duration11"].ToString()));//兵役假
+                        row.CreateCell(14).SetCellValue(com.toDou(dv[i]["Duration2"].ToString()));//婚假
+                        row.CreateCell(15).SetCellValue(com.toDou(dv[i]["Duration3"].ToString()));//喪假
+                        row.CreateCell(16).SetCellValue(com.toDou(dv[i]["Duration8"].ToString()));//產檢假／陪產假
+                        row.CreateCell(17).SetCellValue(com.toDou(dv[i]["Duration12"].ToString()));//特休
+                        row.CreateCell(18).SetCellValue(com.toDou(dv[i]["pAnnualLeavePro"].ToString()));//特休假工時比例
+                        row.CreateCell(19).SetCellValue(com.toDou(dv[i]["pAnnualLeaveSalary"].ToString()));//特休假代金
+                        row.CreateCell(20).SetCellValue(com.toDou(dv[i]["pP1Time"].ToString()));//P1工時
+                        row.CreateCell(21).SetCellValue(com.toDou(dv[i]["pSickLeaveSalary"].ToString()));//病假薪資
+                        row.CreateCell(22).SetCellValue(com.toDou(dv[i]["pMarriageLeaveSalary"].ToString()));//婚假薪資
+                        row.CreateCell(23).SetCellValue(com.toDou(dv[i]["pFuneralLeaveSalary"].ToString()));//喪假薪資
+                        row.CreateCell(24).SetCellValue(com.toDou(dv[i]["pProductionLeaveSalary"].ToString()));//產檢/陪產
+                        row.CreateCell(25).SetCellValue(com.toDou(dv[i]["pMaternityLeaveSalary"].ToString()));//產假薪資
+                        row.CreateCell(26).SetCellValue(com.toDou(dv[i]["pAbortionLeaveSalary"].ToString()));//流產假薪資
+                        row.CreateCell(27).SetCellValue(com.toDou(dv[i]["pMilitaryLeaveSalary"].ToString()));//兵役薪資
                     }
                 }
 

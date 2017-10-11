@@ -1421,43 +1421,43 @@
 
                                                 <tr>
                                                     <td class="width25" align="right">
-                                                        <div class="font-title titlebackicon">普通事故保險費率</div>
+                                                        <div class="font-title titlebackicon">普通事故保險費率(%)</div>
                                                     </td>
                                                     <td class="width25">
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection1" /></td>
                                                     <td class="width25" align="right">
-                                                        <div class="font-title titlebackicon">健保費率</div>
+                                                        <div class="font-title titlebackicon">健保費率(%)</div>
                                                     </td>
                                                     <td class="width25">
                                                         <input type="text" class="inputex width100" id="txt_ib_ibHealthcare1" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">就業保險費率</div>
+                                                        <div class="font-title titlebackicon">就業保險費率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection2" /></td>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">健保費被保險人負擔比率</div>
+                                                        <div class="font-title titlebackicon">健保費被保險人負擔比率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibHealthcare2"  /></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">職業災害保險費率</div>
+                                                        <div class="font-title titlebackicon">職業災害保險費率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection3" /></td>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">健保費投保單位負擔比率</div>
+                                                        <div class="font-title titlebackicon">健保費投保單位負擔比率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibHealthcare3" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">工資墊償基金提繳費率</div>
+                                                        <div class="font-title titlebackicon">工資墊償基金提繳費率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection4" /></td>
@@ -1469,7 +1469,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">勞保費被保險人負擔比率</div>
+                                                        <div class="font-title titlebackicon">勞保費被保險人負擔比率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection5" /></td>
@@ -1481,12 +1481,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">勞保費投保單位負擔比率</div>
+                                                        <div class="font-title titlebackicon">勞保費投保單位負擔比率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibLaborProtection6" /></td>
                                                     <td align="right">
-                                                        <div class="font-title titlebackicon">補充保險費率</div>
+                                                        <div class="font-title titlebackicon">補充保險費率(%)</div>
                                                     </td>
                                                     <td>
                                                         <input type="text" class="inputex width100" id="txt_ib_ibHealthcare6" /></td>
