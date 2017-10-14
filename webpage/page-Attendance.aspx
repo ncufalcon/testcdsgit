@@ -81,7 +81,11 @@
                             if (response == "ok") {
                                 alert("請假資料匯入成功");
                                 $.fancybox.close();
-                            } else {
+                            } else if (response == "timeout") {
+                                alert("請重新登入");
+                                location.href = "Page-Login.aspx";
+                            }
+                            else {
                                 alert("請假資料匯入失敗");
                             }
                         },//success end
@@ -196,6 +200,9 @@
                         str_html += "";
                     } else if (response == "error") {
                         alert("系統錯誤");
+                    } else if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
                     }
                     else {
                         for (var i = 0; i < response.length; i++) {
@@ -241,7 +248,11 @@
                 success: function (response) {
                     $("#tbl_list").empty();
                     var str_html = "";
-                    if (response != "nodata") {
+                    if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
+                    }
+                    else if (response != "nodata") {
                         str_html += '<thead>';
                         str_html += '<tr>';
                         str_html += '<th nowrap="nowrap">操作</th>';
@@ -309,10 +320,14 @@
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 },
                 success: function (response) {
-                    if (response != "nodata") {
+                    if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
+                    }
+                    else if (response != "nodata") {
                         $("#txt_person_empno").val(response[0].leaAppilcantId);
                         $("#txt_person_cname").text(response[0].perName);
-                        $("#txt_dates").val(response[0].leaStratFrom.substr(0,10));
+                        $("#txt_dates").val(response[0].leaStratFrom.substr(0, 10));
                         $("#txt_datee").val(response[0].leaEndAt.substr(0, 10));
                         $("#txt_date").val(response[0].leaDuration);
                         $("#txt_leave_type").val(response[0].leaLeaveTypeId);
@@ -483,6 +498,9 @@
                             load_data();
                         }
                         
+                    } else if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
                     } else {
                         alert($("#txt_type").text() + "失敗");
                     }
@@ -599,6 +617,9 @@
                     if (response == "ok") {
                         alert("刪除成功");
                         load_data();
+                    } else if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
                     } else {
                         alert("刪除失敗");
                     }
@@ -627,16 +648,22 @@
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                 },
                 success: function (response) {
-                    var str_html = "<option value=''>-----請選擇-----</option>";
-                    if (response != "nodata") {
+                    if (response == "timeout") {
+                        alert("請重新登入");
+                        location.href = "Page-Login.aspx";
+                    } else {
+                        var str_html = "<option value=''>-----請選擇-----</option>";
+                        if (response != "nodata") {
 
-                        for (var i = 0; i < response.length; i++) {
-                            str_html += "<option value='" + response[i].phCode + "'>" + response[i].phName + "</option>";
+                            for (var i = 0; i < response.length; i++) {
+                                str_html += "<option value='" + response[i].phCode + "'>" + response[i].phName + "</option>";
+                            }
+                            str_html += "</tbody>";
                         }
-                        str_html += "</tbody>";
+                        $("#txt_leave_type").append(str_html);
+                        $("#txt_leave_type2").append(str_html);
                     }
-                    $("#txt_leave_type").append(str_html);
-                    $("#txt_leave_type2").append(str_html);
+                    
                 },//success end
                 complete: function () {
                     $.unblockUI();
@@ -688,7 +715,7 @@
                             $("#txt_leave_type_date").text("0.5");
                         }
                         //表示請整天
-                        if (dtStar.substring(11) == "00:00:00") {
+                        if (dtStar.substring(11) == "00:00:00" && $("#txt_leave_type2_date").val()!="0.5") {
                             $("#txt_date").val("1.0");
                             $("#txt_leave_type_date").text("1.0");
                         }

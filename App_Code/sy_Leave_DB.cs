@@ -481,7 +481,7 @@ public class sy_Leave_DB
                     oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
                     oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                     oCmd.ExecuteNonQuery();
-                    
+
                     double days = Convert.ToDouble(str_days) - 0.5;
                     DateTime dtime_this = Convert.ToDateTime(leaStratFrom);//.ToShortDateString()
                     //再insert 後面整天的進去
@@ -582,29 +582,73 @@ public class sy_Leave_DB
                     oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
                     oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                     oCmd.ExecuteNonQuery();
-                }//假別1都整天 半天在假別2 END
-                 //兩種假別都整天
+                }
+                //假別1都整天 半天在假別2 END
+                //兩種假別都整天 or 半天
                 else
                 {
                     double days = Convert.ToDouble(str_days);
                     DateTime dtime_this = Convert.ToDateTime(leaStratFrom);//.ToShortDateString()
-                                                                        //1.先insert 假別1 整天的進去
-                    for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                    if (str_type_date == "0.5" && str_type2_date == "0.5")
                     {
-                        dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                        //1.先insert 假別1 半天的進去
                         oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldId"].Value = DBNull.Value;
                         oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
                         oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
                         oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
-                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
+                        oCmd.ExecuteNonQuery();
+                        //2.再insert 假別2 半天的進去
+                        oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                        oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                        oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                         oCmd.ExecuteNonQuery();
                     }
-                    //2.再insert 假別2 整天的進去
-                    for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                    //前後都半天 請假>=2天
+                    else if (Convert.ToDouble(str_type_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5" && Convert.ToDouble(str_type2_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5")
                     {
-                        dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                        //1.先insert 假別1 半天的進去
+                        oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                        oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
+                        oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
+                        oCmd.ExecuteNonQuery();
+                        //2.再insert 假別1 後面整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //3.insert 假別2整天得進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //4.insert 假別2 後面半天的進去
                         dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
                         oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldId"].Value = DBNull.Value;
@@ -612,9 +656,41 @@ public class sy_Leave_DB
                         oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
                         oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
-                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                         oCmd.ExecuteNonQuery();
                     }
+                    //都整天
+                    else
+                    {
+                        //1.先insert 假別1 整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //2.再insert 假別2 整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                    }
+
                 }//兩種假別都整天 END
 
             }
@@ -699,7 +775,8 @@ public class sy_Leave_DB
                 ";
                 oCmd.Parameters.AddWithValue("@leaID", leaID);
             }//leaGuid=@leaGuid 
-            else {
+            else
+            {
                 oCmd.CommandText = @"
                     update sy_Leave set 
                     leaStratFrom=@leaStratFrom,leaEndAt=@leaEndAt,leaDuration=@leaDuration,leaRemark=@leaRemark,leaAskerName=@leaAskerName,
@@ -727,8 +804,9 @@ public class sy_Leave_DB
             //新增到Detail 先砍掉舊的再新增
             oCmd.Parameters.Add("@ldLeaGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@ldLeaveid", SqlDbType.Int);
-            
-            if (leaID != 0) {
+
+            if (leaID != 0)
+            {
                 oCmd.CommandText = @"
                     delete from sy_LeaveDetail where ldLeaveid=@ldLeaveid
                 ";
@@ -767,11 +845,12 @@ public class sy_Leave_DB
                         oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldLeaveid"].Value = leaID;
                     }
-                    else {
+                    else
+                    {
                         oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                     }
-                   
+
                     oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
                     oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
                     oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
@@ -960,11 +1039,10 @@ public class sy_Leave_DB
                 else
                 {
                     double days = Convert.ToDouble(str_days);
-                    DateTime dtime_this = Convert.ToDateTime(str_days);//.ToShortDateString()
-                                                                       //1.先insert 假別1 整天的進去
-                    for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                    DateTime dtime_this = Convert.ToDateTime(leaStratFrom);//.ToShortDateString()
+                    if (str_type_date == "0.5" && str_type2_date == "0.5")
                     {
-                        dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                        //1.先insert 假別1 半天的進去
                         if (leaID != 0)
                         {
                             oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
@@ -975,17 +1053,93 @@ public class sy_Leave_DB
                             oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                             oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         }
+                        //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldId"].Value = DBNull.Value;
                         oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
                         oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
-                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
+                        oCmd.ExecuteNonQuery();
+                        //2.再insert 假別2 半天的進去
+                        oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                        oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                        oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                         oCmd.ExecuteNonQuery();
                     }
-                    //2.再insert 假別2 整天的進去
-                    for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                    //前後都半天 請假>=2天
+                    else if (Convert.ToDouble(str_type_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5" && Convert.ToDouble(str_type2_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5")
                     {
-                        dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                        //1.先insert 假別1 半天的進去
+                        if (leaID != 0)
+                        {
+                            oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                        }
+                        else
+                        {
+                            oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                        }
+                        //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                        oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
+                        oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                        oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
+                        oCmd.ExecuteNonQuery();
+                        //2.再insert 假別1 後面整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            if (leaID != 0)
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                                oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                            }
+                            else
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                                oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            }
+                            //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //3.insert 假別2整天得進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            if (leaID != 0)
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                                oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                            }
+                            else
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                                oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            }
+                            //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //4.insert 假別2 後面半天的進去
                         dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
                         if (leaID != 0)
                         {
@@ -997,13 +1151,110 @@ public class sy_Leave_DB
                             oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                             oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         }
+                        //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldId"].Value = DBNull.Value;
                         oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
                         oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
-                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                        oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                         oCmd.ExecuteNonQuery();
                     }
+                    //都整天
+                    else
+                    {
+                        //1.先insert 假別1 整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            if (leaID != 0)
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                                oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                            }
+                            else
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                                oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            }
+                            //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                        //2.再insert 假別2 整天的進去
+                        for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                        {
+                            dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                            if (leaID != 0)
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                                oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                            }
+                            else
+                            {
+                                oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                                oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            }
+                            //oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                            oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                            oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                            oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                            oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                            oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                            oCmd.ExecuteNonQuery();
+                        }
+                    }
+                    //double days = Convert.ToDouble(str_days);
+                    //DateTime dtime_this = Convert.ToDateTime(str_days);//.ToShortDateString()
+                    //                                                   //1.先insert 假別1 整天的進去
+                    //for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
+                    //{
+                    //    dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                    //    if (leaID != 0)
+                    //    {
+                    //        oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                    //        oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                    //    }
+                    //    else
+                    //    {
+                    //        oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                    //        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                    //    }
+                    //    oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                    //    oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
+                    //    oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                    //    oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
+                    //    oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                    //    oCmd.ExecuteNonQuery();
+                    //}
+                    ////2.再insert 假別2 整天的進去
+                    //for (int i = 1; i <= (Convert.ToDouble(str_type2_date)); i++)
+                    //{
+                    //    dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                    //    dtime_this = dtime_this.AddDays(1);//.ToShortDateString()
+                    //    if (leaID != 0)
+                    //    {
+                    //        oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
+                    //        oCmd.Parameters["@ldLeaveid"].Value = leaID;
+                    //    }
+                    //    else
+                    //    {
+                    //        oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
+                    //        oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
+                    //    }
+                    //    oCmd.Parameters["@ldId"].Value = DBNull.Value;
+                    //    oCmd.Parameters["@ldDate"].Value = dtime_this.ToString("yyyy/MM/dd");
+                    //    oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
+                    //    oCmd.Parameters["@ldTypeId"].Value = leaLeaveType2;
+                    //    oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(1);
+                    //    oCmd.ExecuteNonQuery();
+                    //}
                 }//兩種假別都整天 END
 
             }
