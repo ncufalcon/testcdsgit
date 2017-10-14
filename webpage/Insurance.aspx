@@ -855,16 +855,21 @@
         function getLaborList() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getLaborList.ashx",
                 data: {
                     keyword: $("#lb_keyword").val(),
                     ddlLabor: $("#ddlLaborExport").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getLaborList Error");
                         return false;
@@ -1122,16 +1127,21 @@
         function getHealList() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getHealList.ashx",
                 data: {
                     keyword: $("#h_keyword").val(),
                     ddlHeal: $("#ddlHealExport").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getHealList Error");
                         return false;
@@ -1347,22 +1357,72 @@
                     }
                 });
             });
-        });
+
+            //產出提繳申報表 show button change
+            $(document).on("change", "#ddlPensionExport", function () {
+                if ($("#ddlPensionExport").val() == "01")
+                    $("#ppDeclareBtn").show();
+                else
+                    $("#ppDeclareBtn").hide();
+            });
+
+            //產出提繳申報表
+            $(document).on("click", "#ppDeclareBtn", function () {
+                var itemGuid = "";
+                $("input[name='ppck']:checked").each(function () {
+                    if (itemGuid != "") itemGuid += ",";
+                    itemGuid += "'" + this.value + "'";
+                });
+
+                $.ajax({
+                    type: "POST",
+                    async: true, //在沒有返回值之前,不會執行下一步動作
+                    url: "../webpage/tashiu_export.aspx",
+                    data: {
+                        itemGuid: itemGuid
+                    },
+                    error: function (xhr) {
+                        alert(xhr);
+                        $.unblockUI();
+                    },
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (data) {
+                        //var reStr = data.split(',');
+                        //if (reStr[0] == "error") {
+                        //    alert(decodeURIComponent(reStr[1]));
+                        //    $.unblockUI();
+                        //    return false;
+                        //}
+                        //else {
+                        //    location.href = "../DOWNLOAD.aspx?FlexCel=" + reStr[1];
+                        $.unblockUI();
+                        //}
+                    }
+                });
+            });
+        });//js end
 
         //勞退列表
         function getPensionList() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getPensionList.ashx",
                 data: {
                     keyword: $("#pp_keyword").val(),
                     ddlPension: $("#ddlPensionExport").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     console.log(xhr.responseText);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getPensionList Error");
                         return false;
@@ -1645,16 +1705,21 @@
         function getFamilyInsList() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getFamilyInsList.ashx",
                 data: {
                     keyword: $("#pf_keyword").val(),
                     ddlPfExport: $("#ddlPfExport").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getFamilyInsList Error");
                         return false;
@@ -1918,16 +1983,21 @@
         function getGroupInsList() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getGroupInsList.ashx",
                 data: {
                     keyword: $("#pg_keyword").val(),
                     ddlPgExport: $("#ddlPgExport").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getGroupInsList Error");
                         return false;
@@ -2449,7 +2519,7 @@
         function getPensionRatio() {
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getPPratio.ashx",
                 data: {
                     pNo: $("#pr_pNo").val(),
@@ -2458,9 +2528,14 @@
                     pYear: $("#pr_pYear").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getPPratio Error");
                         return false;
@@ -2691,6 +2766,7 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="ppExportBtn" class="keybtn fancybox">匯出</a>
+                                <a href="javascript:void(0);" id="ppDeclareBtn" class="keybtn" style="display:none;">產出提繳申報表</a>
                                 <select id="ddlPensionExport" name="ddlPensionExport" onchange="getPensionList()">
                                     <option value="">--請選擇--</option>
                                     <option value="01">提繳</option>
