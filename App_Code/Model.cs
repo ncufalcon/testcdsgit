@@ -190,7 +190,7 @@ namespace payroll.model
         public decimal pSalary { get; set; }
         
         public string UserInfo { get; set; }
-
+        public string pClass { get; set; }
     }
 
 

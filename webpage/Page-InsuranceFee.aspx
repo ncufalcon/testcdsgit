@@ -28,8 +28,8 @@
                 <div class="gentable ">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                        <td class="width13" align="right"><div class="font-title titlebackicon">計薪週期</div></td>
-                        <td class="width20" colspan="3">
+                        <td class="width10" align="right"><div class="font-title titlebackicon">計薪週期</div></td>
+                        <td class="width20" >
                             <table>
                                 <tr>
                                     <td style="width:150px" ><span class="font-title titlebackicon">日期起</span><span id="sp_sDate"></span></td>
@@ -47,21 +47,15 @@
                             </table>                                 
                             </td>
                           </tr>                         
-                        <tr>
+<%--                        <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" name="txt_CompanyNo"/>
-<%--                                <img src="../images/btn-search.gif" id="img_Company" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_CName"></span>
-                                <input id="hid_CGuid" type="hidden" />    --%>                 
+                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" name="txt_CompanyNo"/>               
                             </td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
                             <td class="width20">
                                 <input type="text" class="inputex" id="txt_Dep" name="txt_Dep"/>
-<%--                                <img src="../images/btn-search.gif" id="img_Dep" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_DepName"></span>
-                                <input id="hid_DepGuid" type="hidden" />  --%>               
                             </td>
-                        </tr>
+                        </tr>--%>
 
 
                     </table>
@@ -85,7 +79,7 @@
                 rad_LI: 'rad_LI',
                 rad_NHI: 'rad_NHI',
                 sp_PerName: 'sp_PerName',
-                txt_PerName:'txt_PerName',
+                txt_PerName: 'txt_PerName',
                 txt_CompanyNo: 'txt_CompanyNo',
                 //sp_CName: 'sp_CName',
                 //hid_CGuid: 'hid_CGuid',
@@ -149,32 +143,23 @@
             ExportExcel: function () {
                 var srGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
                 if (srGuid != '') {
-                    var PerNo = $('#' + this.Id.txt_PerNo).val();
-                    var PerName = $('#' + this.Id.txt_PerName).val();                    
-                    var Company = $('#' + this.Id.txt_CompanyNo).val();
-                    var Dep = $('#' + this.Id.txt_Dep).val();
+                    //var PerNo = $('#' + this.Id.txt_PerNo).val();
+                    //var PerName = $('#' + this.Id.txt_PerName).val();                    
+                    //var Company = $('#' + this.Id.txt_CompanyNo).val();
+                    //var Dep = $('#' + this.Id.txt_Dep).val();
 
-                    var eClass = (document.getElementById(this.Id.rad_LI).checked) ? "Y" : "";
+                    var eClass = (document.getElementById(this.Id.rad_LI).checked) ? "LI" : "NHI";
                     var SalaryDate = $('#' + this.Id.hid_SalaryDate).val();
 
-                    if (eClass == "Y") {
-                        window.location = "../handler/Report/ashx_LIReport.ashx?sr_guid=" + srGuid
-                            + "&PerNo=" + PerNo
-                            + "&PerName=" + PerName
-                            + "&Company=" + Company
-                            + "&Dep=" + Dep
-                            + "&srGuid=" + srGuid
-                            + "&SalaryDate=" + SalaryDate;
-                    } else
-                    {
-                        window.location = "../handler/Report/ashx_NHIReport.ashx?sr_guid=" + srGuid
-                            + "&PerNo=" + PerNo
-                            + "&PerName=" + PerName
-                            + "&Company=" + Company
-                            + "&Dep=" + Dep
-                            + "&srGuid=" + srGuid
-                            + "&SalaryDate=" + SalaryDate;
-                    }
+
+                    window.location = "../handler/Report/ashx_FeeReport.ashx?srGuid=" + srGuid
+                        + "&PerNo=" + ''
+                        + "&PerName=" + ''
+                        + "&Company=" + ''
+                        + "&Dep=" + ''
+                        + "&Class=" + eClass
+                        + "&SalaryDate=" + SalaryDate;
+
                 } else { alert('請選擇計薪週期'); }
             }
 

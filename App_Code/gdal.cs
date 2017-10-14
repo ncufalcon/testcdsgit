@@ -1517,9 +1517,108 @@ namespace payroll
         }
 
 
+        /// <summary>
+        /// 查詢勞退
+        /// </summary>
+        public DataTable Sel_sy_PersonPension(payroll.model.sy_Person p)
+        {
+
+            string sql = @" select perNo
+                            ,perName
+                            ,substring(perIDNumber,1,1) as perId_1
+                            ,substring(perIDNumber,2,1) as perId_2
+                            ,substring(perIDNumber,3,1) as perId_3
+                            ,substring(perIDNumber,4,1) as perId_4
+                            ,substring(perIDNumber,5,1) as perId_5
+                            ,substring(perIDNumber,6,1) as perId_6
+                            ,substring(perIDNumber,7,1) as perId_7
+                            ,substring(perIDNumber,8,1) as perId_8
+                            ,substring(perIDNumber,9,1) as perId_9
+                            ,substring(perIDNumber,10,1) as perId_10
+                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),ppChangeDate,20) - 1911) +   SUBSTRING(CONVERT(VARCHAR(10),ppChangeDate,20),6,2) +  SUBSTRING(CONVERT(VARCHAR(10),ppChangeDate,20),9,2) as perChangeDate
+                            ,ppPayPayroll as perPayPayroll
+                            ,ppLarboRatio as perRatio
+                            ,ppEmployerRatio as comRatio
+                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),perFirstDate,20) - 1911) +   SUBSTRING(CONVERT(VARCHAR(10),perFirstDate,20),6,2) +  SUBSTRING(CONVERT(VARCHAR(10),perFirstDate,20),9,2) as perFirstDate
+                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),perBirthday,20) - 1911) as perbirthday_1 
+                            ,SUBSTRING(CONVERT(VARCHAR(10),perBirthday,20),6,2) as perbirthday_2 
+                            ,SUBSTRING(CONVERT(VARCHAR(10),perBirthday,20),9,2) as perbirthday_3 
+                             from dbo.sy_PersonPension 
+                             left join sy_person on ppPerGuid=perGuid
+                             left join sy_CodeBranches on perDep=cbGuid  
+                             left join sy_Company on perComGuid=ComGuid
+                             where 1=1 ";
+
+            if (!string.IsNullOrEmpty(p.sDate) && !string.IsNullOrEmpty(p.eDate))
+                sql += "and ppChangeDate between @sDate and @eDate ";
+
+            if (!string.IsNullOrEmpty(p.perNo))
+                sql += "and perNo=@perNo ";
+
+            if (!string.IsNullOrEmpty(p.perName))
+                sql += "and perName=@perName ";
+
+            if (!string.IsNullOrEmpty(p.perCompanyName))
+                sql += "and comName like '%' + @perCompanyName '%' ";
+
+            if (!string.IsNullOrEmpty(p.perDep))
+                sql += "and ((cbValue like '%' + @perDep '%') or (cbName like '%' + @perDep '%'))";
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@sDate", p.sDate);
+            cmd.Parameters.AddWithValue("@eDate", p.eDate);
+            cmd.Parameters.AddWithValue("@perNo", p.perNo);
+            cmd.Parameters.AddWithValue("@perName", p.perName);
+            cmd.Parameters.AddWithValue("@perCompanyName", p.perCompanyName);
+            cmd.Parameters.AddWithValue("@perDep", p.perDep);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
 
 
 
 
+        /// <summary>
+        /// 計算薪資
+        /// </summary>
+        /// <param name="Class"></param>
+        /// <param name="Region"></param>
+        /// <param name="Dep"></param>
+        /// <returns></returns>
+        public DataTable pr_InsuranceFeeReport(payroll.model.sy_PayRoll p)
+        {
+            string sql = @"pr_InsuranceFeeReport ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
+            cmd.Parameters.AddWithValue("@sr_Guid", p.sr_Guid);
+            cmd.Parameters.AddWithValue("@perCompanyName", p.pCompanyName);
+            cmd.Parameters.AddWithValue("@perDep", p.pDep);
+            cmd.Parameters.AddWithValue("@class", p.pClass);
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);        
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
     }
 }
