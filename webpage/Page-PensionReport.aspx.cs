@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using Microsoft.Reporting.WebForms;
+using System.Reflection;
 
 public partial class webpage_Page_PensionReport : System.Web.UI.Page
 {
@@ -13,14 +14,49 @@ public partial class webpage_Page_PensionReport : System.Web.UI.Page
     Common Com = new Common();
     protected void Page_Load(object sender, EventArgs e)
     {
+        
 
+
+    }
+    protected void Page_PreRender(object sender, EventArgs e)
+    {
+        // 此段要放在Page_PreRender中，若要隱藏PDF，把關鍵字”PDF”放入字串陣列中即可。
+        DisableExportButtons(this.ReportViewer1, new string[] { "Excel", "EXCELOPENXML", "IMAGE", "WORD", "WORDOPENXML" });
+    }
+
+
+
+    // 主要處理函式
+    public void DisableExportButtons(ReportViewer ReportViewerID, string[] strFormatName)
+    {
+        try
+        {
+            FieldInfo FInfo;
+            foreach (RenderingExtension RenExt in
+            ReportViewerID.LocalReport.ListRenderingExtensions())
+            {
+                foreach (string s in strFormatName)
+                {
+                    if (RenExt.Name.Equals(s))
+                    {
+                        FInfo = RenExt.GetType().GetField("m_isVisible",
+                             BindingFlags.Instance | BindingFlags.NonPublic);
+                        FInfo.SetValue(RenExt, false);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     protected void btn_Search_Click(object sender, EventArgs e)
     {
 
 
-
+        ReportViewer1.LocalReport.Dispose();
         ReportViewer1.LocalReport.DataSources.Clear(); //將資料清空
         ReportViewer1.Reset();
 
@@ -62,6 +98,7 @@ public partial class webpage_Page_PensionReport : System.Web.UI.Page
             ReportViewer1.LocalReport.DataSources.Add(source);
             //重整
             ReportViewer1.LocalReport.Refresh();
+            //ReportViewer1.LocalReport.Dispose();
 
         }
         else { Response.Redirect("~/ErrorPage.aspx?err=par"); }

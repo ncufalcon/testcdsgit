@@ -1523,7 +1523,7 @@ namespace payroll
         public DataTable Sel_sy_PersonPension(payroll.model.sy_Person p)
         {
 
-            string sql = @" select perNo
+            string sql = @" select ROW_NUMBER() OVER( ORDER BY perNo) as RowNumber,perNo
                             ,perName
                             ,substring(perIDNumber,1,1) as perId_1
                             ,substring(perIDNumber,2,1) as perId_2

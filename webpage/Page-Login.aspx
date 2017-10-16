@@ -55,7 +55,7 @@
                             <!--{* 選單end *}-->
                         </div>
                         <!-- basemenu -->
-
+                            <img src="D:\I020000001.jpg" width="1000" height="1000" />
                     </div>
                     <!-- WrapperHeader -->
                     <div class="fixwidth">
