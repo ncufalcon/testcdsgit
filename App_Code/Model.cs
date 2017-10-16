@@ -314,6 +314,9 @@ namespace payroll.model
         public string sDate { get; set; }
         public string eDate { get; set; }
 
+
+        public string perChange { get; set; }
+
     }
 
 

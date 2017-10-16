@@ -23,16 +23,18 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                         <td class="width13" align="right"><div class="font-title titlebackicon">日期區間</div></td>
-                        <td class="width20" colspan="3">
+                        <td class="width20">
                             <table>
                                 <tr>
                             <td colspan="3" >
-                                起:<input type="text" class="inputex" id="txt_sDate" runat="server" value="2017/08/01"  />
-                               ~迄:<input type="text" class="inputex" id="txt_eDate" runat="server" value="2017/08/30" /></td>   
+                                起:<input type="text" class="inputex width35" id="txt_sDate" runat="server" value="2017/08/01"  />
+                               ~迄:<input type="text" class="inputex width35" id="txt_eDate" runat="server" value="2017/08/30" /></td>   
 
                                 </tr>
                             </table>                                 
                             </td>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">異動別</div></td>
+                            <td class="width13" ><select id="pp_Change" runat="server" name="pp_Change" class="inputex"></select></td>
                           </tr>  
                          <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">工號</div></td>
@@ -53,6 +55,13 @@
                             <td class="width20">
                                 <asp:TextBox class="inputex" id="txt_Dep" runat="server"></asp:TextBox>
                             </td>
+                        </tr>
+                        <tr>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">提撥單位編號</div></td>
+                            <td class="width20">
+                                 <asp:TextBox class="inputex" id="txt_No" runat="server" Text="P05689696X"></asp:TextBox>
+                            </td>
+
                         </tr>
                         <tr>
 
@@ -94,6 +103,46 @@
             });
         }
 
+
+
+           
+        $(document).ready(function () {
+            getddl("13", '#<%=pp_Change.ClientID%>');
+        });
+
+
+        //DDL
+        function getddl(gno, tagName) {
+            $.ajax({
+                type: "POST",
+                async: false, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/GetDDL.ashx",
+                data: {
+                    Group: gno
+                },
+                error: function (xhr) {
+                    alert(xhr);
+                },
+                success: function (data) {
+                    if (data == "error") {
+                        alert("GetDDL Error");
+                        return false;
+                    }
+
+                    if (data != null) {
+                        data = $.parseXML(data);
+                        $(tagName).empty();
+                        var ddlstr = '<option value="">--請選擇--</option>';
+                        if ($(data).find("code").length > 0) {
+                            $(data).find("code").each(function (i) {
+                                ddlstr += '<option value="' + $(this).attr("v") + '">' + $(this).attr("desc") + '</option>';
+                            });
+                        }
+                        $(tagName).append(ddlstr);
+                    }
+                }
+            });
+        }
     </script>
     
 

@@ -66,8 +66,9 @@ public partial class webpage_Page_PensionReport : System.Web.UI.Page
         string PerName = txt_PerName.Text.Trim();
         string PerDep = txt_Dep.Text.Trim();
         string PerCompany = txt_CompanyNo.Text.Trim();
-
-        string[] str = { Sdate, Edate, PerNo, PerName, PerDep, PerCompany };
+        string PPChange = pp_Change.Value;
+        string No = txt_No.Text.Trim();
+        string[] str = { Sdate, Edate, PerNo, PerName, PerDep, PerCompany, PPChange };
         string sqlinj = Com.CheckSqlInJection(str);
         if (sqlinj == "")
         {
@@ -81,24 +82,42 @@ public partial class webpage_Page_PensionReport : System.Web.UI.Page
             p.perName = PerName;
             p.perDep = PerDep;
             p.perCompanyName = PerCompany;
+            p.perChange = PPChange;
             DataTable dt = dal.Sel_sy_PersonPension(p);
 
-            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/rdlc/Report.rdlc"); //給報表檔案的路徑
-            ReportDataSource source = new ReportDataSource("DataSet1", dt);
-            ReportViewer1.LocalReport.EnableExternalImages = true;
-            string imagePath = new Uri(Server.MapPath("~/images/report.jpg")).AbsoluteUri;
-            ReportParameter parameter = new ReportParameter("img", imagePath);
-            ReportViewer1.LocalReport.SetParameters(parameter);
-            //ReportParameter SdatePar = new ReportParameter("SDate", txt_Sdate.Value);
-            //ReportParameter EdatePar = new ReportParameter("EDate", txt_Edate.Value);
-            //ReportParameter GroupPar = new ReportParameter("Group", Group);
-            //ReportParameter TitlePar = new ReportParameter("Title", getTitle(Group));
-            //ReportParameter UnitPar = new ReportParameter("UnitCode", "單位/部門:" + UnitCode);
-            //ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { SdatePar, EdatePar, GroupPar, TitlePar, UnitPar });
-            ReportViewer1.LocalReport.DataSources.Add(source);
-            //重整
-            ReportViewer1.LocalReport.Refresh();
-            //ReportViewer1.LocalReport.Dispose();
+            DataView dv = dal.Sel_sy_Company(PerCompany).DefaultView;
+
+            if (dv.Count != 0)
+            {
+                ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/rdlc/Report.rdlc"); //給報表檔案的路徑
+                ReportDataSource source = new ReportDataSource("DataSet1", dt);
+                ReportViewer1.LocalReport.EnableExternalImages = true;
+                string imagePath = new Uri(Server.MapPath("~/images/report.jpg")).AbsoluteUri;
+                ReportParameter parameter = new ReportParameter("img", imagePath);
+
+                ReportParameter CompanyName = new ReportParameter("CompanyName", dv[0]["comName"].ToString());
+                ReportParameter comID1 = new ReportParameter("comID1", No.Substring(0,1));
+                ReportParameter comID2 = new ReportParameter("comID2", No.Substring(1,1));
+                ReportParameter comID3 = new ReportParameter("comID3", No.Substring(2,1));
+                ReportParameter comID4 = new ReportParameter("comID4", No.Substring(3,1));
+                ReportParameter comID5 = new ReportParameter("comID5", No.Substring(4,1));
+                ReportParameter comID6 = new ReportParameter("comID6", No.Substring(5,1));
+                ReportParameter comID7 = new ReportParameter("comID7", No.Substring(6,1));
+                ReportParameter comID8 = new ReportParameter("comID8", No.Substring(7,1));
+                ReportParameter comID9 = new ReportParameter("comID9", No.Substring(8,1));
+                ReportParameter yyyy = new ReportParameter("yyyy", (int.Parse(DateTime.Now.ToString("yyyy")) - 1911).ToString());
+                ReportParameter MM = new ReportParameter("MM", DateTime.Now.ToString("MM"));
+                ReportParameter dd = new ReportParameter("dd", DateTime.Now.ToString("dd"));
+                ReportViewer1.LocalReport.SetParameters(parameter);
+
+                //ReportParameter UnitPar = new ReportParameter("UnitCode", "單位/部門:" + UnitCode);
+                //ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { SdatePar, EdatePar, GroupPar, TitlePar, UnitPar });
+                ReportViewer1.LocalReport.DataSources.Add(source);
+                //重整
+                ReportViewer1.LocalReport.Refresh();
+                //ReportViewer1.LocalReport.Dispose();
+            }
+            else { }
 
         }
         else { Response.Redirect("~/ErrorPage.aspx?err=par"); }

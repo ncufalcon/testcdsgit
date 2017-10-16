@@ -1555,6 +1555,9 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.perNo))
                 sql += "and perNo=@perNo ";
 
+            if (!string.IsNullOrEmpty(p.perChange))
+                sql += "and ppChange=@ppChange ";
+
             if (!string.IsNullOrEmpty(p.perName))
                 sql += "and perName=@perName ";
 
@@ -1570,6 +1573,7 @@ namespace payroll
             cmd.Parameters.AddWithValue("@perName", p.perName);
             cmd.Parameters.AddWithValue("@perCompanyName", p.perCompanyName);
             cmd.Parameters.AddWithValue("@perDep", p.perDep);
+            cmd.Parameters.AddWithValue("@ppChange", p.perChange);
             try
             {
                 cmd.Connection.Open();
@@ -1620,5 +1624,41 @@ namespace payroll
             catch (Exception ex) { throw ex; }
             finally { cmd.Connection.Close(); cmd.Dispose(); }
         }
+
+
+        /// <summary>
+        /// 查詢勞退
+        /// </summary>
+        public DataTable Sel_sy_Company(string keyword)
+        {
+
+            string sql = @"select comName
+                           ,substring(comUniform,1,1) as comId1
+                           ,substring(comUniform,2,1) as comId1
+                           ,substring(comUniform,3,1) as comId1
+                           ,substring(comUniform,4,1) as comId1
+                           ,substring(comUniform,5,1) as comId1
+                           ,substring(comUniform,6,1) as comId1
+                           ,substring(comUniform,7,1) as comId1
+                           ,substring(comUniform,8,1) as comId1
+                           sy_Company from where 1=1 ";
+
+            if (!string.IsNullOrEmpty(keyword))
+                sql += "and ((comName like '%' + @keyword + '%') or (comUniform like '%' + @keyword + '%'))";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@keyword", keyword);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
     }
 }
