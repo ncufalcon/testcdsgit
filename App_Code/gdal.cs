@@ -1535,37 +1535,39 @@ namespace payroll
                             ,substring(perIDNumber,8,1) as perId_8
                             ,substring(perIDNumber,9,1) as perId_9
                             ,substring(perIDNumber,10,1) as perId_10
-                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),ppChangeDate,20) - 1911) +   SUBSTRING(CONVERT(VARCHAR(10),ppChangeDate,20),6,2) +  SUBSTRING(CONVERT(VARCHAR(10),ppChangeDate,20),9,2) as perChangeDate
-                            ,ppPayPayroll as perPayPayroll
-                            ,ppLarboRatio as perRatio
-                            ,ppEmployerRatio as comRatio
-                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),perFirstDate,20) - 1911) +   SUBSTRING(CONVERT(VARCHAR(10),perFirstDate,20),6,2) +  SUBSTRING(CONVERT(VARCHAR(10),perFirstDate,20),9,2) as perFirstDate
-                            ,CONVERT(VARCHAR(3),CONVERT(VARCHAR(4),perBirthday,20) - 1911) as perbirthday_1 
-                            ,SUBSTRING(CONVERT(VARCHAR(10),perBirthday,20),6,2) as perbirthday_2 
-                            ,SUBSTRING(CONVERT(VARCHAR(10),perBirthday,20),9,2) as perbirthday_3 
-                             from dbo.sy_PersonPension 
-                             left join sy_person on ppPerGuid=perGuid
+                            ,convert(varchar(3),convert(varchar(4),a.ppChangeDate,20) - 1911) +   substring(convert(varchar(10),a.ppChangeDate,20),6,2) +  substring(convert(varchar(10),a.ppChangeDate,20),9,2) as perChangeDate
+                            ,a.ppPayPayroll as perPayPayroll
+                            ,convert(nvarchar(10),a.ppLarboRatio) + '%' as perRatio
+                            ,convert(nvarchar(10),a.ppEmployerRatio) + '%' as comRatio
+                            ,convert(varchar(3),convert(varchar(4),perFirstDate,20) - 1911) +   substring(convert(varchar(10),perFirstDate,20),6,2) +  substring(convert(varchar(10),perFirstDate,20),9,2) as perFirstDate
+                            ,convert(varchar(3),convert(varchar(4),perBirthday,20) - 1911) as perbirthday_1 
+                            ,substring(convert(varchar(10),perBirthday,20),6,2) as perbirthday_2 
+                            ,substring(convert(varchar(10),perBirthday,20),9,2) as perbirthday_3 
+                             from sy_person
+                             left join sy_PersonPension a on perGuid=a.ppPerGuid and a.ppCreateDate=(select max(b.ppCreateDate) from sy_PersonPension b where a.ppPerGuid=b.ppPerGuid and b.ppChangeDate <= convert(varchar, @eDate, 111) and b.ppStatus='A')
                              left join sy_CodeBranches on perDep=cbGuid  
                              left join sy_Company on perComGuid=ComGuid
-                             where 1=1 ";
+                             where 1=1 and ppStatus='A' ";
 
             if (!string.IsNullOrEmpty(p.sDate) && !string.IsNullOrEmpty(p.eDate))
-                sql += "and ppChangeDate between @sDate and @eDate ";
+                sql += "and a.ppChangeDate between @sDate and @eDate ";
 
             if (!string.IsNullOrEmpty(p.perNo))
                 sql += "and perNo=@perNo ";
 
             if (!string.IsNullOrEmpty(p.perChange))
-                sql += "and ppChange=@ppChange ";
+                sql += "and a.ppChange=@ppChange ";
 
             if (!string.IsNullOrEmpty(p.perName))
                 sql += "and perName=@perName ";
 
             if (!string.IsNullOrEmpty(p.perCompanyName))
-                sql += "and comName like '%' + @perCompanyName '%' ";
+                sql += "and ((comName like '%' + @perCompanyName + '%') or (comUniform like '%' + @perCompanyName + '%')) ";
 
             if (!string.IsNullOrEmpty(p.perDep))
-                sql += "and ((cbValue like '%' + @perDep '%') or (cbName like '%' + @perDep '%'))";
+                sql += "and ((cbValue like '%' + @perDep + '%') or (cbName like '%' + @perDep + '%')) ";
+
+            sql += "order by cbValue, perNo ";
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sDate", p.sDate);
             cmd.Parameters.AddWithValue("@eDate", p.eDate);
@@ -1632,19 +1634,11 @@ namespace payroll
         public DataTable Sel_sy_Company(string keyword)
         {
 
-            string sql = @"select comName
-                           ,substring(comUniform,1,1) as comId1
-                           ,substring(comUniform,2,1) as comId1
-                           ,substring(comUniform,3,1) as comId1
-                           ,substring(comUniform,4,1) as comId1
-                           ,substring(comUniform,5,1) as comId1
-                           ,substring(comUniform,6,1) as comId1
-                           ,substring(comUniform,7,1) as comId1
-                           ,substring(comUniform,8,1) as comId1
-                           sy_Company from where 1=1 ";
+            string sql = @"select comName,comBusinessEntity from
+                           sy_Company where 1=1 ";
 
             if (!string.IsNullOrEmpty(keyword))
-                sql += "and ((comName like '%' + @keyword + '%') or (comUniform like '%' + @keyword + '%'))";
+                sql += "and ((comName like '%' + @keyword + '%') or (comUniform like '%' + @keyword + '%')) ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@keyword", keyword);

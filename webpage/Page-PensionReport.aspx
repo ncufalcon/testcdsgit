@@ -34,7 +34,10 @@
                             </table>                                 
                             </td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">異動別</div></td>
-                            <td class="width13" ><select id="pp_Change" runat="server" name="pp_Change" class="inputex"></select></td>
+                            <td class="width13" >
+                                <select id="pp_Change" runat="server" name="pp_Change" class="inputex" onchange="ddls_change()"></select>
+                                <input type="hidden" id="hid_changeVal" runat="server" />
+                            </td>
                           </tr>  
                          <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">工號</div></td>
@@ -49,7 +52,7 @@
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
                             <td class="width20">
-                                 <asp:TextBox class="inputex" id="txt_CompanyNo" runat="server"></asp:TextBox>
+                                 <asp:TextBox class="inputex" id="txt_CompanyNo" runat="server" Text="27951869"></asp:TextBox>
                             </td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
                             <td class="width20">
@@ -142,6 +145,11 @@
                     }
                 }
             });
+        }
+
+        function ddls_change() {
+            var ddls = document.getElementById('<%=pp_Change.ClientID%>');
+            document.getElementById('<%=hid_changeVal.ClientID%>').value = ddls.value;
         }
     </script>
     
