@@ -522,7 +522,7 @@ public class sy_PersonChange
 	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,plPs,@str_creatid,'A'
 	                    from sy_PersonLabor 
 	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='02')
-	                    order by plChangeDate,plCreateDate DESC
+	                    order by plChangeDate DESC,plCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -535,7 +535,7 @@ public class sy_PersonChange
                         select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'07',piInsurancePayroll,piPs,@str_creatid,'A'
 	                    from sy_PersonInsurance 
 	                    where piPerGuid=@str_back_per_guid and piStatus='A' and (piChange='01' or piChange='03')
-	                    order by piChangeDate,piCreateDate DESC
+	                    order by piChangeDate DESC,piCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -548,7 +548,7 @@ public class sy_PersonChange
                         select top 1 NEWID(),pgiPerGuid,pgiType,'02',@str_date,pgiInsuranceCode,pgiPs,@str_creatid,'A'
 	                    from sy_PersonGroupInsurance 
 	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiChange='01'
-	                    order by pgiChangeDate,pgiCreateDate DESC
+	                    order by pgiChangeDate DESC,pgiCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -561,7 +561,7 @@ public class sy_PersonChange
                         select top 1 NEWID(),ppGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,@str_creatid,'A'
 	                    from sy_PersonPension 
 	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' and (ppChange='01' or ppChange='02')
-	                    order by ppChangeDate,ppCreateDate DESC
+	                    order by ppChangeDate DESC,ppCreateDate DESC
                     end
 
                 set @rowcounts=0;
@@ -574,7 +574,7 @@ public class sy_PersonChange
                         select NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,@str_creatid,'A'
 	                    from sy_PersonFamilyInsurance 
 	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and pfiChange='01'
-	                    order by pfiChangeDate,pfiCreateDate DESC
+	                    order by pfiChangeDate DESC,pfiCreateDate DESC
                     end
                 ");
 
