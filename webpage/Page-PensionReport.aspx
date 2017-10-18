@@ -12,7 +12,7 @@
     <div class="WrapperMain">
         <div class="fixwidth">
             <div class="twocol underlineT1 margin10TB">
-                <div class="left font-light">首頁 / 報表輸出管理 /<span class="font-black font-bold">保險人名冊LI/NHI</span></div>
+                <div class="left font-light">首頁 / 報表輸出管理 /<span class="font-black font-bold">勞退提繳工資調整報表</span></div>
             </div>
 
         </div>
@@ -27,8 +27,8 @@
                             <table>
                                 <tr>
                             <td colspan="3" >
-                                起:<input type="text" class="inputex width35" id="txt_sDate" runat="server" value="2017/08/01"  />
-                               ~迄:<input type="text" class="inputex width35" id="txt_eDate" runat="server" value="2017/08/30" /></td>   
+                                起:<input type="text" class="inputex width35" id="txt_sDate" runat="server"  />
+                               ~迄:<input type="text" class="inputex width35" id="txt_eDate" runat="server" /></td>   
 
                                 </tr>
                             </table>                                 
