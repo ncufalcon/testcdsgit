@@ -583,24 +583,21 @@
             });
 
             //設定合約/試用期滿日
-            $(document).on("change", "#pFirstDate,input[name='pContract']", function () {
-                //if ($("input[name='pContract']:checked").length > 0 && $("#pFirstDate").val() != "") {
-                    if ($("#pFirstDate").val().substring(4, 5) == "/" && $("#pFirstDate").val().substring(7, 8) == "/") {
-                        var sday = new Date($("#pFirstDate").val());
-                        //if ($("input[name='pContract']:checked").val() == "01")
-                        //    sday = new Date(sday.getFullYear(), sday.getMonth() + 1, sday.getDate());
-                        //else
-                        sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate() - 1);
-                        $("#pContractDeadline").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
-                    }
-                //}
+            $(document).on("keyup change", "#pFirstDate,input[name='pContract']", function () {
+                var sday = new Date($("#pFirstDate").val());
+                sday = new Date(sday.getFullYear(), sday.getMonth() + 3, sday.getDate() - 1);
+                $("#pContractDeadline").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
+                if (this.value.length != 10)
+                    $("#pContractDeadline").val("");
             });
 
             //設定體檢到期日
-            $(document).on("change", "#pExaminationDate", function () {
+            $(document).on("keyup change", "#pExaminationDate", function () {
                 var sday = new Date($("#pExaminationDate").val());
                 sday = new Date(sday.getFullYear() + 1, sday.getMonth(), sday.getDate() - 1);
                 $("#pExaminationLastDate").val($.datepicker.formatDate('yy/mm/dd', new Date(sday)));
+                if (this.value.length != 10)
+                    $("#pExaminationLastDate").val("");
             });
 
             //確認公司&部門
@@ -1255,8 +1252,6 @@
                                 $("#pb_Contractor").val($(this).children("pbContractor").text().trim());
                                 $("#pb_Tel").val($(this).children("pbTel").text().trim());
                                 $("#pb_Fee").val($(this).children("pbFee").text().trim());
-                                $("#pb_No").val($(this).children("pbNo").text().trim());
-
                             });
                         }
                     }

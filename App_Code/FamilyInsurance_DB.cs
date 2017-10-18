@@ -114,7 +114,8 @@ left join sy_codetable on code_group='14' and code_value=pfiChange
 where pfiStatus<>'D' ");
         if (KeyWord != "")
         {
-            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfName) LIKE '%' + upper(@KeyWord) + '%')
+ or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
         if (pfiChange != "")
         {
