@@ -19,6 +19,8 @@ public class sy_PersonChange
     string str_back_per_guid = string.Empty;
     string str_creatid = string.Empty;
     string str_perguid = string.Empty;
+    string str_dates = string.Empty;
+    string str_datee = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -44,6 +46,14 @@ public class sy_PersonChange
     public string _str_perguid
     {
         set { str_perguid = value; }
+    }
+    public string _str_dates
+    {
+        set { str_dates = value; }
+    }
+    public string _str_datee
+    {
+        set { str_datee = value; }
     }
     #endregion
 
@@ -214,8 +224,17 @@ public class sy_PersonChange
                 show_value.Append(@" and pcStatus=@pcStatus  ");
                 thisCommand.Parameters.AddWithValue("@pcStatus", pcStatus);
             }
-
-            show_value.Append(@" order by pcStatus, pcCreateDate DESC  ");
+            if (pcChangeName != "")
+            {
+                show_value.Append(@" and pcChangeName=@pcChangeName  ");
+                thisCommand.Parameters.AddWithValue("@pcChangeName", pcChangeName);
+            }
+            if (str_dates!="" && str_datee!="") {
+                show_value.Append(@" and pcChangeDate between  @str_dates and @str_datee ");
+                thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
+                thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
+            }
+            show_value.Append(@" order by pcStatus DESC, pcCreateDate DESC,pcChangeDate DESC  ");
 
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
@@ -532,8 +551,8 @@ public class sy_PersonChange
                 where piPerGuid=@str_back_per_guid and piStatus='A'
                 if @rowcounts>0
                     begin
-                        insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus)
-                        select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'07',piInsurancePayroll,'',@str_creatid,'A'
+                        insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus,piDropOutReason)
+                        select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'07',piInsurancePayroll,'',@str_creatid,'A','1'
 	                    from sy_PersonInsurance 
 	                    where piPerGuid=@str_back_per_guid and piStatus='A' and (piChange='01' or piChange='03')
 	                    order by piChangeDate DESC,piCreateDate DESC
@@ -762,7 +781,15 @@ public class sy_PersonChange
                 select @EmployerRatio=iiRetirement 
                 from sy_Person left join sy_InsuranceIdentity on perInsuranceDes=iiGuid 
                 where perGuid = @perGuid
-
+                
+                --建保加保
+                declare @add_piSubsidyLevel nvarchar(50)
+                declare @add_comHealthInsuranceCode nvarchar(20)
+                select @add_piSubsidyLevel = perInsuranceID from sy_Person where perGuid=@perGuid
+                select @add_comHealthInsuranceCode = comHealthInsuranceCode from sy_Person left join sy_Company on perComGuid = comGuid where perGuid=@perGuid
+                insert into sy_PersonInsurance(piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus)
+                values(NEWID(),@perGuid,@add_piSubsidyLevel,@add_comHealthInsuranceCode,@perFirstDate,'01',@ganbor,'',@str_creatid,'A')    
+            
                 --勞保加保
                 declare @add_perLaborID  nvarchar(50)
                 declare @add_perLaborProtection  nvarchar(20)

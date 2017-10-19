@@ -14,6 +14,10 @@
         var now_user = "<%=USERINFO.MemberName %>";;//登入者姓名 目前還沒有登入這塊 先寫死
         var now_user_guid = "<%=USERINFO.MemberGuid %>";;//登入者GUID 目前還沒有登入這塊 先寫死
         $(function () {
+            //預設查詢區塊隱藏
+            $("#span_person_search").hide();
+            $("#span_pay_search").hide();
+            sel_searchChangeIten();
             //人事異動 工號欄位 change事件
             $(document).on("change", "#txt_person_empno", function () {
                 //alert($(this).val());
@@ -31,12 +35,9 @@
                         break;
                 }
             });
-            //預設查詢區塊隱藏
-            $("#span_person_search").hide();
-            $("#span_pay_search").hide();
             //套用datetimepicker
             $.datetimepicker.setLocale('zh-TW');//設定為中文
-            $("#txt_person_change_date,#search_person_date,#txt_pay_change_date,#search_pay_date").datetimepicker({
+            $("#txt_person_change_date,#search_person_date,#txt_pay_change_date,#search_pay_date,#search_person_dates,#search_person_datee,#search_pay_dates,#search_pay_datee").datetimepicker({
                 format: 'Y/m/d',//'Y-m-d H:i:s'
                 timepicker: false,    //false關閉時間選項 
                 defaultDate: false
@@ -55,16 +56,24 @@
                 $("#btn_person_search").hide();
                 $("div[name=div_person_data]").hide();
                 $("#span_person_search").show();
+                $("#btn_person_add").hide();
             });
             //人事異動 裡面的查詢按鈕
             $("#btn_person_inner_search").click(function () {
-                $("#btn_person_search").show();
-                $("div[name=div_person_data]").show();
-                $("#span_person_search").hide();
-                call_personchangedata();
-                $("#search_person_date").val("");
-                $("#search_person_keyword").val("");
-                $("#search_person_status").val("");
+                var dd = $("#search_person_date").val();
+                var ds = $("#search_person_dates").val();
+                var de = $("#search_person_datee").val();
+                if (chk_date(dd) && chk_date(ds) && chk_date(de) && chkDatesDatee(ds, de)) {
+                    $("#btn_person_search").show();
+                    $("div[name=div_person_data]").show();
+                    $("#span_person_search").hide();
+                    $("#btn_person_add").show();
+                    call_personchangedata();
+                    $("#search_person_date").val("");
+                    $("#search_person_keyword").val("");
+                    $("#search_person_status").val("");
+                }
+                
             });
             //人事異動 新增按鈕
             $("#btn_person_add").click(function () {
@@ -264,78 +273,78 @@
             }
             //撈人事異動資料
             function call_personchangedata() {
-                if (chk_date($("#search_person_date").val())) {
-                    $("#div_person_list").empty();
-                    $.ajax({
-                        type: "POST",
-                        async: true, //在沒有返回值之前,不會執行下一步動作
-                        url: "../handler/pageModify.ashx",
-                        data: {
-                            func: "load_personchangedata",
-                            str_person_date: $("#search_person_date").val(),
-                            str_person_keyword: $("#search_person_keyword").val(),
-                            str_person_status: $("#search_person_status").val()
-                        },
-                        error: function (xhr) {
-                            alert("error");
-                        },
-                        beforeSend: function () {
-                            $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-                        },
-                        success: function (response) {
-                            var str_html = "";
-                            if (response != "nodata") {
-                                str_html += "<thead>";
-                                str_html += "<tr>";
-                                str_html += "<th nowrap='nowrap' width='60'>操作</th>";
-                                str_html += "<th nowrap='nowrap' >員工代號</th>";
-                                str_html += "<th nowrap='nowrap' >員工姓名</th>";
-                                str_html += "<th nowrap='nowrap' >異動日期</th>";
-                                str_html += "<th nowrap='nowrap' >異動項目名稱</th>";
-                                str_html += "<th nowrap='nowrap' >異動前</th>";
-                                str_html += "<th nowrap='nowrap' >異動後</th>";
-                                str_html += "<th nowrap='nowrap' >確認日</th>";
-                                str_html += "<th nowrap='nowrap' >確認者名稱</th>";
-                                str_html += "<th nowrap='nowrap' >狀態</th>";
-                                str_html += "<th nowrap='nowrap' >備註</th>";
-                                str_html += "</tr>";
-                                str_html += "</thead>";
-                                str_html += "<tbody>";
-                                for (var i = 0; i < response.length; i++) {
-                                    str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "' trlastdate='" + response[i].perLastDate + "'  >";
-                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcChangeDate + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].ChangeCName + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].begin_name + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].end_name + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenifyDate + "</td>";
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].mbName + "</td>";
-                                    if (response[i].pcStatus == "0") {
-                                        str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;color:red;'>待確認</td>";
-                                    } else {
-                                        str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>已確認</td>";
-                                    }
-
-                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcPs + "</td>";
-                                    str_html += "</tr>";
+                $("#div_person_list").empty();
+                $.ajax({
+                    type: "POST",
+                    async: true, //在沒有返回值之前,不會執行下一步動作
+                    url: "../handler/pageModify.ashx",
+                    data: {
+                        func: "load_personchangedata",
+                        str_person_date: $("#search_person_date").val(),
+                        str_person_keyword: $("#search_person_keyword").val(),
+                        str_person_status: $("#search_person_status").val(),
+                        str_person_changetype:$("#search_person_changetype").val(),
+                        str_person_dates: $("#search_person_dates").val(),
+                        str_person_datee: $("#search_person_datee").val()
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    },
+                    beforeSend: function () {
+                        $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    },
+                    success: function (response) {
+                        var str_html = "";
+                        if (response != "nodata") {
+                            str_html += "<thead>";
+                            str_html += "<tr>";
+                            str_html += "<th nowrap='nowrap' width='60'>操作</th>";
+                            str_html += "<th nowrap='nowrap' >員工代號</th>";
+                            str_html += "<th nowrap='nowrap' >員工姓名</th>";
+                            str_html += "<th nowrap='nowrap' >異動日期</th>";
+                            str_html += "<th nowrap='nowrap' >異動項目名稱</th>";
+                            str_html += "<th nowrap='nowrap' >異動前</th>";
+                            str_html += "<th nowrap='nowrap' >異動後</th>";
+                            str_html += "<th nowrap='nowrap' >確認日</th>";
+                            str_html += "<th nowrap='nowrap' >確認者名稱</th>";
+                            str_html += "<th nowrap='nowrap' >狀態</th>";
+                            str_html += "<th nowrap='nowrap' >備註</th>";
+                            str_html += "</tr>";
+                            str_html += "</thead>";
+                            str_html += "<tbody>";
+                            for (var i = 0; i < response.length; i++) {
+                                str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "' trlastdate='" + response[i].perLastDate + "'  >";
+                                str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcChangeDate + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].ChangeCName + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].begin_name + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].end_name + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcVenifyDate + "</td>";
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].mbName + "</td>";
+                                if (response[i].pcStatus == "0") {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;color:red;'>待確認</td>";
+                                } else {
+                                    str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>已確認</td>";
                                 }
-                                str_html += "</tbody>";
-                            } else {
-                                str_html += "<td colspan='6' nowrap='nowrap' style='cursor: pointer;'>查無資料</td>";
-                            }
-                            $("#div_person_list").append(str_html);
-                            $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
-                            $(".stripeMe tr:even").addClass("alt");
-                            $(".fixTable").tableHeadFixer();
-                        },//success end
-                        complete: function () {
-                            $.unblockUI();
-                        }
-                    });//ajax end
-                }
 
+                                str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcPs + "</td>";
+                                str_html += "</tr>";
+                            }
+                            str_html += "</tbody>";
+                        } else {
+                            str_html += "<td colspan='6' nowrap='nowrap' style='cursor: pointer;'>查無資料</td>";
+                        }
+                        $("#div_person_list").append(str_html);
+                        $(".stripeMe tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
+                        $(".stripeMe tr:even").addClass("alt");
+                        $(".fixTable").tableHeadFixer();
+                    },//success end
+                    complete: function () {
+                        $.unblockUI();
+                    }
+                });//ajax end
             }
             //撈人事異動資料 by guid
             function call_personchangedata_byguid() {
@@ -586,6 +595,7 @@
             $("#txt_hidden_pay_siguid").val("");
             $("#txt_hidden_pay_perguid").val("");
             $("#hidden_pay_refcode").val("");
+            sel_paychangeitem();
             //薪資異動 外面的查詢按鈕
             $("#btn_pay_search").click(function () {
                 $("#btn_pay_search").hide();
@@ -596,15 +606,21 @@
             });
             //薪資異動 裡面的查詢按鈕
             $("#btn_pay_inner_search").click(function () {
-                $("#btn_pay_search").show();
-                $("#span_pay_right_btn").show();
-                $("#a_pay_manychk").show();
-                $("div[name=div_pay_data]").show();
-                $("#span_pay_search").hide();
-                call_paychangedata();
-                $("#search_pay_date").val("");
-                $("#search_pay_keyword").val("");
-                $("#search_pay_status").val("");
+                var dd = $("#search_pay_date").val();
+                var ds = $("#search_pay_dates").val();
+                var de = $("#search_pay_datee").val();
+                if (chk_date(dd) && chk_date(ds) && chk_date(de) && chkDatesDatee(ds, de)) {
+                    $("#btn_pay_search").show();
+                    $("#span_pay_right_btn").show();
+                    $("#a_pay_manychk").show();
+                    $("div[name=div_pay_data]").show();
+                    $("#span_pay_search").hide();
+                    call_paychangedata();
+                    $("#search_pay_date").val("");
+                    $("#search_pay_keyword").val("");
+                    $("#search_pay_status").val("");
+                }
+                
             });
             //薪資異動 新增按鈕
             $("#btn_pay_add").click(function () {
@@ -801,7 +817,10 @@
                         func: "load_paychangedata",
                         str_pay_date: $("#search_pay_date").val(),
                         str_pay_keyword: $("#search_pay_keyword").val(),
-                        str_pay_status: $("#search_pay_status").val()
+                        str_pay_status: $("#search_pay_status").val(),
+                        str_pay_changetype: $("#search_pay_changetype").val(),
+                        str_pay_dates: $("#search_pay_dates").val(),
+                        str_pay_datee: $("#search_pay_datee").val()
                     },
                     error: function (xhr) {
                         alert("error");
@@ -1021,10 +1040,10 @@
                                 $("#txt_pay_empno").val(response[0].perNo);
                                 $("#txt_pay_cname").text(response[0].perName);
                                 $("#txt_hidden_pay_perguid").val(response[0].perGuid);
-                                if ($("#hidden_pay_refcode").val() == "01") {
+                                if ($("#hidden_pay_refcode").val() == "底薪") {
                                     $("#txt_pay_before").val(response[0].perBasicSalary);
                                 }
-                                else if ($("#hidden_pay_refcode").val() == "02") {
+                                else if ($("#hidden_pay_refcode").val() == "職能加給") {
                                     $("#txt_pay_before").val(response[0].perAllowance);
                                 } else {
                                     $("#txt_pay_before").val("");
@@ -1224,7 +1243,7 @@
                 case "SiItem":
                     $("#txt_pay_siname").val(pname);//項目名稱
                     $("#txt_hidden_pay_siguid").val(gv);//項目GUID
-                    $("#hidden_pay_refcode").val(refcode);//01底薪02職能加給
+                    $("#hidden_pay_refcode").val(pname);//底薪 職能加給
                     load_thispeopledata($("#txt_pay_empno").val(), "pay");
                     break;
             }
@@ -1310,6 +1329,84 @@
                 }
             });//ajax end
         }
+        //人事異動 撈查詢的異動項目下拉選單
+        function sel_searchChangeIten() {
+            $("#search_person_changetype").empty();
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_person_changedata"
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    var str_html = "<option value=''>----請選擇----</option>";
+                    if (response != "nodata") {
+                        for (var i = 0; i < response.length; i++) {
+                            str_html += "<option value='" + response[i].code_value + "'>" + response[i].code_desc + "</option>";
+                        }
+                    }
+                    $("#search_person_changetype").append(str_html);
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //查詢日期區間檢查
+        function chkDatesDatee(ds,de){
+            if (ds == "" && de != "") {
+                alert("請選擇正確且完整的異動區間");
+                return false;
+            }
+            if (ds != "" && de == "") {
+                alert("請選擇正確且完整的異動區間");
+                return false;
+            }
+            if (ds != "" && de != "") {
+                if (ds >= de) {
+                    alert("異動區間起訖日期有誤");
+                    return false;
+                }
+            }
+            return true;
+        }
+        //薪資異動 查詢 異動項目下拉選單
+        function sel_paychangeitem(){
+            $("#search_pay_changetype").empty();
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_paychangeiten"
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    var str_html = "<option value=''>----請選擇----</option>";
+                    if (response != "nodata") {
+                        for (var i = 0; i < response.length; i++) {
+                            str_html += "<option value='" + response[i].siGuid + "'>" + response[i].siItemName + "</option>";
+                        }
+                    }
+                    $("#search_pay_changetype").append(str_html);
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -1334,12 +1431,15 @@
                     <div class="twocol margin15TB" id="div_people_btn">
                         <div class="right">
                             <span id="span_person_search">
-                                關鍵字：<input type="text" id="search_person_keyword" />
-                                異動日期：<input type="text" id="search_person_date" maxlength="10" />
+                                關鍵字：<input class="inputex width15" type="text" id="search_person_keyword" />
+                                異動日期：<input class="inputex width15" type="text" id="search_person_date" maxlength="10" />
                                 狀態：<select id="search_person_status"><option value="">--請選擇--</option>
                                     <option value="0">待確認</option>
                                     <option value="1">已確認</option>
                                 </select>
+                                異動項目：<select id="search_person_changetype"></select><br /><br />
+                                異動區間：<input class="inputex width15" type="text" id="search_person_dates" maxlength="10" />~
+                                <input class="inputex width15" type="text" id="search_person_datee" maxlength="10" />
                                 <a href="Javascript:void(0)" class="keybtn fancybox" id="btn_person_inner_search">查詢</a>
                             </span>
                             <a href="Javascript:void(0)" class="keybtn fancybox" id="btn_person_search">查詢</a>
@@ -1459,6 +1559,9 @@
                                     <option value="0">待確認</option>
                                     <option value="1">已確認</option>
                                 </select>
+                                異動項目：<select id="search_pay_changetype"></select><br /><br />
+                                異動區間：<input class="inputex width15" type="text" id="search_pay_dates" maxlength="10" />~
+                                <input class="inputex width15" type="text" id="search_pay_datee" maxlength="10" />
                                 <a href="Javascript:void(0)" class="keybtn fancybox" id="btn_pay_inner_search">查詢</a>
                             </span>
                             <span id="span_pay_right_btn">
