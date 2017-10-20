@@ -99,6 +99,8 @@ public class page_Attendance : IHttpHandler, IRequiresSessionState
                     string str_datee = string.IsNullOrEmpty(context.Request.Form["str_datee"]) ? "" : context.Request.Form["str_datee"].ToString().Trim();
                     string str_type = string.IsNullOrEmpty(context.Request.Form["str_type"]) ? "" : context.Request.Form["str_type"].ToString().Trim();
                     string str_guid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
+                    string str_keyword = string.IsNullOrEmpty(context.Request.Form["str_keyword"]) ? "" : context.Request.Form["str_keyword"].ToString().Trim();
+                    string str_attype = string.IsNullOrEmpty(context.Request.Form["str_attype"]) ? "" : context.Request.Form["str_attype"].ToString().Trim();
 
                     try
                     {
@@ -106,6 +108,8 @@ public class page_Attendance : IHttpHandler, IRequiresSessionState
                         lea_db._str_datee = str_datee;
                         lea_db._str_type = str_type;
                         lea_db._leaGuid = str_guid;
+                        lea_db._str_keyword = str_keyword;
+                        lea_db._str_attype = str_attype;
                         //lea_db._leaID = Convert.ToInt32(str_id);
                         DataTable dt_data = lea_db.SelectLeave();
                         if (dt_data.Rows.Count > 0)

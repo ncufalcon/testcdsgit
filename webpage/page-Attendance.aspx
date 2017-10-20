@@ -237,7 +237,9 @@
                     func: "load_data",
                     str_dates: $("#sel_dates").val(),
                     str_datee: $("#sel_datee").val(),
-                    str_type: $("#sel_type").val()
+                    str_type: $("#sel_type").val(),
+                    str_keyword: $("#sel_keyword").val(),
+                    str_attype: $("#sel_attype").val()
                 },
                 error: function (xhr) {
                     alert("error");
@@ -633,6 +635,7 @@
         function load_PayHoliday() {
             $("#txt_leave_type").empty();
             $("#txt_leave_type2").empty();
+            $("#sel_attype").empty();
             $.ajax({
                 type: "POST",
                 async: true, //在沒有返回值之前,不會執行下一步動作
@@ -654,7 +657,6 @@
                     } else {
                         var str_html = "<option value=''>-----請選擇-----</option>";
                         if (response != "nodata") {
-
                             for (var i = 0; i < response.length; i++) {
                                 str_html += "<option value='" + response[i].phCode + "'>" + response[i].phName + "</option>";
                             }
@@ -662,6 +664,7 @@
                         }
                         $("#txt_leave_type").append(str_html);
                         $("#txt_leave_type2").append(str_html);
+                        $("#sel_attype").append(str_html);
                     }
                     
                 },//success end
@@ -773,8 +776,10 @@
             </div>
             <div class="twocol margin15T">
                 <div class="left">
+                    關鍵字：<input type="text" id="sel_keyword" size="12" />
                     日期起：<input type="text" id="sel_dates" size="12" />
                     日期迄：<input type="text" id="sel_datee" size="12" />
+                    假別：<select id="sel_attype"></select>
                     資料別：
                     <select id="sel_type">
                         <option value="all">全部</option>
@@ -783,6 +788,8 @@
                     </select>
                     <a href="javascript:void(0);" class="keybtn" id="btn_sel">查詢</a>
                 </div>
+                <br /><br /><br /><br />
+                
                 <div class="right">
                     <a href="javascript:void(0);" class="keybtn" id="btn_add">新增</a>
                     <a href="javascript:void(0);" class="keybtn" id="btn_import">請假記錄匯入</a>

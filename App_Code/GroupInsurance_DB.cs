@@ -88,7 +88,7 @@ public class GroupInsurance_DB
     }
     #endregion
 
-    public DataTable SelectList()
+    public DataTable SelectList(string EffectiveDate)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
@@ -104,13 +104,14 @@ left join sy_GroupInsurance on giGuid=pgiInsuranceCode
 where pgiStatus<>'D'  ");
         if (KeyWord != "")
         {
-            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
+            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfName) LIKE '%' + upper(@KeyWord) + '%')
+ or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
         if (pgiChangeDate != "")
         {
-            sb.Append(@"and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate ");
+            sb.Append(@"and ((pgiChange='02' and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate) or (pgiChange='01' and SUBSTRING(pgiChangeDate,1,7)=@EffectiveDate)) ");
         }
-        sb.Append(@"order by sy_PersonGroupInsurance.pgiChangeDate desc,pgiCreateDate desc ");
+        sb.Append(@"order by pgiChange,pgiChangeDate desc,pgiCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -118,6 +119,7 @@ where pgiStatus<>'D'  ");
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@pgiChangeDate", pgiChangeDate);
+        oCmd.Parameters.AddWithValue("@EffectiveDate", EffectiveDate);
         oda.Fill(ds);
         return ds;
     }

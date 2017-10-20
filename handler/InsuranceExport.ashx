@@ -226,8 +226,9 @@ public class InsuranceExport : IHttpHandler {
                                         {
                                             Xls.SetCellValue(i, 1, "2");
                                             string IDCode = (dt.Rows[i - 2]["iiIdentityCode"].ToString() != "4") ? "1" : "2";
-                                            Xls.SetCellValue(i, 2, dt.Rows[i - 2]["comLaborProtection1"].ToString());
-                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection2"].ToString());
+                                            Xls.SetCellValue(i, 2, IDCode);
+                                            Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection1"].ToString());
+                                            Xls.SetCellValue(i, 4, dt.Rows[i - 2]["comLaborProtection2"].ToString());
                                             //判斷外籍,身份證前兩碼為英文 
                                             if (dt.Rows[i - 2]["perIDNumber"].ToString() == "")
                                                 continue;
@@ -498,8 +499,8 @@ public class InsuranceExport : IHttpHandler {
                                         Xls.SetCellValue(i, 8, dt.Rows[i - 2]["perIDNumber"].ToString());
                                         Xls.SetCellValue(i, 9, dt.Rows[i - 2]["perName"].ToString());
                                         Xls.SetCellValue(i, 10, ROC_Date(dt.Rows[i - 2]["perBirthday"].ToString()));
-                                        Xls.SetCellValue(i, 11, dt.Rows[i - 2]["minLaborLv"].ToString());
-                                        Xls.SetCellValue(i, 12, dt.Rows[i - 2]["minInsLv"].ToString());
+                                        Xls.SetCellValue(i, 11, dt.Rows[i - 2]["plLaborPayroll"].ToString());
+                                        Xls.SetCellValue(i, 12, dt.Rows[i - 2]["piInsurancePayroll"].ToString());
                                         Xls.SetCellValue(i, 13, "1");
                                         if (dt.Rows[i - 2]["iiIdentityCode"].ToString() == "2")
                                             Xls.SetCellValue(i, 14, "0");
@@ -542,7 +543,7 @@ public class InsuranceExport : IHttpHandler {
                                         Xls.SetCellValue(i, 6, "2");
                                         Xls.SetCellValue(i, 7, "1");
                                         //判斷外籍,身份證前兩碼為英文 
-                                        if (dt.Rows[i - 2]["perIDNumber"].ToString() == "")
+                                        if (dt.Rows[i - 2]["pfIDNumber"].ToString() == "")
                                             continue;
                                         Regex reg1 = new Regex(@"^[A-Za-z]+$");
                                         if (reg1.IsMatch(dt.Rows[i - 2]["pfIDNumber"].ToString().Substring(0, 2)))
@@ -579,6 +580,8 @@ public class InsuranceExport : IHttpHandler {
                         for (int i = 4; i < dt.Rows.Count + 4; i++)
                         {
                             string birthYear = DateTime.Parse(dt.Rows[i - 4]["perBirthday"].ToString()).ToString("yyyy");
+                            if (dt.Rows[i - 4]["perNo"].ToString() == "232995")
+                                category = "PGI";
                             Xls.SetCellValue(i, 1, dt.Rows[i - 4]["perDep"].ToString());
                             Xls.SetCellValue(i, 2, dt.Rows[i - 4]["perNo"].ToString());
                             Xls.SetCellValue(i, 3, dt.Rows[i - 4]["perName"].ToString());

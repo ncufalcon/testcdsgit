@@ -23,6 +23,8 @@ public class sy_PersonAllowanceChang1e_DB
     string str_keyword = string.Empty;
     string str_date = string.Empty;
     string str_status = string.Empty;
+    string str_dates = string.Empty;
+    string str_datee = string.Empty;
     int str_after;
     #endregion
     #region 全公用
@@ -41,6 +43,14 @@ public class sy_PersonAllowanceChang1e_DB
     public int _str_after
     {
         set { str_after = value; }
+    }
+    public string _str_dates
+    {
+        set { str_dates = value; }
+    }
+    public string _str_datee
+    {
+        set { str_datee = value; }
     }
     #endregion
 
@@ -142,7 +152,7 @@ public class sy_PersonAllowanceChang1e_DB
                 left join sy_Person a on pacPerGuid = a.perGuid
                 left join sy_SalaryItem on pacChange = siGuid
                 left join sy_Member on pacVenify=mbGuid
-                where pacStatus_d='A'
+                where pacStatus_d='A' 
             ");
 
             if (str_keyword != "")
@@ -164,6 +174,16 @@ public class sy_PersonAllowanceChang1e_DB
             {
                 show_value.Append(@" and pacStatus=@pacStatus  ");
                 thisCommand.Parameters.AddWithValue("@pacStatus", str_status);
+            }
+            if (pacChange!="") {
+                show_value.Append(@" and pacChange=@pacChange  ");
+                thisCommand.Parameters.AddWithValue("@pacChange", pacChange);
+            }
+            if (str_dates != ""&& str_datee != "")
+            {
+                show_value.Append(@" and pacChangeDate between @str_dates and @str_datee  ");
+                thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
+                thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
             }
             show_value.Append(@" order by pacStatus, pacCreateDate ASC   ");
             thisCommand.CommandType = CommandType.Text;
@@ -498,6 +518,50 @@ public class sy_PersonAllowanceChang1e_DB
             thisConnection.Dispose();
             thisCommand.Dispose();
         }
+
+    }
+    #endregion
+
+    #region 撈 薪資異動的所有異動項目
+    public DataTable SelectPersonAllowanceChangItem()
+    {
+        DataTable dt = new DataTable();
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            thisConnection.Open();
+            show_value.Append(@"  
+                select siGuid,siItemCode,siItemName,siRef from sy_SalaryItem where siStatus='A' and (siRef='01' or siRef='02')
+                union 
+                select paAllowanceCode,
+                (select siItemCode from sy_SalaryItem where siGuid=paAllowanceCode) siItemCode,
+                (select siItemName from sy_SalaryItem where siGuid=paAllowanceCode) siItemName,
+                (select siRef from sy_SalaryItem where siGuid=paAllowanceCode) siRef
+                from sv_PersonAllowance where paStatus='A'
+            ");
+            thisCommand.CommandType = CommandType.Text;
+            thisCommand.CommandText = show_value.ToString();
+            oda.SelectCommand = thisCommand;
+            oda.Fill(dt);
+        }
+        catch (Exception ex)
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+        return dt;
 
     }
     #endregion

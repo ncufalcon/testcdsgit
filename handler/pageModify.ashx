@@ -81,6 +81,14 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string siRef { get; set; }
         public string mbNAme { get; set; }
     }
+    //薪資異動 異動項目
+    public class payChangeItenTooL
+    {
+        public string siGuid { get; set; }//
+        public string siItemCode { get; set; }//
+        public string siItemName { get; set; }//
+        public string siRef { get; set; }//
+    }
 
     CodeTable_DB code_db = new CodeTable_DB();
     Dal dal_db = new Dal();
@@ -164,10 +172,16 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string str_search_person_keyword = string.IsNullOrEmpty(context.Request.Form["str_person_keyword"]) ? "" : context.Request.Form["str_person_keyword"].ToString().Trim();
                 string str_search_person_status = string.IsNullOrEmpty(context.Request.Form["str_person_status"]) ? "" : context.Request.Form["str_person_status"].ToString().Trim();
                 string str_search_person_guid = string.IsNullOrEmpty(context.Request.Form["str_search_person_guid"]) ? "" : context.Request.Form["str_search_person_guid"].ToString().Trim();
+                string str_person_changetype = string.IsNullOrEmpty(context.Request.Form["str_person_changetype"]) ? "" : context.Request.Form["str_person_changetype"].ToString().Trim();
+                string str_person_dates = string.IsNullOrEmpty(context.Request.Form["str_person_dates"]) ? "" : context.Request.Form["str_person_dates"].ToString().Trim();
+                string str_person_datee = string.IsNullOrEmpty(context.Request.Form["str_person_datee"]) ? "" : context.Request.Form["str_person_datee"].ToString().Trim();
                 pc_db._str_keyword = str_search_person_keyword;
                 pc_db._pcChangeDate = str_search_person_date;
                 pc_db._pcStatus = str_search_person_status;
                 pc_db._pcGuid = str_search_person_guid;
+                pc_db._pcChangeName = str_person_changetype;
+                pc_db._str_dates = str_person_dates;
+                pc_db._str_datee = str_person_datee;
                 DataTable dt_personchange = pc_db.SelectPersonChange();
                 if (dt_personchange.Rows.Count > 0)
                 {
@@ -433,10 +447,16 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 string str_search_pay_keyword = string.IsNullOrEmpty(context.Request.Form["str_pay_keyword"]) ? "" : context.Request.Form["str_pay_keyword"].ToString().Trim();
                 string str_search_pay_status = string.IsNullOrEmpty(context.Request.Form["str_pay_status"]) ? "" : context.Request.Form["str_pay_status"].ToString().Trim();
                 string str_search_pay_guid = string.IsNullOrEmpty(context.Request.Form["str_search_person_guid"]) ? "" : context.Request.Form["str_search_person_guid"].ToString().Trim();
+                string str_pay_changetype = string.IsNullOrEmpty(context.Request.Form["str_pay_changetype"]) ? "" : context.Request.Form["str_pay_changetype"].ToString().Trim();
+                string str_pay_dates = string.IsNullOrEmpty(context.Request.Form["str_pay_dates"]) ? "" : context.Request.Form["str_pay_dates"].ToString().Trim();
+                string str_pay_datee = string.IsNullOrEmpty(context.Request.Form["str_pay_datee"]) ? "" : context.Request.Form["str_pay_datee"].ToString().Trim();
                 pac_db._str_keyword = str_search_pay_keyword;
                 pac_db._str_date = str_search_pay_date;
                 pac_db._str_status = str_search_pay_status;
                 pac_db._pacGuid = str_search_pay_guid;
+                pac_db._pacChange = str_pay_changetype;
+                pac_db._str_dates = str_pay_dates;
+                pac_db._str_datee = str_pay_datee;
                 DataTable dt_pacdata = pac_db.SelectPersonAllowanceChang1e();
                 if (dt_pacdata.Rows.Count > 0)
                 {
@@ -624,7 +644,36 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     context.Response.Write("nodata");
                 }
                 break;
+            //撈薪資異動 查詢異動項目下拉選單
+            case "load_paychangeiten":
+                DataTable dt_pcitem = pac_db.SelectPersonAllowanceChangItem();
+                if (dt_pcitem.Rows.Count > 0)
+                {
+                    //public string siGuid { get; set; }//
+                    //public string siItemCode { get; set; }//
+                    //public string siItemName { get; set; }//
+                    //public string siRef { get; set; }//
 
+                    List<payChangeItenTooL> pciList = new List<payChangeItenTooL>();
+                    for (int i = 0; i < dt_pcitem.Rows.Count; i++)
+                    {
+                        payChangeItenTooL e = new payChangeItenTooL();
+                        e.siGuid  =  dt_pcitem.Rows[i]["siGuid"].ToString().Trim();
+                        e.siItemCode  =  dt_pcitem.Rows[i]["siItemCode"].ToString().Trim();
+                        e.siItemName =  dt_pcitem.Rows[i]["siItemName"].ToString().Trim();
+                        e.siRef =  dt_pcitem.Rows[i]["siRef"].ToString().Trim();//離職日期
+                        pciList.Add(e);
+                    }
+                    System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string ans = objSerializer.Serialize(pciList);  //new
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(ans);
+                }
+                else
+                {
+                    context.Response.Write("nodata");
+                }
+                break;
         }
     }
 

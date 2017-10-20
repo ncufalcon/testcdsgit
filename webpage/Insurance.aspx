@@ -1680,16 +1680,16 @@
                                     $("input[name='pfi_AreaPerson']").prop('checked', true);
                                 $("#pfi_Ps").val($(this).children("pfiPs").text().trim());
                                 if ($(this).children("pfiChange").text().trim() != "02" && $(this).children("pfiChange").text().trim() != "03")
-                                    $(".dor").hide();
+                                    $(".pfidor").hide();
                                 else {
-                                    $(".dor").show();
+                                    $(".pfidor").show();
                                     if ($(this).children("pfiChange").text().trim() == "02") {
-                                        $(".dor").show();
+                                        $(".pfidor").show();
                                         getddl("20", "#pfi_DropOutReason");
                                     }
 
                                     if ($(this).children("pfiChange").text().trim() == "03") {
-                                        $(".dor").show();
+                                        $(".pfidor").show();
                                         getddl("21", "#pfi_DropOutReason");
                                     }
                                     $("#pfi_DropOutReason").val($(this).children("pfiDropOutReason").text().trim());

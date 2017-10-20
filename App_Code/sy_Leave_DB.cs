@@ -28,6 +28,8 @@ public class sy_Leave_DB
     string str_type_date = string.Empty;
     string str_type2_date = string.Empty;
     string str_days = string.Empty;
+    string str_attype = string.Empty;
+    string str_keyword = string.Empty;
     #endregion
     #region 全公用
     public string _str_dates
@@ -57,6 +59,14 @@ public class sy_Leave_DB
     public string _str_days
     {
         set { str_days = value; }
+    }
+    public string _str_attype
+    {
+        set { str_attype = value; }
+    }
+    public string _str_keyword
+    {
+        set { str_keyword = value; }
     }
     #endregion
 
@@ -227,7 +237,7 @@ public class sy_Leave_DB
         {
             thisConnection.Open();
             show_value.Append(@"  
-                select leaID,leaGuid,leaStratFrom,leaEndAt,leaDuration,leaRemark,leaLeaveTypeId,leaAppilcantId,perGuid,perName,leaLeaveType2,leaDuration2,a.phName phName1,b.phName phName2 ,leaImportStatus
+                select leaID,leaGuid,leaStratFrom,leaEndAt,leaDuration,leaRemark,leaLeaveTypeId,leaAppilcantId,perGuid,perName,leaLeaveType2,leaDuration2,a.phName phName1,b.phName phName2 ,leaImportStatus,perName
                 from sy_Leave 
                 left join sy_PayHoliday a on leaLeaveTypeId = a.phCode
                 left join sy_PayHoliday b on leaLeaveType2 = b.phCode
@@ -256,6 +266,15 @@ public class sy_Leave_DB
             {
                 show_value.Append(@" and leaGuid = @leaGuid  ");
                 thisCommand.Parameters.AddWithValue("@leaGuid", leaGuid);
+            }
+            if (str_attype!="") {
+                show_value.Append(@" and (leaLeaveTypeId = @str_attype or leaLeaveType2=@str_attype)  ");
+                thisCommand.Parameters.AddWithValue("@str_attype", str_attype);
+            }
+            if (str_keyword != "")
+            {
+                show_value.Append(@" and (upper(leaAppilcantId) LIKE '%' + upper(@str_keyword) + '%' or upper(perName) LIKE '%' + upper(@str_keyword) + '%' )  ");
+                thisCommand.Parameters.AddWithValue("@str_keyword", str_keyword);
             }
             show_value.Append(@" order by leaAppilcantId ASC,leaEndAt ASC  ");
             thisCommand.CommandType = CommandType.Text;
@@ -481,7 +500,7 @@ public class sy_Leave_DB
                     oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
                     oCmd.Parameters["@ldDuration"].Value = Convert.ToDecimal(0.5);
                     oCmd.ExecuteNonQuery();
-
+                    
                     double days = Convert.ToDouble(str_days) - 0.5;
                     DateTime dtime_this = Convert.ToDateTime(leaStratFrom);//.ToShortDateString()
                     //再insert 後面整天的進去
@@ -611,8 +630,7 @@ public class sy_Leave_DB
                         oCmd.ExecuteNonQuery();
                     }
                     //前後都半天 請假>=2天
-                    else if (Convert.ToDouble(str_type_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5" && Convert.ToDouble(str_type2_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5")
-                    {
+                    else if (Convert.ToDouble(str_type_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5" && Convert.ToDouble(str_type2_date).ToString("#0.0").Substring(Convert.ToDouble(str_type2_date).ToString("#0.0").Length - 2) == ".5") {
                         //1.先insert 假別1 半天的進去
                         oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldId"].Value = DBNull.Value;
@@ -660,8 +678,7 @@ public class sy_Leave_DB
                         oCmd.ExecuteNonQuery();
                     }
                     //都整天
-                    else
-                    {
+                    else {
                         //1.先insert 假別1 整天的進去
                         for (int i = 1; i <= (Convert.ToDouble(str_type_date)); i++)
                         {
@@ -690,7 +707,7 @@ public class sy_Leave_DB
                             oCmd.ExecuteNonQuery();
                         }
                     }
-
+                   
                 }//兩種假別都整天 END
 
             }
@@ -775,8 +792,7 @@ public class sy_Leave_DB
                 ";
                 oCmd.Parameters.AddWithValue("@leaID", leaID);
             }//leaGuid=@leaGuid 
-            else
-            {
+            else {
                 oCmd.CommandText = @"
                     update sy_Leave set 
                     leaStratFrom=@leaStratFrom,leaEndAt=@leaEndAt,leaDuration=@leaDuration,leaRemark=@leaRemark,leaAskerName=@leaAskerName,
@@ -804,9 +820,8 @@ public class sy_Leave_DB
             //新增到Detail 先砍掉舊的再新增
             oCmd.Parameters.Add("@ldLeaGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@ldLeaveid", SqlDbType.Int);
-
-            if (leaID != 0)
-            {
+            
+            if (leaID != 0) {
                 oCmd.CommandText = @"
                     delete from sy_LeaveDetail where ldLeaveid=@ldLeaveid
                 ";
@@ -845,12 +860,11 @@ public class sy_Leave_DB
                         oCmd.Parameters["@ldLeaGuid"].Value = DBNull.Value;
                         oCmd.Parameters["@ldLeaveid"].Value = leaID;
                     }
-                    else
-                    {
+                    else {
                         oCmd.Parameters["@ldLeaGuid"].Value = mod_guid;
                         oCmd.Parameters["@ldLeaveid"].Value = DBNull.Value;
                     }
-
+                   
                     oCmd.Parameters["@ldDate"].Value = Convert.ToDateTime(leaStratFrom).ToString("yyyy/MM/dd");
                     oCmd.Parameters["@ldApplicantId"].Value = leaAppilcantId;
                     oCmd.Parameters["@ldTypeId"].Value = leaLeaveTypeId;
