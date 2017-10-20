@@ -519,6 +519,7 @@ namespace payroll
             string sql = @"pr_LeaveExport";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@sr_Guid", sr_guid);
             cmd.Parameters.AddWithValue("@perNo", perNo);
             cmd.Parameters.AddWithValue("@company", company);

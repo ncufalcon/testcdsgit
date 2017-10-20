@@ -550,6 +550,8 @@ public class Common
         }
         catch (Exception ex) { return 0; }
     }
+
+
 }
 
 public class JavaScript
