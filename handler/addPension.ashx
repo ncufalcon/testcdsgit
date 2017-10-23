@@ -23,7 +23,7 @@ public class addPension : IHttpHandler,IRequiresSessionState {
             string pp_Change = (context.Request.Form["pp_Change"] != null) ? context.Request.Form["pp_Change"].ToString() : "";
             string pp_ChangeDate = (context.Request.Form["pp_ChangeDate"] != null) ? context.Request.Form["pp_ChangeDate"].ToString() : "";
             string pp_LarboRatio = (context.Request.Form["pp_LarboRatio"] != null) ? context.Request.Form["pp_LarboRatio"].ToString() : "";
-            string pp_EmployerRatio = (context.Request.Form["pp_LarboRatio"] != null) ? context.Request.Form["pp_LarboRatio"].ToString() : "";
+            string pp_EmployerRatio = (context.Request.Form["pp_EmployerRatio"] != null) ? context.Request.Form["pp_EmployerRatio"].ToString() : "";
             string pp_PayPayroll = (context.Request.Form["pp_PayPayroll"] != null) ? context.Request.Form["pp_PayPayroll"].ToString() : "";
             string pp_Ps = (context.Request.Form["pp_Ps"] != null) ? context.Request.Form["pp_Ps"].ToString() : "";
             DataTable checkDt = new DataTable();
