@@ -7,34 +7,38 @@ using System.IO;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-public class ashx_ImportExcel : IHttpHandler {
+public class ashx_ImportExcel : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
     payroll.gdal dal = new payroll.gdal();
     Common com = new Common();
     public void ProcessRequest(HttpContext context)
     {
         try
         {
-            //context.Response.ContentType = "text/plain";
-            HttpFileCollection files = context.Request.Files;
-            HttpPostedFile file = files[0];
-
-            Stream oriexcel = file.InputStream;
-
-            string FileName = file.FileName;//原始檔名
-            string fileExtension = System.IO.Path.GetExtension(FileName);//副檔名
-            DataTable dt = readExcel(oriexcel, 0, 0, 5, fileExtension);
-
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-                dt.Rows[i]["columns2"] = DateTime.Parse(dt.Rows[i]["columns2"].ToString()).ToString("yyyy/MM/dd");
-                dt.Rows[i]["columns3"] = dt.Rows[i]["columns3"].ToString().Replace(",", "");
+                //context.Response.ContentType = "text/plain";
+                HttpFileCollection files = context.Request.Files;
+                HttpPostedFile file = files[0];
+
+                Stream oriexcel = file.InputStream;
+
+                string FileName = file.FileName;//原始檔名
+                string fileExtension = System.IO.Path.GetExtension(FileName);//副檔名
+                DataTable dt = readExcel(oriexcel, 0, 0, 5, fileExtension);
+
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    dt.Rows[i]["columns2"] = DateTime.Parse(dt.Rows[i]["columns2"].ToString()).ToString("yyyy/MM/dd");
+                    dt.Rows[i]["columns3"] = dt.Rows[i]["columns3"].ToString().Replace(",", "");
+                }
+                dal.DelsyAllowanceTemp();
+                dal.InsAllTemp(dt);
+
+
+                context.Response.Write("<script type='text/JavaScript'>parent.JsEven.feedbackFun('" + "ok" + "');</script>");
             }
-            dal.DelsyAllowanceTemp();
-            dal.InsAllTemp(dt);
-
-
-            context.Response.Write("<script type='text/JavaScript'>parent.JsEven.feedbackFun('" + "ok" + "');</script>");
+            else { context.Response.Write("<script type='text/JavaScript'>parent.JsEven.feedbackFun('" + "t" + "');</script>"); }
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.JsEven.feedbackFun('" + "e" + "');</script>"); }
     }
