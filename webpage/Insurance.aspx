@@ -718,7 +718,7 @@
                 if ($("#pl_Change").val().trim() == "")
                     msg += "請選擇異動別\n";
                 if ($("#pl_LaborPayroll").val() == "")
-                    msg += "請輸入健保投保薪資\n";
+                    msg += "請輸入勞保投保薪資\n";
 
                 if (msg != "") {
                     alert(msg);
