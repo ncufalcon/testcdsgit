@@ -578,7 +578,7 @@ public class sy_PersonChange
                 if @rowcounts>0
                     begin
                         insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
-                        select top 1 NEWID(),ppGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,'',@str_creatid,'A'
+                        select top 1 NEWID(),ppPerGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,'',@str_creatid,'A'
 	                    from sy_PersonPension 
 	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' and (ppChange='01' or ppChange='02')
 	                    order by ppChangeDate DESC,ppCreateDate DESC
