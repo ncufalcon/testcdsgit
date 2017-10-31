@@ -93,7 +93,7 @@ public partial class MasterPage_MasterPage : System.Web.UI.MasterPage
                         break;
                     case "PayrollElectronic":
                         a_PayrollMag.Visible = true;
-                        a_PayrollElectronic.Visible = true;
+                        //a_PayrollElectronic.Visible = true;
                         break;
                     case "IndividualTax":
                         a_PayrollMag.Visible = true;

@@ -45,6 +45,12 @@ public class ashx_AttendanceReport : IHttpHandler, System.Web.SessionState.IRead
                 IRow HeaderRow = sh.CreateRow(3);
                 ICell DateCell = HeaderRow.CreateCell(0);
                 ICell DateCell13 = HeaderRow.CreateCell(13);
+
+
+                XSSFCellStyle DateStyle = wk.CreateCellStyle() as XSSFCellStyle;
+                XSSFDataFormat format = wk.CreateDataFormat() as XSSFDataFormat;
+                DateStyle.DataFormat = format.GetFormat("yyyy/MM/dd");
+
                 //ICell DateCell_10 = HeaderRow.CreateCell(10);
                 XSSFCellStyle cellStyle = (XSSFCellStyle)wk.CreateCellStyle();
                 XSSFFont font = (XSSFFont)wk.CreateFont();
@@ -58,12 +64,17 @@ public class ashx_AttendanceReport : IHttpHandler, System.Web.SessionState.IRead
                     row.CreateCell(0).SetCellValue(dv[i]["cbValue"].ToString());//分店編號
                     row.CreateCell(1).SetCellValue(dv[i]["perNo"].ToString());//工號
                     row.CreateCell(2).SetCellValue(dv[i]["perName"].ToString());//姓名
+                    if (dv[i]["aAttendanceDate"].ToString() != "小計" && dv[i]["aAttendanceDate"].ToString() != "")
+                    {
+                        ICell c3 = row.CreateCell(3);
+                        c3.CellStyle = DateStyle;
+                        c3.SetCellValue(DateTime.Parse(dv[i]["aAttendanceDate"].ToString())); //日期
+                    } else
+                    { row.CreateCell(3).SetCellValue(dv[i]["aAttendanceDate"].ToString()); }//日期)
 
-                    row.CreateCell(3).SetCellValue(dv[i]["aAttendanceDate"].ToString());//日期
                     row.CreateCell(4).SetCellValue(com.toDou(dv[i]["aDays"].ToString()));//出勤天數
                     row.CreateCell(5).SetCellValue(com.toDou(dv[i]["aLeave"].ToString()));//休假天數
                     row.CreateCell(6).SetCellValue(com.toDou(dv[i]["aTimes"].ToString()));//出勤時數
-
                     row.CreateCell(7).SetCellValue(com.toDou(dv[i]["aGeneralOverTime1"].ToString()));//加班時數-1類
                     row.CreateCell(8).SetCellValue(com.toDou(dv[i]["aGeneralOverTime2"].ToString()));//加班時數-2類
                     row.CreateCell(9).SetCellValue(com.toDou(dv[i]["aGeneralOverTime3"].ToString()));//加班時數-3類

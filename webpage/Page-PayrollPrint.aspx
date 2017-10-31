@@ -138,107 +138,100 @@
         </div>
         <br />
         <div class="fixwidth ">
-                <table width="99%" border="1" cellspacing="0" cellpadding="0">
+
+        <table style="width:100%">
+            <tr><td style="text-align:center">[D003]</td><td style="text-align:center">[D002]</td><td style="text-align:center">[D001]</td><td style="text-align:center">:[D005] [D006]</td></tr>
+
+        </table>
+        <table width="99%" border="1" cellspacing="0" cellpadding="0">
         <tr>
-            <td colspan="7">應發項目</td>
-            <td colspan="2">應扣項目</td>
+            <td colspan="8" style="text-align:center">應發項目</td>
+            <td colspan="2" style="text-align:center">應扣項目</td>
         </tr>
         <tr>
-            <td>項目</td>
-            <td>時數/天數</td>
-            <td>金額</td>
-            <td>加班別</td>
-            <td>倍率</td>
-            <td>時數</td>
-            <td>金額</td>
-            <td>勞工自負額</td>
-            <td>金額</td>
+            <td style="text-align:center">項目</td>
+            <td style="text-align:center; width:10% ">時數/天數</td>
+            <td style="text-align:center; width:10%">金額</td>
+            <td style="text-align:center; width:18%" colspan="2">加班別</td>
+            <td style="text-align:center">倍率</td>
+            <td style="text-align:center">時數</td>
+            <td style="text-align:center">金額</td>
+            <td style="text-align:center">勞工自負額</td>
+            <td style="text-align:center">金額</td>
         </tr>
         <tr>
-            <td>基本薪資</td>
-            <td></td>
-            <td></td>
-            <td>平日加班1類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>代扣勞保費</td>
-            <td></td>
+            <td style="text-align:center">基本薪資</td>
+            <td style="text-align:right">[A001]</td>
+            <td style="text-align:right">[A002]</td>
+            <td style="text-align:center" colspan="2" rowspan="3">平日加班</td>         
+            <td style="text-align:right">[B001]</td>
+            <td style="text-align:right">[B002]</td>
+            <td style="text-align:right">[B003]</td>
+            <td style="text-align:center">代扣勞保費</td>
+            <td style="text-align:right">[C001]</td>
         </tr>
         <tr>
-            <td>津貼項目</td>
+            <td style="text-align:center">津貼項目</td>
             <td></td>
             <td></td>
-            <td>平日加班2類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>代扣健保費</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>平日加班3類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>代扣福利金</td>
-            <td></td>
+            <td style="text-align:right">[B004]</td>
+            <td style="text-align:right">[B005]</td>
+            <td style="text-align:right">[B006]</td>
+            <td style="text-align:center">代扣健保費</td>
+            <td style="text-align:right">[C002]</td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>休息加班1類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>勞退自提</td>
-            <td></td>
+            <td style="text-align:right">[B007]</td>
+            <td style="text-align:right">[B008]</td>
+            <td style="text-align:right">[B009]</td>
+            <td style="text-align:center">代扣福利金</td>
+            <td style="text-align:right">[C003]</td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>休息加班2類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>代扣補充保費</td>
-            <td></td>
+            <td style="text-align:center" rowspan="4">休息日加班</td>
+            <td style="width:9%">2小以內</td>
+            <td style="text-align:right">[B010]</td>
+            <td style="text-align:right">[B011]</td>
+            <td style="text-align:right">[B012]</td>
+            <td style="text-align:center">勞退自提</td>
+            <td style="text-align:right">[C004]</td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>休息加班3類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>其它津貼扣項</td>
-            <td></td>
+            <td >2~8小時</td>
+            <td style="text-align:right">[B013]</td>
+            <td style="text-align:right">[B014]</td>
+            <td style="text-align:right">[B015]</td>
+            <td style="text-align:center">代扣補充保費</td>
+            <td style="text-align:right">[C005]</td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>例假日加班1類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td >8~12小時</td>
+            <td style="text-align:right">[B016]</td>
+            <td style="text-align:right">[B017]</td>
+            <td style="text-align:right">[B018]</td>
+            <td style="text-align:center">其它津貼扣項</td>
             <td></td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>例假日加班2類</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td >12小時以上</td>
+            <td style="text-align:right">[B019]</td>
+            <td style="text-align:right">[B020]</td>
+            <td style="text-align:right">[B021]</td>
             <td></td>
             <td></td>
         </tr>
@@ -246,68 +239,83 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>例假日加班3類</td>
+            <td style="text-align:center" rowspan="4">例假/國定假日加班</td>
+            <td>8小時內</td>
+            <td style="text-align:right">[B022]</td>
+            <td style="text-align:right">[B023]</td>
+            <td style="text-align:right">[B024]</td>
+            <td></td>
+             <td></td>
+        </tr>
+        <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td >8~10小時</td>
+            <td style="text-align:right">[B025]</td>
+            <td style="text-align:right">[B026]</td>
+            <td style="text-align:right">[B027]</td>
+            <td style="text-align:right"></td>
             <td></td>
         </tr>
         <tr>
             <td></td>
             <td></td>
             <td></td>
-            <td>例假日加班4類</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>10~12小時</td>
+            <td style="text-align:right">[B028]</td>
+            <td style="text-align:right">[B029]</td>
+            <td style="text-align:right">[B030]</td>
             <td></td>
             <td></td>
         </tr>
 
         <tr>
+            <td>&nbsp;</td>
             <td></td>
             <td></td>
-            <td></td>
-            <td>國定假日加班1類</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>國定假日加班2類</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>12小時以上</td>
+            <td style="text-align:right">[B031]</td>
+            <td style="text-align:right">[B032]</td>
+            <td style="text-align:right">[B033]</td>
             <td></td>
             <td></td>
         </tr>
         <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td ></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>國定假日加班3類</td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+             <td></td>
         </tr>
         <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td ></td>
             <td></td>
             <td></td>
             <td></td>
-            <td>國定假日加班4類</td>
+            <td></td>
+            <td></td>
+             <td></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td ></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
+             <td></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -319,6 +327,7 @@
             <td></td>
             <td></td>
             <td></td>
+             <td></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -330,31 +339,28 @@
             <td></td>
             <td></td>
             <td></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td></td>
         </tr>
         <tr>
-            <td>&nbsp;</td>
+            <td>合計(A)</td>
+            <td></td>
+            <td></td>
+            <td>合計(B)</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+             <td>合計(C)</td>
+             <td></td>
         </tr>
+
     </table>
-
+        <table style="width:100%">
+            <tr><th colspan="2">個人特休假</th><th colspan="2">保險資訊</th></tr>
+            <tr><td >可請休期間</td><td>[D007]</td><td>勞保/健保投保級距</td><td>[D010]/[D011]</td></tr>
+            <tr><td >可休日數</td><td>[D008]</td><td>勞退提撥工資/%</td><td>:[D011]</td></tr>
+            <tr><td >已休日數</td><td>[D009]</td><td>提撥金額</td><td></td></tr>
+        </table>
         </div>
 
 
@@ -398,31 +404,42 @@
                                 加項1金額合計:[A004]<br />
                              </td>
                              <td>
-                                平日加班1類時數:[B003]<br />
-                                平日加班1類金額:[B004]<br />  
+                                平日加班1類倍率:[B001]<br />
+                                平日加班1類時數:[B002]<br />
+                                平日加班1類金額:[B003]<br />  
+                                平日加班2類倍率:[B004]<br />
                                 平日加班2類時數:[B005]<br />  
-                                平日加班2類金額:[B006]<br />  
-                                平日加班3類時數:[B007]<br />  
-                                平日加班3類金額:[B008]<br />  
-                                休息加班1類時數:[B009]<br />  
-                                休息加班1類金額:[B010]<br />  
-                                休息加班2類時數:[B011]<br />  
-                                休息加班2類金額:[B012]<br />                                   
-                                休息加班3類時數:[B013]<br />  
-                                休息加班3類金額:[B014]<br />   
-                                例假日加班1類時數:[B015]<br />  
-                                例假日加班1類金額:[B016]<br />  
-                                例假日加班2類時數:[B017]<br />  
-                                例假日加班2類金額:[B018]<br />                                   
-                                例假日加班3類時數:[B019]<br />  
-                                例假日加班3類金額:[B020]<br /> 
-                                國定假日加班1類時數:[B021]<br />  
-                                國定假日加班1類金額:[B022]<br />  
-                                國定假日加班2類時數:[B023]<br />  
-                                國定假日加班2類金額:[B024]<br />                                   
-                                國定假日加班3類時數:[B025]<br />  
-                                國定假日加班3類金額:[B026]<br /> 
-                                加項2金額合計:[B027]<br /> 
+                                平日加班2類金額:[B006]<br />
+                                平日加班3類倍率:[B007]<br />
+                                平日加班3類時數:[B008]<br />  
+                                平日加班3類金額:[B009]<br /> 
+                                  
+                                休息加班1類倍率:[B010]<br />
+                                休息加班1類時數:[B011]<br />  
+                                休息加班1類金額:[B012]<br />  
+                                休息加班2類倍率:[B013]<br />
+                                休息加班2類時數:[B014]<br />  
+                                休息加班2類金額:[B015]<br />
+                                休息加班3類倍率:[B016]<br />                                    
+                                休息加班3類時數:[B017]<br />  
+                                休息加班3類金額:[B018]<br /> 
+                                休息加班4類倍率:[B019]<br />                                    
+                                休息加班4類時數:[B020]<br />  
+                                休息加班4類金額:[B021]<br /> 
+
+                                例假日/國定加班1類倍率:[B022]<br />   
+                                例假日/國定加班1類時數:[B023]<br />                                   
+                                例假日/國定加班1類金額:[B024]<br />
+                                例假日/國定加班2類倍數:[B025]<br />                                    
+                                例假日/國定加班2類時數:[B026]<br />  
+                                例假日/國定加班2類金額:[B027]<br />
+                                例假日/國定加班3類倍數:[B028]<br />                                    
+                                例假日/國定加班3類時數:[B029]<br />  
+                                例假日/國定加班3類金額:[B030]<br />
+                                例假日/國定加班4類倍數:[B031]<br />                                    
+                                例假日/國定加班4類時數:[B032]<br />  
+                                例假日/國定加班4類金額:[B033]<br />                                                  
+                                加項2金額合計:[B034]<br /> 
                              </td>
                              <td>
                                  代扣健保費:[C001]<br />  
@@ -443,9 +460,11 @@
                                  可請休期間:[D007]<br />                                 
                                  可休日數:[D008]<br />
                                  以休日數:[D009]<br />
-                                 勞保/健保投保級距:[D010]<br />
-                                 勞退提撥工資:[D011]<br />
-                                 提撥金額:[D012]<br />
+                                 勞保投保級距:[D010]<br />
+                                 健保投保級距:[D011]<br />
+                                 勞退提撥工資:[D012]<br />
+                                 勞退提撥率:[D013]<br />
+                                 提撥金額:[D014]<br />
                              </td>
                          </tr>
                      </table>

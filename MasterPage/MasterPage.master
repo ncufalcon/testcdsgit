@@ -66,7 +66,7 @@
             <li><a id="a_Saveto" runat="server" href="~/webpage/page-Saveto.aspx" target='_self' title="薪資轉存花旗媒體產生" visible="false">薪資轉存花旗媒體產生</a></li>
             <li><a id="a_PayrollPrint" runat="server" href="~/webpage/Page-PayrollPrint.aspx" target='_self' title="保密薪資條列印" visible="false">保密薪資條列印</a></li>
             <li><a id="a_PayrollList" runat="server" href="~/webpage/Page-PayrollList.aspx" target='_self' title="薪資冊" visible="false">薪資冊</a></li>
-            <li><a id="a_PayrollElectronic" runat="server" href="~/webpage/Page-PayrollElectronic.aspx" target='_self' title="電子薪資條" visible="false">電子薪資條</a></li>
+            <%--<li><a id="a_PayrollElectronic" runat="server" href="~/webpage/Page-PayrollElectronic.aspx" target='_self' title="電子薪資條" visible="false">電子薪資條</a></li>--%>
             <li><a id="a_IndividualTax" runat="server" href="~/webpage/page-IndividualTax.aspx" target='_self' title="申報所得稅" visible="false">申報所得稅</a></li>
         </ul>
     </li>
