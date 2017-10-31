@@ -68,6 +68,10 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 11, dt.Rows[i - 2]["plLaborPayroll"].ToString());
                                                 Xls.SetCellValue(i, 12, dt.Rows[i - 2]["piInsurancePayroll"].ToString());
                                                 Xls.SetCellValue(i, 20, "1");
+                                                string ColX = (double.Parse(dt.Rows[i - 2]["ppEmployerRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
+                                                Xls.SetCellValue(i, 24, ColX);
+                                                string ColY = (double.Parse(dt.Rows[i - 2]["ppLarboRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
+                                                Xls.SetCellValue(i, 25, ColY);
                                             }
                                             else
                                             {
@@ -97,10 +101,6 @@ public class InsuranceExport : IHttpHandler {
                                             Xls.SetCellValue(i, 19, "1");
                                             Xls.SetCellValue(i, 21, ROC_Date(dt.Rows[i - 2]["ChangeDate"].ToString()));
                                             Xls.SetCellValue(i, 23, dt.Rows[i - 2]["perPensionIdentity"].ToString());
-                                            string ColX = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString());
-                                            Xls.SetCellValue(i, 24, ColX);
-                                            string ColY = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString());
-                                            Xls.SetCellValue(i, 25, ColY);
                                             if (dt.Rows[i - 2]["ppChangeDate"].ToString() != dt.Rows[i - 2]["plChangeDate"].ToString())
                                                 Xls.SetCellValue(i, 26, ROC_Date(dt.Rows[i - 2]["ppChangeDate"].ToString()));
                                         }
@@ -247,9 +247,9 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 11, "0");
                                             Xls.SetCellValue(i, 12, "1");
                                             Xls.SetCellValue(i, 14, dt.Rows[i - 2]["perPensionIdentity"].ToString());
-                                            string ColO = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString());
+                                            string ColO = (double.Parse(dt.Rows[i - 2]["ppEmployerRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
                                             Xls.SetCellValue(i, 15, ColO);
-                                            string ColP = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "0" ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString());
+                                            string ColP = (double.Parse(dt.Rows[i - 2]["ppLarboRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
                                             Xls.SetCellValue(i, 16, ColP);
                                             if (dt.Rows[i - 2]["ppChangeDate"].ToString() != dt.Rows[i - 2]["plChangeDate"].ToString())
                                                 Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["ppChangeDate"].ToString()));
