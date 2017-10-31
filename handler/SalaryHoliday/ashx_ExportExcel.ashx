@@ -46,6 +46,10 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
                 XSSFDataFormat format = wk.CreateDataFormat() as XSSFDataFormat;
                 intStyle.DataFormat = format.GetFormat("0.0");
 
+                XSSFCellStyle intStyle2 = wk.CreateCellStyle() as XSSFCellStyle;
+                XSSFDataFormat format2 = wk.CreateDataFormat() as XSSFDataFormat;
+                intStyle2.DataFormat = format2.GetFormat("0.00");
+
                 XSSFCellStyle pStyle = wk.CreateCellStyle() as XSSFCellStyle;
                 XSSFDataFormat pformat = wk.CreateDataFormat() as XSSFDataFormat;
                 pStyle.DataFormat = format.GetFormat("0.0%");
@@ -133,7 +137,7 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
 
                         ICell c10 = row.CreateCell(10);
                         c10.CellStyle = intStyle;
-                        c10.SetCellValue(com.toDou(dv[i]["Duration5"].ToString()));//普通病假
+                        c10.SetCellValue(double.Parse(dv[i]["Duration5"].ToString()));//普通病假
 
                         ICell c11 = row.CreateCell(11);
                         c11.CellStyle = intStyle;
@@ -170,7 +174,11 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
                         row.CreateCell(19).SetCellValue(com.toDou(dv[i]["pAnnualLeaveSalary"].ToString()));//特休假代金
 
                         row.CreateCell(20).SetCellValue(com.toDou(dv[i]["perSalary"].ToString()));//時薪
-                        row.CreateCell(21).SetCellValue(com.toDou(dv[i]["pP1Time"].ToString()));//P1工時
+
+                        ICell c21 = row.CreateCell(21);
+                        c21.CellStyle = intStyle2;
+                        c21.SetCellValue(double.Parse(dv[i]["pP1Time"].ToString()));//特休假工時比例
+                        //row.CreateCell(21).SetCellValue(double.Parse(dv[i]["pP1Time"].ToString()));//P1工時
                         row.CreateCell(22).SetCellValue(com.toDou(dv[i]["pSickLeaveSalary"].ToString()));//病假薪資
                         row.CreateCell(23).SetCellValue(com.toDou(dv[i]["pMarriageLeaveSalary"].ToString()));//婚假薪資
                         row.CreateCell(24).SetCellValue(com.toDou(dv[i]["pFuneralLeaveSalary"].ToString()));//喪假薪資

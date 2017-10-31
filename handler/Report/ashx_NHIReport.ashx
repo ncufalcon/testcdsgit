@@ -44,7 +44,7 @@ public class ashx_NHIReport : IHttpHandler, System.Web.SessionState.IReadOnlySes
 
                 IRow HeaderRow = sh.CreateRow(3);
                 ICell DateCell = HeaderRow.CreateCell(0);
-                //ICell DateCell_10 = HeaderRow.CreateCell(10);
+                ICell DateCell_10 = HeaderRow.CreateCell(5);
                 XSSFCellStyle cellStyle = (XSSFCellStyle)wk.CreateCellStyle();
                 XSSFFont font = (XSSFFont)wk.CreateFont();
 
@@ -53,7 +53,7 @@ public class ashx_NHIReport : IHttpHandler, System.Web.SessionState.IReadOnlySes
                 //font.Color = NPOI.HSSF.Util.HSSFColor.Red.Index;
                 //cellStyle.SetFont(font);
                 DateCell.SetCellValue("製表日期:" + DateTime.Now.ToString("yyyy/MM/dd"));
-                //DateCell_10.SetCellValue("核對年月:2017/08:" + DateTime.Now.ToString("yyyy/MM/dd"));
+                DateCell_10.SetCellValue("核對年月:" + DateTime.Parse(SalaryDate).ToString("yyyy/MM"));
                  int rowNumber = 4; //從第幾row開始塞資料
                 int cellN = 0 + rowNumber;
                 for (int i = 0; i < dv.Count; i++)
@@ -73,12 +73,12 @@ public class ashx_NHIReport : IHttpHandler, System.Web.SessionState.IReadOnlySes
                     pfModel.psfiPerGuid = dv[i]["pPerGuid"].ToString();
                         pfModel.srGuid = srGuid;
                     DataView fdv = dal.Sel_sy_PaySalaryFamilyInsurance(pfModel).DefaultView;
-                    row.CreateCell(5).SetCellValue(com.toDou((fdv.Count + 1).ToString()));//眷保人數
+                    row.CreateCell(5).SetCellValue(com.toDou((fdv.Count).ToString()));//眷保人數
                     for (int j = 0; j < fdv.Count; j++)
                     {
                         cellN += 1;
                         IRow rowf = sh.CreateRow(cellN);
-
+                        rowf.CreateCell(1).SetCellValue(dv[i]["pPerNo"].ToString());//工號
                         rowf.CreateCell(8).SetCellValue(fdv[j]["psfiName"].ToString());//眷屬姓名
                         rowf.CreateCell(9).SetCellValue(fdv[j]["psfiIDNumber"].ToString());//眷屬身分證
                         rowf.CreateCell(10).SetCellValue(fdv[j]["psfibirthday"].ToString());//出生年月日
