@@ -68,9 +68,11 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 11, dt.Rows[i - 2]["plLaborPayroll"].ToString());
                                                 Xls.SetCellValue(i, 12, dt.Rows[i - 2]["piInsurancePayroll"].ToString());
                                                 Xls.SetCellValue(i, 20, "1");
-                                                string ColX = (double.Parse(dt.Rows[i - 2]["ppEmployerRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
+                                                string ColX = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "") ? "0" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
+                                                ColX = (double.Parse(ColX) == 0) ? "" : ColX;
                                                 Xls.SetCellValue(i, 24, ColX);
-                                                string ColY = (double.Parse(dt.Rows[i - 2]["ppLarboRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
+                                                string ColY = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "") ? "0" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
+                                                ColY = (double.Parse(ColY) == 0) ? "" : ColY;
                                                 Xls.SetCellValue(i, 25, ColY);
                                             }
                                             else
@@ -167,7 +169,7 @@ public class InsuranceExport : IHttpHandler {
                                 {
                                     Xls.Open(fileSpec);
                                     FileName += ToDate + "保薪調整三合一";
-                                    DataSet ds31 = LH_Db.LH_3in1_mod(itemGv,category);
+                                    DataSet ds31 = LH_Db.LH_3in1_mod(itemGv, category);
                                     dt = ds31.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -247,9 +249,11 @@ public class InsuranceExport : IHttpHandler {
                                                 Xls.SetCellValue(i, 11, "0");
                                             Xls.SetCellValue(i, 12, "1");
                                             Xls.SetCellValue(i, 14, dt.Rows[i - 2]["perPensionIdentity"].ToString());
-                                            string ColO = (double.Parse(dt.Rows[i - 2]["ppEmployerRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
+                                            string ColO = (dt.Rows[i - 2]["ppEmployerRatio"].ToString() == "") ? "0" : dt.Rows[i - 2]["ppEmployerRatio"].ToString();
+                                            ColO = (double.Parse(ColO) == 0) ? "" : ColO;
                                             Xls.SetCellValue(i, 15, ColO);
-                                            string ColP = (double.Parse(dt.Rows[i - 2]["ppLarboRatio"].ToString())) == 0 ? "" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
+                                            string ColP = (dt.Rows[i - 2]["ppLarboRatio"].ToString() == "") ? "0" : dt.Rows[i - 2]["ppLarboRatio"].ToString();
+                                            ColP = (double.Parse(ColP) == 0) ? "" : ColP;
                                             Xls.SetCellValue(i, 16, ColP);
                                             if (dt.Rows[i - 2]["ppChangeDate"].ToString() != dt.Rows[i - 2]["plChangeDate"].ToString())
                                                 Xls.SetCellValue(i, 17, ROC_Date(dt.Rows[i - 2]["ppChangeDate"].ToString()));
@@ -302,7 +306,7 @@ public class InsuranceExport : IHttpHandler {
                                 {
                                     Xls.Open(fileSpec);
                                     FileName += ToDate + "保薪調整二合一";
-                                    DataSet ds21 = LH_Db.LH_3in1_mod(itemGv,category);
+                                    DataSet ds21 = LH_Db.LH_3in1_mod(itemGv, category);
                                     dt = ds21.Tables[0];
                                     TXlsCellRange myRange = new TXlsCellRange("A2:Z2");
                                     if (dt.Rows.Count > 0)
@@ -622,7 +626,10 @@ public class InsuranceExport : IHttpHandler {
             Xls.Save(System.IO.Path.Combine(ConfigurationManager.AppSettings["UploadFileRootDir"], FileName + ".xls"));
             context.Response.Write("success," + FileName + ".xls");
         }
-        catch (Exception ex) { context.Response.Write("error," + context.Server.UrlEncode(ex.Message).Replace("+", " ")); }
+        catch (Exception ex)
+        {
+            context.Response.Write("error," + context.Server.UrlEncode(ex.Message).Replace("+", " "));
+        }
     }
 
     private string ROC_Date(string dateStr)
