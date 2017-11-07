@@ -338,42 +338,42 @@ namespace payroll
                 }
 
 
-                    //insert 資料
-                    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+                //insert 資料
+                sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
                             select columns0,columns2,columns3,columns4 from #temp ";
 
-                    cmd.CommandText = sql;
-                    cmd.ExecuteNonQuery();
+                cmd.CommandText = sql;
+                cmd.ExecuteNonQuery();
 
 
-                    //cmd.Connection = Sqlconn;
-                    //cmd.Connection.Open();
-                    //SqlTransaction transaction;
-                    //transaction = cmd.Connection.BeginTransaction();
-                    //cmd.Transaction = transaction;
+                //cmd.Connection = Sqlconn;
+                //cmd.Connection.Open();
+                //SqlTransaction transaction;
+                //transaction = cmd.Connection.BeginTransaction();
+                //cmd.Transaction = transaction;
 
-                    //string sql = @"";
+                //string sql = @"";
 
-                    ////新增Jumper
-                    //for (int i = 0; i < dt.Rows.Count; i++)
-                    //{
+                ////新增Jumper
+                //for (int i = 0; i < dt.Rows.Count; i++)
+                //{
 
-                    //    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
-                    //            values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
-
-
-                    //    cmd.CommandText = sql;
-                    //    cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
-                    //    cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
-                    //    cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
-                    //    cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
-                    //    cmd.ExecuteNonQuery();
-                    //}
+                //    sql = @"insert into sy_AllowanceTemp(atPerNo,atDate,atItem,atCost) 
+                //            values(@atPerNo" + i + ",@atDate" + i + ",@atItem" + i + ",@atCost" + i + ")";
 
 
-                    ////cmd.ExecuteNonQuery();
-                    transaction.Commit();
-                }
+                //    cmd.CommandText = sql;
+                //    cmd.Parameters.AddWithValue("@atPerNo" + i, dt.Rows[i]["員工編號"].ToString());
+                //    cmd.Parameters.AddWithValue("@atDate" + i, dt.Rows[i]["日期(YYYYMMDD)"].ToString());
+                //    cmd.Parameters.AddWithValue("@atItem" + i, dt.Rows[i]["津貼項目"].ToString());
+                //    cmd.Parameters.AddWithValue("@atCost" + i, dt.Rows[i]["金額"].ToString());
+                //    cmd.ExecuteNonQuery();
+                //}
+
+
+                ////cmd.ExecuteNonQuery();
+                transaction.Commit();
+            }
             catch (Exception ex) { throw ex; }
             finally { cmd.Connection.Close(); cmd.Dispose(); }
         }
@@ -782,7 +782,7 @@ namespace payroll
         /// <param name="Region"></param>
         /// <param name="Dep"></param>
         /// <returns></returns>
-        public void GenRayroll(string rGuid,string UserInfo)
+        public void GenRayroll(string rGuid, string UserInfo)
         {
             string sql = @"pr_GenPayroll";
 
@@ -1200,7 +1200,7 @@ namespace payroll
 
 
         /// <summary>
-        /// 發薪紀錄-法扣
+        /// 查詢保密薪資條範本
         /// </summary>
         public DataTable Selsy_PaySalaryPrint()
         {
@@ -1220,6 +1220,12 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
 
         }
+
+
+
+
+
+
 
 
 
@@ -1370,9 +1376,9 @@ namespace payroll
             cmd.Parameters.AddWithValue("@iitStock", p.iitStock);
             cmd.Parameters.AddWithValue("@iitIdentify", p.iitIdentify);
             cmd.Parameters.AddWithValue("@iitErrMark", p.iitErrMark);
-            cmd.Parameters.AddWithValue("@iitHouseTax", p.iitHouseTax)                ;
+            cmd.Parameters.AddWithValue("@iitHouseTax", p.iitHouseTax);
             cmd.Parameters.AddWithValue("@iitIndustryCode", p.iitIndustryCode);
-            cmd.Parameters.AddWithValue("@iitCode", p.iitCode);       
+            cmd.Parameters.AddWithValue("@iitCode", p.iitCode);
 
             try
             {
@@ -1619,7 +1625,7 @@ namespace payroll
 
 
                 DataTable dt = new DataTable();
-                new SqlDataAdapter(cmd).Fill(dt);        
+                new SqlDataAdapter(cmd).Fill(dt);
                 cmd.ExecuteNonQuery();
                 transaction.Commit();
                 return dt;
@@ -1649,6 +1655,36 @@ namespace payroll
                 DataTable dt = new DataTable();
                 new SqlDataAdapter(cmd).Fill(dt);
                 return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+        /// <summary>
+        /// 修改薪資條範本
+        /// </summary>
+        public void Upsy_SalaryPrint(string pspContent, string pspModdifyId, string pspGuid)
+        {
+            string sql = @"update sy_PaySalaryPrint set                                                               
+                                  pspContent=@pspContent
+                                  ,pspModdifyId=@pspModdifyId 
+                                  ,pspModdifyDate=@pspModdifyDate 
+                                  where pspGuid=@pspGuid";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pspContent", pspContent);
+            cmd.Parameters.AddWithValue("@pspModdifyId", pspModdifyId);
+            cmd.Parameters.AddWithValue("@pspModdifyDate", DateTime.Now);
+            cmd.Parameters.AddWithValue("@pspGuid", pspGuid);
+
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
             }
             catch (Exception ex) { throw ex; }
             finally { cmd.Connection.Close(); cmd.Dispose(); }
