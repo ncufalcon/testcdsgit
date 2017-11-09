@@ -7,6 +7,7 @@ using System.Data;
 
 public class addPension : IHttpHandler,IRequiresSessionState {
     PersonPension_DB PP_Db = new PersonPension_DB();
+    Personnel_DB Personnel_Db = new Personnel_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -26,8 +27,20 @@ public class addPension : IHttpHandler,IRequiresSessionState {
             string pp_EmployerRatio = (context.Request.Form["pp_EmployerRatio"] != null) ? context.Request.Form["pp_EmployerRatio"].ToString() : "";
             string pp_PayPayroll = (context.Request.Form["pp_PayPayroll"] != null) ? context.Request.Form["pp_PayPayroll"].ToString() : "";
             string pp_Ps = (context.Request.Form["pp_Ps"] != null) ? context.Request.Form["pp_Ps"].ToString() : "";
-            DataTable checkDt = new DataTable();
 
+            //檢查挑選人員是否為離職人員
+            DataTable dtCheckLast = new DataTable();
+            Personnel_Db._perGuid = pp_No;
+            dtCheckLast = Personnel_Db.getPersonByGuid();
+            if (dtCheckLast.Rows.Count>0) {
+                if (dtCheckLast.Rows[0]["perLastDate"] != null && dtCheckLast.Rows[0]["perLastDate"].ToString().Trim()!="") {
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已離職');</script>");
+                    return;
+                }
+            }
+            //檢查離職END
+
+            DataTable checkDt = new DataTable();
             switch (Mode)
             {
                 case "New":
