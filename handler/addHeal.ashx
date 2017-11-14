@@ -28,8 +28,20 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
             string pi_DropOutReason = (context.Request.Form["pi_DropOutReason"] != null) ? context.Request.Form["pi_DropOutReason"].ToString() : "";
             string pi_InsurancePayroll = (context.Request.Form["pi_InsurancePayroll"] != null) ? context.Request.Form["pi_InsurancePayroll"].ToString() : "";
             string pi_Ps = (context.Request.Form["pi_Ps"] != null) ? context.Request.Form["pi_Ps"].ToString() : "";
-            DataTable checkDt = new DataTable();
 
+            //檢查挑選人員是否為離職人員
+            DataTable dtCheckLast = new DataTable();
+            Personnel_Db._perGuid = pi_No;
+            dtCheckLast = Personnel_Db.getPersonByGuid();
+            if (dtCheckLast.Rows.Count>0) {
+                if (dtCheckLast.Rows[0]["perLastDate"] != null && dtCheckLast.Rows[0]["perLastDate"].ToString().Trim()!="") {
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已離職');</script>");
+                    return;
+                }
+            }
+            //檢查離職END
+
+            DataTable checkDt = new DataTable();
             switch (Mode)
             {
                 case "New":
@@ -56,8 +68,8 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                             {
                                 if (checkDt.Rows[0]["piChange"].ToString() == "02" || checkDt.Rows[0]["piChange"].ToString() == "04" || checkDt.Rows[0]["piChange"].ToString() == "07")
                                 {
-                                    DataTable dt=  Code_Db.getCodeCn("12", checkDt.Rows[0]["piChange"].ToString());
-                                    if(dt.Rows.Count>0)
+                                    DataTable dt = Code_Db.getCodeCn("12", checkDt.Rows[0]["piChange"].ToString());
+                                    if (dt.Rows.Count > 0)
                                         context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已" + dt.Rows[0]["code_desc"].ToString() + "');</script>");
                                     return;
                                 }
@@ -69,8 +81,8 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                             {
                                 if (checkDt.Rows[0]["piChange"].ToString() == "02" || checkDt.Rows[0]["piChange"].ToString() == "04" || checkDt.Rows[0]["piChange"].ToString() == "06" || checkDt.Rows[0]["piChange"].ToString() == "07")
                                 {
-                                    DataTable dt=  Code_Db.getCodeCn("12", checkDt.Rows[0]["piChange"].ToString());
-                                    if(dt.Rows.Count>0)
+                                    DataTable dt = Code_Db.getCodeCn("12", checkDt.Rows[0]["piChange"].ToString());
+                                    if (dt.Rows.Count > 0)
                                         context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已" + dt.Rows[0]["code_desc"].ToString() + "');</script>");
                                     return;
                                 }
