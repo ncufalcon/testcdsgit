@@ -1666,19 +1666,17 @@ namespace payroll
         /// <summary>
         /// 修改薪資條範本
         /// </summary>
-        public void Upsy_SalaryPrint(string pspContent, string pspModdifyId, string pspGuid)
+        public void Upsy_SalaryPrint(string pspContent, string pspModdifyId)
         {
             string sql = @"update sy_PaySalaryPrint set                                                               
                                   pspContent=@pspContent
                                   ,pspModdifyId=@pspModdifyId 
-                                  ,pspModdifyDate=@pspModdifyDate 
-                                  where pspGuid=@pspGuid";
+                                  ,pspModdifyDate=@pspModdifyDate";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@pspContent", pspContent);
             cmd.Parameters.AddWithValue("@pspModdifyId", pspModdifyId);
             cmd.Parameters.AddWithValue("@pspModdifyDate", DateTime.Now);
-            cmd.Parameters.AddWithValue("@pspGuid", pspGuid);
 
             try
             {

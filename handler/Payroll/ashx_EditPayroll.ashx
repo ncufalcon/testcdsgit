@@ -13,9 +13,8 @@ public class ashx_EditPayroll : IHttpHandler, System.Web.SessionState.IReadOnlyS
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-                string pspGuid = (!string.IsNullOrEmpty(context.Request.Form["pspGuid"])) ? context.Request.Form["pspGuid"].ToString() : "";
                 string pspContent = (!string.IsNullOrEmpty(context.Request.Form["pspContent"])) ? context.Request.Form["pspContent"].ToString() : "";
-                dal.Upsy_SalaryPrint(pspContent,USERINFO.MemberGuid,pspGuid);
+                dal.Upsy_SalaryPrint(pspContent,USERINFO.MemberGuid);
                 context.Response.Write("ok");
 
             }

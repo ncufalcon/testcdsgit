@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" ValidateRequest="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
@@ -38,22 +38,7 @@
 </script>
 
 
-
-<%--    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#div_design').fancybox({
-                minHeight: "400",
-                closeClick: false,
-                openEffect: 'elastic',
-                closeEffect: 'elastic',
-                beforeShow: function () { tinymce.execCommand('mceToggleEditor', false, 'fbwysiwyg'); },
-                beforeClose: function () { tinyMCE.execCommand('mceRemoveControl', false, 'fbwysiwyg'); }
- 
-            });
-        });
-     </script>--%>
-
-            <script type="text/javascript">
+    <script type="text/javascript">
         //確認公司&部門
             $(document).on("change", "#txt_CompanyNo,#txt_Dep", function () {
                 if (this.id == "txt_CompanyNo") type = "Company"
@@ -77,7 +62,7 @@
                 <div class="right">
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >列印</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >預覽</a>
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.opDiv()" >設計憑證</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.List()" >設計憑證</a>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -101,50 +86,31 @@
                             </table>                                 
                             </td>
                           </tr>   
-                        <tr>
+<%--                        <tr>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出應發金額為零</div></td>
                             <td><input type="checkbox" id="chk_ShouldPay" /></td>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出已離職</div></td>
                             <td><input type="checkbox" id="chk_Leave" /></td>
+                        </tr>--%>
+                        <tr>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">員工編號</div></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerNo" /></td>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">姓名</div></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerName" /></td>
                         </tr>
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" name="txt_CompanyNo"/>
-                                <img src="../images/btn-search.gif" id="img_Company" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_CName"></span>
-                                <input id="hid_CGuid" type="hidden" />                     
-                            </td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" /></td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
-                            <td class="width20">
-                                <input type="text" class="inputex" id="txt_Dep" name="txt_Dep"/>
-                                <img src="../images/btn-search.gif" id="img_Dep" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_DepName"></span>
-                                <input id="hid_DepGuid" type="hidden" />                 
-                            </td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_Dep" /></td>
                         </tr>
-
-<%--                        <tr>
-                            <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
-                            <td  colspan="3">
-                                <img id="mPersonBox" src="../images/btn-search.gif" onclick="JsEven.openMutiBox(this)" style="cursor: pointer;" />
-                                <br />
-                                
-                            </td>
-                        </tr>--%>
                     </table>
                 </div>
             </div>
         </div>
         </div>
         <br />
-        <div class="fixwidth ">
-
- 
-         
- 
-
-
-
+        <div class="fixwidth ">    
         <table style="width:100%">
             <tr><td style="text-align:center">[D003]</td><td style="text-align:center">[D002]</td><td style="text-align:center">[D001]</td><td style="text-align:center">:[D005] [D006]</td></tr>
 
@@ -343,25 +309,22 @@
 
 
 
-        <div id="div_Edit">
+        <div id="div_Edit" style="display:none">
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >儲存</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit()" >儲存</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >取消</a>
 
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
         </div>
-        <div id="div_design" class="fixwidth ">
+        <div id="div_design" class="fixwidth " >
             <table style="height:500px" >
                 <tr>
                     <td>
-                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  >
-     
-                        </textarea>
-     
+                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  ></textarea>     
                     </td>
                 </tr>
                 <tr>
@@ -481,6 +444,8 @@
             Id: {
                 hid_pspGuid: 'hid_pspGuid',
                 tex_designContent: 'tex_designContent',
+                div_List: 'div_List',
+                div_Edit: 'div_Edit',
             },
 
             List: function () {
@@ -490,7 +455,7 @@
                     url: '../handler/Payroll/ashx_SelPayrollPrint.ashx',
                     v: '',
                     type: 'html',
-                    success: function (xmldoc) {
+                    success: function (msg) {
 
                         switch (msg) {
                             case "DangerWord":
@@ -504,11 +469,9 @@
                                 alert('資料發生錯誤，請聯絡管理者');
                                 break;
                             default:
-
-
-                                document.getElementById(JsEven.Id.div_Search).style.display = "none";
-                                document.getElementById(JsEven.Id.div_Data).style.display = "block";
-                                $("#" + JsEven.Id.div_MList).tableHeadFixer();
+                                document.getElementById(JsEven.Id.div_List).style.display = "none";
+                                document.getElementById(JsEven.Id.div_Edit).style.display = "block";
+                                tinyMCE.get(JsEven.Id.tex_designContent).setContent(msg);
                                 break;
                         }
                         $.unblockUI();
@@ -516,6 +479,50 @@
                 }
                 CmFmCommon.ajax(opt);
             },
+
+            Edit: function () {
+
+                var contetn = tinyMCE.get(this.Id.tex_designContent).getContent();
+
+                if (contetn == "") { alert('內容不可為空'); return false; }
+                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                $.ajax({
+                    type: "POST",
+                    url: '../handler/Payroll/ashx_EditPayroll.ashx',
+                    data: 'pspContent=' + encodeURIComponent(contetn),
+                    dataType: 'text',  //xml, json, script, text, html
+                    success: function (msg) {
+                        switch (msg) {
+                            case "ok":
+                                alert('儲存成功'); 
+                                break;
+                            case "e":
+                                alert('程式發生錯誤，請聯絡相關管理人員');
+                                break;
+                            case "t":
+                                alert('登入逾時');
+                                CommonEven.goLogin();
+                                break;
+                            case "d":
+                                CommandEven.goErrorPage();
+                                break;
+                        }
+                        $.unblockUI();
+                    },
+                    error: function (xhr, statusText) {
+                        //alert(xhr.status);
+                        $.unblockUI();
+                        alert('資料發生錯誤');
+
+                    }
+                });
+            },
+
+            cancel: function () {
+                document.getElementById(JsEven.Id.div_List).style.display = "block";
+                document.getElementById(JsEven.Id.div_Edit).style.display = "none";
+            }
+
 
         }
 

@@ -7,7 +7,7 @@
             <div class="WrapperMain">
         <div class="fixwidth">
             <div class="twocol underlineT1 margin10TB">
-                <div class="left font-light">首頁 / 統計查詢 /<span class="font-black font-bold">員工特休統計表</span></div>
+                <div class="left font-light">首頁 / 統計查詢 /<span class="font-black font-bold">員工出勤明細表</span></div>
             </div>
 
         </div>
