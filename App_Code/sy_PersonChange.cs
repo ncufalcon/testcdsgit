@@ -541,7 +541,7 @@ public class sy_PersonChange
                         insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
 	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,'',@str_creatid,'A'
 	                    from sy_PersonLabor 
-	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='02')
+	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='03')
 	                    order by plChangeDate DESC,plCreateDate DESC
                     end
 
