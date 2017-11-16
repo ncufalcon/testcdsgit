@@ -26,8 +26,20 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
             string pl_Change = (context.Request.Form["pl_Change"] != null) ? context.Request.Form["pl_Change"].ToString() : "";
             string pl_LaborPayroll = (context.Request.Form["pl_LaborPayroll"] != null) ? context.Request.Form["pl_LaborPayroll"].ToString() : "";
             string pl_Ps = (context.Request.Form["pl_Ps"] != null) ? context.Request.Form["pl_Ps"].ToString() : "";
-            DataTable checkDt = new DataTable();
 
+            //檢查挑選人員是否為離職人員
+            DataTable dtCheckLast = new DataTable();
+            Personnel_Db._perGuid = pl_No;
+            dtCheckLast = Personnel_Db.getPersonByGuid();
+            if (dtCheckLast.Rows.Count>0) {
+                if (dtCheckLast.Rows[0]["perLastDate"] != null && dtCheckLast.Rows[0]["perLastDate"].ToString().Trim()!="") {
+                    context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('MsgStr','訊息：該員工已離職');</script>");
+                    return;
+                }
+            }
+            //檢查離職END
+
+            DataTable checkDt = new DataTable();
             switch (Mode)
             {
                 case "New":

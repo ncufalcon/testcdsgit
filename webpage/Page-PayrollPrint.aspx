@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" ValidateRequest="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
@@ -38,22 +38,7 @@
 </script>
 
 
-
-<%--    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#div_design').fancybox({
-                minHeight: "400",
-                closeClick: false,
-                openEffect: 'elastic',
-                closeEffect: 'elastic',
-                beforeShow: function () { tinymce.execCommand('mceToggleEditor', false, 'fbwysiwyg'); },
-                beforeClose: function () { tinyMCE.execCommand('mceRemoveControl', false, 'fbwysiwyg'); }
- 
-            });
-        });
-     </script>--%>
-
-            <script type="text/javascript">
+    <script type="text/javascript">
         //確認公司&部門
             $(document).on("change", "#txt_CompanyNo,#txt_Dep", function () {
                 if (this.id == "txt_CompanyNo") type = "Company"
@@ -77,7 +62,7 @@
                 <div class="right">
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >列印</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >預覽</a>
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.opDiv()" >設計憑證</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.List()" >設計憑證</a>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -101,44 +86,31 @@
                             </table>                                 
                             </td>
                           </tr>   
-                        <tr>
+<%--                        <tr>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出應發金額為零</div></td>
                             <td><input type="checkbox" id="chk_ShouldPay" /></td>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出已離職</div></td>
                             <td><input type="checkbox" id="chk_Leave" /></td>
+                        </tr>--%>
+                        <tr>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">員工編號</div></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerNo" /></td>
+                            <td class="width13" align="right"><div class="font-title titlebackicon">姓名</div></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerName" /></td>
                         </tr>
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" name="txt_CompanyNo"/>
-                                <img src="../images/btn-search.gif" id="img_Company" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_CName"></span>
-                                <input id="hid_CGuid" type="hidden" />                     
-                            </td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" /></td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
-                            <td class="width20">
-                                <input type="text" class="inputex" id="txt_Dep" name="txt_Dep"/>
-                                <img src="../images/btn-search.gif" id="img_Dep" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                <span id="sp_DepName"></span>
-                                <input id="hid_DepGuid" type="hidden" />                 
-                            </td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_Dep" /></td>
                         </tr>
-
-<%--                        <tr>
-                            <td align="right"><div class="font-title titlebackicon">選擇人員</div></td>
-                            <td  colspan="3">
-                                <img id="mPersonBox" src="../images/btn-search.gif" onclick="JsEven.openMutiBox(this)" style="cursor: pointer;" />
-                                <br />
-                                
-                            </td>
-                        </tr>--%>
                     </table>
                 </div>
             </div>
         </div>
         </div>
         <br />
-        <div class="fixwidth ">
-
+        <div class="fixwidth ">    
         <table style="width:100%">
             <tr><td style="text-align:center">[D003]</td><td style="text-align:center">[D002]</td><td style="text-align:center">[D001]</td><td style="text-align:center">:[D005] [D006]</td></tr>
 
@@ -171,9 +143,9 @@
             <td style="text-align:right">[C001]</td>
         </tr>
         <tr>
-            <td style="text-align:center">津貼項目</td>
+            <td style="text-align:center">BestSA獎金</td>
             <td></td>
-            <td></td>
+            <td style="text-align:right">[A003]</td>
             <td style="text-align:right">[B004]</td>
             <td style="text-align:right">[B005]</td>
             <td style="text-align:right">[B006]</td>
@@ -181,9 +153,9 @@
             <td style="text-align:right">[C002]</td>
         </tr>
         <tr>
+            <td>體檢補助</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A004]</td>
             <td style="text-align:right">[B007]</td>
             <td style="text-align:right">[B008]</td>
             <td style="text-align:right">[B009]</td>
@@ -191,9 +163,9 @@
             <td style="text-align:right">[C003]</td>
         </tr>
         <tr>
+            <td>其它津貼</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A005]</td>
             <td style="text-align:center" rowspan="4">休息日加班</td>
             <td style="width:9%">2小以內</td>
             <td style="text-align:right">[B010]</td>
@@ -203,9 +175,9 @@
             <td style="text-align:right">[C004]</td>
         </tr>
         <tr>
+            <td>職災補償</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A006]</td>
             <td >2~8小時</td>
             <td style="text-align:right">[B013]</td>
             <td style="text-align:right">[B014]</td>
@@ -214,9 +186,9 @@
             <td style="text-align:right">[C005]</td>
         </tr>
         <tr>
+            <td>資遣費</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A007]</td>
             <td >8~12小時</td>
             <td style="text-align:right">[B016]</td>
             <td style="text-align:right">[B017]</td>
@@ -225,9 +197,9 @@
             <td></td>
         </tr>
         <tr>
+            <td>勞保費調整</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A008]</td>
             <td >12小時以上</td>
             <td style="text-align:right">[B019]</td>
             <td style="text-align:right">[B020]</td>
@@ -236,9 +208,9 @@
             <td></td>
         </tr>
         <tr>
+            <td>健保費調整</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A009]</td>
             <td style="text-align:center" rowspan="4">例假/國定假日加班</td>
             <td>8小時內</td>
             <td style="text-align:right">[B022]</td>
@@ -248,9 +220,9 @@
              <td></td>
         </tr>
         <tr>
+            <td>勞退自提調整</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td style="text-align:right">[A010]</td>
             <td >8~10小時</td>
             <td style="text-align:right">[B025]</td>
             <td style="text-align:right">[B026]</td>
@@ -281,42 +253,9 @@
             <td></td>
             <td></td>
         </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td ></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-             <td></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td ></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-             <td></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td></td>
-            <td></td>
-            <td ></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-             <td></td>
-        </tr>
+
+
+
         <tr>
             <td>&nbsp;</td>
             <td></td>
@@ -344,14 +283,19 @@
         <tr>
             <td>合計(A)</td>
             <td></td>
-            <td></td>
+            <td style="text-align:right">[A011]</td>
             <td>合計(B)</td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td style="text-align:right">[B034]</td>
              <td>合計(C)</td>
-             <td></td>
+             <td style="text-align:right">[C011]</td>
+        </tr>
+        <tr>
+            <td colspan="8"></td>
+            <td>實發金額<br />(A)+(B)-(C)</td>
+            <td style="text-align:right">[D015]</td>
         </tr>
 
     </table>
@@ -365,25 +309,22 @@
 
 
 
-        <div id="div_Edit">
+        <div id="div_Edit" style="display:none">
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >儲存</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit()" >儲存</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >取消</a>
 
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
         </div>
-        <div id="div_design" class="fixwidth ">
+        <div id="div_design" class="fixwidth " >
             <table style="height:500px" >
                 <tr>
                     <td>
-                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  >
-     
-                        </textarea>
-     
+                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  ></textarea>     
                     </td>
                 </tr>
                 <tr>
@@ -400,8 +341,15 @@
                              <td>                                     
                                 基本薪資時數:[A001]<br />  
                                 基本薪資金額:[A002]<br />                                  
-                                津貼項目(加項):[A003]<br />
-                                加項1金額合計:[A004]<br />
+                                BestSA獎金:[A003]<br />
+                                體檢補助:[A004]<br />
+                                其它津貼:[A005]<br />
+                                職災補償:[A006]<br />
+                                資遣費:[A007]<br />
+                                勞保費調整:[A008]<br />
+                                健保費調整:[A009]<br />
+                                勞退自提調整:[A010]<br />
+                                加項1金額合計:[A011]<br />
                              </td>
                              <td>
                                 平日加班1類倍率:[B001]<br />
@@ -447,8 +395,12 @@
                                  代扣福利金:[C003]<br /> 
                                  勞退自提:[C004]<br />  
                                  代扣補充保費:[C005]<br />  
-                                 津貼項目(減項):[C006]<br />
-                                 應扣合計:[C007]<br />
+                                 代扣勞保費調整:[C006]<br />
+                                 代扣健保費調整:[C007]<br />
+                                 代扣勞退自提調整:[C008]<br />
+                                 代法院執行:[C009]<br />
+                                 代扣繳-捐:[C010]<br />
+                                 應扣合計:[C011]<br />
                              </td>
                              <td>
                                  姓名:[D001]<br />
@@ -465,6 +417,7 @@
                                  勞退提撥工資:[D012]<br />
                                  勞退提撥率:[D013]<br />
                                  提撥金額:[D014]<br />
+                                 實發金額:[D015]<br />
                              </td>
                          </tr>
                      </table>
@@ -483,237 +436,98 @@
 
 
     <!-- WrapperMain -->
-    <input type="hidden" id="hid_PerGuid" />
-
-
-
-
-
-
-
-
+    <input type="hidden" id="hid_pspGuid" />
     <script type="text/javascript">
 
         JsEven = {
 
             Id: {
-                hid_PerGuid: 'hid_PerGuid',
-                sp_sDate: 'sp_sDate',
-                sp_eDate: 'sp_eDate',
-                hid_SalaryRangeGuid: 'hid_SalaryRangeGuid',
-                chk_ShouldPay: 'chk_ShouldPay',
-                chk_Leave: 'chk_Leave',
-                sp_PerName: 'sp_PerName',
-
-                txt_CompanyNo: 'txt_CompanyNo',
-                sp_CName: 'sp_CName',
-                hid_CGuid: 'hid_CGuid',
-
-
-                txt_Dep: 'txt_Dep',
-                sp_DepName: 'sp_DepName',
-                hid_DepGuid: 'hid_DepGuid',
-                tex_designContent:'tex_designContent'
+                hid_pspGuid: 'hid_pspGuid',
+                tex_designContent: 'tex_designContent',
+                div_List: 'div_List',
+                div_Edit: 'div_Edit',
             },
 
-            //查詢視窗
-            openfancybox: function (item) {
-                switch ($(item).attr("id")) {
-                    case "img_SalaryRange":
-                        link = "SearchWindow.aspx?v=SalaryRange";
-                        break;
-                    case "img_Company":
-                        link = "SearchWindow.aspx?v=Comp";
-                        break;
-                    case "img_Dep":
-                        link = "SearchWindow.aspx?v=Dep";
-                        break;
+            List: function () {
+
+                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                var opt = {
+                    url: '../handler/Payroll/ashx_SelPayrollPrint.ashx',
+                    v: '',
+                    type: 'html',
+                    success: function (msg) {
+
+                        switch (msg) {
+                            case "DangerWord":
+                                CommonEven.goErrorPage();
+                                break;
+                            case "Timeout":
+                                alert('登入逾時');
+                                CommonEven.goLogin();
+                                break;
+                            case "error":
+                                alert('資料發生錯誤，請聯絡管理者');
+                                break;
+                            default:
+                                document.getElementById(JsEven.Id.div_List).style.display = "none";
+                                document.getElementById(JsEven.Id.div_Edit).style.display = "block";
+                                tinyMCE.get(JsEven.Id.tex_designContent).setContent(msg);
+                                break;
+                        }
+                        $.unblockUI();
+                    }
                 }
-                $.fancybox({
-                    href: link,
-                    type: "iframe",
-                    minHeight: "400",
-                    closeClick: false,
-                    openEffect: 'elastic',
-                    closeEffect: 'elastic'
+                CmFmCommon.ajax(opt);
+            },
+
+            Edit: function () {
+
+                var contetn = tinyMCE.get(this.Id.tex_designContent).getContent();
+
+                if (contetn == "") { alert('內容不可為空'); return false; }
+                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                $.ajax({
+                    type: "POST",
+                    url: '../handler/Payroll/ashx_EditPayroll.ashx',
+                    data: 'pspContent=' + encodeURIComponent(contetn),
+                    dataType: 'text',  //xml, json, script, text, html
+                    success: function (msg) {
+                        switch (msg) {
+                            case "ok":
+                                alert('儲存成功'); 
+                                break;
+                            case "e":
+                                alert('程式發生錯誤，請聯絡相關管理人員');
+                                break;
+                            case "t":
+                                alert('登入逾時');
+                                CommonEven.goLogin();
+                                break;
+                            case "d":
+                                CommandEven.goErrorPage();
+                                break;
+                        }
+                        $.unblockUI();
+                    },
+                    error: function (xhr, statusText) {
+                        //alert(xhr.status);
+                        $.unblockUI();
+                        alert('資料發生錯誤');
+
+                    }
                 });
             },
 
-            //多選查詢視窗
-            openMutiBox: function (item) {
-                var link = "";
-                switch ($(item).attr("id")) {
-                    case "mPersonBox":
-                        link = "MutiSearch.aspx?v=" + $("#tmpUID").val();
-                        break;
-                }
-                $.fancybox({
-                    href: link,
-                    type: "iframe",
-                    width: "400",
-                    minHeight: "600",
-                    closeClick: false,
-                    openEffect: 'elastic',
-                    closeEffect: 'elastic'
-                });
-            },
-
-            ExportExcel: function () {
-                var arGuid = $('#' + this.Id.hid_SalaryRangeGuid).val();
-                if (arGuid != '') {
-                    var PerGuid = $('#' + this.Id.hid_PerGuid).val();
-                    var sDate = $('#' + this.Id.sp_sDate).html();
-                    var eDate = $('#' + this.Id.sp_eDate).html();
-                    var Leave = ($("#" + this.Id.chk_Leave).attr("checked") == "checked") ? "Y" : "";  //$('#' + this.Id.chk_Leave).val();
-                    var ShouldPay = ($("#" + this.Id.chk_ShouldPay).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
-                    var Company = $('#' + this.Id.hid_CGuid).val();
-                    var Dep = $('#' + this.Id.hid_DepGuid).val();
-                    window.location = "../handler/Payroll/ashx_ExportPayroll.ashx?sr_guid=" + arGuid
-                        + "&PerGuid=" + PerGuid
-                        + "&Leave=" + Leave
-                        + "&ShouldPay=" + ShouldPay
-                        + "&Company=" + Company
-                        + "&sDate=" + sDate
-                        + "&eDate=" + eDate
-                        + "&Dep=" + Dep;
-                } else { alert('請選擇計薪週期'); }
-            },
-
-            opDiv: function () {
-
-
-                //$.ajax({
-                //    type: "POST",
-                //    url: '../handler/Payroll/ashx_SelPayrollPrint.ashx',
-                //    data: '',
-                //    dataType: 'text',  //xml, json, script, text, html
-                //    success: function (msg) {
-                //        switch (msg) {
-                //            case "e":
-                //                alert('程式發生錯誤，請聯絡相關管理人員');
-                //                break;
-                //            case "t":
-                //                alert('登入逾時');
-                //                CommonEven.goLogin();
-                //                break;
-                //            default:
-                //                tinyMCE.get(JsEven.Id.tex_designContent).setContent(msg);
-                //                $.fancybox.open('#div_design');
-                //                break;
-                //        }
-                //        $.unblockUI();
-                //    },
-                //    error: function (xhr, statusText) {
-                //        //alert(xhr.status);
-                //        $.unblockUI();
-                //        alert('程式發生錯誤，請聯絡相關管理人員');
-
-                //    }
-                //});
-
-                $.fancybox.open('#div_design');
-               
+            cancel: function () {
+                document.getElementById(JsEven.Id.div_List).style.display = "block";
+                document.getElementById(JsEven.Id.div_Edit).style.display = "none";
             }
 
+
         }
 
 
-        //fancybox回傳
-        function setReturnValue(type, gv, str, str2) {
-            switch (type) {
-                case "SalaryRange":
-                    $("#" + JsEven.Id.sp_sDate).html(str);
-                    $("#" + JsEven.Id.sp_eDate).html(str2);
-                    $("#" + JsEven.Id.hid_SalaryRangeGuid).val(gv);
-                    break;
-                case "Comp":
-                    $("#" + JsEven.Id.txt_CompanyNo).val(str);
-                    $("#" + JsEven.Id.hid_CGuid).val(gv);
-                    $("#" + JsEven.Id.sp_CName).html(str2);
-                    $("#" + JsEven.Id.sp_CName).css("color", "");
-                    $("#" + JsEven.Id.hid_CStatus).val("Y");
-                    break;
-                case "Dep":
-                    $("#" + JsEven.Id.txt_Dep).val(str);
-                    $("#" + JsEven.Id.hid_DepGuid).val(gv);
-                    $("#" + JsEven.Id.sp_DepName).html(str2);
-                    $("#" + JsEven.Id.sp_DepName).css("color", "");
-                    $("#" + JsEven.Id.hid_Depstatus).val("Y");
-                    break;
-
-            }
-        }
-
-
-
-
-        function mutiReturn(str, str2) {
-            $("#" + JsEven.Id.hid_PerGuid).val(str);
-            $("#tmpName").val(str2);
-            str2 = str2.replace(/,/g, "、");
-            $("#" + JsEven.Id.sp_PerName).html(str2);
-        }
-
-
-
-        //確認欄位資料key in是否正確
-        function checkData(type, v) {
-            $.ajax({
-                type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
-                url: "../handler/checkData.ashx",
-                data: {
-                    tp: type,
-                    str: v
-                },
-                error: function (xhr) {
-                    alert(xhr);
-                },
-                success: function (data) {
-                    if (data == "error") {
-                        alert("checkData Error");
-                        return false;
-                    }
-
-                    if (data != null) {
-                        data = $.parseXML(data);
-                        if ($(data).find("data_item").length > 1)
-                            alert("有兩筆資料")
-                        else if ($(data).find("data_item").length > 0) {
-                            switch (type) {
-                                case "Company":
-                                    $("#" + JsEven.Id.sp_CName).html($("comAbbreviate", data).text());
-                                    $("#" + JsEven.Id.hid_PerGuid).val($("comGuid", data).text());
-                                    $("#" + JsEven.Id.sp_CName).css("color", "");
-         
-                                    break;
-                                case "Dep":
-                                    $("#" + JsEven.Id.sp_DepName).html($("cbName", data).text());
-                                    $("#" + JsEven.Id.hid_DepGuid).val($("cbGuid", data).text());
-                                    $("#" + JsEven.Id.sp_DepName).css("color", "");
-                                    break;
-  
-                            }
-                        }
-                        else {
-                            switch (type) {
-                                case "Company":
-                                    $("#" + JsEven.Id.sp_CName).html('X');
-                                    $("#" + JsEven.Id.hid_PerGuid).val('');
-                                    $("#" + JsEven.Id.sp_CName).css("color", "red");
-                                    break;
-                                case "Dep":
-                                    $("#" + JsEven.Id.sp_DepName).html("X");
-                                    $("#" + JsEven.Id.hid_DepGuid).val('');
-                                    $("#" + JsEven.Id.sp_DepName).css("color", "red");
-                                    break;
-    
-                            }
-                        }
-                    }
-                }
-            });
-        }
+        
 
 
 

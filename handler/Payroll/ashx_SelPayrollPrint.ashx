@@ -8,7 +8,7 @@ public class ashx_SelPayrollPrint : IHttpHandler, System.Web.SessionState.IReadO
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
     {
-        context.Response.ContentType = "text/plain";
+        context.Response.ContentType = "text/html";
         try
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))

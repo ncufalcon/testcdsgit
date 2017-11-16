@@ -71,12 +71,13 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                     row.CreateCell(3).SetCellValue(dv[i]["pPerName"].ToString());//姓名
                     row.CreateCell(4).SetCellValue("");//註記
 
-
-                    row.CreateCell(5).SetCellValue(com.toDou((decimal.Parse(dv[i]["pBasicSalary"].ToString()) + decimal.Parse(dv[i]["pAllowance"].ToString())).ToString()));//底薪
+                    decimal pBasicSalary = (!string.IsNullOrEmpty(dv[i]["pBasicSalary"].ToString())) ? decimal.Parse(dv[i]["pBasicSalary"].ToString()) : 0;
+                        decimal pAllowance = (!string.IsNullOrEmpty(dv[i]["pAllowance"].ToString())) ? decimal.Parse(dv[i]["pAllowance"].ToString()) : 0;
+                    row.CreateCell(5).SetCellValue(com.toDou((pBasicSalary + pAllowance).ToString()));//底薪
                     row.CreateCell(6).SetCellValue(com.toDou(dv[i]["pAttendanceDays"].ToString()));//出勤天數
-                    row.CreateCell(7).SetCellValue(com.toDou(dv[i]["pGeneralTime"].ToString()));//出勤時數
-                    row.CreateCell(8).SetCellValue(com.toDou(dv[i]["pWeekdayTime1"].ToString()));//平日加班一類
-                    row.CreateCell(9).SetCellValue(com.toDou(dv[i]["pWeekdayTime2"].ToString()));//平日加班二類
+                    row.CreateCell(7).SetCellValue(com.toDou((decimal.Parse(dv[i]["pGeneralTime"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysTime1"].ToString())).ToString()));//出勤時數  pNationalholidaysTime1
+                    row.CreateCell(8).SetCellValue(com.toDou((decimal.Parse(dv[i]["pWeekdayTime1"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysTime2"].ToString())).ToString()));//平日加班一類
+                    row.CreateCell(9).SetCellValue(com.toDou((decimal.Parse(dv[i]["pWeekdayTime2"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysTime3"].ToString())).ToString()));//平日加班二類
                     row.CreateCell(10).SetCellValue(com.toDou((decimal.Parse(dv[i]["pOffDayTime1"].ToString()) + decimal.Parse(dv[i]["pOffDayTime2"].ToString()) + decimal.Parse(dv[i]["pOffDayTime3"].ToString())).ToString()));//休息加班
                     row.CreateCell(11).SetCellValue(com.toDou(dv[i]["pSalary"].ToString()));//本薪
                     row.CreateCell(12).SetCellValue(com.toDou(dv[i]["pOverTimeTaxation"].ToString()));//課稅加班費

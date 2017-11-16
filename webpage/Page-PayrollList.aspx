@@ -161,8 +161,8 @@
                     var PerGuid = $('#' + this.Id.hid_PerGuid).val();
                     var sDate = $('#' + this.Id.sp_sDate).html();
                     var eDate = $('#' + this.Id.sp_eDate).html();
-                    var Leave = ($("#" + this.Id.chk_Leave).attr("checked") == "checked") ? "Y" : "";  //$('#' + this.Id.chk_Leave).val();
-                    var ShouldPay = ($("#" + this.Id.chk_ShouldPay).attr("checked") == "checked") ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
+                    var Leave = (document.getElementById(this.Id.chk_Leave).checked == true) ? "Y" : "";  //$('#' + this.Id.chk_Leave).val();
+                    var ShouldPay = (document.getElementById(this.Id.chk_ShouldPay).checked == true) ? "Y" : "";//$('#' + this.Id.chk_ShouldPay).val();
                     var Company = $('#' + this.Id.hid_CGuid).val();
                     var Dep = $('#' + this.Id.hid_DepGuid).val();
                     window.location = "../handler/Payroll/ashx_ExportPayroll.ashx?sr_guid=" + arGuid

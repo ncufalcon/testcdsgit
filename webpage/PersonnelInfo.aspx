@@ -1705,17 +1705,18 @@
                                         <td colspan="3"><input type="text" id="pEmail" name="pEmail" class="inputex width100" /></td>
                                     </tr>
                                     <tr>
-                                        <td align="right"><div class="font-title titlebackicon">通訊地址</div></td>
-                                        <td colspan="7">
-                                            <input type="text" id="pPostalCode" name="pPostalCode" class="inputex width10" />(郵遞區號)-<input type="text" id="pAddr" name="pAddr" class="inputex width75" />
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td align="right"><div class="font-title titlebackicon">戶籍地址</div></td>
                                         <td colspan="7">
                                             <input type="text" id="pResPostalCode" name="pResPostalCode" class="inputex width10" />(郵遞區號)-<input type="text" id="pResidentAddr" name="pResidentAddr" class="inputex width75" />
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td align="right"><div class="font-title titlebackicon">通訊地址</div></td>
+                                        <td colspan="7">
+                                            <input type="text" id="pPostalCode" name="pPostalCode" class="inputex width10" />(郵遞區號)-<input type="text" id="pAddr" name="pAddr" class="inputex width75" />
+                                        </td>
+                                    </tr>
+
                                     <tr>
                                         <td align="right"><div class="font-title titlebackicon">緊急聯絡人</div></td>
                                         <td><input type="text" id="pContactPerson" name="pContactPerson" class="inputex width100" /></td>
