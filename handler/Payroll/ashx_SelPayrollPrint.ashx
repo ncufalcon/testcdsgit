@@ -16,7 +16,7 @@ public class ashx_SelPayrollPrint : IHttpHandler, System.Web.SessionState.IReadO
                 DataView dv = dal.Selsy_PaySalaryPrint().DefaultView;
                 if (dv.Count == 1)
                 {
-                    context.Response.Write(context.Server.HtmlEncode(dv[0]["pspContent"].ToString()));
+                    context.Response.Write((dv[0]["pspContent"].ToString()));
                 }
             }
             else { context.Response.Write("t"); }

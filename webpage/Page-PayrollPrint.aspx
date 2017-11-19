@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" ValidateRequest="true" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" ValidateRequest="false" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
@@ -56,13 +56,17 @@
 
         </div>
         <!-- fixwidth -->
-        <div id="div_List" >
+        <div id="div_List" runat="server" >
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >列印</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >預覽</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.List()" >設計憑證</a>
+
+                    <asp:LinkButton ID="lkb_print" CssClass="keybtn" runat="server">列印</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_browse" CssClass="keybtn" runat="server">預覽</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_design"  CssClass="keybtn" runat="server" OnClick="lkb_design_Click">設計憑證</asp:LinkButton>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -80,18 +84,18 @@
                                     <td style="width:150px" ><span class="font-title titlebackicon">日期起</span><span id="sp_sDate"></span></td>
                                     <td style="width:150px" ><span class="font-title titlebackicon">日期迄</span><span id="sp_eDate"></span></td>
                                     <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
-                                        <input id="hid_SalaryRangeGuid" type="hidden"  />
+                                        <input id="hid_SalaryRangeGuid" type="hidden" runat="server"  />
                                     </td>
                                 </tr>
                             </table>                                 
                             </td>
                           </tr>   
-<%--                        <tr>
+                        <tr>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出應發金額為零</div></td>
                             <td><input type="checkbox" id="chk_ShouldPay" /></td>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出已離職</div></td>
                             <td><input type="checkbox" id="chk_Leave" /></td>
-                        </tr>--%>
+                        </tr>
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">員工編號</div></td>
                             <td class="width20"><input type="text" class="inputex" id="txt_PerNo" /></td>
@@ -110,7 +114,7 @@
         </div>
         </div>
         <br />
-        <div class="fixwidth ">    
+        <%--<div class="fixwidth ">    
         <table style="width:100%">
             <tr><td style="text-align:center">[D003]</td><td style="text-align:center">[D002]</td><td style="text-align:center">[D001]</td><td style="text-align:center">:[D005] [D006]</td></tr>
 
@@ -305,17 +309,18 @@
             <tr><td >可休日數</td><td>[D008]</td><td>勞退提撥工資/%</td><td>:[D011]</td></tr>
             <tr><td >已休日數</td><td>[D009]</td><td>提撥金額</td><td></td></tr>
         </table>
-        </div>
+        </div>--%>
 
 
 
-        <div id="div_Edit" style="display:none">
+        <div id="div_Edit" style="display:none" runat="server">
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit()" >儲存</a>
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >取消</a>
-
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.cancel()" >取消</a>
+                    <asp:LinkButton ID="lkb_subimt" CssClass="keybtn" runat="server" OnClick="lkb_subimt_Click">儲存</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_Cancel" CssClass="keybtn" runat="server" OnClick="lkb_Cancel_Click">取消</asp:LinkButton>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
@@ -324,7 +329,7 @@
             <table style="height:500px" >
                 <tr>
                     <td>
-                        <textarea id="tex_designContent" rows="800" cols="50" style="height:500px; width:500px;"  ></textarea>     
+                        <textarea id="tex_designContent" runat="server" rows="800" cols="50" style="height:500px; width:500px;"  ></textarea>     
                     </td>
                 </tr>
                 <tr>
@@ -446,6 +451,9 @@
                 tex_designContent: 'tex_designContent',
                 div_List: 'div_List',
                 div_Edit: 'div_Edit',
+                hid_SalaryRangeGuid: '<%=hid_SalaryRangeGuid.ClientID%>',
+                sp_sDate: 'sp_sDate',
+                sp_eDate: 'sp_eDate'
             },
 
             List: function () {
@@ -521,13 +529,45 @@
             cancel: function () {
                 document.getElementById(JsEven.Id.div_List).style.display = "block";
                 document.getElementById(JsEven.Id.div_Edit).style.display = "none";
-            }
+            },
 
+            //查詢視窗
+            openfancybox: function (item) {
+                switch ($(item).attr("id")) {
+                    case "img_SalaryRange":
+                        $('#' + this.Id.hid_RangeType).val('S');
+                        link = "SearchWindow.aspx?v=SalaryRange";
+                        break;
+                    case "img_SalaryRange_Gen":
+                        $('#' + this.Id.hid_RangeType).val('Payroll');
+                        link = "SearchWindow.aspx?v=SalaryRange";
+                        break;
 
+                }
+                $.fancybox({
+                    href: link,
+                    type: "iframe",
+                    minHeight: "400",
+                    closeClick: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic'
+                });
+            },
         }
 
 
-        
+        //fancybox回傳
+        function setReturnValue(type, gv, str, str2) {
+            switch (type) {
+                case "SalaryRange":
+                    {
+                        $("#" + JsEven.Id.sp_sDate).html(str);
+                        $("#" + JsEven.Id.sp_eDate).html(str2);
+                        $("#" + JsEven.Id.hid_SalaryRangeGuid).val(gv);
+                    }
+                    break;
+            }
+        }
 
 
 
