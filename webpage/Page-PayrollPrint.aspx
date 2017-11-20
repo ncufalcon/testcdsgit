@@ -60,14 +60,19 @@
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >列印</a>
+<%--                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >列印</a>
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.ExportExcel()" >預覽</a>
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.List()" >設計憑證</a>
-
-                    <asp:LinkButton ID="lkb_print" CssClass="keybtn" runat="server">列印</asp:LinkButton>
-                    <asp:LinkButton ID="lkb_browse" CssClass="keybtn" runat="server">預覽</asp:LinkButton>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.List()" >設計憑證</a>--%>
+                    <span id="sp_gp1" runat="server">
+                    <asp:LinkButton ID="lkb_print" CssClass="keybtn" runat="server" OnClick="lkb_print_Click">列印</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_browse" CssClass="keybtn" runat="server" OnClick="lkb_browse_Click">預覽</asp:LinkButton>
                     <asp:LinkButton ID="lkb_design"  CssClass="keybtn" runat="server" OnClick="lkb_design_Click">設計憑證</asp:LinkButton>
-                    <!--<a href="#" class="keybtn">取消</a>-->
+                    </span> 
+                    <span id="sp_gp2" runat="server" style="display:none">
+                    <asp:LinkButton ID="lkb_TestSearch" CssClass="keybtn" runat="server" OnClick="lkb_TestSearch_Click" >查詢</asp:LinkButton>    
+                    <asp:LinkButton ID="lkb_TestPrint" CssClass="keybtn" runat="server" OnClick="lkb_TestPrint_Click" >測試列印</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_TestCancel"  CssClass="keybtn" runat="server" OnClick="lkb_TestCancel_Click" >取消</asp:LinkButton>
+                    </span> 
                 </div>
             </div>
         </div>
@@ -92,26 +97,29 @@
                           </tr>   
                         <tr>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出應發金額為零</div></td>
-                            <td><input type="checkbox" id="chk_ShouldPay" /></td>
+                            <td><input type="checkbox" id="chk_ShouldPay" runat="server" /></td>
                             <td style="width:15%" align="right"><div class="font-title titlebackicon">匯出已離職</div></td>
-                            <td><input type="checkbox" id="chk_Leave" /></td>
+                            <td><input type="checkbox" id="chk_Leave" runat="server"/></td>
                         </tr>
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">員工編號</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_PerNo" /></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerNo" runat="server" /></td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">姓名</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_PerName" /></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_PerName" runat="server"/></td>
                         </tr>
                         <tr>
                             <td class="width13" align="right"><div class="font-title titlebackicon">公司別</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" /></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_CompanyNo" runat="server"/></td>
                             <td class="width13" align="right"><div class="font-title titlebackicon">部門</div></td>
-                            <td class="width20"><input type="text" class="inputex" id="txt_Dep" /></td>
+                            <td class="width20"><input type="text" class="inputex" id="txt_Dep" runat="server"/></td>
                         </tr>
                     </table>
                 </div>
             </div>
-        </div>
+        </div><br /><br />
+          <div id="div_show" runat="server" class="fixwidth">
+
+          </div>
         </div>
         <br />
         <%--<div class="fixwidth ">    
@@ -311,15 +319,14 @@
         </table>
         </div>--%>
 
-
-
         <div id="div_Edit" style="display:none" runat="server">
         <div class="fixwidth">
             <div class="twocol margin15TB">
                 <div class="right">
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit()" >儲存</a>
-                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.cancel()" >取消</a>
+<%--                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit()" >儲存</a>
+                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.cancel()" >取消</a>--%>
                     <asp:LinkButton ID="lkb_subimt" CssClass="keybtn" runat="server" OnClick="lkb_subimt_Click">儲存</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_Back" CssClass="keybtn" runat="server" OnClick="lkb_Back_Click" >回原預設</asp:LinkButton>
                     <asp:LinkButton ID="lkb_Cancel" CssClass="keybtn" runat="server" OnClick="lkb_Cancel_Click">取消</asp:LinkButton>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
@@ -376,23 +383,20 @@
                                 休息加班3類倍率:[B016]<br />                                    
                                 休息加班3類時數:[B017]<br />  
                                 休息加班3類金額:[B018]<br /> 
-                                休息加班4類倍率:[B019]<br />                                    
-                                休息加班4類時數:[B020]<br />  
-                                休息加班4類金額:[B021]<br /> 
 
-                                例假日/國定加班1類倍率:[B022]<br />   
-                                例假日/國定加班1類時數:[B023]<br />                                   
-                                例假日/國定加班1類金額:[B024]<br />
-                                例假日/國定加班2類倍數:[B025]<br />                                    
-                                例假日/國定加班2類時數:[B026]<br />  
-                                例假日/國定加班2類金額:[B027]<br />
-                                例假日/國定加班3類倍數:[B028]<br />                                    
-                                例假日/國定加班3類時數:[B029]<br />  
-                                例假日/國定加班3類金額:[B030]<br />
-                                例假日/國定加班4類倍數:[B031]<br />                                    
-                                例假日/國定加班4類時數:[B032]<br />  
-                                例假日/國定加班4類金額:[B033]<br />                                                  
-                                加項2金額合計:[B034]<br /> 
+                                例假日/國定加班1類倍率:[B019]<br />   
+                                例假日/國定加班1類時數:[B020]<br />                                   
+                                例假日/國定加班1類金額:[B021]<br />
+                                例假日/國定加班2類倍數:[B022]<br />                                    
+                                例假日/國定加班2類時數:[B023]<br />  
+                                例假日/國定加班2類金額:[B024]<br />
+                                例假日/國定加班3類倍數:[B025]<br />                                    
+                                例假日/國定加班3類時數:[B026]<br />  
+                                例假日/國定加班3類金額:[B027]<br />
+                                例假日/國定加班4類倍數:[B028]<br />                                    
+                                例假日/國定加班4類時數:[B029]<br />  
+                                例假日/國定加班4類金額:[B030]<br />                                                  
+                                加項2金額合計:[B031]<br /> 
                              </td>
                              <td>
                                  代扣健保費:[C001]<br />  
@@ -432,6 +436,9 @@
             </table>
         </div>
         </div>
+
+
+
     </div>
 
 

@@ -1689,5 +1689,64 @@ namespace payroll
 
         }
 
+
+
+        /// <summary>
+        /// 查詢勞退
+        /// </summary>
+        public DataTable Sel_SalaryPrint(string sr_Guid, string perNo, string perName, string company,
+            string Dep, string Amount, string Leave)
+        {
+
+            string sql = @"pr_PrintPayroll ";
+
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@sr_Guid", sr_Guid);
+            cmd.Parameters.AddWithValue("@perNo", perNo);
+            cmd.Parameters.AddWithValue("@perName", perName);
+            cmd.Parameters.AddWithValue("@company", company);
+            cmd.Parameters.AddWithValue("@Dep", Dep);
+            cmd.Parameters.AddWithValue("@Amount", Amount);
+            cmd.Parameters.AddWithValue("@Leave", Leave);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
+
+        /// <summary>
+        /// 還原預設值
+        /// </summary>
+        public void Upsy_BackSalaryPrint(string pspModdifyId)
+        {
+            string sql = @"update sy_PaySalaryPrint set                                                               
+                                  pspContent=@pspTemplate
+                                  ,pspModdifyId=@pspModdifyId 
+                                  ,pspModdifyDate=@pspModdifyDate";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pspModdifyId", pspModdifyId);
+            cmd.Parameters.AddWithValue("@pspModdifyDate", DateTime.Now);
+
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
     }
 }
