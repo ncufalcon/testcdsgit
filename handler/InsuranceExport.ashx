@@ -583,14 +583,12 @@ public class InsuranceExport : IHttpHandler {
                     {
                         for (int i = 4; i < dt.Rows.Count + 4; i++)
                         {
-                            string birthYear = DateTime.Parse(dt.Rows[i - 4]["perBirthday"].ToString()).ToString("yyyy");
-                            if (dt.Rows[i - 4]["perNo"].ToString() == "232995")
-                                category = "PGI";
+                            string birthYear = (dt.Rows[i - 4]["perBirthday"].ToString() != "") ? DateTime.Parse(dt.Rows[i - 4]["perBirthday"].ToString()).ToString("yyyy") : DateTime.Now.ToString("yyyy");
                             Xls.SetCellValue(i, 1, dt.Rows[i - 4]["perDep"].ToString());
                             Xls.SetCellValue(i, 2, dt.Rows[i - 4]["perNo"].ToString());
                             Xls.SetCellValue(i, 3, dt.Rows[i - 4]["perName"].ToString());
                             Xls.SetCellValue(i, 4, dt.Rows[i - 4]["perIDNumber"].ToString());
-                            Xls.SetCellValue(i, 5, ROC_Date(dt.Rows[i - 4]["perBirthday"].ToString()));
+                            Xls.SetCellValue(i, 5, dt.Rows[i - 4]["perBirthday"].ToString());
                             Xls.SetCellValue(i, 6, dt.Rows[i - 4]["perPosition"].ToString());
                             Xls.SetCellValue(i, 7, "B");
                             if (dt.Rows[i - 4]["pgiChange"].ToString() != "02")
@@ -602,14 +600,16 @@ public class InsuranceExport : IHttpHandler {
                                 Xls.SetCellValue(i, 10, dt.Rows[i - 4]["pfTitle"].ToString());
                                 Xls.SetCellValue(i, 11, dt.Rows[i - 4]["pfName"].ToString());
                                 Xls.SetCellValue(i, 12, dt.Rows[i - 4]["pfIDNumber"].ToString());
-                                Xls.SetCellValue(i, 13, ROC_Date(dt.Rows[i - 4]["pfBirthday"].ToString()));
+                                Xls.SetCellValue(i, 13, dt.Rows[i - 4]["pfBirthday"].ToString());
                                 if (dt.Rows[i - 4]["pfBirthday"].ToString() != "")
                                     birthYear = DateTime.Parse(dt.Rows[i - 4]["pfBirthday"].ToString()).ToString("yyyy");
                                 else
-                                    birthYear = "0";
+                                    birthYear =  DateTime.Now.ToString("yyyy");
                             }
                             string age = (Int32.Parse(DateTime.Now.ToString("yyyy")) - Int32.Parse(birthYear)).ToString();
-                            if (Int32.Parse(age) > 23 && dt.Rows[i - 4]["pfTitle"].ToString().Trim() == "子女")
+                            if (age == "0")
+                                Xls.SetCellValue(i, 14, "");
+                            else if (Int32.Parse(age) > 23 && dt.Rows[i - 4]["pfTitle"].ToString().Trim() == "子女")
                                 Xls.SetCellValue(i, 14, ">23歲");
                             else
                                 Xls.SetCellValue(i, 14, age);

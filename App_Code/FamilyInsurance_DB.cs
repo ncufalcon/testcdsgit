@@ -346,10 +346,10 @@ perNo,perName,perIDNumber,perBirthday,
 CONVERT(VARCHAR(10),(SELECT DATEADD(month, 1, perFirstDate)),111) startDate,
 (select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle,pfName,pfIDNumber,pfBirthday,pgiChange,pgiChangeDate
 from sy_PersonGroupInsurance
-left join sy_Person on pgiPerGuid=perGuid and perStatus='A'
-left join sy_PersonFamily on pgiPfGuid=pfGuid and pfStatus='A' 
+left join sy_Person on pgiPerGuid=perGuid
+left join sy_PersonFamily on pgiPfGuid=pfGuid
 where pgiGuid in (" + pgiGuid + @")
-order by perDep,perNo,pfTitle
+order by pgiChange,perDep,perNo,pfTitle
 ");
 
         oCmd.CommandText = sb.ToString();
