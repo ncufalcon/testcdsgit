@@ -11,7 +11,8 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
     payroll.gdal dal = new payroll.gdal();
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        sp_sDate.InnerText = hid_sdate.Value;
+        sp_eDate.InnerText = hid_edate.Value;
     }
 
     protected void lkb_design_Click(object sender, EventArgs e)
@@ -63,7 +64,9 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
 
     protected void lkb_TestPrint_Click(object sender, EventArgs e)
     {
-
+        string val = div_show.InnerHtml;
+        //Page.ClientScript.RegisterClientScriptInclude(val, "printScreen()");
+        ScriptManager.RegisterStartupScript(Page, GetType(), "clicktest", "<script>printScreen('"+ hid_SalaryRangeGuid.Value + "','" + txt_PerNo.Value + "')</script>", false);
     }
 
     protected void lkb_TestSearch_Click(object sender, EventArgs e)
@@ -84,7 +87,7 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
 
         if (string.IsNullOrEmpty(perNo))
         {
-            JavaScript.AlertMessage(this.Page, "請選擇計薪週期");
+            JavaScript.AlertMessage(this.Page, "請輸入測試工號");
             return;
         }
 
@@ -105,18 +108,37 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
         string perName = txt_PerName.Value;
         string Company = txt_CompanyNo.Value;
         string Dep = txt_Dep.Value;
-
         if (string.IsNullOrEmpty(srGuid))
         {
             JavaScript.AlertMessage(this.Page, "請選擇計薪週期");
             return;
         }
-        div_show.Style.Remove("display");
-        DataView dv = dal.Sel_SalaryPrint(srGuid, perNo, perName, Company, Dep, Amount, Leave).DefaultView;
-        for (int i = 0; i < dv.Count; i++)
-        {
-            div_show.InnerHtml = dv[0]["htmlstr"].ToString();
-        }
+
+        //if (string.IsNullOrEmpty(perNo))
+        //{
+        //    JavaScript.AlertMessage(this.Page, "請輸入測試工號");
+        //    return;
+        //}
+        ScriptManager.RegisterStartupScript(Page, GetType(), "clicktest", "<script>opList('" + srGuid + "','" + perNo + "','" + perName + "','" + Company + "','" + Dep + "','" + Amount + "','" + Leave + "' )</script>", false);
+        //string srGuid = hid_SalaryRangeGuid.Value;
+        //string Amount = (chk_ShouldPay.Checked == true) ? "Y" : "N";
+        //string Leave = (chk_Leave.Checked == true) ? "Y" : "N";
+        //string perNo = txt_PerNo.Value;
+        //string perName = txt_PerName.Value;
+        //string Company = txt_CompanyNo.Value;
+        //string Dep = txt_Dep.Value;
+
+        //if (string.IsNullOrEmpty(srGuid))
+        //{
+        //    JavaScript.AlertMessage(this.Page, "請選擇計薪週期");
+        //    return;
+        //}
+        //div_show.Style.Remove("display");
+        //DataView dv = dal.Sel_SalaryPrint(srGuid, perNo, perName, Company, Dep, Amount, Leave).DefaultView;
+        //for (int i = 0; i < dv.Count; i++)
+        //{
+        //    div_show.InnerHtml = dv[0]["htmlstr"].ToString();
+        //}
     }
 
     protected void lkb_Back_Click(object sender, EventArgs e)

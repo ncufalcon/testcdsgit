@@ -1514,6 +1514,7 @@ namespace payroll
             try
             {
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 600;
                 cmd.Connection.Open();
                 DataTable dt = new DataTable();
                 new SqlDataAdapter(cmd).Fill(dt);

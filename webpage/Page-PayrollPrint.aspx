@@ -1,6 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/MasterPage.master" AutoEventWireup="true" CodeFile="Page-PayrollPrint.aspx.cs" Inherits="webpage_Page_PayrollPrint" ValidateRequest="false" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+        <style>
+
+        .stripeMenoline table{border-collapse:collapse; border:0}
+        .stripeMenoline th{border-collapse:collapse; border:0; padding:0px;}
+        .stripeMenoline td{border-collapse:collapse; border:0; padding:0px;}
+
+    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
@@ -8,9 +15,52 @@
     <script src="../tinymce/tinymce.min.js" type="text/javascript"></script>
 
 
+    <script language="javascript" type="text/javascript">
+
+        function printScreen(guid,No) {
+            window.open('print.aspx?guid=' + guid + '&No=' + No, '555', "height=750, width=1020, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+        }
 
 
-<script type="text/javascript">
+        function opList(guid, No, Name, Com, Dep, Amt, Lev) {
+            window.open('printList.aspx?guid=' + guid + '&No=' + No + '&Name=' + Name + '&Com=' + Com + '&Dep=' + Dep + '&Amt=' + Amt + '&Lev=' + Lev, '555', "height=750, width=1020, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+        }
+function printpage(){
+
+    var newstr = document.getElementById('<%=div_show.ClientID%>').innerHTML;
+    //alert(newstr);
+    var oldstr = document.body.innerHTML;
+    document.body.innerHTML = newstr;
+    window.print();
+    //document.body.innerHTML = oldstr;
+}
+
+
+
+
+
+
+
+
+</script>
+
+
+
+     <script type="text/javascript">
+              tinymce.init({
+            selector: "textarea",
+            language: 'zh_TW',
+            plugins: [
+                        "advlist autolink lists link charmap preview anchor",
+                        "searchreplace visualblocks code fullscreen",
+                        "insertdatetime media table contextmenu paste"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link",
+            statusbar: false,
+            menubar: false
+        });
+        </script>
+<%--<script type="text/javascript">
     tinymce.init({
         selector: "textarea",
         language: "zh_TW",
@@ -35,7 +85,7 @@
         convert_urls: true,
         toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link pagebreak table image | forecolor backcolor | fontselect fontsizeselect"
     });
-</script>
+</script>--%>
 
 
     <script type="text/javascript">
@@ -69,9 +119,11 @@
                     <asp:LinkButton ID="lkb_design"  CssClass="keybtn" runat="server" OnClick="lkb_design_Click">設計憑證</asp:LinkButton>
                     </span> 
                     <span id="sp_gp2" runat="server" style="display:none">
-                    <asp:LinkButton ID="lkb_TestSearch" CssClass="keybtn" runat="server" OnClick="lkb_TestSearch_Click" >查詢</asp:LinkButton>    
+                    <%--<asp:LinkButton ID="lkb_TestSearch" CssClass="keybtn" runat="server" OnClick="lkb_TestSearch_Click" >查詢</asp:LinkButton>    --%>
                     <asp:LinkButton ID="lkb_TestPrint" CssClass="keybtn" runat="server" OnClick="lkb_TestPrint_Click" >測試列印</asp:LinkButton>
                     <asp:LinkButton ID="lkb_TestCancel"  CssClass="keybtn" runat="server" OnClick="lkb_TestCancel_Click" >取消</asp:LinkButton>
+                     <%--<a href="javascript:void(0);" class="keybtn" onclick="printpage()" >測試列印111</a>--%>
+                    
                     </span> 
                 </div>
             </div>
@@ -86,10 +138,12 @@
                         <td class="width20" colspan="3">
                             <table>
                                 <tr>
-                                    <td style="width:150px" ><span class="font-title titlebackicon">日期起</span><span id="sp_sDate"></span></td>
-                                    <td style="width:150px" ><span class="font-title titlebackicon">日期迄</span><span id="sp_eDate"></span></td>
+                                    <td style="width:150px" ><span class="font-title titlebackicon">日期起</span><span id="sp_sDate" runat="server"></span></td>
+                                    <td style="width:150px" ><span class="font-title titlebackicon">日期迄</span><span id="sp_eDate" runat="server"></span></td>
                                     <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                         <input id="hid_SalaryRangeGuid" type="hidden" runat="server"  />
+                                         <input id="hid_sdate" type="hidden" runat="server"  />
+                                         <input id="hid_edate" type="hidden" runat="server"  />
                                     </td>
                                 </tr>
                             </table>                                 
@@ -129,7 +183,7 @@
         </table>
         <table width="99%" border="1" cellspacing="0" cellpadding="0">
         <tr>
-            <td colspan="8" style="text-align:center">應發項目</td>
+            <td colspan="8" style="text-align:center;"">應發項目</td>
             <td colspan="2" style="text-align:center">應扣項目</td>
         </tr>
         <tr>
@@ -178,7 +232,7 @@
             <td>其它津貼</td>
             <td></td>
             <td style="text-align:right">[A005]</td>
-            <td style="text-align:center" rowspan="4">休息日加班</td>
+            <td style="text-align:center" rowspan="3">休息日加班</td>
             <td style="width:9%">2小以內</td>
             <td style="text-align:right">[B010]</td>
             <td style="text-align:right">[B011]</td>
@@ -212,7 +266,8 @@
             <td>勞保費調整</td>
             <td></td>
             <td style="text-align:right">[A008]</td>
-            <td >12小時以上</td>
+            <td style="text-align:center" rowspan="4">例假/國定假日加班</td>
+            <td>8小時內</td>
             <td style="text-align:right">[B019]</td>
             <td style="text-align:right">[B020]</td>
             <td style="text-align:right">[B021]</td>
@@ -223,8 +278,7 @@
             <td>健保費調整</td>
             <td></td>
             <td style="text-align:right">[A009]</td>
-            <td style="text-align:center" rowspan="4">例假/國定假日加班</td>
-            <td>8小時內</td>
+            <td >8~10小時</td>
             <td style="text-align:right">[B022]</td>
             <td style="text-align:right">[B023]</td>
             <td style="text-align:right">[B024]</td>
@@ -235,7 +289,7 @@
             <td>勞退自提調整</td>
             <td></td>
             <td style="text-align:right">[A010]</td>
-            <td >8~10小時</td>
+            <td>10~12小時</td>
             <td style="text-align:right">[B025]</td>
             <td style="text-align:right">[B026]</td>
             <td style="text-align:right">[B027]</td>
@@ -246,7 +300,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>10~12小時</td>
+            <td>12小時以上</td>
             <td style="text-align:right">[B028]</td>
             <td style="text-align:right">[B029]</td>
             <td style="text-align:right">[B030]</td>
@@ -258,10 +312,11 @@
             <td>&nbsp;</td>
             <td></td>
             <td></td>
-            <td>12小時以上</td>
-            <td style="text-align:right">[B031]</td>
-            <td style="text-align:right">[B032]</td>
-            <td style="text-align:right">[B033]</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
         </tr>
@@ -300,7 +355,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td style="text-align:right">[B034]</td>
+            <td style="text-align:right">[B031]</td>
              <td>合計(C)</td>
              <td style="text-align:right">[C011]</td>
         </tr>
@@ -318,6 +373,7 @@
             <tr><td >已休日數</td><td>[D009]</td><td>提撥金額</td><td></td></tr>
         </table>
         </div>--%>
+        
 
         <div id="div_Edit" style="display:none" runat="server">
         <div class="fixwidth">
@@ -327,16 +383,16 @@
                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.cancel()" >取消</a>--%>
                     <asp:LinkButton ID="lkb_subimt" CssClass="keybtn" runat="server" OnClick="lkb_subimt_Click">儲存</asp:LinkButton>
                     <asp:LinkButton ID="lkb_Back" CssClass="keybtn" runat="server" OnClick="lkb_Back_Click" >回原預設</asp:LinkButton>
-                    <asp:LinkButton ID="lkb_Cancel" CssClass="keybtn" runat="server" OnClick="lkb_Cancel_Click">取消</asp:LinkButton>
+                    <asp:LinkButton ID="lkb_Cancel" CssClass="keybtn" runat="server" OnClick="lkb_Cancel_Click">返回</asp:LinkButton>
                     <!--<a href="#" class="keybtn">取消</a>-->
                 </div>
             </div>
         </div>
         <div id="div_design" class="fixwidth " >
-            <table style="height:500px" >
+            <table style="width:100%" >
                 <tr>
                     <td>
-                        <textarea id="tex_designContent" runat="server" rows="800" cols="50" style="height:500px; width:500px;"  ></textarea>     
+                        <textarea id="tex_designContent" runat="server" rows="800" cols="50" style="height:500px; width:100%;"  ></textarea>     
                     </td>
                 </tr>
                 <tr>
@@ -352,7 +408,7 @@
                          <tr>
                              <td>                                     
                                 基本薪資時數:[A001]<br />  
-                                基本薪資金額:[A002]<br />                                  
+                               基本薪資金額:[A002]<br />                                  
                                 BestSA獎金:[A003]<br />
                                 體檢補助:[A004]<br />
                                 其它津貼:[A005]<br />
@@ -459,8 +515,10 @@
                 div_List: 'div_List',
                 div_Edit: 'div_Edit',
                 hid_SalaryRangeGuid: '<%=hid_SalaryRangeGuid.ClientID%>',
-                sp_sDate: 'sp_sDate',
-                sp_eDate: 'sp_eDate'
+                hid_sdate: '<%=hid_sdate.ClientID%>',
+                hid_edate: '<%=hid_edate.ClientID%>',
+                sp_sDate: '<%=sp_sDate.ClientID%>',
+                sp_eDate:'<%=sp_eDate.ClientID%>'
             },
 
             List: function () {
@@ -569,6 +627,8 @@
                 case "SalaryRange":
                     {
                         $("#" + JsEven.Id.sp_sDate).html(str);
+                        $("#" + JsEven.Id.hid_sdate).val(str);
+                        $("#" + JsEven.Id.hid_edate).val(str2);
                         $("#" + JsEven.Id.sp_eDate).html(str2);
                         $("#" + JsEven.Id.hid_SalaryRangeGuid).val(gv);
                     }
