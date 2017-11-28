@@ -238,4 +238,21 @@ where pfGuid=@pfGuid
         oCmd.ExecuteNonQuery();
         oCmd.Connection.Close();
     }
+
+    public DataTable checkPFbyIDNum()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"SELECT * from sy_PersonFamily with (nolock) where pfIDNumber=@pfIDNumber and pfStatus='A' ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@pfIDNumber", pfIDNumber);
+        oda.Fill(ds);
+        return ds;
+    }
 }
