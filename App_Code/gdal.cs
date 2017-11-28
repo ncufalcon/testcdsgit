@@ -1704,6 +1704,7 @@ namespace payroll
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@sr_Guid", sr_Guid);
             cmd.Parameters.AddWithValue("@perNo", perNo);
             cmd.Parameters.AddWithValue("@perName", perName);
