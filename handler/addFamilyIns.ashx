@@ -36,7 +36,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     switch (pfi_Change)
                     {
                         case "01":
-                            checkDt = FI_Db.checkLastStatus(pfi_No);
+                            checkDt = FI_Db.checkLastStatus(pfi_PfGuid);
                             if (checkDt.Rows.Count > 0)
                             {
                                 if (checkDt.Rows[0]["pfiChange"].ToString() == "01")
@@ -48,7 +48,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                             break;
                         case "02":
                         case "03":
-                            checkDt = FI_Db.checkLastStatus(pfi_No);
+                            checkDt = FI_Db.checkLastStatus(pfi_PfGuid);
                             if (checkDt.Rows.Count > 0)
                             {
                                 if (checkDt.Rows[0]["pfiChange"].ToString() == "02" || checkDt.Rows[0]["pfiChange"].ToString() == "03")
@@ -72,7 +72,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiStatus = "A";
                     FI_Db._pfiCreateId = USERINFO.MemberGuid;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
-                    FI_Db.addFamilyIns();
+                    //FI_Db.addFamilyIns();
                     break;
                 case "Modify":
                     FI_Db._pfiGuid = id;

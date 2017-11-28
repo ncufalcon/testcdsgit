@@ -367,15 +367,15 @@ order by pgiChange,perDep,perNo,pfTitle
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select * from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPerGuid=@perGuid 
-and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPerGuid=@perGuid) 
-and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPerGuid=@perGuid) ");
+        sb.Append(@"select * from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPfGuid=@pfiPfGuid 
+and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPfGuid=@pfiPfGuid) 
+and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiStatus='A' and pfiPfGuid=@pfiPfGuid) ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataTable ds = new DataTable();
-        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oCmd.Parameters.AddWithValue("@pfiPfGuid", pfiPfGuid);
         oda.Fill(ds);
         return ds;
     }
