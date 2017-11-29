@@ -13,6 +13,7 @@ using System.Configuration;
 public class PersonImport : IHttpHandler,IRequiresSessionState {
     ErrorLog err = new ErrorLog();
     Personnel_DB Personnel_Db = new Personnel_DB();
+    PersonFamily_DB pf_db = new PersonFamily_DB();
     public void ProcessRequest(HttpContext context)
     {
         if (string.IsNullOrEmpty(USERINFO.MemberGuid))
@@ -492,6 +493,11 @@ perStatus
 
                     //判斷身分證字號是否為空
                     if (pfIDNumber == "")
+                        continue;
+
+                    pf_db._pfIDNumber = pfIDNumber;
+                    DataTable pfdt = pf_db.checkPFbyIDNum();
+                    if (pfdt.Rows.Count > 0)
                         continue;
 
                     //無對應工號則不Insert
