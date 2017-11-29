@@ -46,7 +46,7 @@ function printpage(){
 
 
 
-<%--     <script type="text/javascript">
+     <script type="text/javascript">
               tinymce.init({
             selector: "textarea",
             language: 'zh_TW',
@@ -59,8 +59,8 @@ function printpage(){
             statusbar: false,
             menubar: false
         });
-        </script>--%>
-<script type="text/javascript">
+        </script>
+<%--<script type="text/javascript">
     tinymce.init({
         selector: "textarea",
         language: "zh_TW",
@@ -85,7 +85,7 @@ function printpage(){
         convert_urls: true,
         toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link pagebreak table image | forecolor backcolor | fontselect fontsizeselect"
     });
-</script>
+</script>--%>
 
 
     <script type="text/javascript">
