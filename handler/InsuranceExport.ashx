@@ -592,7 +592,7 @@ public class InsuranceExport : IHttpHandler {
                             Xls.SetCellValue(i, 6, dt.Rows[i - 4]["perPosition"].ToString());
                             Xls.SetCellValue(i, 7, "B");
                             if (dt.Rows[i - 4]["pgiChange"].ToString() != "02")
-                                Xls.SetCellValue(i, 8, dt.Rows[i - 4]["startDate"].ToString());
+                                Xls.SetCellValue(i, 8, dt.Rows[i - 4]["pgiChangeDate"].ToString());
                             if (dt.Rows[i - 4]["pgiChange"].ToString() == "02")
                                 Xls.SetCellValue(i, 9, dt.Rows[i - 4]["pgiChangeDate"].ToString());
                             if (dt.Rows[i - 4]["pgiType"].ToString() == "02")

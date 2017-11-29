@@ -340,16 +340,18 @@ order by perIDNumber ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select pgiType,
+(select cbValue from sy_CodeBranches where cbStatus<>'D' and cbGuid=perDep) DepCode,
 (select cbName from sy_CodeBranches where cbStatus<>'D' and cbGuid=perDep) perDep,
 perNo,perName,perIDNumber,perBirthday,
 (select code_desc from sy_codetable where code_group='02' and code_value=perPosition) perPosition,perFirstDate,
-CONVERT(VARCHAR(10),(SELECT DATEADD(month, 1, perFirstDate)),111) startDate,
-(select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle,pfName,pfIDNumber,pfBirthday,pgiChange,pgiChangeDate
+(select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle,
+(select code_value from sy_codetable where code_group='17' and code_value=pfTitle) TitleCode,
+pfName,pfIDNumber,pfBirthday,pgiChange,pgiChangeDate
 from sy_PersonGroupInsurance
 left join sy_Person on pgiPerGuid=perGuid
 left join sy_PersonFamily on pgiPfGuid=pfGuid
 where pgiGuid in (" + pgiGuid + @")
-order by pgiChange,perDep,perNo,pfTitle
+order by pgiChange,DepCode,perNo,pgiType,TitleCode
 ");
 
         oCmd.CommandText = sb.ToString();
