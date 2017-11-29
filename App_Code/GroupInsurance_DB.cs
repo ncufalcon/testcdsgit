@@ -101,7 +101,7 @@ from sy_PersonGroupInsurance
 left join sy_Person on perGuid=pgiPerGuid
 left join sy_PersonFamily on pfGuid=pgiPfGuid
 left join sy_GroupInsurance on giGuid=pgiInsuranceCode
-where pgiStatus<>'D'  ");
+where pgiStatus<>'D' ");
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfName) LIKE '%' + upper(@KeyWord) + '%')
@@ -109,7 +109,8 @@ where pgiStatus<>'D'  ");
         }
         if (pgiChangeDate != "")
         {
-            sb.Append(@"and ((pgiChange='02' and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate) or (pgiChange='01' and SUBSTRING(pgiChangeDate,1,7)=@EffectiveDate)) ");
+            //sb.Append(@"and ((pgiChange='02' and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate) or (pgiChange='01' and SUBSTRING(pgiChangeDate,1,7)=@EffectiveDate)) ");
+            sb.Append(@"and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate  ");
         }
         sb.Append(@"order by pgiChange,pgiChangeDate desc,pgiCreateDate desc ");
 

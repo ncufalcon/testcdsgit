@@ -119,6 +119,9 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters.Add("@LaborNo", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@HealNo", SqlDbType.NVarChar);
 
+                //團保加保日到職日加一個月
+                oCmd.Parameters.Add("@PgiAddmonth", SqlDbType.NVarChar);
+
                 for (int j = 3; j <= Xls.GetRowCount(1); j++)
                 {
                     string perIDNumber = (Xls.GetCellValue(j, 1) != null) ? Xls.GetCellValue(j, 1).ToString() : "";
@@ -196,6 +199,7 @@ public class PersonImport : IHttpHandler,IRequiresSessionState {
                     oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(getStartIns("ssi_tahui"));
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
+                    oCmd.Parameters["@PgiAddmonth"].Value = DateTime.Parse(xlsDateTimeFormat(perFirstDate)).AddMonths(1).ToString("yyyy/MM/dd");
                     //勞健保卡號
                     string CompanyGid = getCnValue("sy_Company", "comAbbreviate", perComGuid, "comGuid","comStatus");
                     oCmd.Parameters["@LaborNo"].Value =  getCnValue("sy_Company", "comGuid", CompanyGid, "comLaborProtectionCode","comStatus");
@@ -445,7 +449,7 @@ perStatus
                     '',
                     '01',
                     '01',
-                    @perFirstDate,
+                    @PgiAddmonth,
                     @perCreateId,
                     @perModifyDate,
                     @perModifyId,
@@ -463,6 +467,7 @@ perStatus
                 oCmd.Parameters.Add("@pfiGuid", SqlDbType.NVarChar);
                 //團保
                 oCmd.Parameters.Add("@pgiGuid", SqlDbType.NVarChar);
+                oCmd.Parameters.Add("@pgiChangeDate", SqlDbType.NVarChar);
 
                 oCmd.Parameters.Add("@pfGuid", SqlDbType.NVarChar);
                 oCmd.Parameters.Add("@pfPerGuid", SqlDbType.NVarChar);
@@ -510,6 +515,10 @@ perStatus
                     oCmd.Parameters["@pfiGuid"].Value = Guid.NewGuid().ToString();
                     //團保
                     oCmd.Parameters["@pgiGuid"].Value = Guid.NewGuid().ToString();
+                    string pgi_changedate = getCnValue("sy_Person", "perNo", pfPerGuid, "perFirstDate","perStatus");
+                    if (pgi_changedate != "")
+                        pgi_changedate = DateTime.Parse(pgi_changedate).AddMonths(1).ToString("yyyy/MM/dd");
+                    oCmd.Parameters["@pgiChangeDate"].Value = pgi_changedate;
                     //到職日
                     string PersonGid = getCnValue("sy_Person", "perNo", pfPerGuid, "perGuid","perStatus");
                     oCmd.Parameters["@ChangeDate"].Value = getCnValue("sy_Person", "perGuid", PersonGid, "perFirstDate","perStatus");
@@ -606,7 +615,7 @@ perStatus
                     @pfGuid,
                     '02',
                     '01',
-                    @ChangeDate,
+                    @pgiChangeDate,
                     @pfCreateId,
                     @pfModifyDate,
                     @pfModifyId,
