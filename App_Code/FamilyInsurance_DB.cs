@@ -340,7 +340,7 @@ order by perIDNumber ");
         StringBuilder sb = new StringBuilder();
 
         sb.Append(@"select pgiType,
-(select cbValue from sy_CodeBranches where cbStatus<>'D' and cbGuid=perDep) DepCode,
+(select CONVERT(int,cbValue) from sy_CodeBranches where cbStatus<>'D' and cbGuid=perDep) DepCode,
 (select cbName from sy_CodeBranches where cbStatus<>'D' and cbGuid=perDep) perDep,
 perNo,perName,perIDNumber,perBirthday,
 (select code_desc from sy_codetable where code_group='02' and code_value=perPosition) perPosition,perFirstDate,
