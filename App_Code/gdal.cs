@@ -662,7 +662,7 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pDepCode))
                 sql += "and ((pPerDepCode = @pDepCode) or (pPerDep like '%' + @pDepCode +'%')) ";
 
-            sql += "order by pPerDepCode, pPerNo ";
+            sql += "order by convert(int,pPerDepCode), pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
