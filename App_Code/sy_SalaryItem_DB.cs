@@ -147,7 +147,7 @@ public class sy_SalaryItem_DB
                 thisCommand.Parameters.AddWithValue("@siGuid", siGuid);
             }
             show_value.Append(@"  
-                order by siCreatDate DESC
+                order by siItemCode,siCreatDate DESC
             ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();

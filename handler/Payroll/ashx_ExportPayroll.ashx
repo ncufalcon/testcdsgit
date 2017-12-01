@@ -72,7 +72,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                     row.CreateCell(4).SetCellValue("");//註記
 
                     decimal pBasicSalary = (!string.IsNullOrEmpty(dv[i]["pBasicSalary"].ToString())) ? decimal.Parse(dv[i]["pBasicSalary"].ToString()) : 0;
-                        decimal pAllowance = (!string.IsNullOrEmpty(dv[i]["pAllowance"].ToString())) ? decimal.Parse(dv[i]["pAllowance"].ToString()) : 0;
+                    decimal pAllowance = (!string.IsNullOrEmpty(dv[i]["pAllowance"].ToString())) ? decimal.Parse(dv[i]["pAllowance"].ToString()) : 0;
                     row.CreateCell(5).SetCellValue(com.toDou((pBasicSalary + pAllowance).ToString()));//底薪
                     row.CreateCell(6).SetCellValue(com.toDou(dv[i]["pAttendanceDays"].ToString()));//出勤天數
                     row.CreateCell(7).SetCellValue(com.toDou((decimal.Parse(dv[i]["pGeneralTime"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysTime1"].ToString())).ToString()));//出勤時數  pNationalholidaysTime1
@@ -119,7 +119,12 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                         switch (adv[j]["siItemCode"].ToString())
                         {
                             case "A003":
-                                row.CreateCell(13).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//薪資調整-薪資項目
+                            case "A102":
+                                //row.CreateCell(13).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//薪資調整-薪資項目
+                                if (adv[j]["siItemCode"].ToString() == "A003")
+                                    row.CreateCell(13).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//薪資調整-薪資項目
+                                if (adv[j]["siItemCode"].ToString() == "A102")
+                                    row.CreateCell(13).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//薪資調整-薪資項目
                                 break;
                             case "S001":
                                 row.CreateCell(21).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//BestSA獎金
@@ -137,7 +142,13 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                 row.CreateCell(25).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//伙食津貼 待計算
                                 break;
                             case "D01":
-                                row.CreateCell(29).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
+                            case "D11":
+                                //row.CreateCell(29).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
+                                if (adv[j]["siItemCode"].ToString() == "D01")
+                                    row.CreateCell(29).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
+                                if (adv[j]["siItemCode"].ToString() == "D11")
+                                    row.CreateCell(29).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//調免稅加班
+
                                 break;
                             case "S104":
                                 row.CreateCell(44).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣福利金
@@ -156,7 +167,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                 if (adv[j]["siItemCode"].ToString() == "A004")
                                     row.CreateCell(34).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣勞保費調整
                                 if (adv[j]["siItemCode"].ToString() == "A104")
-                                    row.CreateCell(34).SetCellValue(com.toDou("-" +adv[j]["psaCost"].ToString()));//代扣勞保費調整
+                                    row.CreateCell(34).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣勞保費調整
                                 break;
                             case "A005":
                             case "A105":
@@ -170,7 +181,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                 if (adv[j]["siItemCode"].ToString() == "A010")
                                     row.CreateCell(36).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
                                 if (adv[j]["siItemCode"].ToString() == "A110")
-                                    row.CreateCell(36).SetCellValue( com.toDou("-" +adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
+                                    row.CreateCell(36).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
                                 break;
                             case "A101":
                                 row.CreateCell(37).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代法院執行
@@ -211,7 +222,10 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
             ErrorLog err = new ErrorLog();
             err.InsErrorLog("ashx_ExportPayroll.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("程式發生錯誤，請聯絡相關管理人員");
-
+            //E002(職能加給)  D12(調應稅加班)  D13(免稅加班二)  
+            //D02(調應稅加班)  S002(颱風天加給)  A103(體檢補助)  S003(國定假日加給)  D03(免稅加班二(>160小、休息日加班))
+            //F006(調未休假代金)  D04(應稅加班二(單月OT>46小)  D14(應稅加班二(單月OT>46小) 
+            //A107(代扣繳-訓練費)  
         }
     }
 
