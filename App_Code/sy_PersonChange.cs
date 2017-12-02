@@ -564,8 +564,8 @@ public class sy_PersonChange
                 where pgiPerGuid=@str_back_per_guid and pgiStatus='A'
                 if @rowcounts>0
                     begin
-                        insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
-                        select NEWID(),pgiPerGuid,pgiType,'02',@str_date,pgiInsuranceCode,'',@str_creatid,'A'
+                        insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiPfGuid,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
+                        select NEWID(),pgiPerGuid,pgiType,pgiPfGuid,'02',@str_date,pgiInsuranceCode,'',@str_creatid,'A'
 	                    from sy_PersonGroupInsurance 
 	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiChange='01'
 	                    order by pgiChangeDate DESC,pgiCreateDate DESC
