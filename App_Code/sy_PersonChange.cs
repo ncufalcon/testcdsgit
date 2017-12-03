@@ -590,8 +590,8 @@ public class sy_PersonChange
                 where pfiPerGuid=@str_back_per_guid and pfiStatus='A'
                 if @rowcounts>0
                     begin
-                        insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus)
-                        select NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,'',@str_creatid,'A'
+                        insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus,pfiDropOutReason)
+                        select NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,'',@str_creatid,'A','5'
 	                    from sy_PersonFamilyInsurance 
 	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and pfiChange='01'
 	                    order by pfiChangeDate DESC,pfiCreateDate DESC
