@@ -314,7 +314,12 @@
                             str_html += "<tbody>";
                             for (var i = 0; i < response.length; i++) {
                                 str_html += "<tr trguid='" + response[i].pcGuid + "' trstat='" + response[i].pcStatus + "' trlastdate='" + response[i].perLastDate + "'  >";
-                                str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
+                                if (response[i].pcStatus == "0") {
+                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_person_a' astatus='" + response[i].pcStatus + "' aguid='" + response[i].pcGuid + "'>刪除</a></td>";
+                                } else {
+                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'></td>";
+                                }
+                                
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pcChangeDate + "</td>";
@@ -854,8 +859,11 @@
                                 } else {
                                     str_html += "<td align='center' class='font-normal' nowrap='nowrap'></td>";
                                 }
-
-                                str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_pay_a' aguid='" + response[i].pacGuid + "'>刪除</a></td>";
+                                if (response[i].pacStatus == "0") {
+                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'><a href='javascript:void(0);' name='del_pay_a' aguid='" + response[i].pacGuid + "'>刪除</a></td>";
+                                } else {
+                                    str_html += "<td align='center' class='font-normal' nowrap='nowrap'></td>";
+                                }
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perNo + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].perName + "</td>";
                                 str_html += "<td align='center' nowrap='nowrap' style='cursor: pointer;'>" + response[i].pacChangeDate + "</td>";
