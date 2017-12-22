@@ -532,70 +532,123 @@ public class sy_PersonChange
             //20170926調整  健保&團保是轉出piChange='07' pfiChange='03'  勞保 團保 勞退 三個依舊維持是退保
             //20171017 調整 所有備註都不要帶過去 都insert 空值
             show_value.Append(@" 
-                declare @rowcounts int;
-                select @rowcounts=COUNT(*) 
+                declare @chk_type nvarchar(5);
+
+                --勞保
+                select top 1 @chk_type=plChange
                 from sy_PersonLabor 
                 where plPerGuid=@str_back_per_guid and plStatus='A' 
-                if @rowcounts>0
-                    begin
-                        insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
+                order by plChangeDate DESC,plCreateDate DESC
+                if @chk_type is not null and @chk_type <>'' and @chk_type<>'02' and @chk_type<>'04' and (@chk_type='01' or @chk_type='03')
+	                begin 
+		                insert into sy_PersonLabor (plGuid,plPerGuid,plSubsidyLevel,plLaborNo,plChangeDate,plChange,plLaborPayroll,plPs,plCreateId,plStatus)
 	                    select top 1 NEWID(),plPerGuid,plSubsidyLevel,plLaborNo,@str_date,'02',plLaborPayroll,'',@str_creatid,'A'
 	                    from sy_PersonLabor 
-	                    where plPerGuid=@str_back_per_guid and plStatus='A'  and (plChange='01' or plChange='03')
-	                    order by plChangeDate DESC,plCreateDate DESC
-                    end
-
-                set @rowcounts=0;
-                select @rowcounts=COUNT(*) 
+	                    where plPerGuid=@str_back_per_guid and plStatus='A' 
+                        order by plChangeDate DESC,plCreateDate DESC
+	                end
+            
+                --健保
+                set @chk_type='';
+                select top 1 @chk_type=piChange
                 from sy_PersonInsurance 
                 where piPerGuid=@str_back_per_guid and piStatus='A'
-                if @rowcounts>0
+                order by piChangeDate DESC,piCreateDate DESC
+                if @chk_type is not null and @chk_type <>'' and @chk_type<>'02' and @chk_type<>'04' and @chk_type<>'06' and @chk_type<>'07' and (@chk_type='01' or @chk_type='03' or @chk_type='05')
                     begin
                         insert into sy_PersonInsurance (piGuid,piPerGuid,piSubsidyLevel,piCardNo,piChangeDate,piChange,piInsurancePayroll,piPs,piCreateId,piStatus,piDropOutReason)
                         select top 1 NEWID(),piPerGuid,piSubsidyLevel,piCardNo,@str_date,'07',piInsurancePayroll,'',@str_creatid,'A','1'
 	                    from sy_PersonInsurance 
-	                    where piPerGuid=@str_back_per_guid and piStatus='A' and (piChange='01' or piChange='03')
-	                    order by piChangeDate DESC,piCreateDate DESC
+	                    where piPerGuid=@str_back_per_guid and piStatus='A'
+                        order by piChangeDate DESC,piCreateDate DESC
                     end
-
-                set @rowcounts=0;
-                select @rowcounts=COUNT(*) 
-                from sy_PersonGroupInsurance 
-                where pgiPerGuid=@str_back_per_guid and pgiStatus='A'
-                if @rowcounts>0
-                    begin
-                        insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiPfGuid,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
-                        select NEWID(),pgiPerGuid,pgiType,pgiPfGuid,'02',@str_date,pgiInsuranceCode,'',@str_creatid,'A'
-	                    from sy_PersonGroupInsurance 
-	                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiChange='01'
-	                    order by pgiChangeDate DESC,pgiCreateDate DESC
-                    end
-
-                set @rowcounts=0;
-                select @rowcounts=COUNT(*) 
+                
+                --勞退
+                set @chk_type='';
+                select top 1 @chk_type=ppChange
                 from sy_PersonPension 
                 where ppPerGuid=@str_back_per_guid and ppStatus='A'
-                if @rowcounts>0
+                order by ppChangeDate DESC,ppCreateDate DESC
+                if @chk_type is not null and @chk_type <>'' and @chk_type<>'03' and (@chk_type='01' or @chk_type='02')
                     begin
                         insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
                         select top 1 NEWID(),ppPerGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,'',@str_creatid,'A'
 	                    from sy_PersonPension 
-	                    where ppPerGuid=@str_back_per_guid and ppStatus='A' and (ppChange='01' or ppChange='02')
+	                    where ppPerGuid=@str_back_per_guid and ppStatus='A'
 	                    order by ppChangeDate DESC,ppCreateDate DESC
                     end
 
-                set @rowcounts=0;
-                select @rowcounts=COUNT(*) 
-                from sy_PersonFamilyInsurance 
-                where pfiPerGuid=@str_back_per_guid and pfiStatus='A'
-                if @rowcounts>0
-                    begin
-                        insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus,pfiDropOutReason)
-                        select NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,'',@str_creatid,'A','5'
-	                    from sy_PersonFamilyInsurance 
-	                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and pfiChange='01'
-	                    order by pfiChangeDate DESC,pfiCreateDate DESC
-                    end
+                --團保
+                set @chk_type='';
+                declare @pgirowcount int;
+                declare @while_pgiPerGuid nvarchar(50);
+                declare @while_pgiPfGuid nvarchar(50);
+                --先撈出該GUID底下在sy_PersonGroupInsurance裡面有多少人屬於他
+                select pgiPerGuid,pgiPfGuid
+                into #tmp_pgi
+                from sy_PersonGroupInsurance 
+                where pgiPerGuid=@str_back_per_guid and pgiStatus='A'
+                group by pgiPerGuid,pgiPfGuid
+                select @pgirowcount=COUNT(*) from #tmp_pgi
+                if @pgirowcount>0
+	                begin 
+		                while @pgirowcount>0
+			                begin
+                                --根據屬於該GUID底下的人員一個一個找最新一筆資料是加保還是退保，如果是退保就不新增
+				                select top 1 @while_pgiPerGuid=pgiPerGuid,@while_pgiPfGuid=pgiPfGuid from #tmp_pgi
+				                select top 1 @chk_type=pgiChange from sy_PersonGroupInsurance
+				                where pgiPerGuid=@while_pgiPerGuid and pgiPfGuid=@while_pgiPfGuid and pgiStatus='A'
+				                order by pgiChangeDate DESC,pgiCreateDate DESC
+				                if @chk_type is not null and @chk_type<>'' and @chk_type<>'02' and @chk_type='01'
+					                begin
+						                insert into sy_PersonGroupInsurance (pgiGuid,pgiPerGuid,pgiType,pgiPfGuid,pgiChange,pgiChangeDate,pgiInsuranceCode,pgiPs,pgiCreateId,pgiStatus)
+                                        select NEWID(),pgiPerGuid,pgiType,pgiPfGuid,'02',@str_date,pgiInsuranceCode,'',@str_creatid,'A'
+	                                    from sy_PersonGroupInsurance 
+	                                    where pgiPerGuid=@str_back_per_guid and pgiStatus='A' and pgiPerGuid=@while_pgiPerGuid and pgiPfGuid=@while_pgiPfGuid
+	                                    order by pgiChangeDate DESC,pgiCreateDate DESC
+					                end
+				                delete from #tmp_pgi where pgiPerGuid=@while_pgiPerGuid and pgiPfGuid=@while_pgiPfGuid
+				                set @pgirowcount = @pgirowcount-1;
+				                set @chk_type=''
+			                end
+	                end
+                    drop table #tmp_pgi
+
+                    --眷屬
+                    --先撈出該GUID底下在sy_PersonFamilyInsurance裡面有多少人屬於他
+                    declare @pfirowcount int;
+                    declare @while_pfiPerGuid nvarchar(50);
+                    declare @while_pfiPfGuid nvarchar(50);
+                    select pfiPerGuid,pfiPfGuid
+                    into #tmp_pfi
+                    from sy_PersonFamilyInsurance 
+                    where pfiPerGuid=@str_back_per_guid and pfiStatus='A'
+                    group by pfiPerGuid,pfiPfGuid
+                    select @pfirowcount=COUNT(*) from #tmp_pfi
+                    if @pfirowcount>0
+	                    begin 
+		                    while @pfirowcount>0
+			                    begin
+                                    --根據屬於該GUID底下的人員一個一個找最新一筆資料是加保還是退保，如果是退保就不新增
+				                    select top 1 @while_pfiPerGuid=pfiPerGuid,@while_pfiPfGuid=pfiPfGuid from #tmp_pfi
+				                    select top 1 @chk_type=pfiChange from sy_PersonFamilyInsurance
+				                    where pfiPerGuid=@while_pfiPerGuid and pfiPfGuid=@while_pfiPfGuid and pfiStatus='A'
+				                    order by pfiChangeDate DESC,pfiCreateDate DESC
+				                    if @chk_type is not null and @chk_type<>'' and @chk_type<>'02' and @chk_type<>'03' and @chk_type='01'
+					                    begin
+						                    insert into sy_PersonFamilyInsurance (pfiGuid,pfiPerGuid,pfiPfGuid,pfiChange,pfiChangeDate,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,pfiPs,pfiCreateId,pfiStatus,pfiDropOutReason)
+                                            select top 1 NEWID(),pfiPerGuid,pfiPfGuid,'03',@str_date,pfiSubsidyLevel,pfiCardNo,pfiAreaPerson,'',@str_creatid,'A','5'
+	                                        from sy_PersonFamilyInsurance 
+	                                        where pfiPerGuid=@str_back_per_guid and pfiStatus='A' and  pfiPerGuid=@while_pfiPerGuid and pfiPfGuid=@while_pfiPfGuid
+	                                        order by pfiChangeDate DESC,pfiCreateDate DESC
+					                    end
+				                    delete from #tmp_pfi where pfiPerGuid=@while_pfiPerGuid and pfiPfGuid=@while_pfiPfGuid
+				                    set @pfirowcount = @pfirowcount-1;
+				                    set @chk_type=''
+			                    end
+	                    end
+                    drop table #tmp_pfi
+
                 ");
 
             thisCommand.Parameters.AddWithValue("@str_back_per_guid", str_back_per_guid);
