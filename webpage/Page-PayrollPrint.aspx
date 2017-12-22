@@ -46,7 +46,7 @@ function printpage(){
 
 
 
-     <script type="text/javascript">
+<%--     <script type="text/javascript">
               tinymce.init({
             selector: "textarea",
             language: 'zh_TW',
@@ -59,8 +59,8 @@ function printpage(){
             statusbar: false,
             menubar: false
         });
-        </script>
-<%--<script type="text/javascript">
+        </script>--%>
+<script type="text/javascript">
     tinymce.init({
         selector: "textarea",
         language: "zh_TW",
@@ -85,7 +85,7 @@ function printpage(){
         convert_urls: true,
         toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link pagebreak table image | forecolor backcolor | fontselect fontsizeselect"
     });
-</script>--%>
+</script>
 
 
     <script type="text/javascript">
@@ -417,23 +417,26 @@ function printpage(){
                                 勞保費調整:[A008]<br />
                                 健保費調整:[A009]<br />
                                 勞退自提調整:[A010]<br />
-                                特休假:[A011]<br />
-                                特休假天數:[A012]<br />
-                                婚假:[A013]<br />
-                                婚假天數:[A014]<br />
-                                病假:[A015]<br />
-                                病假天數:[A016]<br />
-                                喪假:[A017]<br />
-                                喪假天數:[A018]<br />
-                                產假:[A019]<br />
-                                產假天數:[A020]<br />
-                                陪產假:[A021]<br />
-                                陪產假天數:[A022]<br />
-                                兵役假:[A023]<br />
-                                兵役假天數:[A024]<br />
-                                流產假:[A0125]<br />
-                                流產假天數:[A026]<br />
-                                加項1金額合計:[A027]<br />
+                                年節禮金:[A011]<br />
+                                颱風天加給:[A012]<br />
+                                未休特休假:[A013]<br />
+                                特休假:[A014]<br />
+                                特休假天數:[A015]<br />
+                                婚假:[A016]<br />
+                                婚假天數:[A017]<br />
+                                病假:[A018]<br />
+                                病假天數:[A019]<br />
+                                喪假:[A020]<br />
+                                喪假天數:[A021]<br />
+                                產假:[A022]<br />
+                                產假天數:[A023]<br />
+                                陪產假:[A024]<br />
+                                陪產假天數:[A025]<br />
+                                兵役假:[A026]<br />
+                                兵役假天數:[A027]<br />
+                                流產假:[A0128]<br />
+                                流產假天數:[A029]<br />
+                                加項1金額合計:[A030]<br />
                              </td>
                              <td>
                                 平日加班1類倍率:[B001]<br />
@@ -481,7 +484,8 @@ function printpage(){
                                  代扣勞退自提調整:[C008]<br />
                                  代法院執行:[C009]<br />
                                  代扣繳-捐:[C010]<br />
-                                 應扣合計:[C011]<br />
+                                 代扣繳-訓:[C011]<br />
+                                 應扣合計:[C012]<br />
                              </td>
                              <td>
                                  姓名:[D001]<br />
