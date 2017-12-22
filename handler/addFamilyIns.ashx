@@ -72,7 +72,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiStatus = "A";
                     FI_Db._pfiCreateId = USERINFO.MemberGuid;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
-                    //FI_Db.addFamilyIns();
+                    FI_Db.addFamilyIns();
                     break;
                 case "Modify":
                     FI_Db._pfiGuid = id;

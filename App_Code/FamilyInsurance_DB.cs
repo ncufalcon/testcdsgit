@@ -363,7 +363,7 @@ order by pgiChange,DepCode,perNo,pgiType,TitleCode
         return ds;
     }
 
-    public DataTable checkLastStatus(string perGuid)
+    public DataTable checkLastStatus(string pfiPfGuid)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
