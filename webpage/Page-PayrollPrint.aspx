@@ -392,7 +392,9 @@ function printpage(){
             <table style="width:100%" >
                 <tr>
                     <td>
-                        <textarea id="tex_designContent" runat="server" rows="800" cols="50" style="height:500px; width:100%;"  ></textarea>     
+                        <textarea id="tex_designContent" runat="server" rows="800" cols="50" style="height:500px; width:100%;"  ></textarea><br />
+                        
+                        保薪調整提醒字樣設定:<asp:TextBox ID="txt_remind" runat="server"></asp:TextBox>     
                     </td>
                 </tr>
                 <tr>
@@ -418,7 +420,7 @@ function printpage(){
                                 健保費調整:[A009]<br />
                                 勞退自提調整:[A010]<br />
                                 年節禮金:[A011]<br />
-                                颱風天加給:[A012]<br />
+                                國定/假日加給:[A012]<br />
                                 未休特休假:[A013]<br />
                                 特休假:[A014]<br />
                                 特休假天數:[A015]<br />
@@ -503,6 +505,7 @@ function printpage(){
                                  勞退提撥率:[D013]<br />
                                  提撥金額:[D014]<br />
                                  實發金額:[D015]<br />
+                                 保薪調整提醒:[D016]<br />
                              </td>
                          </tr>
                      </table>

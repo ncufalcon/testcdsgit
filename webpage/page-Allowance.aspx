@@ -96,7 +96,7 @@
                                     </td>
                                     <td class="width35">
                                         <input type="text" id="txt_AllowanceCode" class="inputex width60"  />
-                                        <%--<img src="../images/btn-search.gif" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>--%>
+                                        <img src="../images/btn-search.gif" onclick="JsEven.openfancybox(this)" id="img_Code_s" style="cursor:pointer"/>
                                     </td>
                                     <td class="width15" align="right">
                                         <div class="font-title titlebackicon">金額</div>
@@ -207,7 +207,7 @@
 
         <input id="hid_Guid" type="hidden" />
     <input id="hid_EditType" type="hidden" />
-
+    <input id="hid_opWtype" type="hidden" />
     <script type="text/javascript">
 
 
@@ -250,7 +250,8 @@
                 sp_CodeName_m: 'sp_CodeName_m',
                 hid_CodeGuid_m: 'hid_CodeGuid_m',
                 tb_Edit: 'tb_Edit',
-                hid_EditType: 'hid_EditType'
+                hid_EditType: 'hid_EditType',
+                hid_opWtype: 'hid_opWtype'
             },
 
 
@@ -481,7 +482,9 @@
             openfancybox: function (item) {
                 switch ($(item).attr("id")) {
                     case "img_Code":
+                    case "img_Code_s":
                         link = "SearchWindow.aspx?v=Allowance";
+                        $('#' + this.Page2Id.hid_opWtype).val($(item).attr("id"));
                         break;
                     case "img_Person":
                         link = "SearchWindow.aspx?v=Personnel";
@@ -696,9 +699,18 @@
                     $("#" + JsEven.Page2Id.hid_PerGuid_m).val(gv);
                     break;
                 case "Allowance":
-                    $("#" + JsEven.Page2Id.txt_AllowanceCode_m).val(no);
-                    $("#" + JsEven.Page2Id.sp_CodeName_m).html(name);
-                    $("#" + JsEven.Page2Id.hid_CodeGuid_m).val(gv);
+                    switch($('#' + JsEven.Page2Id.hid_opWtype).val())
+                    {
+                        case "img_Code":
+                            $("#" + JsEven.Page2Id.txt_AllowanceCode_m).val(no);
+                            $("#" + JsEven.Page2Id.sp_CodeName_m).html(name);
+                            $("#" + JsEven.Page2Id.hid_CodeGuid_m).val(gv);
+                            break;
+                        case "img_Code_s":
+                            $("#" + JsEven.Page2Id.txt_AllowanceCode).val(no);
+                            break;
+                    }
+
                     break;
             }
         }

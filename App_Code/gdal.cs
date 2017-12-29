@@ -598,7 +598,7 @@ namespace payroll
             if (!string.IsNullOrEmpty(p.pGuid))
                 sql += "and pGuid = @pGuid ";
 
-            sql += "order by convert(datetime,sr_SalaryDate) desc ";
+            sql += "order by sr_SalaryDate desc, convert(int,pPerDepCode), pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));
@@ -691,7 +691,7 @@ namespace payroll
         public DataTable SelSy_PaySalaryDetailTop200()
         {
 
-            string sql = @"select top 200 * from v_PaySalaryDetail where pStatus='A' ";
+            string sql = @"select top 200 * from v_PaySalaryDetail where pStatus='A' order by sr_SalaryDate desc, convert(int,pPerDepCode), pPerNo";
 
             //if (!string.IsNullOrEmpty(str))
             //    sql += "and ((sr_BeginDate like '%'+ @str+ '%') or (sr_Enddate like '%' + @str + '%')   or (sr_SalaryDate like '%' + @str + '%') or (sr_Ps like '%' + @str + '%')) ";
@@ -1667,15 +1667,17 @@ namespace payroll
         /// <summary>
         /// 修改薪資條範本
         /// </summary>
-        public void Upsy_SalaryPrint(string pspContent, string pspModdifyId)
+        public void Upsy_SalaryPrint(string pspContent, string pspModdifyId, string pspRemind)
         {
             string sql = @"update sy_PaySalaryPrint set                                                               
                                   pspContent=@pspContent
+                                  ,pspRemind=@pspRemind
                                   ,pspModdifyId=@pspModdifyId 
                                   ,pspModdifyDate=@pspModdifyDate";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.Parameters.AddWithValue("@pspContent", pspContent);
+            cmd.Parameters.AddWithValue("@pspRemind", pspRemind);
             cmd.Parameters.AddWithValue("@pspModdifyId", pspModdifyId);
             cmd.Parameters.AddWithValue("@pspModdifyDate", DateTime.Now);
 

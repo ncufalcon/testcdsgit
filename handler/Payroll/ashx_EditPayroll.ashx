@@ -14,7 +14,7 @@ public class ashx_EditPayroll : IHttpHandler, System.Web.SessionState.IReadOnlyS
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
                 string pspContent = (!string.IsNullOrEmpty(context.Request.Form["pspContent"])) ? context.Request.Form["pspContent"].ToString() : "";
-                dal.Upsy_SalaryPrint(pspContent,USERINFO.MemberGuid);
+                dal.Upsy_SalaryPrint(pspContent,USERINFO.MemberGuid,"");
                 context.Response.Write("ok");
 
             }

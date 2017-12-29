@@ -21,7 +21,7 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
         if (dv.Count == 1)
         {
             tex_designContent.Value = (dv[0]["pspContent"].ToString());
-
+            txt_remind.Text = dv[0]["pspRemind"].ToString();
             div_List.Style.Add("display", "none");
             div_Edit.Style.Remove("display");
         }
@@ -38,7 +38,7 @@ public partial class webpage_Page_PayrollPrint : System.Web.UI.Page
         try
         {
             string pspContent = tex_designContent.Value;
-            dal.Upsy_SalaryPrint(pspContent, USERINFO.MemberGuid);
+            dal.Upsy_SalaryPrint(pspContent, USERINFO.MemberGuid, txt_remind.Text.Trim());
             JavaScript.AlertMessage(this.Page, "儲存成功");
         }
         catch (Exception ex)

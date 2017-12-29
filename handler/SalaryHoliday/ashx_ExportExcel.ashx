@@ -101,8 +101,9 @@ public class ashx_ExportExcel : IHttpHandler, System.Web.SessionState.IReadOnlyS
                         //IRow row = sh.GetRow(cellN);
                         IRow row = sh.CreateRow(cellN);
 
-                        row.CreateCell(0).SetCellValue(dv[i]["PerNo"].ToString());
-                        row.CreateCell(1).SetCellValue(dv[i]["cbValue"].ToString());
+                        
+                        row.CreateCell(0).SetCellValue(dv[i]["cbValue"].ToString());
+                            row.CreateCell(1).SetCellValue(dv[i]["PerNo"].ToString());
                         row.CreateCell(2).SetCellValue(dv[i]["perName"].ToString());
 
 
