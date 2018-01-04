@@ -351,14 +351,15 @@ and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppStatus=
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT perGuid,perNo,perName,
-(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
+        sb.Append(@"select * into #tmp from getYears((Select Convert(varchar(10),Getdate(),111)))
+
+SELECT perGuid,perNo,perName,perDep,
 perYears,ppLarboRatio,ppEmployerRatio,ppPayPayroll
-from sy_Person
+from #tmp
 left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppChangeDate
-	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppCreateDate and ppStatus='A'
+ and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppCreateDate and ppStatus='A'
 where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A' 
- and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3 and CONVERT(float,ppEmployerRatio)<=6) or 
+ and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3  and CONVERT(float,ppEmployerRatio)<=6) or 
 (CONVERT(int,perYears)>=3 and CONVERT(float,ppEmployerRatio)<=6.5)) ");
         if (pNo != "")
         {
