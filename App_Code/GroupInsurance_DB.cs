@@ -94,25 +94,58 @@ public class GroupInsurance_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 pgiGuid,pgiPerGuid,pgiPfGuid,perNo,perName,pfName,pgiInsuranceCode,pgiType,pgiChangeDate,
-(select code_desc from sy_codetable where code_group='14' and code_value=pgiChange) pgiChange,
-(select code_desc from sy_codetable where code_group='17' and code_value=pfTitle) pfTitle
-from sy_PersonGroupInsurance
-left join sy_Person on perGuid=pgiPerGuid
-left join sy_PersonFamily on pfGuid=pgiPfGuid
-left join sy_GroupInsurance on giGuid=pgiInsuranceCode
-where pgiStatus<>'D' ");
-        if (KeyWord != "")
-        {
-            sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfName) LIKE '%' + upper(@KeyWord) + '%')
- or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
-        }
+        sb.Append(@"select pgiPerGuid,pgiPfGuid,pgiType,CONVERT(nvarchar(7),pgiChangeDate) as dateM into #tmp1 from sy_PersonGroupInsurance where pgiStatus<>'D' and pgiChange='01' ");
         if (pgiChangeDate != "")
         {
-            //sb.Append(@"and ((pgiChange='02' and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate) or (pgiChange='01' and SUBSTRING(pgiChangeDate,1,7)=@EffectiveDate)) ");
-            sb.Append(@"and SUBSTRING(pgiChangeDate,1,7)=@pgiChangeDate  ");
+            sb.Append(@"and CONVERT(nvarchar(7),pgiChangeDate)=@pgiChangeDate  ");
         }
-        sb.Append(@"order by pgiChange,pgiChangeDate desc,pgiCreateDate desc ");
+
+        sb.Append(@"select pgiPerGuid,pgiPfGuid,pgiType,CONVERT(nvarchar(7),pgiChangeDate) as dateM into #tmp2 from sy_PersonGroupInsurance where pgiStatus<>'D' and pgiChange='02' ");
+        if (pgiChangeDate != "")
+        {
+            sb.Append(@"and CONVERT(nvarchar(7),pgiChangeDate)=@pgiChangeDate  ");
+        }
+
+        sb.Append(@"--先過濾掉兩張表有同月份重複加退保的資料
+select a.pgiPerGuid,a.pgiPfGuid,a.pgiType,tmp.dateM,Max(a.pgiChangeDate) as masxdate into #tmptmp from (
+	select * from (
+		select * from #tmp1
+		except
+		select * from #tmp2
+	)tmp
+	union all
+	select * from (
+		select * from #tmp2
+		except
+		select * from #tmp1
+	)tmp
+)tmp
+left join sy_PersonGroupInsurance a 
+on tmp.pgiPerGuid = a.pgiPerGuid and isnull(tmp.pgiPfGuid,'') = isnull(a.pgiPfGuid,'') and tmp.pgiType = a.pgiType
+	and tmp.dateM=CONVERT(nvarchar(7),a.pgiChangeDate)
+group by a.pgiPerGuid,a.pgiPfGuid,a.pgiType,tmp.dateM 
+
+--再根據沒有同月份重複加退保的資料去join出所有資料
+select top 200 a.*,b.perNo,b.perName,c.pfName,d.pgiGuid,d.pgiInsuranceCode,d.pgiType,d.pgiChangeDate 
+,(select code_desc from sy_codetable where code_group='14' and code_value=d.pgiChange) pgiChange
+,(select code_desc from sy_codetable where code_group='17' and code_value=c.pfTitle) pfTitle
+from #tmptmp a 
+left join sy_Person b on  a.pgiPerGuid=b.perGuid 
+left join sy_PersonFamily c on a.pgiPfGuid=c.pfGuid
+left join sy_PersonGroupInsurance d on a.pgiPerGuid=d.pgiPerGuid and a.pgiPfGuid=d.pgiPfGuid and a.pgiType=d.pgiType and a.masxdate=d.pgiChangeDate
+left join sy_GroupInsurance e on d.pgiInsuranceCode=e.giGuid
+where d.pgiStatus='A' ");
+        if (pgiChangeDate != "")
+        {
+            sb.Append(@"and a.dateM=@pgiChangeDate  ");
+        }
+
+        if (KeyWord != "")
+        {
+            sb.Append(@"and ((upper(b.perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(b.perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(c.pfName) LIKE '%' + upper(@KeyWord) + '%')
+ or (upper(c.pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
+        }
+        sb.Append(@"order by d.pgiChange,d.pgiChangeDate desc,d.pgiCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
