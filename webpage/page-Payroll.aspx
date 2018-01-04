@@ -86,21 +86,30 @@
                         </div>
 
         <div id="div_GenPayroll" class=" gentable font-normal" style="display:none; height:200px">
-          <table  border="0" cellspacing="0" cellpadding="0">
+          <table  border="0" cellspacing="0" cellpadding="0" style="width:100%">
               <tr>
-                  <td style="width:150px">日期起:<span id="sp_sDate_Gen"></span></td>
-                  <td style="width:150px">日期迄:<span id="sp_eDate_Gen"></span></td>
+                  <td ><span class="font-title titlebackicon">日期起</span><span id="sp_sDate_Gen"></span></td>
+                  <td ><span class="font-title titlebackicon">日期迄</span><span id="sp_eDate_Gen"></span></td>
                   <td><img src="../images/btn-search.gif" id="img_SalaryRange_Gen" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                       <input id="txt_SalaryRang_Gen" type="hidden" />
                   </td>
+
+              </tr>
+              <tr>
+                  <td><span class="font-title titlebackicon">員工</span><span id="sp_perName_Gen"></span></td>
+                  <td><img src="../images/btn-search.gif" id="img_Person_Gen" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+                      <input id="hid_perGuid_Gen" type="hidden" />
+                  </td>
                   <td  style="text-align:right">
                       <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genPayroll();">開始計算薪資</a>
+                      <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.genClear();">清除</a>
                       <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.Cancel();">取消</a>
                   </td>
+
               </tr>
 
           </table> 
-
+          <div class="font-red" >ps.如需計算個人薪資請選擇人員</div>  
         </div>
 
 
@@ -430,7 +439,9 @@
                 sp_sDate_Gen: 'sp_sDate_Gen',
                 sp_eDate_Gen: 'sp_eDate_Gen',
                 txt_SalaryRang_Gen: 'txt_SalaryRang_Gen',
-                div_GenPayroll: 'div_GenPayroll'
+                div_GenPayroll: 'div_GenPayroll',
+                hid_perGuid_Gen: 'hid_perGuid_Gen',
+                sp_perName_Gen: 'sp_perName_Gen'
             },
 
             Page1Id: {
@@ -1055,7 +1066,7 @@
                     case "img_Dep":
                         link = "SearchWindow.aspx?v=Dep";
                         break;
-                    case "img_Person":
+                    case "img_Person_Gen":
                         link = "SearchWindow.aspx?v=Personnel";
                         break;
                     case "img_SalaryRange":
@@ -1133,6 +1144,13 @@
 
             },
 
+            genClear:function(){
+                $('#' + this.Id.sp_sDate_Gen).html('');
+                $('#' + this.Id.sp_eDate_Gen).html('');
+                $('#' + this.Id.sp_perName_Gen).html('');
+                $('#' + this.Id.hid_perGuid_Gen).val('');
+            },
+
             payChange: function () {
 
                 var pSalary = $('#' + this.Page1Id.txt_pSalary).val(); //本薪
@@ -1194,9 +1212,8 @@
                     $("#" + JsEven.id.hid_Depstatus).val("Y");
                     break;
                 case "Personnel":
-                    $("#" + JsEven.id.txt_PerNo).val(str);
-                    $("#" + JsEven.id.sp_PerName).html(str2);
-                    $("#" + JsEven.id.hid_PerGuid).val(str);
+                    $("#" + JsEven.Id.sp_perName_Gen).html(str2 + '(' + str + ')');
+                    $("#" + JsEven.Id.hid_perGuid_Gen).val(str);
                     break;
                 case "SalaryRange":
                     var t = $('#' + JsEven.Id.hid_RangeType).val();

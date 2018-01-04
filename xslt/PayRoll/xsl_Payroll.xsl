@@ -9,6 +9,9 @@
       <thead>
         <tr>
           <th>
+            功能
+          </th>
+          <th>
             員工編號
           </th>
           <th >
@@ -37,6 +40,9 @@
       <tbody>
         <xsl:for-each select="dView">
           <tr guid="{pGuid}">
+            <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
+              <a href="Javascript:void(0)">刪除</a>
+            </td>            
             <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
               <xsl:value-of select="pPerNo"/>
             </td>
