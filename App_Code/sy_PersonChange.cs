@@ -234,7 +234,7 @@ public class sy_PersonChange
                 thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
                 thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
             }
-            show_value.Append(@" order by pcStatus DESC, pcCreateDate DESC,pcChangeDate DESC  ");
+            show_value.Append(@" order by pcStatus DESC,pcChangeDate DESC, pcCreateDate DESC  ");
 
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();

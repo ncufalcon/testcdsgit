@@ -147,7 +147,7 @@ public class sy_PersonAllowanceChang1e_DB
             thisConnection.Open();
             show_value.Append(@"  
                 select pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
-                        pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName
+                        pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName,a.perLastDate
                 from sy_PersonAllowanceChang1e
                 left join sy_Person a on pacPerGuid = a.perGuid
                 left join sy_SalaryItem on pacChange = siGuid
@@ -185,7 +185,7 @@ public class sy_PersonAllowanceChang1e_DB
                 thisCommand.Parameters.AddWithValue("@str_dates", str_dates);
                 thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
             }
-            show_value.Append(@" order by pacStatus, pacCreateDate ASC   ");
+            show_value.Append(@" order by pacStatus,pacChangeDate desc, pacCreateDate desc   ");
             thisCommand.CommandType = CommandType.Text;
             thisCommand.CommandText = show_value.ToString();
             oda.SelectCommand = thisCommand;

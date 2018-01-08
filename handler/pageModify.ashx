@@ -80,6 +80,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
         public string pacChange { get; set; }
         public string siRef { get; set; }
         public string mbNAme { get; set; }
+        public string perLastDate { get; set; }
     }
     //薪資異動 異動項目
     public class payChangeItenTooL
@@ -480,6 +481,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         e.siItemName = dt_pacdata.Rows[i]["siItemName"].ToString().Trim();
                         e.pacChange = dt_pacdata.Rows[i]["pacChange"].ToString().Trim();
                         e.siRef = dt_pacdata.Rows[i]["siRef"].ToString().Trim();
+                        e.perLastDate = dt_pacdata.Rows[i]["perLastDate"].ToString().Trim();
                         pacList.Add(e);
                     }
                     System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
