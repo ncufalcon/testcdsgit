@@ -17,14 +17,13 @@ public class ashx_GenPayroll : IHttpHandler, System.Web.SessionState.IReadOnlySe
             {
                 DataView dv = new DataView();
                 string rGuid = (!string.IsNullOrEmpty(context.Request.Form["rGuid"])) ? context.Request.Form["rGuid"].ToString() : "";
-
+                string perGuid = (!string.IsNullOrEmpty(context.Request.Form["perGuid"])) ? context.Request.Form["perGuid"].ToString() : "";
                 string[] str = { rGuid };
                 string sqlinj = com.CheckSqlInJection(str);
 
                 if (sqlinj == "")
                 {
-                    // DataTable dt =   dal.GenRayroll(rGuid,USERINFO.MemberGuid); 
-                    dal.GenRayroll(rGuid, USERINFO.MemberGuid);
+                    dal.GenRayroll(rGuid, USERINFO.MemberGuid, perGuid);
                     context.Response.Write("ok");
                 }
                 else { context.Response.Write("DangerWord"); }

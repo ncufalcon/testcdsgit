@@ -782,7 +782,7 @@ namespace payroll
         /// <param name="Region"></param>
         /// <param name="Dep"></param>
         /// <returns></returns>
-        public void GenRayroll(string rGuid, string UserInfo)
+        public void GenRayroll(string rGuid, string UserInfo, string singeleGuid)
         {
             string sql = @"pr_GenPayroll";
 
@@ -790,6 +790,7 @@ namespace payroll
             cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@sr_Guid", rGuid);
             cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
+            cmd.Parameters.AddWithValue("@singeleGuid", singeleGuid);
             try
             {
                 cmd.Connection.Open();
@@ -809,7 +810,39 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
         }
 
+        /// <summary>
+        /// 計算薪資
+        /// </summary>
+        /// <param name="Class"></param>
+        /// <param name="Region"></param>
+        /// <param name="Dep"></param>
+        /// <returns></returns>
+        public void DelRayroll(string pGuid, string UserInfo)
+        {
+            string sql = @"pr_DelPayroll";
 
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
+            cmd.Parameters.AddWithValue("@pGuid", pGuid);
+            cmd.Parameters.AddWithValue("@UserInfo", UserInfo);
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+
+                //DataTable dt = new DataTable();
+                //new SqlDataAdapter(cmd).Fill(dt);        
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                //return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+        }
 
 
         /// <summary>
