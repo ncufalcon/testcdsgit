@@ -1845,7 +1845,7 @@
                                 <a href="Javascript:void(0);" class="keybtn" id="btn_il_import">匯入</a>
                             </div>
                         </div>
-                        <div class="tabfixwidth" name="div_il">
+                        <div class="tabfixwidth" name="div_il" style="width:70%">
                             <div class="stripeMe fixTable" style="height: 400px;">
                                 <table width="99%" border="0" cellspacing="0" cellpadding="0" id="tbl_il">
                                     

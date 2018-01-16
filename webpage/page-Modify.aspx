@@ -990,6 +990,20 @@
                             $("#txt_pay_chkpeople_guid").val(now_user_guid);
                         }
                         $("#hidden_pay_refcode").val(response[0].siRef);
+                        if (response[0].perLastDate != null && response[0].perLastDate != "") {
+                            //離職
+                            $("#PPbox").attr("disabled", "disabled");
+                            $("#PCbox").attr("disabled", "disabled");
+                            $("#PPbox").prop("onclick", false);
+                            $("#PCbox").prop("onclick", false);
+                            $("#txt_pay_empno").attr("disabled", "disabled");
+                            $("input[name='txt_pay_status").attr("disabled", "disabled");
+                            $("#txt_pay_change_date").attr("disabled", "disabled");
+                            $("#txt_pay_before").attr("disabled", "disabled");
+                            $("#txt_pay_after").attr("disabled", "disabled");
+                            $("#btn_pay_submit").attr("disabled", "disabled");
+
+                        }
                     } else {
 
                     }
@@ -1056,6 +1070,7 @@
                                 } else {
                                     $("#txt_pay_before").val("");
                                 }
+                                sel_lastdateByPay(response[0].perNo);
                                 break;
                         }
                     } else {
@@ -1234,7 +1249,7 @@
             });
         }
         //fancybox回傳
-        function setReturnValue(v, gv, pno, pname,refcode) {
+        function setReturnValue(v, gv, pno, pname, refcode) {
             switch (v) {
                 case "Personnel":
                     $("#txt_person_empno").val(pno);
@@ -1247,6 +1262,7 @@
                     $("#txt_pay_empno").val(pno);
                     $("#txt_pay_cname").text(pname);
                     $("#txt_hidden_pay_perguid").val(gv);
+                    sel_lastdateByPay(pno);
                     break;
                 case "SiItem":
                     $("#txt_pay_siname").val(pname);//項目名稱
@@ -1330,6 +1346,57 @@
                     } else {
                         $("#txt_person_cname").text("無資料");
                         $("#txt_hidden_person_guid").val("");
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
+        //撈離職資訊 (薪資異動)
+        function sel_lastdateByPay(thisno) {
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_lastdate",
+                    str_thisno: thisno
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    if (response != "nodata") {
+                        if (response[0].perLastDate != null && response[0].perLastDate != "") {
+                            //離職
+                            //$("#PPbox").attr("disabled", "disabled");
+                            //$("#PPbox").prop("onclick", false);
+                            $("#PCbox").attr("disabled", "disabled");
+                            $("#PCbox").prop("onclick", false);
+                            //$("#txt_pay_empno").attr("disabled", "disabled");
+                            $("input[name='txt_pay_status").attr("disabled", "disabled");
+                            $("#txt_pay_change_date").attr("disabled", "disabled");
+                            $("#txt_pay_before").attr("disabled", "disabled");
+                            $("#txt_pay_after").attr("disabled", "disabled");
+                            $("#btn_pay_submit").attr("disabled", "disabled");
+                        } else {
+                            //在職
+                            $("#PPbox").removeAttr('disabled');
+                            $("#PCbox").removeAttr('disabled');
+                            $("#PPbox").attr("onclick", "openfancybox(this);");
+                            $("#PCbox").attr("onclick", "openfancybox(this);");
+                            $("#txt_pay_empno").removeAttr('disabled');
+                            $("input[name='txt_pay_status']").removeAttr('disabled');
+                            $("#txt_pay_change_date").removeAttr('disabled');
+                            $("#txt_pay_before").removeAttr('disabled');
+                            $("#txt_pay_after").removeAttr('disabled');
+                            $("#btn_pay_submit").removeAttr('disabled');
+                            
+                        }
                     }
                 },//success end
                 complete: function () {

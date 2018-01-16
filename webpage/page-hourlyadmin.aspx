@@ -1403,7 +1403,7 @@
                     <ul>
                         <li class="li_clk" id="li_1"><a href="#tabs-1">時薪設定</a></li>
                         <li class="li_clk" id="li_2"><a href="#tabs-2">薪資計算公式</a></li>
-                        <li class="li_clk" id="li_3"><a href="#tabs-3">薪資項目設定</a></li>
+                        <li class="li_clk" id="li_3"><a href="#tabs-3">津貼項目設定</a></li><!--原薪資項目設定  20171227測試報告調整為"津貼項目設定"-->
                         <li class="li_clk" id="li_4"><a href="#tabs-4">加班費設定</a></li>
                         <li class="li_clk" id="li_5"><a href="#tabs-5">給薪假設定</a></li>
                         <li class="li_clk" id="li_6"><a href="#tabs-6">特別休假設定</a></li>
@@ -1879,7 +1879,7 @@
                                 <a href="Javascript:void(0);" class="keybtn fancybox" id="btn_spd_add" name="div_spd">新增</a>
                             </div>
                         </div>
-                        <div class="tabfixwidth" name="div_spd">
+                        <div class="tabfixwidth" name="div_spd" style="width:60%">
                             <div class="stripeMe fixTable" style="max-height: 175px;">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tbl_spd"></table>
                             </div>
