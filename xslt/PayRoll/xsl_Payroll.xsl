@@ -41,7 +41,7 @@
         <xsl:for-each select="dView">
           <tr guid="{pGuid}">
             <td style="text-align:center;width:10%; cursor:pointer" guid="{pGuid}" class="font-normal">
-              <a href="Javascript:void(0)" guid="{pGuid}" >刪除</a>
+              <a href="Javascript:void(0)" guid="{pGuid}" onclick="JsEven.delPayroll(this)" >刪除</a>
             </td>            
             <td style="text-align:center;width:10%; cursor:pointer" onclick="JsEven.view(this)" guid="{pGuid}">
               <xsl:value-of select="pPerNo"/>

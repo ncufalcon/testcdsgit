@@ -70,7 +70,7 @@
                                                      <input id="txt_SalaryRang_S" type="hidden" />
                                                  </td>
                                              </tr>
-                                         </table>  
+                                         </table>
 <%--                                        <span id="sp_SalaryRang"></span>
                                         <input type="hidden" id="txt_SalaryRang_S" class="inputex width40"  />--%>
                                     </td>
@@ -1111,7 +1111,7 @@
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     var opt = {
                         url: '../handler/Payroll/ashx_GenPayroll.ashx',
-                        v: 'rGuid=' + rGuid + 'perGuid=' + perGuid,
+                        v: 'rGuid=' + rGuid + '&perGuid=' + perGuid,
                         type: 'text',
                         success: function (msg) {
 
@@ -1193,43 +1193,44 @@
             },
 
             delPayroll: function (a) {
-                var pGuid = a.getAttribute('guid');
-                $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
-                $.ajax({
-                    type: "POST",
-                    url: '../handler/Payroll/ashx_DelPayroll.ashx',
-                    data: 'pGuid=' + pGuid,
-                    dataType: 'text',  //xml, json, script, text, html
-                    success: function (msg) {
-                        switch (msg) {
-                            case "ok":
-                                alert('儲存成功');
-                                var tbl = document.getElementById('tbl_List');
-                                var trTag = tbl.getElementsByTagName('tr');
-                                for (var i = 0; i < trTag.length; i++)
-                                {
-                                    var tag = trTag[i];
-                                    if(tag.getAttribute('guid') == guid)                                    
-                                        tag.parentNode.removeChild(tag);
-                                }
-                                break;
-                            case "e":
-                                alert('程式發生錯誤，請聯絡相關管理人員');
-                                break;
-                            case "t":
-                                alert('登入逾時');
-                                CommonEven.goLogin();
-                                break;
-                        }
-                        $.unblockUI();
-                    },
-                    error: function (xhr, statusText) {
-                        //alert(xhr.status);
-                        $.unblockUI();
-                        alert('資料發生錯誤');
+                if (confirm('刪除後無法回復，您確定要刪除嗎?')) {
+                    var pGuid = a.getAttribute('guid');
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    $.ajax({
+                        type: "POST",
+                        url: '../handler/Payroll/ashx_DelPayroll.ashx',
+                        data: 'pGuid=' + pGuid,
+                        dataType: 'text',  //xml, json, script, text, html
+                        success: function (msg) {
+                            switch (msg) {
+                                case "ok":
+                                    alert('儲存成功');
+                                    var tbl = document.getElementById('tbl_List');
+                                    var trTag = tbl.getElementsByTagName('tr');
+                                    for (var i = 0; i < trTag.length; i++) {
+                                        var tag = trTag[i];
+                                        if (tag.getAttribute('guid') == pGuid)
+                                            tag.parentNode.removeChild(tag);
+                                    }
+                                    break;
+                                case "e":
+                                    alert('程式發生錯誤，請聯絡相關管理人員');
+                                    break;
+                                case "t":
+                                    alert('登入逾時');
+                                    CommonEven.goLogin();
+                                    break;
+                            }
+                            $.unblockUI();
+                        },
+                        error: function (xhr, statusText) {
+                            //alert(xhr.status);
+                            $.unblockUI();
+                            alert('資料發生錯誤');
 
-                    }
-                });
+                        }
+                    });
+                }
 
             }
 
@@ -1255,7 +1256,8 @@
                     break;
                 case "Personnel":
                     $("#" + JsEven.Id.sp_perName_Gen).html(str2 + '(' + str + ')');
-                    $("#" + JsEven.Id.hid_perGuid_Gen).val(str);
+                    $("#" + JsEven.Id.hid_perGuid_Gen).val(gv);
+                    //alert(gv);
                     break;
                 case "SalaryRange":
                     var t = $('#' + JsEven.Id.hid_RangeType).val();

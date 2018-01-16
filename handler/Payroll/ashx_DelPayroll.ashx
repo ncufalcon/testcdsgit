@@ -3,7 +3,7 @@
 using System;
 using System.Web;
 
-public class ashx_DelPayroll : IHttpHandler {
+public class ashx_DelPayroll : IHttpHandler,System.Web.SessionState.IReadOnlySessionState {
     
     public void ProcessRequest (HttpContext context) {
         Common com = new Common();
@@ -13,7 +13,7 @@ public class ashx_DelPayroll : IHttpHandler {
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-                string pGuid = (!string.IsNullOrEmpty(context.Request.Form["guid"])) ? context.Request.Form["guid"].ToString() : "";
+                string pGuid = (!string.IsNullOrEmpty(context.Request.Form["pGuid"])) ? context.Request.Form["pGuid"].ToString() : "";
                 dal.DelRayroll(pGuid,USERINFO.MemberGuid);
                 context.Response.Write("ok");
             }
