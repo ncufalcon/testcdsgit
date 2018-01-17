@@ -676,6 +676,26 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     context.Response.Write("nodata");
                 }
                 break;
+
+            //開始/停止勞退提撥
+            case "per_taishu":
+                string str_type = string.IsNullOrEmpty(context.Request.Form["str_type"]) ? "" : context.Request.Form["str_type"].ToString().Trim();
+                string taishu_person_guid = string.IsNullOrEmpty(context.Request.Form["add_person_guid"]) ? "" : context.Request.Form["add_person_guid"].ToString().Trim();
+                string taishu_date = string.IsNullOrEmpty(context.Request.Form["add_date"]) ? "" : context.Request.Form["add_date"].ToString().Trim();
+                try {
+                    //留職停薪復職 開始勞退提撥 
+                    pc_db._str_taishu_type = str_type;
+                    pc_db._str_creatid = session_no;
+                    pc_db._str_date = taishu_date;
+                    pc_db._str_back_per_guid = taishu_person_guid;
+                    pc_db.UpdatePersonTaishu();
+                    context.Response.Write("ok");
+                }
+                catch (Exception ex) {
+                    context.Response.Write("error");
+                }
+
+                break;
         }
     }
 

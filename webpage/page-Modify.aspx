@@ -474,9 +474,9 @@
                                     $("#search_person_keyword").val("");
                                     $("#search_person_date").val("");
                                     $("input[name='search_person_status']").removeAttr("checked");
+                                    //如果選"離職"而且"已確認"
                                     if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "04")
                                     {
-                                        //如果選"離職"而且"已確認"
                                         if (confirm("是否要退保?")) {
                                             $.ajax({
                                                 type: "POST",
@@ -505,8 +505,8 @@
                                             });//ajax end
                                         }
                                     }
+                                    //如果選"回任"而且"已確認"
                                     if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "06") {
-                                        //如果選"離職"而且"已確認"
                                         if (confirm("是否要加保?")) {
                                             $.ajax({
                                                 type: "POST",
@@ -535,6 +535,69 @@
                                             });//ajax end
                                         }
                                     }
+                                    //如果選"留職停薪"而且"已確認"
+                                    if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "03") {
+                                        if (confirm("是否要停止勞退提撥?")) {
+                                            $.ajax({
+                                                type: "POST",
+                                                async: true, //在沒有返回值之前,不會執行下一步動作
+                                                url: "../handler/pageModify.ashx",
+                                                data: {
+                                                    func: "per_taishu",
+                                                    str_type: "stop",
+                                                    add_person_guid: $("#txt_hidden_person_guid").val(),
+                                                    add_date: $("#txt_person_change_date").val()
+                                                },
+                                                error: function (xhr) {
+                                                    alert("error");
+                                                },
+                                                beforeSend: function () {
+                                                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                                                },
+                                                success: function (response) {
+                                                    if (response != "error") {
+                                                        alert("停止勞退提撥成功");
+                                                        call_personchangedata();
+                                                    }
+                                                },//success end
+                                                complete: function () {
+                                                    $.unblockUI();
+                                                }
+                                            });//ajax end
+                                        }
+                                    }
+                                    //如果選"留職停薪復職"而且"已確認"
+                                    if ($("input[name='txt_person_status']:checked").val() == "1" && $("#txt_person_change_pro").val() == "05") {
+                                        if (confirm("是否要開始勞退提撥?")) {
+                                            $.ajax({
+                                                type: "POST",
+                                                async: true, //在沒有返回值之前,不會執行下一步動作
+                                                url: "../handler/pageModify.ashx",
+                                                data: {
+                                                    func: "per_taishu",
+                                                    str_type : "start",
+                                                    add_person_guid: $("#txt_hidden_person_guid").val(),
+                                                    add_date: $("#txt_person_change_date").val() 
+                                                },
+                                                error: function (xhr) {
+                                                    alert("error");
+                                                },
+                                                beforeSend: function () {
+                                                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                                                },
+                                                success: function (response) {
+                                                    if (response != "error") {
+                                                        alert("開始勞退提撥成功");
+                                                        call_personchangedata();
+                                                    }
+                                                },//success end
+                                                complete: function () {
+                                                    $.unblockUI();
+                                                }
+                                            });//ajax end
+                                        }
+                                    }
+
                                     $("#hidden_person_status").val($("input[name='txt_person_status']:checked").val());
                                     if ($("input[name='txt_person_status']:checked").val() == "1") {
                                         $("#txt_person_empno").attr('disabled', 'disabled');

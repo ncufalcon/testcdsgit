@@ -21,6 +21,7 @@ public class sy_PersonChange
     string str_perguid = string.Empty;
     string str_dates = string.Empty;
     string str_datee = string.Empty;
+    string str_taishu_type = string.Empty;
     #endregion
     #region 全公用
     public string _str_keyword
@@ -54,6 +55,10 @@ public class sy_PersonChange
     public string _str_datee
     {
         set { str_datee = value; }
+    }
+    public string _str_taishu_type
+    {
+        set { str_taishu_type = value; }
     }
     #endregion
 
@@ -190,19 +195,38 @@ public class sy_PersonChange
         try
         {
             thisConnection.Open();
-            show_value.Append(@"  
-                select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
-                        ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
-                from sy_PersonChange
-                left join sy_Person on pcPerGuid = perGuid
-                left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
-                left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
-                left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
-                left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
-                left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
-                left join sy_Member on pcVenify=mbGuid
-                where pcStatus_d='A'
-            ");
+            if (str_keyword != "" || pcChangeDate != "" || pcGuid != "" || pcStatus != "" || pcChangeName != "" || (str_dates != "" && str_datee != ""))
+            {
+                show_value.Append(@"  
+                    select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
+                            ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
+                    from sy_PersonChange
+                    left join sy_Person on pcPerGuid = perGuid
+                    left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
+                    left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
+                    left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
+                    left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
+                    left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
+                    left join sy_Member on pcVenify=mbGuid
+                    where pcStatus_d='A'
+                ");
+            }
+            else {
+                show_value.Append(@"  
+                    select top 200 pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
+                            ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
+                    from sy_PersonChange
+                    left join sy_Person on pcPerGuid = perGuid
+                    left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
+                    left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
+                    left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
+                    left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
+                    left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
+                    left join sy_Member on pcVenify=mbGuid
+                    where pcStatus_d='A'
+                ");
+            }
+            
 
             if (str_keyword != "")
             {
@@ -867,6 +891,67 @@ public class sy_PersonChange
             thisCommand.Connection.Open();
             thisCommand.ExecuteNonQuery();
             thisCommand.Connection.Close();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            oda.Dispose();
+            thisConnection.Close();
+            thisConnection.Dispose();
+            thisCommand.Dispose();
+        }
+
+    }
+    #endregion
+
+    #region 
+    public void UpdatePersonTaishu()
+    {
+        SqlConnection thisConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        SqlCommand thisCommand = thisConnection.CreateCommand();
+        SqlDataAdapter oda = new SqlDataAdapter();
+        StringBuilder show_value = new StringBuilder();
+        try
+        {
+            //勞退
+            if (str_taishu_type=="start") {
+                show_value.Append(@" 
+                    --勞退加保
+                    insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
+                    select top 1 NEWID(),ppPerGuid,'01',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,'',@str_creatid,'A'
+                    from sy_PersonPension
+                    where ppPerGuid=@str_back_per_guid and ppChange='03' and ppStatus='A'
+                    order by ppChangeDate desc, ppCreateDate desc
+
+                ");
+            }
+            if (str_taishu_type == "stop")
+            {
+                show_value.Append(@" 
+                    --勞退 停止提撥
+                    insert into sy_PersonPension (ppGuid,ppPerGuid,ppChange,ppChangeDate,ppLarboRatio,ppEmployerRatio,ppPayPayroll,ppPs,ppCreateId,ppStatus)
+                    select top 1 NEWID(),ppPerGuid,'03',@str_date,ppLarboRatio,ppEmployerRatio,ppPayPayroll,'',@str_creatid,'A'
+                    from sy_PersonPension
+                    where ppPerGuid=@str_back_per_guid and (ppChange='01' or ppChange='02' ) and ppStatus='A'
+                    order by ppChangeDate desc, ppCreateDate desc
+                ");
+            }
+            
+
+            thisCommand.Parameters.AddWithValue("@str_back_per_guid", str_back_per_guid);
+            thisCommand.Parameters.AddWithValue("@str_date", str_date);
+            thisCommand.Parameters.AddWithValue("@str_creatid", str_creatid);//
+
+            thisCommand.CommandText = show_value.ToString();
+            thisCommand.CommandType = CommandType.Text;
+
+            thisCommand.Connection.Open();
+            thisCommand.ExecuteNonQuery();
+            thisCommand.Connection.Close();
+
         }
         catch (Exception ex)
         {
