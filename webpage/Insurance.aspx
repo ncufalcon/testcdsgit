@@ -2735,7 +2735,7 @@
                                     <td class="width15"><span id="pi_Dep" class="showStr"></span></td>
                                     <td class="width13" align="right"><div class="font-title titlebackicon font-red">補助等級</div></td>
                                     <td class="width15">
-                                        <input id="pi_SubsidyLevel" name="pi_SubsidyLevel" type="text" class="inputex width80" value="" /><input id="pi_SLGuid" name="pi_SLGuid" type="hidden" />
+                                        <input id="pi_SubsidyLevel" name="pi_SubsidyLevel" type="text" class="inputex width78" value="" /><input id="pi_SLGuid" name="pi_SLGuid" type="hidden" />
                                         <img id="HealSLBox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
                                         <span id="pi_SLName" class="showStr"></span>
                                         <input id="pi_SLStatus" name="pl_SLStatus" type="hidden" />

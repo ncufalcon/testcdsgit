@@ -53,6 +53,7 @@ public class SearchDialog : IHttpHandler,IRequiresSessionState {
                 case "LB":
                 case "Heal":
                 case "LaborSL":
+                case "HealSL":
                 case "PFInsSL":
                     Personnel_Db._KeyWord = SearchStr;
                     DataSet ds3 = Personnel_Db.getSubsidyLevel(pageStart.ToString(), pageEnd.ToString());

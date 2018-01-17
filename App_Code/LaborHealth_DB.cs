@@ -310,6 +310,7 @@ where plGuid=@plGuid ";
         sb.Append(@"SELECT * from sy_PersonLabor 
 left join sy_Person on perGuid=plPerGuid
 left join sy_SubsidyLevel on slGuid=plSubsidyLevel
+left join sy_CodeBranches on cbGuid=perDep
 where  plStatus<>'D' and plGuid=@plGuid  ");
 
         oCmd.CommandText = sb.ToString();
@@ -492,6 +493,7 @@ where piGuid=@piGuid ";
         sb.Append(@"SELECT * from sy_PersonInsurance 
 left join sy_Person on perGuid=piPerGuid
 left join sy_SubsidyLevel on slGuid=piSubsidyLevel
+left join sy_CodeBranches on cbGuid=perDep
 where  piStatus<>'D' and piGuid=@piGuid  ");
 
         oCmd.CommandText = sb.ToString();

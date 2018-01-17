@@ -232,6 +232,7 @@ where ppGuid=@ppGuid ";
 
         sb.Append(@"SELECT * from sy_PersonPension 
 left join sy_Person on perGuid=ppPerGuid
+left join sy_CodeBranches on cbGuid=perDep
 where  ppStatus<>'D' and ppGuid=@ppGuid  ");
 
         oCmd.CommandText = sb.ToString();
