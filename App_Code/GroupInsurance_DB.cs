@@ -132,7 +132,7 @@ select top 200 a.*,b.perNo,b.perName,c.pfName,d.pgiGuid,d.pgiInsuranceCode,d.pgi
 from #tmptmp a 
 left join sy_Person b on  a.pgiPerGuid=b.perGuid 
 left join sy_PersonFamily c on a.pgiPfGuid=c.pfGuid
-left join sy_PersonGroupInsurance d on a.pgiPerGuid=d.pgiPerGuid and a.pgiPfGuid=d.pgiPfGuid and a.pgiType=d.pgiType and a.masxdate=d.pgiChangeDate
+left join sy_PersonGroupInsurance d on a.pgiPerGuid=d.pgiPerGuid and isnull(a.pgiPfGuid,'')=isnull(d.pgiPfGuid,'') and a.pgiType=d.pgiType and a.masxdate=d.pgiChangeDate
 left join sy_GroupInsurance e on d.pgiInsuranceCode=e.giGuid
 where d.pgiStatus='A' ");
         if (pgiChangeDate != "")
