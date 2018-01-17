@@ -195,19 +195,38 @@ public class sy_PersonChange
         try
         {
             thisConnection.Open();
-            show_value.Append(@"  
-                select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
-                        ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
-                from sy_PersonChange
-                left join sy_Person on pcPerGuid = perGuid
-                left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
-                left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
-                left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
-                left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
-                left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
-                left join sy_Member on pcVenify=mbGuid
-                where pcStatus_d='A'
-            ");
+            if (str_keyword != "" || pcChangeDate != "" || pcGuid != "" || pcStatus != "" || pcChangeName != "" || (str_dates != "" && str_datee != ""))
+            {
+                show_value.Append(@"  
+                    select pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
+                            ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
+                    from sy_PersonChange
+                    left join sy_Person on pcPerGuid = perGuid
+                    left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
+                    left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
+                    left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
+                    left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
+                    left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
+                    left join sy_Member on pcVenify=mbGuid
+                    where pcStatus_d='A'
+                ");
+            }
+            else {
+                show_value.Append(@"  
+                    select top 200 pcGuid,pcPerGuid,pcChangeDate,pcChangeName,pcChangeBegin,pcChangeEnd,pcVenifyDate,pcVenify,pcStatus,pcPs,perNo,perName,e.code_desc ChangeCName
+                            ,a.code_desc begin_jobname,b.code_desc after_jobname,c.cbName begin_storename,d.cbName after_storename,mbName,perLastDate
+                    from sy_PersonChange
+                    left join sy_Person on pcPerGuid = perGuid
+                    left join sy_codetable a on a.code_group='02' and pcChangeBegin = a.code_value
+                    left join sy_codetable b on b.code_group='02' and pcChangeEnd = b.code_value
+                    left join sy_codetable e on e.code_group='10' and pcChangeName = e.code_value
+                    left join sy_CodeBranches c on pcChangeBegin = c.cbGuid
+                    left join sy_CodeBranches d on pcChangeEnd = d.cbGuid
+                    left join sy_Member on pcVenify=mbGuid
+                    where pcStatus_d='A'
+                ");
+            }
+            
 
             if (str_keyword != "")
             {

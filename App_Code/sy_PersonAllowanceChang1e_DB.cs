@@ -145,15 +145,28 @@ public class sy_PersonAllowanceChang1e_DB
         try
         {
             thisConnection.Open();
-            show_value.Append(@"  
-                select pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
-                        pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName,a.perLastDate
-                from sy_PersonAllowanceChang1e
-                left join sy_Person a on pacPerGuid = a.perGuid
-                left join sy_SalaryItem on pacChange = siGuid
-                left join sy_Member on pacVenify=mbGuid
-                where pacStatus_d='A' 
-            ");
+            if (str_keyword != "" || str_date != "" || pacGuid != "" || str_status != "" || pacChange != "" || (str_dates != "" && str_datee != "")) {
+                show_value.Append(@"  
+                    select pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
+                            pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName,a.perLastDate
+                    from sy_PersonAllowanceChang1e
+                    left join sy_Person a on pacPerGuid = a.perGuid
+                    left join sy_SalaryItem on pacChange = siGuid
+                    left join sy_Member on pacVenify=mbGuid
+                    where pacStatus_d='A' 
+                ");
+            } else {
+                show_value.Append(@"  
+                    select top 200 pacGuid,pacPerGuid,pacChangeDate,pacChangeBegin,pacChangeEnd,pacVenifyDate,pacVenify,pacStatus,pacPs,pacCreateId,pacCreateDate,
+                            pacModifyId,pacModifyDate,pacStatus_d,a.perNo,a.perName,pacChange,siItemName,siRef,mbName,a.perLastDate
+                    from sy_PersonAllowanceChang1e
+                    left join sy_Person a on pacPerGuid = a.perGuid
+                    left join sy_SalaryItem on pacChange = siGuid
+                    left join sy_Member on pacVenify=mbGuid
+                    where pacStatus_d='A' 
+                ");
+            }
+            
 
             if (str_keyword != "")
             {
