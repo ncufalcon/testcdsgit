@@ -351,16 +351,26 @@ and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppStatus=
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
+        //有套計算年資的Function
+        //        sb.Append(@"select * into #tmp from getYears((Select Convert(varchar(10),Getdate(),111)))
+        //SELECT perGuid,perNo,perName,perDep,
+        //perYears,ppLarboRatio,ppEmployerRatio,ppPayPayroll
+        //from #tmp
+        //left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppChangeDate
+        // and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppCreateDate and ppStatus='A'
+        //where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A' 
+        // and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3  and CONVERT(float,ppEmployerRatio)<=6) or 
+        //(CONVERT(int,perYears)>=3 and CONVERT(float,ppEmployerRatio)<=6.5)) ");
 
-        sb.Append(@"select * into #tmp from getYears((Select Convert(varchar(10),Getdate(),111)))
-
-SELECT perGuid,perNo,perName,perDep,
+        //年資直接撈sy_person 資料表 perYears 欄位
+        sb.Append(@"SELECT perGuid,perNo,perName,
+(select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
 perYears,ppLarboRatio,ppEmployerRatio,ppPayPayroll
-from #tmp
-left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppChangeDate
- and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid and ppStatus='A')=ppCreateDate and ppStatus='A'
+from sy_Person
+left join sy_PersonPension on perGuid=ppPerGuid and (select MAX(ppChangeDate) from sy_PersonPension where perGuid=ppPerGuid)=ppChangeDate
+	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid)=ppCreateDate and ppStatus='A'
 where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A' 
- and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3  and CONVERT(float,ppEmployerRatio)<=6) or 
+ and ((CONVERT(int,perYears)>=2 and CONVERT(int,perYears)<3 and CONVERT(float,ppEmployerRatio)<=6) or 
 (CONVERT(int,perYears)>=3 and CONVERT(float,ppEmployerRatio)<=6.5)) ");
         if (pNo != "")
         {
@@ -378,7 +388,7 @@ where perStatus='A' and perLastDate='' and ppChange<>'03' and ppStatus='A'
         {
             sb.Append(@"and (upper(perYears) LIKE '%' + upper(@pYear) + '%') ");
         }
-        sb.Append(@"order by perNo ");
+        sb.Append(@"order by perDep,perNo ");
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
