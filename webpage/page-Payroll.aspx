@@ -66,7 +66,7 @@
                                              <tr>
                                                  <td style="width:150px">日期起:<span id="sp_sDate"></span></td>
                                                  <td style="width:150px">日期迄:<span id="sp_eDate"></span></td>
-                                                 <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
+                                                 <td><img src="../images/btn-search.gif" id="img_SalaryRange" onclick="JsEven.openfancybox(this)" style="cursor:pointer;"/>
                                                      <input id="txt_SalaryRang_S" type="hidden" />
                                                  </td>
                                              </tr>
