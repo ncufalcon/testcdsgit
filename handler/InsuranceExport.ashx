@@ -226,8 +226,8 @@ public class InsuranceExport : IHttpHandler {
                                     {
                                         for (int i = 2; i < dt.Rows.Count + 2; i++)
                                         {
-                                            Xls.SetCellValue(i, 1, "2");
-                                            string IDCode = (dt.Rows[i - 2]["iiIdentityCode"].ToString() != "4") ? "1" : "2";
+                                            Xls.SetCellValue(i, 1, "4");
+                                            string IDCode = (dt.Rows[i - 2]["iiIdentityCode"].ToString() != "04") ? "1" : "2";
                                             Xls.SetCellValue(i, 2, IDCode);
                                             Xls.SetCellValue(i, 3, dt.Rows[i - 2]["comLaborProtection1"].ToString());
                                             Xls.SetCellValue(i, 4, dt.Rows[i - 2]["comLaborProtection2"].ToString());
