@@ -72,10 +72,10 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             string pSyAccount = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pSyAccount"].ToString() : "";
             //法院執行命令
             string pReferenceNumber = (context.Request.Form["pReferenceNumber"] != null) ? context.Request.Form["pReferenceNumber"].ToString() : "";
-            string pDetentionRatio = (context.Request.Form["pDetentionRatio"] != null) ? context.Request.Form["pDetentionRatio"].ToString() : "";
-            string pDetentionFee = (context.Request.Form["pDetentionFee"] != null) ? context.Request.Form["pDetentionFee"].ToString() : "";
-            string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "";
-            string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "";
+            string pDetentionRatio = (context.Request.Form["pDetentionRatio"] != null) ? context.Request.Form["pDetentionRatio"].ToString() : "0";
+            string pDetentionFee = (context.Request.Form["pDetentionFee"] != null) ? context.Request.Form["pDetentionFee"].ToString() : "0";
+            string pMonthPayroll = (context.Request.Form["pMonthPayroll"] != null) ? context.Request.Form["pMonthPayroll"].ToString() : "0";
+            string pYearEndBonuses = (context.Request.Form["pSyAccount"] != null) ? context.Request.Form["pYearEndBonuses"].ToString() : "0";
 
             string newPersonGid = Guid.NewGuid().ToString();
             switch (Mode)
