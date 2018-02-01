@@ -1934,7 +1934,7 @@
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >債權金額</div></td>
                                             <td class="width15"><input id="pb_CreditorCost" name="pb_CreditorCost" type="text" class="inputex width100 pbtxt" /></td>
                                             <td class="width13" align="right"><div class="font-title titlebackicon font-red" >移轉比例</div></td>
-                                            <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt" /></td>
+                                            <td class="width15"><input id="pb_Ratio" name="pb_Ratio" type="text" class="inputex width100 pbtxt num" /></td>
                                         </tr>
                                         <tr>
                                             <td align="right"><div class="font-title titlebackicon ">解款行代號</div></td>
