@@ -504,12 +504,12 @@ public class sy_PersonAllowanceChang1e_DB
             show_value.Append(@" 
                 update sv_PersonAllowance 
                 set paCost=@str_after,paModifyId=@paModifyId,paModifyDate=@paModifyDate
-                where paPerGuid=@pacPerGuid and paAllowanceCode=@pacGuid
+                where paPerGuid=@pacPerGuid and paAllowanceCode=@pacChange
             ");
 
             thisCommand.Parameters.AddWithValue("@pacPerGuid", pacPerGuid);
             thisCommand.Parameters.AddWithValue("@str_after", str_after);
-            thisCommand.Parameters.AddWithValue("@pacGuid", pacGuid);
+            thisCommand.Parameters.AddWithValue("@pacChange", pacChange);
             thisCommand.Parameters.AddWithValue("@paModifyId", pacModifyId);
             thisCommand.Parameters.AddWithValue("@paModifyDate", DateTime.Now);
 
