@@ -555,6 +555,7 @@
                     str_keywords: $("#search_old_keyword").val(),
                     str_dates: $("#search_old_dates").val(),
                     str_datee: $("#search_old_datee").val(),
+                    str_datatype: $("#search_old_datatype").val(),
                     str_order_status: order_status,
                     str_order_column: order_column
                 },
@@ -819,6 +820,12 @@
                                     日期起：<input type="text" size="10" id="search_old_dates" />
                                     日期迄：<input type="text" size="10" id="search_old_datee" />
                                     關鍵字：<input type="text" size="10" id="search_old_keyword"  />
+                                    資料別：
+                                    <select id="search_old_datatype">
+                                        <option value="all" selected="selected">全部</option>
+                                        <option value="N">手動新增</option>
+                                        <option value="Y">匯入資料</option>
+                                    </select>
                                     <a href="javascript:void(0);" class="keybtn" id="btn_oldhours_search">查詢</a>
                                 </span>
                                 <br />

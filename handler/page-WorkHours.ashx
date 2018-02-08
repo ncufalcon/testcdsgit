@@ -276,6 +276,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
             case "load_oldhours":
                 string old_dates = string.IsNullOrEmpty(context.Request.Form["str_dates"]) ? "" : context.Request.Form["str_dates"].ToString().Trim();
                 string old_datee = string.IsNullOrEmpty(context.Request.Form["str_datee"]) ? "" : context.Request.Form["str_datee"].ToString().Trim();
+                string old_datatype = string.IsNullOrEmpty(context.Request.Form["str_datatype"]) ? "" : context.Request.Form["str_datatype"].ToString().Trim();
                 string old_keyword = string.IsNullOrEmpty(context.Request.Form["str_keywords"]) ? "" : context.Request.Form["str_keywords"].ToString().Trim();
                 string old_ahguid = string.IsNullOrEmpty(context.Request.Form["str_guid"]) ? "" : context.Request.Form["str_guid"].ToString().Trim();
                 string old_order_column = string.IsNullOrEmpty(context.Request.Form["str_order_column"]) ? "" : context.Request.Form["str_order_column"].ToString().Trim();
@@ -285,6 +286,7 @@ public class page_WorkHours : IHttpHandler, IRequiresSessionState
                     at_db._str_keyword = old_keyword;
                     at_db._str_dates = old_dates;
                     at_db._str_datee = old_datee;
+                        at_db._str_datatype = old_datatype;
                     at_db._ah_guid = old_ahguid;
                     if (old_order_column == "cno")
                     {
