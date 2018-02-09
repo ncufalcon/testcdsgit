@@ -129,7 +129,8 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += "@@";
                                 text += dt_a.Rows[i]["SalaryDate"].ToString().Trim().Replace("/", "");//交易日
                                 text += "@";
-                                text += dt_a.Rows[i]["perNo"].ToString().Trim();//交易序號
+                                //text += dt_a.Rows[i]["perNo"].ToString().Trim();//20180209 交易序號
+                                text += (i+1).ToString();//20180209 原本是放員工編號 調整為放序號
                                 text += "@@@@@";
                                 //text += dt_a.Rows[i]["comno"].ToString().Trim();//公司代碼
                                 text += str_comno;//公司代碼
@@ -196,7 +197,7 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += "@@@@@@@";
                                 //受款人 法扣撈""==>廣哥會給欄位 
                                 //text += dt_a.Rows[i]["perSyAccountName"].ToString().Trim();//
-                                text += dt_a.Rows[i]["psbCreditor"].ToString().Trim();//受款人
+                                text += dt_a.Rows[i]["psbIntoName"].ToString().Trim();//psbCreditor => psbIntoName 20180209法扣修正 [戶名](psbIntoName) 而非 [債權人](psbCreditor)
                                 text += "@";
                                 text += dt_a.Rows[i]["strOther"].ToString();
                                 text += "@@@@";
