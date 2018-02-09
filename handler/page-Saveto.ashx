@@ -129,8 +129,8 @@ public class page_Saveto : IHttpHandler, IRequiresSessionState {
                                 text += "@@";
                                 text += dt_a.Rows[i]["SalaryDate"].ToString().Trim().Replace("/", "");//交易日
                                 text += "@";
-                                //text += dt_a.Rows[i]["perNo"].ToString().Trim();//20180209 交易序號
-                                text += (i+1).ToString();//20180209 原本是放員工編號 調整為放序號
+                                //text += dt_a.Rows[i]["perNo"].ToString().Trim();//員工編號
+                                text += (i+1).ToString();//20180209 Lynn在電話跟晨峻說不要放員工編號 要調整為放流水序號
                                 text += "@@@@@";
                                 //text += dt_a.Rows[i]["comno"].ToString().Trim();//公司代碼
                                 text += str_comno;//公司代碼
