@@ -4,6 +4,9 @@ using System;
 using System.Web;
 using System.Web.SessionState;
 using System.Data;
+using System.Data.SqlClient;
+using System.Web.SessionState;
+using System.Configuration;
 
 public class addPersonFamily : IHttpHandler,IRequiresSessionState {
     PersonFamily_DB PF_Db = new PersonFamily_DB();
@@ -69,7 +72,10 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
                         GI_Db._pgiPfGuid = GuidStr;
                         GI_Db._pgiType = "02"; //身份
                         GI_Db._pgiChange = "01"; //異動別
-                        GI_Db._pgiChangeDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        //團保加保生效日應為員工到職日起滿一個月
+                        string sDay = getValue("sy_Person", "perGuid", PerID, "perFirstDate", "perStatus");
+                        DateTime daytmp = DateTime.Parse(sDay).AddMonths(1);
+                        GI_Db._pgiChangeDate = daytmp.ToString("yyyy/MM/dd");
                         GI_Db._pgiModifyId = USERINFO.MemberGuid;
                         GI_Db.addGroupInsurance();
                     }
@@ -92,6 +98,32 @@ public class addPersonFamily : IHttpHandler,IRequiresSessionState {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('PF');</script>");
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addPersonFamily');</script>"); }
+    }
+
+    /// <summary>
+    /// <para>TableName : 資料表名稱,conName : 條件欄位名稱,InputVal : 查詢條件值,reName : 讀取欄位名稱,statusName : 狀態欄位名稱</para>
+    /// </summary>
+    private string getValue(string TableName, string conName, string InputVal, string reName,string statusName)
+    {
+        string str = string.Empty;
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.Connection.Open();
+        oCmd.CommandText = "SELECT * from " + TableName + " with (nolock) where " + conName + "='" + InputVal + "' "; //with (nolock) SqlTransaction不加會TimeOut
+        if (statusName != "")
+            oCmd.CommandText += " and " + statusName + "<>'D'";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oda.Fill(ds);
+        oda.Dispose();
+        oCmd.Connection.Close();
+        oCmd.Connection.Dispose();
+
+        if (ds.Rows.Count > 0)
+            str = ds.Rows[0][reName].ToString();
+
+        return str;
     }
 
     public bool IsReusable {
