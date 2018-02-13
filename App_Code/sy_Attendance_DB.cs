@@ -19,6 +19,7 @@ public class sy_Attendance_DB
     string str_perno = string.Empty;
     string dates = string.Empty;
     string datee = string.Empty;
+    string str_datatype = string.Empty;
     string str_order_column = string.Empty;
     string str_order_status = string.Empty;
     #endregion
@@ -34,6 +35,10 @@ public class sy_Attendance_DB
     public string _str_datee
     {
         set { str_datee = value; }
+    }
+    public string _str_datatype
+    {
+        set { str_datatype = value; }
     }
     public string _str_perno
     {
@@ -539,7 +544,7 @@ public class sy_Attendance_DB
         {
             thisConnection.Open();
             //如果都沒有查詢條件 只顯示最新100
-            if (str_keyword == "" && str_dates == "" && str_datee == "" && ah_guid == "" && (ah_perGuid=="" || ah_AttendanceDate==""))
+            if (str_keyword == "" && str_dates == "" && str_datee == "" && ah_guid == "" && (ah_perGuid=="" || ah_AttendanceDate=="") && str_datatype=="all")
             {
                 show_value.Append(@"  
                     select top 100 ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,perGuid,perName
@@ -585,6 +590,11 @@ public class sy_Attendance_DB
                 {
                     show_value.Append(@" and ah_AttendanceDate<=@str_datee  ");
                     thisCommand.Parameters.AddWithValue("@str_datee", str_datee);
+                }
+                //資料別 N=手動 Y=匯入
+                if (str_datatype!="all") {
+                    show_value.Append(@" and ah_flag=@str_datatype  ");
+                    thisCommand.Parameters.AddWithValue("@str_datatype", str_datatype);
                 }
 
             }
