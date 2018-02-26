@@ -74,7 +74,7 @@
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].perName + '</td>';
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].sum_normal + '</td>';
                             str_html += '<td align="center" nowrap="nowrap">' + response[i].sum_other + '</td>';
-                            str_html += '<td align="center" nowrap="nowrap">' + response[i].sum_all + '</td>';
+                            str_html += '<td align="center" nowrap="nowrap">' + response[i].sum_aTimes + '</td>';
                             str_html += '</tr>';
                         }
                         str_html += '</tbody>';

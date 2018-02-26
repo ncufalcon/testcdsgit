@@ -27,6 +27,7 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
         public string perName { get; set; }//人員名稱
         public string sum_normal { get; set; }//正常時數
         public string sum_other { get; set; }//加班時數
+        public string sum_all { get; set; }//
         public string sum_all { get; set; }//總時數
     }
     page_Gifts_DB a_db = new page_Gifts_DB();
@@ -78,6 +79,7 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
                             e.sum_normal = dt_a.Rows[i]["sum_normal"].ToString().Trim();
                             e.sum_other = dt_a.Rows[i]["sum_other"].ToString().Trim();
                             e.sum_all = dt_a.Rows[i]["sum_all"].ToString().Trim();
+                            e.sum_aTimes = dt_a.Rows[i]["sum_aTimes"].ToString().Trim();
                             aList.Add(e);
                         }
                         System.Web.Script.Serialization.JavaScriptSerializer objSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
