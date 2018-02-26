@@ -28,7 +28,7 @@ public class page_Gifts : IHttpHandler, IRequiresSessionState
         public string sum_normal { get; set; }//正常時數
         public string sum_other { get; set; }//加班時數
         public string sum_all { get; set; }//
-        public string sum_all { get; set; }//總時數
+        public string sum_aTimes { get; set; }//總時數
     }
     page_Gifts_DB a_db = new page_Gifts_DB();
     public void ProcessRequest (HttpContext context) {
