@@ -506,6 +506,7 @@ function printpage(){
                                  提撥金額:[D014]<br />
                                  實發金額:[D015]<br />
                                  保薪調整提醒:[D016]<br />
+                                 底薪:[D017]<br />
                              </td>
                          </tr>
                      </table>
