@@ -849,7 +849,7 @@ where perGuid=@perGuid ";
         }
 
         sb.Append(@"select * from (
-          select ROW_NUMBER() over (order by slCreatDate) itemNo,
+          select ROW_NUMBER() over (order by slSubsidyCode,slCreatDate) itemNo,
           * from sy_SubsidyLevel where slStatus<>'D' ");
 
         if (KeyWord != "")
