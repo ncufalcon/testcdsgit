@@ -8,8 +8,9 @@ using System.IO;
 using FlexCel.Core;
 using FlexCel.XlsAdapter;
 using System.Configuration;
+using System.Web.SessionState;
 
-public class PACImport : IHttpHandler {
+public class PACImport : IHttpHandler, IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
         bool status = true;
@@ -72,7 +73,7 @@ public class PACImport : IHttpHandler {
                             where perNo=@perNo and perStatus='A'
                         ";
                         oCmd.Parameters["@pacChangeDate"].Value = textdate;
-                        oCmd.Parameters["@pacCreateId"].Value = "王胖爺";
+                        oCmd.Parameters["@pacCreateId"].Value = USERINFO.MemberGuid.ToString().Trim();
                         oCmd.Parameters["@pacChangeEnd"].Value = aftermoney;
                         oCmd.Parameters["@perNo"].Value = perno;
                         oCmd.ExecuteNonQuery();
@@ -101,7 +102,7 @@ public class PACImport : IHttpHandler {
                             where perNo=@perNo and perStatus='A'
                         ";
                         oCmd.Parameters["@pacChangeDate"].Value = textdate;
-                        oCmd.Parameters["@pacCreateId"].Value = "王胖爺";
+                        oCmd.Parameters["@pacCreateId"].Value = USERINFO.MemberGuid.ToString().Trim();
                         oCmd.Parameters["@pacChangeEnd"].Value = aftermoney;
                         oCmd.Parameters["@perNo"].Value = perno;
                         oCmd.ExecuteNonQuery();

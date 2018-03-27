@@ -585,7 +585,7 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                 int total_rows = guid.Length;
                 int count_rows = 0;
                 DateTime dtnow = DateTime.Now;
-                string str_dtnow = dtnow.ToString("yyyy/mm/dd");
+                string str_dtnow = dtnow.ToString("yyyy/MM/dd");
                 try {
                     for (int i = 0; i < guid.Length; i++)
                     {
@@ -599,15 +599,15 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                         pac_db._str_after = Convert.ToInt32(arr_afertmoney[i].ToString().Trim());//異動後金額
                         if (arr_siRef[i].ToString().Trim() == "01")//底薪
                         {
-                            pac_db.UpdatePersonBasicSalary();
+                            //pac_db.UpdatePersonBasicSalary();
                         }
                         else if (arr_siRef[i].ToString().Trim() == "02")//職能加給
                         {
-                            pac_db.UpdatePersonAllowance();
+                            //pac_db.UpdatePersonAllowance();
                         }
                         else {//個人津貼
                             pac_db._pacGuid = arr_pacguid[i].ToString().Trim();//人員guid
-                            pac_db.UpdatePersonAllowancepaCost();
+                            //pac_db.UpdatePersonAllowancepaCost();
                         }
                         count_rows++;
                     }
