@@ -90,7 +90,8 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                     row.CreateCell(19).SetCellValue(com.toDou(dv[i]["pFuneralLeaveSalary"].ToString()));//喪假薪資-給薪假
                     row.CreateCell(20).SetCellValue(com.toDou(dv[i]["pProductionLeaveSalary"].ToString()));//陪產產檢假薪資-給薪假
                     row.CreateCell(21).SetCellValue(com.toDou(dv[i]["pAnnualLeaveSalary"].ToString()));//特休假薪資-給薪假
-                    row.CreateCell(22).SetCellValue(com.toDou(dv[i]["pMilitaryLeaveSalary"].ToString()));//兵役假薪資-給薪假
+
+                    row.CreateCell(23).SetCellValue(com.toDou(dv[i]["pMilitaryLeaveSalary"].ToString()));//兵役假薪資-給薪假
 
 
                     payroll.model.sy_PayAllowance paModel = new payroll.model.sy_PayAllowance();
@@ -100,25 +101,26 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                     row.CreateCell(13).SetCellValue(0);
                     row.CreateCell(14).SetCellValue(0);
 
-                    row.CreateCell(23).SetCellValue(0);
                     row.CreateCell(24).SetCellValue(0);
                     row.CreateCell(25).SetCellValue(0);
                     row.CreateCell(26).SetCellValue(0);
+                    row.CreateCell(27).SetCellValue(0);
 
-                    row.CreateCell(29).SetCellValue(0);
-                    row.CreateCell(31).SetCellValue(0);
+                    row.CreateCell(30).SetCellValue(0);
                     row.CreateCell(32).SetCellValue(0);
                     row.CreateCell(33).SetCellValue(0);
                     row.CreateCell(34).SetCellValue(0);
-
                     row.CreateCell(35).SetCellValue(0);
+
                     row.CreateCell(36).SetCellValue(0);
                     row.CreateCell(37).SetCellValue(0);
                     row.CreateCell(38).SetCellValue(0);
                     row.CreateCell(39).SetCellValue(0);
                     row.CreateCell(40).SetCellValue(0);
+                    row.CreateCell(41).SetCellValue(0);
+                    row.CreateCell(47).SetCellValue(0);
                     row.CreateCell(46).SetCellValue(0);
-                    row.CreateCell(45).SetCellValue(0);
+                        row.CreateCell(22).SetCellValue(0);
                     for (int j = 0; j < adv.Count; j++)
                     {
                         //津貼
@@ -140,80 +142,83 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                     row.CreateCell(14).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//調應稅加班
                                 break;
                             case "S001":
-                                row.CreateCell(23).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//BestSA獎金
+                                row.CreateCell(24).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//BestSA獎金
                                 break;
                             case "A001":
                             case "A103":
                                 //row.CreateCell(24).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//體檢補助 
                                 if (adv[j]["siItemCode"].ToString() == "A001")
-                                    row.CreateCell(24).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//體檢補助
+                                    row.CreateCell(25).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//體檢補助
                                 if (adv[j]["siItemCode"].ToString() == "A103")
-                                    row.CreateCell(24).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//A103(體檢補助)
+                                    row.CreateCell(25).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//A103(體檢補助)
                                 break;
                             case "A006":
-                                row.CreateCell(25).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//其它津貼
+                                row.CreateCell(26).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//其它津貼
                                 break;
                             case "A002":
-                                row.CreateCell(26).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//年節禮金
+                                row.CreateCell(27).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//年節禮金
                                 break;
 
                             case "D01":
                             case "D11":
                                 //row.CreateCell(29).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
                                 if (adv[j]["siItemCode"].ToString() == "D01")
-                                    row.CreateCell(29).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
+                                    row.CreateCell(30).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//調免稅加班
                                 if (adv[j]["siItemCode"].ToString() == "D11")
-                                    row.CreateCell(29).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//調免稅加班
+                                    row.CreateCell(30).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//調免稅加班
 
                                 break;
 
                             case "F005":
-                                row.CreateCell(32).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//未休特休假  
+                                row.CreateCell(33).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//未休特休假  
                                 break;
                             case "A007":
-                                row.CreateCell(33).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//職災補償
+                                row.CreateCell(34).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//職災補償
                                 break;
                             case "A000":
-                                row.CreateCell(34).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//資遣費
+                                row.CreateCell(35).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//資遣費
                                 break;
                             case "A004":
                             case "A104":
                                 if (adv[j]["siItemCode"].ToString() == "A004")
-                                    row.CreateCell(35).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣勞保費調整
+                                    row.CreateCell(36).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣勞保費調整
                                 if (adv[j]["siItemCode"].ToString() == "A104")
-                                    row.CreateCell(35).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣勞保費調整
+                                    row.CreateCell(36).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣勞保費調整
                                 break;
                             case "A005":
                             case "A105":
                                 if (adv[j]["siItemCode"].ToString() == "A005")
-                                    row.CreateCell(36).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣健保費調整
+                                    row.CreateCell(37).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//代扣健保費調整
                                 if (adv[j]["siItemCode"].ToString() == "A105")
-                                    row.CreateCell(36).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣健保費調整
+                                    row.CreateCell(37).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣健保費調整
                                 break;
                             case "A010":
                             case "A110":
                                 if (adv[j]["siItemCode"].ToString() == "A010")
-                                    row.CreateCell(37).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
+                                    row.CreateCell(38).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
                                 if (adv[j]["siItemCode"].ToString() == "A110")
-                                    row.CreateCell(37).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
+                                    row.CreateCell(38).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//勞退自提調整  項目待補
                                 break;
                             case "A101":
-                                row.CreateCell(38).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代法院執行
+                                row.CreateCell(39).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代法院執行
                                 break;
                             case "A106":
-                                row.CreateCell(39).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣繳-捐
+                                row.CreateCell(40).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣繳-捐
                                 break;
                             case "A107":
-                                row.CreateCell(40).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣繳-訓
+                                row.CreateCell(41).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣繳-訓
                                 break;
                             case "S002":
-                                row.CreateCell(31).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//颱風天加給
+                                row.CreateCell(32).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//颱風天加給
                                 break;
                             case "S104":
-                                row.CreateCell(45).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣福利金
+                                row.CreateCell(46).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣福利金
                                 break;
                             case "E03":
-                                row.CreateCell(46).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//伙食津貼 待計算
+                                row.CreateCell(47).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//伙食津貼
+                                break;
+                            case "F107":
+                                row.CreateCell(22).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//調特休假薪資
                                 break;
 
                         }
@@ -222,17 +227,17 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
 
 
 
-                    row.CreateCell(47).SetCellValue(com.toDou(dv[i]["pTaxation"].ToString()));//課稅所得
-                    row.CreateCell(27).SetCellValue(com.toDou((decimal.Parse(dv[i]["pWeekdaySalary1"].ToString()) + decimal.Parse(dv[i]["pWeekdaySalary2"].ToString()) + decimal.Parse(dv[i]["pWeekdaySalary3"].ToString())).ToString()));//平日免稅加班費
-                    row.CreateCell(28).SetCellValue(com.toDou((decimal.Parse(dv[i]["pOffDaySalary1"].ToString()) + decimal.Parse(dv[i]["pOffDaySalary2"].ToString()) + decimal.Parse(dv[i]["pOffDaySalary3"].ToString())).ToString()));//休息日加班費
-                    row.CreateCell(30).SetCellValue(com.toDou((decimal.Parse(dv[i]["pNationalholidaysSalary1"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary2"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary3"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary4"].ToString())).ToString()));//國定/假日
-                    row.CreateCell(48).SetCellValue(com.toDou(dv[i]["pShouldPay"].ToString()));//應發金額
-                    row.CreateCell(41).SetCellValue(com.toDou("-" + dv[i]["pPersonPension"].ToString()));//員工本月提繳金額
-                    row.CreateCell(42).SetCellValue(com.toDou("-" + dv[i]["pPersonLabor"].ToString()));//勞保費
-                    row.CreateCell(43).SetCellValue(com.toDou("-" + dv[i]["pPersonInsurance"].ToString()));//健保費
-                    row.CreateCell(44).SetCellValue(com.toDou("-" + dv[i]["pPremium"].ToString()));//補充保費
-                    row.CreateCell(49).SetCellValue(com.toDou(dv[i]["pPay"].ToString()));//實付金額
-                    row.CreateCell(50).SetCellValue(com.toDou(dv[i]["pCompanyPension"].ToString()));//公司本月提繳金額
+                    row.CreateCell(48).SetCellValue(com.toDou(dv[i]["pTaxation"].ToString()));//課稅所得
+                    row.CreateCell(28).SetCellValue(com.toDou((decimal.Parse(dv[i]["pWeekdaySalary1"].ToString()) + decimal.Parse(dv[i]["pWeekdaySalary2"].ToString()) + decimal.Parse(dv[i]["pWeekdaySalary3"].ToString())).ToString()));//平日免稅加班費
+                    row.CreateCell(29).SetCellValue(com.toDou((decimal.Parse(dv[i]["pOffDaySalary1"].ToString()) + decimal.Parse(dv[i]["pOffDaySalary2"].ToString()) + decimal.Parse(dv[i]["pOffDaySalary3"].ToString())).ToString()));//休息日加班費
+                    row.CreateCell(31).SetCellValue(com.toDou((decimal.Parse(dv[i]["pNationalholidaysSalary1"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary2"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary3"].ToString()) + decimal.Parse(dv[i]["pNationalholidaysSalary4"].ToString())).ToString()));//國定/假日
+                    row.CreateCell(49).SetCellValue(com.toDou(dv[i]["pShouldPay"].ToString()));//應發金額
+                    row.CreateCell(42).SetCellValue(com.toDou("-" + dv[i]["pPersonPension"].ToString()));//員工本月提繳金額
+                    row.CreateCell(43).SetCellValue(com.toDou("-" + dv[i]["pPersonLabor"].ToString()));//勞保費
+                    row.CreateCell(44).SetCellValue(com.toDou("-" + dv[i]["pPersonInsurance"].ToString()));//健保費
+                    row.CreateCell(45).SetCellValue(com.toDou("-" + dv[i]["pPremium"].ToString()));//補充保費
+                    row.CreateCell(50).SetCellValue(com.toDou(dv[i]["pPay"].ToString()));//實付金額
+                    row.CreateCell(51).SetCellValue(com.toDou(dv[i]["pCompanyPension"].ToString()));//公司本月提繳金額
                 }
 
 

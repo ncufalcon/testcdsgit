@@ -1,22 +1,19 @@
-﻿<%@ WebHandler Language="C#" Class="ashx_PayEdit" %>
+﻿<%@ WebHandler Language="C#" Class="ashx_reSetPay" %>
 
 using System;
 using System.Web;
-using System.Data;
-public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessionState
-{
+
+public class ashx_reSetPay : IHttpHandler, System.Web.SessionState.IReadOnlySessionState {
+    
     Common com = new Common();
     payroll.gdal dal = new payroll.gdal();
     public void ProcessRequest(HttpContext context)
     {
-
         context.Response.ContentType = "text/plain";
         try
         {
             if (!string.IsNullOrEmpty(USERINFO.MemberGuid))
             {
-
-
                 //xml 解析
                 string pGuid = (!string.IsNullOrEmpty(context.Request.Form["pGuid"])) ? context.Request.Form["pGuid"].ToString() : "";
                 decimal pWeekdayTime1 = (!string.IsNullOrEmpty(context.Request.Form["pWeekdayTime1"])) ? decimal.Parse(context.Request.Form["pWeekdayTime1"].ToString()) : 0;
@@ -77,83 +74,70 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
                 decimal pOverTimeDutyfree = (!string.IsNullOrEmpty(context.Request.Form["pOverTimeDutyfree"])) ? decimal.Parse(context.Request.Form["pOverTimeDutyfree"].ToString()) : 0;
                 decimal pOverTimeTaxation = (!string.IsNullOrEmpty(context.Request.Form["pOverTimeTaxation"])) ? decimal.Parse(context.Request.Form["pOverTimeTaxation"].ToString()) : 0;
                 decimal pIntertemporal = (!string.IsNullOrEmpty(context.Request.Form["pIntertemporal"])) ? decimal.Parse(context.Request.Form["pOverTimeTaxation"].ToString()) : 0;
-                decimal pPay = (!string.IsNullOrEmpty(context.Request.Form["pPay"])) ? decimal.Parse(context.Request.Form["pPay"].ToString()) : 0;
-                decimal pTaxation = (!string.IsNullOrEmpty(context.Request.Form["pTaxation"])) ? decimal.Parse(context.Request.Form["pTaxation"].ToString()) : 0;
-                decimal pTax = (!string.IsNullOrEmpty(context.Request.Form["pTax"])) ? decimal.Parse(context.Request.Form["pTax"].ToString()) : 0;
-                decimal pPremium = (!string.IsNullOrEmpty(context.Request.Form["pPremium"])) ? decimal.Parse(context.Request.Form["pPremium"].ToString()) : 0;
-                decimal pPersonInsurance = (!string.IsNullOrEmpty(context.Request.Form["pPersonInsurance"])) ? decimal.Parse(context.Request.Form["pPersonInsurance"].ToString()) : 0;
-                decimal pPersonLabor = (!string.IsNullOrEmpty(context.Request.Form["pPersonLabor"])) ? decimal.Parse(context.Request.Form["pPersonLabor"].ToString()) : 0;
-                decimal pPersonPension = (!string.IsNullOrEmpty(context.Request.Form["pPersonPension"])) ? decimal.Parse(context.Request.Form["pPersonPension"].ToString()) : 0;
-                decimal pCompanyPension = (!string.IsNullOrEmpty(context.Request.Form["pCompanyPension"])) ? decimal.Parse(context.Request.Form["pCompanyPension"].ToString()) : 0;
                 decimal pSalary = (!string.IsNullOrEmpty(context.Request.Form["pSalary"])) ? decimal.Parse(context.Request.Form["pSalary"].ToString()) : 0;
-
 
                 string[] str = { "" };
                 string sqlinj = com.CheckSqlInJection(str);
 
                 if (sqlinj == "")
                 {
-                    //payroll.model.sy_PayRoll p = new payroll.model.sy_PayRoll();
-                    //p.pGuid = pGuid;
-                    //p.pWeekdayTime1 = pWeekdayTime1;
-                    //p.pWeekdayTime2 = pWeekdayTime2;
-                    //p.pWeekdayTime3 = pWeekdayTime3;
-                    //p.pWeekdaySalary1 = pWeekdaySalary1;
-                    //p.pWeekdaySalary2 = pWeekdaySalary2;
-                    //p.pWeekdaySalary3 = pWeekdaySalary3;
-                    //p.pOffDayTime1 = pOffDayTime1;
-                    //p.pOffDayTime2 = pOffDayTime2;
-                    //p.pOffDayTime3 = pOffDayTime3;
-                    //p.pOffDaySalary1 = pOffDaySalary1;
-                    //p.pOffDaySalary2 = pOffDaySalary2;
-                    //p.pOffDaySalary3 = pOffDaySalary3;
-                    //p.pHolidayTime1 = pHolidayTime1;
-                    //p.pHolidayTime2 = pHolidayTime2;
-                    //p.pHolidayTime3 = pHolidayTime3;
-                    //p.pHolidayTime4 = pHolidayTime4;
-                    //p.pHolidaySalary1 = pHolidaySalary1;
-                    //p.pHolidaySalary2 = pHolidaySalary2;
-                    //p.pHolidaySalary3 = pHolidaySalary3;
-                    //p.pHolidaySalary4 = pHolidaySalary4;
-                    //p.pNationalholidaysSalary1 = pNationalholidaysSalary1;
-                    //p.pNationalholidaysSalary2 = pNationalholidaysSalary2;
-                    //p.pNationalholidaysSalary3 = pNationalholidaysSalary3;
-                    //p.pNationalholidaysSalary4 = pNationalholidaysSalary4;
+                    payroll.model.sy_PayRoll p = new payroll.model.sy_PayRoll();
+                    p.pGuid = pGuid;
+                    p.pWeekdayTime1 = pWeekdayTime1;
+                    p.pWeekdayTime2 = pWeekdayTime2;
+                    p.pWeekdayTime3 = pWeekdayTime3;
+                    p.pWeekdaySalary1 = pWeekdaySalary1;
+                    p.pWeekdaySalary2 = pWeekdaySalary2;
+                    p.pWeekdaySalary3 = pWeekdaySalary3;
+                    p.pOffDayTime1 = pOffDayTime1;
+                    p.pOffDayTime2 = pOffDayTime2;
+                    p.pOffDayTime3 = pOffDayTime3;
+                    p.pOffDaySalary1 = pOffDaySalary1;
+                    p.pOffDaySalary2 = pOffDaySalary2;
+                    p.pOffDaySalary3 = pOffDaySalary3;
+                    p.pHolidayTime1 = pHolidayTime1;
+                    p.pHolidayTime2 = pHolidayTime2;
+                    p.pHolidayTime3 = pHolidayTime3;
+                    p.pHolidayTime4 = pHolidayTime4;
+                    p.pHolidaySalary1 = pHolidaySalary1;
+                    p.pHolidaySalary2 = pHolidaySalary2;
+                    p.pHolidaySalary3 = pHolidaySalary3;
+                    p.pHolidaySalary4 = pHolidaySalary4;
+                    p.pNationalholidaysSalary1 = pNationalholidaysSalary1;
+                    p.pNationalholidaysSalary2 = pNationalholidaysSalary2;
+                    p.pNationalholidaysSalary3 = pNationalholidaysSalary3;
+                    p.pNationalholidaysSalary4 = pNationalholidaysSalary4;
 
-                    //p.pAnnualLeaveTimes = pAnnualLeaveTimes;
-                    //p.pAnnualLeaveSalary = pAnnualLeaveSalary;
-                    //p.pMarriageLeaveTimes = pMarriageLeaveTimes;
-                    //p.pMarriageLeaveSalary = pMarriageLeaveSalary;
-                    //p.pSickLeaveTimes = pSickLeaveTimes;
-                    //p.pSickLeaveSalary = pSickLeaveSalary;
-                    //p.pFuneralLeaveTimes = pFuneralLeaveTimes;
-                    //p.pFuneralLeaveSalary = pFuneralLeaveSalary;
-                    //p.pMaternityLeaveTimes = pMaternityLeaveTimes;
-                    //p.pMaternityLeaveSalary = pMaternityLeaveSalary;
-                    //p.pProductionLeaveTimes = pProductionLeaveTimes;
-                    //p.pProductionLeaveSalary = pProductionLeaveSalary;
-                    //p.pMilitaryLeaveTimes = pMilitaryLeaveTimes;
-                    //p.pMilitaryLeaveSalary = pMilitaryLeaveSalary;
-                    //p.pAbortionLeaveTimes = pAbortionLeaveTimes;
-                    //p.pAbortionLeaveSalary = pAbortionLeaveSalary;
-                    //p.pHolidayDutyFree = pHolidayDutyFree;
-                    //p.pHolidayTaxation = pHolidayTaxation;
-                    //p.pNationalholidaysTaxation = pNationalholidaysTaxation;
-                    //p.pNationalholidaysDutyFree = pNationalholidaysDutyFree;
-                    //p.pHolidaySumDutyFree = pHolidaySumDutyFree;
-                    //p.pHolidaySumTaxation = pHolidaySumTaxation;
-                    //p.pAttendanceDays = pAttendanceDays;
-                    //p.pAttendanceTimes = pAttendanceTimes;
-                    //p.pOverTimeDutyfree = pOverTimeDutyfree;
-                    //p.pOverTimeTaxation = pOverTimeTaxation;
-                    //p.pIntertemporal = pIntertemporal;
-                    //p.pSalary = pSalary;
-                    //p.pPay = pPay;
-                    //p.pTaxation = pTaxation;
-                    //p.pTax = pTax;
-                    //p.pPremium = pPremium;
-                    //p.UserInfo = USERINFO.MemberGuid;
-                    //dal.Upsy_PaySalary(p);
+                    p.pAnnualLeaveTimes = pAnnualLeaveTimes;
+                    p.pAnnualLeaveSalary = pAnnualLeaveSalary;
+                    p.pMarriageLeaveTimes = pMarriageLeaveTimes;
+                    p.pMarriageLeaveSalary = pMarriageLeaveSalary;
+                    p.pSickLeaveTimes = pSickLeaveTimes;
+                    p.pSickLeaveSalary = pSickLeaveSalary;
+                    p.pFuneralLeaveTimes = pFuneralLeaveTimes;
+                    p.pFuneralLeaveSalary = pFuneralLeaveSalary;
+                    p.pMaternityLeaveTimes = pMaternityLeaveTimes;
+                    p.pMaternityLeaveSalary = pMaternityLeaveSalary;
+                    p.pProductionLeaveTimes = pProductionLeaveTimes;
+                    p.pProductionLeaveSalary = pProductionLeaveSalary;
+                    p.pMilitaryLeaveTimes = pMilitaryLeaveTimes;
+                    p.pMilitaryLeaveSalary = pMilitaryLeaveSalary;
+                    p.pAbortionLeaveTimes = pAbortionLeaveTimes;
+                    p.pAbortionLeaveSalary = pAbortionLeaveSalary;
+                    p.pHolidayDutyFree = pHolidayDutyFree;
+                    p.pHolidayTaxation = pHolidayTaxation;
+                    p.pNationalholidaysTaxation = pNationalholidaysTaxation;
+                    p.pNationalholidaysDutyFree = pNationalholidaysDutyFree;
+                    p.pHolidaySumDutyFree = pHolidaySumDutyFree;
+                    p.pHolidaySumTaxation = pHolidaySumTaxation;
+                    p.pAttendanceDays = pAttendanceDays;
+                    p.pAttendanceTimes = pAttendanceTimes;
+                    p.pOverTimeDutyfree = pOverTimeDutyfree;
+                    p.pOverTimeTaxation = pOverTimeTaxation;
+                    p.pIntertemporal = pIntertemporal;
+                    p.pSalary = pSalary;
+                    p.UserInfo = USERINFO.MemberGuid;
+                    dal.reSetPayroll(p);
                     context.Response.Write("ok");
                 }
                 else { context.Response.Write("d"); }
@@ -163,16 +147,13 @@ public class ashx_PayEdit : IHttpHandler, System.Web.SessionState.IReadOnlySessi
         catch (Exception ex)
         {
             ErrorLog err = new ErrorLog();
-            err.InsErrorLog("ashx_PayEdit.ashx", ex.Message, USERINFO.MemberName);
+            err.InsErrorLog("ashx_reSetPay.ashx", ex.Message, USERINFO.MemberName);
             context.Response.Write("e");
         }
-
     }
-
-    public bool IsReusable
-    {
-        get
-        {
+ 
+    public bool IsReusable {
+        get {
             return false;
         }
     }

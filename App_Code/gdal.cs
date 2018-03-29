@@ -621,6 +621,36 @@ namespace payroll
         }
 
 
+
+        /// <summary>
+        /// 發薪紀錄
+        /// </summary>
+        public DataTable SelSy_PaySalaryDetailTmp(payroll.model.sy_PayRoll p)
+        {
+
+            string sql = @"select *
+                           ,(select sum(b.pPersonPension_Tmp) from v_PaySalaryDetailTmp as b where b.pPerGuid_Tmp=a.pPerGuid_Tmp and b.sr_Salarydate <= sr_Salarydate) as pPersonPensionSum
+                           ,(select sum(b.pCompanyPension_Tmp) from v_PaySalaryDetailTmp as b where b.pPerGuid_Tmp=a.pPerGuid_Tmp and b.sr_Salarydate <= sr_Salarydate) as pCompanyPensionSum
+                           from v_PaySalaryDetailTmp as a where pStatus_Tmp='A' ";
+
+            if (!string.IsNullOrEmpty(p.pGuid))
+                sql += "and pGuid_tmp = @pGuid ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@pGuid", com.cSNull(p.pGuid));
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
+
         /// <summary>
         /// 發薪紀錄匯出
         /// </summary>
@@ -744,6 +774,36 @@ namespace payroll
 
         }
 
+        /// <summary>
+        /// 發薪紀錄-津貼項
+        /// </summary>
+        public DataTable Selsy_PaySalaryAllowanceTmp(payroll.model.sy_PayAllowance p)
+        {
+
+            string sql = @"select *, case siAdd when '01' then N'加項' when '02' then N'扣項' else '' end as siAddstr 
+                           from sy_PaySalaryAllowanceTmp left join sy_SalaryItem on psaAllowanceCode_Tmp=siGuid where psaStatus_Tmp='A' ";
+
+            if (!string.IsNullOrEmpty(p.psaPerGuid))
+                sql += "and psaPerGuid_Tmp=@psaPerGuid ";
+
+            if (!string.IsNullOrEmpty(p.psaPsmGuid))
+                sql += "and psaPsmGuid_Tmp=@psaPsmGuid ";
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@psaPerGuid", com.cSNull(p.psaPerGuid));
+            cmd.Parameters.AddWithValue("@psaPsmGuid", com.cSNull(p.psaPsmGuid));
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
 
         /// <summary>
         /// 發薪紀錄-法扣
@@ -774,6 +834,37 @@ namespace payroll
             finally { cmd.Connection.Close(); cmd.Dispose(); }
 
         }
+
+        /// <summary>
+        /// 發薪紀錄-法扣
+        /// </summary>
+        public DataTable Selsy_PaySalaryBuckleTmp(payroll.model.sy_PayBuckle p)
+        {
+
+            string sql = @"select * from sy_PaySalaryBuckleTmp where psbStatus_Tmp='A' ";
+
+            if (!string.IsNullOrEmpty(p.psbPerGuid))
+                sql += "and psbPerGuid_Tmp=@psbPerGuid ";
+
+            if (!string.IsNullOrEmpty(p.psbPsmGuid))
+                sql += "and psbPsmGuid_Tmp=@psbPsmGuid ";
+            //sql += "order by convert(datetime,sr_SalaryDate ) desc ";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.Parameters.AddWithValue("@psbPerGuid", p.psbPerGuid);
+            cmd.Parameters.AddWithValue("@psbPsmGuid", p.psbPsmGuid);
+            try
+            {
+                cmd.Connection.Open();
+                DataTable dt = new DataTable();
+                new SqlDataAdapter(cmd).Fill(dt);
+                return dt;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { cmd.Connection.Close(); cmd.Dispose(); }
+
+        }
+
 
         /// <summary>
         /// 計算薪資
@@ -1230,7 +1321,98 @@ namespace payroll
 
 
 
+        /// <summary>
+        /// 修改後重新計算薪資
+        /// </summary>
+        public void reSetPayroll(payroll.model.sy_PayRoll p)
+        {
+            string sql = @"pr_ResPayroll";
 
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
+            cmd.Parameters.AddWithValue("@pGuid", p.pGuid);
+            cmd.Parameters.AddWithValue("@pWeekdayTime1", p.pWeekdayTime1);
+            cmd.Parameters.AddWithValue("@pWeekdayTime2", p.pWeekdayTime2);
+            cmd.Parameters.AddWithValue("@pWeekdayTime3", p.pWeekdayTime3);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary1", p.pWeekdaySalary1);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary2", p.pWeekdaySalary2);
+            cmd.Parameters.AddWithValue("@pWeekdaySalary3", p.pWeekdaySalary3);
+
+            cmd.Parameters.AddWithValue("@pOffDayTime1", p.pOffDayTime1);
+            cmd.Parameters.AddWithValue("@pOffDayTime2", p.pOffDayTime2);
+            cmd.Parameters.AddWithValue("@pOffDayTime3", p.pOffDayTime3);
+            cmd.Parameters.AddWithValue("@pOffDaySalary1", p.pOffDaySalary1);
+            cmd.Parameters.AddWithValue("@pOffDaySalary2", p.pOffDaySalary2);
+            cmd.Parameters.AddWithValue("@pOffDaySalary3", p.pOffDaySalary3)
+                ;
+            cmd.Parameters.AddWithValue("@pHolidayTime", p.pHolidayTime1);
+            cmd.Parameters.AddWithValue("@pHolidayTime1", p.pHolidayTime2);
+            cmd.Parameters.AddWithValue("@pHolidayTime2", p.pHolidayTime3);
+            cmd.Parameters.AddWithValue("@pHolidayTime3", p.pHolidayTime4);
+            cmd.Parameters.AddWithValue("@pHolidaySalary", p.pHolidaySalary1);
+            cmd.Parameters.AddWithValue("@pHolidaySalary1", p.pHolidaySalary2);
+            cmd.Parameters.AddWithValue("@pHolidaySalary2", p.pHolidaySalary3);
+            cmd.Parameters.AddWithValue("@pHolidaySalary3", p.pHolidaySalary4);
+
+            cmd.Parameters.AddWithValue("@pHolidayDutyFree", p.pHolidayDutyFree);
+            cmd.Parameters.AddWithValue("@pHolidayTaxation", p.pHolidayTaxation);
+
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime", p.pNationalholidaysTime1);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime1", p.pNationalholidaysTime2);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime2", p.pNationalholidaysTime3);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTime3", p.pNationalholidaysTime4);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary", p.pNationalholidaysSalary1);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary1", p.pNationalholidaysSalary2);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary2", p.pNationalholidaysSalary3);
+            cmd.Parameters.AddWithValue("@pNationalholidaysSalary3", p.pNationalholidaysSalary4);
+
+            cmd.Parameters.AddWithValue("@pNationalholidaysDutyFree", p.pNationalholidaysDutyFree);
+            cmd.Parameters.AddWithValue("@pNationalholidaysTaxation", p.pNationalholidaysTaxation);
+            cmd.Parameters.AddWithValue("@pHolidaySumDutyFree", p.pHolidaySumDutyFree);
+            cmd.Parameters.AddWithValue("@pHolidaySumTaxation", p.pHolidaySumTaxation);
+
+
+
+            cmd.Parameters.AddWithValue("@pAnnualLeaveTimes", p.pAnnualLeaveTimes);
+            cmd.Parameters.AddWithValue("@pAnnualLeaveSalary", p.pAnnualLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMarriageLeaveTimes", p.pMarriageLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMarriageLeaveSalary", p.pMarriageLeaveSalary);
+            cmd.Parameters.AddWithValue("@pSickLeaveTimes", p.pSickLeaveTimes);
+            cmd.Parameters.AddWithValue("@pSickLeaveSalary", p.pSickLeaveSalary);
+            cmd.Parameters.AddWithValue("@pFuneralLeaveTimes", p.pFuneralLeaveTimes);
+            cmd.Parameters.AddWithValue("@pFuneralLeaveSalary", p.pFuneralLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMaternityLeaveTimes", p.pMaternityLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMaternityLeaveSalary", p.pMaternityLeaveSalary);
+            cmd.Parameters.AddWithValue("@pProductionLeaveTimes", p.pProductionLeaveTimes);
+            cmd.Parameters.AddWithValue("@pProductionLeaveSalary", p.pProductionLeaveSalary);
+            cmd.Parameters.AddWithValue("@pMilitaryLeaveTimes", p.pMilitaryLeaveTimes);
+            cmd.Parameters.AddWithValue("@pMilitaryLeaveSalary", p.pMilitaryLeaveSalary);
+            cmd.Parameters.AddWithValue("@pAbortionLeaveTimes", p.pAbortionLeaveTimes);
+            cmd.Parameters.AddWithValue("@pAbortionLeaveSalary", p.pAbortionLeaveSalary);
+
+            cmd.Parameters.AddWithValue("@pOverTimeDutyfree", p.pOverTimeDutyfree);
+            cmd.Parameters.AddWithValue("@pOverTimeTaxation", p.pOverTimeTaxation);
+            cmd.Parameters.AddWithValue("@pSalary", p.pSalary);
+            cmd.Parameters.AddWithValue("@pAttendanceDays", p.pAttendanceDays);
+            cmd.Parameters.AddWithValue("@pAttendanceTimes", p.pAttendanceTimes);
+
+            cmd.Parameters.AddWithValue("@pIntertemporal", p.pIntertemporal);
+            cmd.Parameters.AddWithValue("@UserInfo", p.UserInfo);
+
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+      
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                //return dt;
+            }
+            catch (Exception ex) { throw ex; }
+        }
 
         /// <summary>
         /// 查詢保密薪資條範本
