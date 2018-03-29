@@ -1326,7 +1326,7 @@ namespace payroll
         /// </summary>
         public void reSetPayroll(payroll.model.sy_PayRoll p)
         {
-            string sql = @"pr_ResPayroll";
+            string sql = @"pr_ResetPayroll";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
             cmd.CommandTimeout = 600;
