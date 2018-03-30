@@ -1414,6 +1414,35 @@ namespace payroll
             catch (Exception ex) { throw ex; }
         }
 
+
+        /// <summary>
+        /// 修改後重新計算薪資
+        /// </summary>
+        public void pr_UpPayroll(payroll.model.sy_PayRoll p)
+        {
+            string sql = @"pr_UpPayroll";
+
+            SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
+            cmd.Parameters.AddWithValue("@pGuid", p.pGuid);
+            cmd.Parameters.AddWithValue("@UserInfo", p.UserInfo);
+
+            try
+            {
+                cmd.Connection.Open();
+                SqlTransaction transaction;
+                transaction = cmd.Connection.BeginTransaction();
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.ExecuteNonQuery();
+                transaction.Commit();
+                //return dt;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
         /// <summary>
         /// 查詢保密薪資條範本
         /// </summary>

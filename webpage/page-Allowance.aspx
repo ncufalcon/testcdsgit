@@ -31,6 +31,8 @@
                                <a href="../FileTemplate/津貼匯入範本.xlsx" style=" text-decoration:none; color:blue">津貼匯入範本</a>
                                 <span id="div_File"><input type="file" name="file_Atta" id="file_Atta" /></span>
                                 <a href="Javascript:void(0)" class="keybtn" onclick="JsEven.UploadFile();">匯入暫存</a>
+                               <br /><br />
+                               <span class="font-red">*請將資料匯入後，在資料清單上方按下"確認匯入"，才算匯入完成。</span>
                            </td>
                        </tr>
                    </table>

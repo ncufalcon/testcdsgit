@@ -142,9 +142,10 @@
                     </ul>
                     <div id="tabs-1">
                             <div class="twocol margin15TB">
+                               <span class="font-red">*請將要修改的欄位修改後，按重新計算，計算完成後請確認數字是否正確，再按儲存。</span>
                                 <div class="right">
-                                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.reSetPay();">重新計算</a>  
-                                    <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit();">儲存</a>                                 
+                                    <a href="javascript:void(0);" id="a_reset" class="keybtn" onclick="JsEven.reSetPay();">重新計算</a>  
+                                    <a href="javascript:void(0);" id="a_submit" class="keybtn" onclick="JsEven.Edit();" >儲存</a>                                 
                                 </div>
                             </div>
                         <div class="gentable">
@@ -1101,149 +1102,81 @@
 
                 var pGuid = $('#' + this.Id.hid_pGuid).val();
                 if (pGuid != "") {
-                    var pWeekdayTime1 = $('#' + this.Page1Id.txt_pWeekdayTime1).val();
-                    var pWeekdayTime2 = $('#' + this.Page1Id.txt_pWeekdayTime2).val();
-                    var pWeekdayTime3 = $('#' + this.Page1Id.txt_pWeekdayTime3).val();
-                    var pWeekdaySalary1 = $('#' + this.Page1Id.txt_pWeekdaySalary1).val();
-                    var pWeekdaySalary2 = $('#' + this.Page1Id.txt_pWeekdaySalary2).val();
-                    var pWeekdaySalary3 = $('#' + this.Page1Id.txt_pWeekdaySalary3).val();
-                    var pOffDayTime1 = $('#' + this.Page1Id.txt_pOffDayTime1).val();
-                    var pOffDayTime2 = $('#' + this.Page1Id.txt_pOffDayTime2).val();
-                    var pOffDayTime3 = $('#' + this.Page1Id.txt_pOffDayTime3).val();
-                    var pOffDaySalary1 = $('#' + this.Page1Id.txt_pOffDaySalary1).val();
-                    var pOffDaySalary2 = $('#' + this.Page1Id.txt_pOffDaySalary2).val();
-                    var pOffDaySalary3 = $('#' + this.Page1Id.txt_pOffDaySalary3).val();
-                    var pHolidayTime1 = $('#' + this.Page1Id.txt_pHolidayTime1).val();
-                    var pHolidayTime2 = $('#' + this.Page1Id.txt_pHolidayTime2).val();
-                    var pHolidayTime3 = $('#' + this.Page1Id.txt_pHolidayTime3).val();
-                    var pHolidayTime4 = $('#' + this.Page1Id.txt_pHolidayTime4).val();
-                    var pHolidaySalary1 = $('#' + this.Page1Id.txt_pHolidaySalary1).val();
-                    var pHolidaySalary2 = $('#' + this.Page1Id.txt_pHolidaySalary2).val();
-                    var pHolidaySalary3 = $('#' + this.Page1Id.txt_pHolidaySalary3).val();
-                    var pHolidaySalary4 = $('#' + this.Page1Id.txt_pHolidaySalary4).val();
-                    var pHolidayDutyFree = $('#' + this.Page1Id.txt_pHolidayDutyFree).val();
-                    var pHolidayTaxation = $('#' + this.Page1Id.txt_pHolidayTaxation).val();
-                    var pNationalholidaysTime1 = $('#' + this.Page1Id.txt_pNationalholidaysTime1).val();
-                    var pNationalholidaysTime2 = $('#' + this.Page1Id.txt_pNationalholidaysTime2).val();
-                    var pNationalholidaysTime3 = $('#' + this.Page1Id.txt_pNationalholidaysTime3).val();
-                    var pNationalholidaysTime4 = $('#' + this.Page1Id.txt_pNationalholidaysTime4).val();
-                    var pNationalholidaysSalary1 = $('#' + this.Page1Id.txt_pNationalholidaysSalary1).val();
-                    var pNationalholidaysSalary2 = $('#' + this.Page1Id.txt_pNationalholidaysSalary2).val();
-                    var pNationalholidaysSalary3 = $('#' + this.Page1Id.txt_pNationalholidaysSalary3).val();
-                    var pNationalholidaysSalary4 = $('#' + this.Page1Id.txt_pNationalholidaysSalary4).val();
-                    var pNationalholidaysTaxation = $('#' + this.Page1Id.txt_pNationalholidaysTaxation).val();
-                    var pNationalholidaysDutyFree = $('#' + this.Page1Id.txt_pNationalholidaysDutyFree).val();
+                    //var pWeekdayTime1 = $('#' + this.Page1Id.txt_pWeekdayTime1).val();
+                    //var pWeekdayTime2 = $('#' + this.Page1Id.txt_pWeekdayTime2).val();
+                    //var pWeekdayTime3 = $('#' + this.Page1Id.txt_pWeekdayTime3).val();
+                    //var pWeekdaySalary1 = $('#' + this.Page1Id.txt_pWeekdaySalary1).val();
+                    //var pWeekdaySalary2 = $('#' + this.Page1Id.txt_pWeekdaySalary2).val();
+                    //var pWeekdaySalary3 = $('#' + this.Page1Id.txt_pWeekdaySalary3).val();
+                    //var pOffDayTime1 = $('#' + this.Page1Id.txt_pOffDayTime1).val();
+                    //var pOffDayTime2 = $('#' + this.Page1Id.txt_pOffDayTime2).val();
+                    //var pOffDayTime3 = $('#' + this.Page1Id.txt_pOffDayTime3).val();
+                    //var pOffDaySalary1 = $('#' + this.Page1Id.txt_pOffDaySalary1).val();
+                    //var pOffDaySalary2 = $('#' + this.Page1Id.txt_pOffDaySalary2).val();
+                    //var pOffDaySalary3 = $('#' + this.Page1Id.txt_pOffDaySalary3).val();
+                    //var pHolidayTime1 = $('#' + this.Page1Id.txt_pHolidayTime1).val();
+                    //var pHolidayTime2 = $('#' + this.Page1Id.txt_pHolidayTime2).val();
+                    //var pHolidayTime3 = $('#' + this.Page1Id.txt_pHolidayTime3).val();
+                    //var pHolidayTime4 = $('#' + this.Page1Id.txt_pHolidayTime4).val();
+                    //var pHolidaySalary1 = $('#' + this.Page1Id.txt_pHolidaySalary1).val();
+                    //var pHolidaySalary2 = $('#' + this.Page1Id.txt_pHolidaySalary2).val();
+                    //var pHolidaySalary3 = $('#' + this.Page1Id.txt_pHolidaySalary3).val();
+                    //var pHolidaySalary4 = $('#' + this.Page1Id.txt_pHolidaySalary4).val();
+                    //var pHolidayDutyFree = $('#' + this.Page1Id.txt_pHolidayDutyFree).val();
+                    //var pHolidayTaxation = $('#' + this.Page1Id.txt_pHolidayTaxation).val();
+                    //var pNationalholidaysTime1 = $('#' + this.Page1Id.txt_pNationalholidaysTime1).val();
+                    //var pNationalholidaysTime2 = $('#' + this.Page1Id.txt_pNationalholidaysTime2).val();
+                    //var pNationalholidaysTime3 = $('#' + this.Page1Id.txt_pNationalholidaysTime3).val();
+                    //var pNationalholidaysTime4 = $('#' + this.Page1Id.txt_pNationalholidaysTime4).val();
+                    //var pNationalholidaysSalary1 = $('#' + this.Page1Id.txt_pNationalholidaysSalary1).val();
+                    //var pNationalholidaysSalary2 = $('#' + this.Page1Id.txt_pNationalholidaysSalary2).val();
+                    //var pNationalholidaysSalary3 = $('#' + this.Page1Id.txt_pNationalholidaysSalary3).val();
+                    //var pNationalholidaysSalary4 = $('#' + this.Page1Id.txt_pNationalholidaysSalary4).val();
+                    //var pNationalholidaysTaxation = $('#' + this.Page1Id.txt_pNationalholidaysTaxation).val();
+                    //var pNationalholidaysDutyFree = $('#' + this.Page1Id.txt_pNationalholidaysDutyFree).val();
 
-                    var pHolidaySumDutyFree = $('#' + this.Page1Id.txt_pHolidaySumDutyFree).val();
-                    var pHolidaySumTaxation = $('#' + this.Page1Id.txt_pHolidaySumTaxation).val();
-                    var pAnnualLeaveTimes = $('#' + this.Page1Id.txt_pAnnualLeaveTimes).val();
-                    var pAnnualLeaveSalary = $('#' + this.Page1Id.txt_pAnnualLeaveSalary).val();
-                    var pMarriageLeaveTimes = $('#' + this.Page1Id.txt_pMarriageLeaveTimes).val();
-                    var pMarriageLeaveSalary = $('#' + this.Page1Id.txt_pMarriageLeaveSalary).val();
-                    var pSickLeaveTimes = $('#' + this.Page1Id.txt_pSickLeaveTimes).val();
-                    var pSickLeaveSalary = $('#' + this.Page1Id.txt_pSickLeaveSalary).val();
-                    var pFuneralLeaveTimes = $('#' + this.Page1Id.txt_pFuneralLeaveTimes).val();
-                    var pFuneralLeaveSalary = $('#' + this.Page1Id.txt_pFuneralLeaveSalary).val();
-                    var pMaternityLeaveTimes = $('#' + this.Page1Id.txt_pMaternityLeaveTimes).val();
-                    var pMaternityLeaveSalary = $('#' + this.Page1Id.txt_pMaternityLeaveSalary).val();
+                    //var pHolidaySumDutyFree = $('#' + this.Page1Id.txt_pHolidaySumDutyFree).val();
+                    //var pHolidaySumTaxation = $('#' + this.Page1Id.txt_pHolidaySumTaxation).val();
+                    //var pAnnualLeaveTimes = $('#' + this.Page1Id.txt_pAnnualLeaveTimes).val();
+                    //var pAnnualLeaveSalary = $('#' + this.Page1Id.txt_pAnnualLeaveSalary).val();
+                    //var pMarriageLeaveTimes = $('#' + this.Page1Id.txt_pMarriageLeaveTimes).val();
+                    //var pMarriageLeaveSalary = $('#' + this.Page1Id.txt_pMarriageLeaveSalary).val();
+                    //var pSickLeaveTimes = $('#' + this.Page1Id.txt_pSickLeaveTimes).val();
+                    //var pSickLeaveSalary = $('#' + this.Page1Id.txt_pSickLeaveSalary).val();
+                    //var pFuneralLeaveTimes = $('#' + this.Page1Id.txt_pFuneralLeaveTimes).val();
+                    //var pFuneralLeaveSalary = $('#' + this.Page1Id.txt_pFuneralLeaveSalary).val();
+                    //var pMaternityLeaveTimes = $('#' + this.Page1Id.txt_pMaternityLeaveTimes).val();
+                    //var pMaternityLeaveSalary = $('#' + this.Page1Id.txt_pMaternityLeaveSalary).val();
 
-                    var pProductionLeaveTimes = $('#' + this.Page1Id.txt_pProductionLeaveTimes).val();
-                    var pProductionLeaveSalary = $('#' + this.Page1Id.txt_pProductionLeaveSalary).val();
-                    var pMilitaryLeaveTimes = $('#' + this.Page1Id.txt_pMilitaryLeaveTimes).val();
-                    var pMilitaryLeaveSalary = $('#' + this.Page1Id.txt_pMilitaryLeaveSalary).val();
-                    var pAbortionLeaveTimes = $('#' + this.Page1Id.txt_pAbortionLeaveTimes).val();
-                    var pAbortionLeaveSalary = $('#' + this.Page1Id.txt_pAbortionLeaveSalary).val();
+                    //var pProductionLeaveTimes = $('#' + this.Page1Id.txt_pProductionLeaveTimes).val();
+                    //var pProductionLeaveSalary = $('#' + this.Page1Id.txt_pProductionLeaveSalary).val();
+                    //var pMilitaryLeaveTimes = $('#' + this.Page1Id.txt_pMilitaryLeaveTimes).val();
+                    //var pMilitaryLeaveSalary = $('#' + this.Page1Id.txt_pMilitaryLeaveSalary).val();
+                    //var pAbortionLeaveTimes = $('#' + this.Page1Id.txt_pAbortionLeaveTimes).val();
+                    //var pAbortionLeaveSalary = $('#' + this.Page1Id.txt_pAbortionLeaveSalary).val();
 
-                    var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
-                    var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
-                    var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
-                    var pOverTimeTaxation = $('#' + this.Page1Id.txt_pOverTimeTaxation).val();
-                    var pIntertemporal = $('#' + this.Page1Id.txt_pIntertemporal).val();
-                    var pSalary = $('#' + this.Page1Id.txt_pSalary).val();
+                    //var pAttendanceDays = $('#' + this.Page1Id.txt_pAttendanceDays).val();
+                    //var pAttendanceTimes = $('#' + this.Page1Id.txt_pAttendanceTimes).val();
+                    //var pOverTimeDutyfree = $('#' + this.Page1Id.txt_pOverTimeDutyfree).val();
+                    //var pOverTimeTaxation = $('#' + this.Page1Id.txt_pOverTimeTaxation).val();
+                    //var pIntertemporal = $('#' + this.Page1Id.txt_pIntertemporal).val();
+                    //var pSalary = $('#' + this.Page1Id.txt_pSalary).val();
                     
-                    var pPay = $('#' + this.Page2Id.txt_pPay).val();
-                    var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
-                    var pTax = $('#' + this.Page2Id.txt_pTax).val();
-                    var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
-                    var pPersonInsurance = $('#' + this.Page2Id.txt_pPersonInsurance).val();
-                    var pPersonLabor = $('#' + this.Page2Id.txt_pPersonLabor).val();
-                    var pPersonPension = $('#' + this.Page2Id.txt_pPersonPension).val();
-                    var pCompanyPension = $('#' + this.Page2Id.txt_pCompanyPension).val();
+                    //var pPay = $('#' + this.Page2Id.txt_pPay).val();
+                    //var pTaxation = $('#' + this.Page2Id.txt_pTaxation).val();
+                    //var pTax = $('#' + this.Page2Id.txt_pTax).val();
+                    //var pPremium = $('#' + this.Page2Id.txt_pPremium).val();
+                    //var pPersonInsurance = $('#' + this.Page2Id.txt_pPersonInsurance).val();
+                    //var pPersonLabor = $('#' + this.Page2Id.txt_pPersonLabor).val();
+                    //var pPersonPension = $('#' + this.Page2Id.txt_pPersonPension).val();
+                    //var pCompanyPension = $('#' + this.Page2Id.txt_pCompanyPension).val();
 
 
                     $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     $.ajax({
                         type: "POST",
                         url: '../handler/Payroll/ashx_PayEdit.ashx',
-                        data: 'pGuid=' + pGuid +
-                              '&pWeekdayTime1=' + pWeekdayTime1 +
-                              '&pWeekdayTime2=' + pWeekdayTime2 +
-                              '&pWeekdayTime3=' + pWeekdayTime3 +
-                              '&pWeekdaySalary1=' + pWeekdaySalary1 +
-                              '&pWeekdaySalary2=' + pWeekdaySalary2 +
-                              '&pWeekdaySalary3=' + pWeekdaySalary3 +
-
-                              '&pOffDayTime1=' + pOffDayTime1 +
-                              '&pOffDayTime2=' + pOffDayTime2 +
-                              '&pOffDayTime3=' + pOffDayTime3 +
-                              '&pOffDaySalary1=' + pOffDaySalary1 +
-                              '&pOffDaySalary2=' + pOffDaySalary2 +
-                              '&pOffDaySalary3=' + pOffDaySalary3 +
-
-                              '&pHolidayTime1=' + pHolidayTime1 +
-                              '&pHolidayTime2=' + pHolidayTime2 +
-                              '&pHolidayTime3=' + pHolidayTime3 +
-                              '&pHolidayTime4=' + pHolidayTime4 +
-                              '&pHolidaySalary1=' + pHolidaySalary1 +
-                              '&pHolidaySalary2=' + pHolidaySalary2 +
-                              '&pHolidaySalary3=' + pHolidaySalary3 +
-                              '&pHolidaySalary4=' + pHolidaySalary4 +
-
-                              '&pNationalholidaysTime1=' + pNationalholidaysTime1 +
-                              '&pNationalholidaysTime2=' + pNationalholidaysTime2 +
-                              '&pNationalholidaysTime3=' + pNationalholidaysTime3 +
-                              '&pNationalholidaysTime4=' + pNationalholidaysTime4 +
-                              '&pNationalholidaysSalary1=' + pNationalholidaysSalary1 +
-                              '&pNationalholidaysSalary2=' + pNationalholidaysSalary2 +
-                              '&pNationalholidaysSalary3=' + pNationalholidaysSalary3 +
-                              '&pNationalholidaysSalary4=' + pNationalholidaysSalary4 +
-                              '&pAnnualLeaveTimes=' + pAnnualLeaveTimes +
-                              '&pAnnualLeaveSalary=' + pAnnualLeaveSalary +
-                              '&pMarriageLeaveTimes=' + pMarriageLeaveTimes +
-                              '&pMarriageLeaveSalary=' + pMarriageLeaveSalary +
-                              '&pSickLeaveTimes=' + pSickLeaveTimes +
-                              '&pSickLeaveSalary=' + pSickLeaveSalary +
-                              '&pFuneralLeaveTimes=' + pFuneralLeaveTimes +
-                              '&pFuneralLeaveSalary=' + pFuneralLeaveSalary +
-                              '&pMaternityLeaveTimes=' + pMaternityLeaveTimes +
-                              '&pMaternityLeaveSalary=' + pMaternityLeaveSalary +
-                              '&pProductionLeaveTimes=' + pProductionLeaveTimes +
-                              '&pProductionLeaveSalary=' + pProductionLeaveSalary +
-                              '&pMilitaryLeaveTimes=' + pMilitaryLeaveTimes +
-                              '&pMilitaryLeaveSalary=' + pMilitaryLeaveSalary +
-                              '&pAbortionLeaveTimes=' + pAbortionLeaveTimes +
-                              '&pAbortionLeaveSalary=' + pAbortionLeaveSalary +
-
-                              '&pHolidayDutyFree=' + pHolidayDutyFree +
-                              '&pHolidayTaxation=' + pHolidayTaxation +
-                              '&pNationalholidaysTaxation=' + pNationalholidaysTaxation +
-                              '&pNationalholidaysDutyFree=' + pNationalholidaysDutyFree +
-                              '&pHolidaySumDutyFree=' + pHolidaySumDutyFree +
-                              '&pHolidaySumTaxation=' + pHolidaySumTaxation +
-                              '&pAttendanceDays=' + pAttendanceDays +
-                              '&pAttendanceTimes=' + pAttendanceTimes +
-                              '&pOverTimeDutyfree=' + pOverTimeDutyfree +
-                              '&pOverTimeTaxation=' + pOverTimeTaxation +
-                              '&pIntertemporal=' + pIntertemporal +
-                              '&pPay=' + pPay +
-                              '&pTaxation=' + pTaxation +
-                              '&pTax=' + pTax +
-                              '&pPremium=' + pPremium +
-                              '&pPersonInsurance=' + pPersonInsurance +
-                              '&pPersonLabor=' + pPersonLabor +
-                              '&pPersonPension=' + pPersonPension +
-                              '&pCompanyPension=' + pCompanyPension + 
-                              '&pSalary=' + pSalary,
+                        data: 'pGuid=' + pGuid,
                         dataType: 'text',  //xml, json, script, text, html
                         success: function (msg) {
                             switch (msg) {
@@ -1421,7 +1354,7 @@
                                 case "ok":
                                     JsEven.viewReSet(pGuid);
                                     JsEven.AllListReSet();
-                                    JsEven.AllList();
+                                    JsEven.AllList();                                   
                                     alert('重新計算成功，請確認資訊後按儲存');
                                     break;
                                 case "e":
