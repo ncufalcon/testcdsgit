@@ -1020,7 +1020,7 @@
                 var perGuid = $('#' + this.Id.hid_perGuid).val();
                 var pPsmGuid = $('#' + this.Id.hid_pPsmGuid).val();
                 if (perGuid != '' && pPsmGuid != '') {
-                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                    //$.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     var opt = {
                         url: '../handler/Payroll/ashx_BuckleListTmp.ashx',
                         v: 'psbPerGuid=' + perGuid +
@@ -1052,7 +1052,7 @@
                                     } else { div.innerHTML = '目前無任何資料'; }
                                     break;
                             }
-                            $.unblockUI();
+                            //$.unblockUI();
                         }
                     }
                     CmFmCommon.ajax(opt);
@@ -1356,6 +1356,7 @@
                                     JsEven.AllListReSet();
                                     JsEven.AllList();                                   
                                     alert('重新計算成功，請確認資訊後按儲存');
+                                    $.unblockUI();
                                     break;
                                 case "e":
                                     alert('程式發生錯誤，請聯絡相關管理人員');
