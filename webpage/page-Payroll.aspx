@@ -330,11 +330,11 @@
                         </div>
                     </div><!-- tabs-1 -->
                     <div id="tabs-2">
-                            <div class="twocol margin15TB">
+<%--                            <div class="twocol margin15TB">
                                 <div class="right">                                    
                                     <a href="javascript:void(0);" class="keybtn" onclick="JsEven.Edit();">儲存</a>                                 
                                 </div>
-                            </div>
+                            </div>--%>
                         <div class="gentable">
 
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
