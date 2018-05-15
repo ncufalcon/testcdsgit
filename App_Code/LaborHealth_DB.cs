@@ -555,9 +555,9 @@ from sy_PersonFamilyInsurance
 left join sy_Person on pfiPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonFamily on pfPerGuid=perGuid and pfStatus='A'
-where pfiPerGuid in (select * from #tmp) and (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A' 
-and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A')
-and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A')
+where pfiPerGuid in (select * from #tmp) and pfiChange='01' and pfiPfGuid=pfGuid and pfiStatus='A' 
+and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
+and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
 order by perIDNumber,fID
 ");
 
@@ -604,9 +604,9 @@ from sy_PersonFamilyInsurance
 left join sy_Person on pfiPerGuid=perGuid
 left join sy_Company on perComGuid=comGuid
 left join sy_PersonFamily on pfPerGuid=perGuid and pfStatus='A'
-where pfiPerGuid in (select * from #tmp) and (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A' 
-and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A')
-and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where (pfiChange='01' or pfiChange='03') and pfiPfGuid=pfGuid and pfiStatus='A')
+where pfiPerGuid in (select * from #tmp) and pfiChange='01'and pfiPfGuid=pfGuid and pfiStatus='A' 
+and pfiChangeDate=(select MAX(pfiChangeDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
+and pfiCreateDate=(select MAX(pfiCreateDate) from sy_PersonFamilyInsurance where pfiPfGuid=pfGuid and pfiStatus='A')
 order by perIDNumber,fID
 
 drop table #tmp
