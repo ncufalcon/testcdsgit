@@ -158,7 +158,7 @@
                                                 <input type="text" id="txt_PerNo_m" class="inputex width50" />
                                                 <img id="img_Person" src="../images/btn-search.gif" onclick="JsEven.openfancybox(this)" style="cursor:pointer"/>
                                                 <span id="sp_PerName_m" class="showStr"></span>
-                                                <input id="hid_PerGuid_m" type="hidden" />
+                                                <input id="hid_PerGuid_m" type="hidden" /> 
                                             </td>
                                             <td class="width10" align="right"><div class="font-title titlebackicon" style="color:Red">津貼代號</div></td>
                                             <td class="width15">
@@ -688,7 +688,40 @@
             reImport: function () {
                 document.getElementById(JsEven.Page1Id.div_UploadSearch).style.display = "none";
                 document.getElementById(JsEven.Page1Id.div_Upload).removeAttribute("style");
-            }
+            },
+
+
+            //撈離職資訊
+            sel_lastdate: function(thisno){
+            $.ajax({
+                type: "POST",
+                async: true, //在沒有返回值之前,不會執行下一步動作
+                url: "../handler/pageModify.ashx",
+                data: {
+                    func: "load_lastdate",
+                    str_thisno: thisno
+                },
+                error: function (xhr) {
+                    alert("error");
+                },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
+                },
+                success: function (response) {
+                    if (response != "nodata") {
+                        $("#" + JsEven.Page2Id.txt_PerNo_m).val(response[0].perNo);
+                        $("#" + JsEven.Page2Id.sp_PerName_m).html(response[0].perName);
+                        $("#" + JsEven.Page2Id.hid_PerGuid_m).val(response[0].perGuid);
+                    } else {
+                        $("#" + JsEven.Page2Id.sp_PerName_m).html("無資料");
+                        $("#" + JsEven.Page2Id.hid_PerGuid_m).val("");
+                    }
+                },//success end
+                complete: function () {
+                    $.unblockUI();
+                }
+            });//ajax end
+        }
 
         }
 
@@ -712,7 +745,6 @@
                             $("#" + JsEven.Page2Id.txt_AllowanceCode).val(no);
                             break;
                     }
-
                     break;
             }
         }
@@ -732,6 +764,10 @@
                 }
             });
         }
+
+        $(document).on("change", "#txt_PerNo_m", function () {
+            JsEven.sel_lastdate($(this).val());
+        });
     </script>
 
 

@@ -20,9 +20,8 @@
 
     }
 
-    void Session_Start(object sender, EventArgs e) 
+    void Session_Start(object sender, EventArgs e)
     {
-        // 在新的工作階段啟動時執行的程式碼
 
     }
 
