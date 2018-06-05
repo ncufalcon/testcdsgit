@@ -7,6 +7,7 @@ using System.Data;
 
 public class addFamilyIns : IHttpHandler,IRequiresSessionState {
     FamilyInsurance_DB FI_Db = new FamilyInsurance_DB();
+    PersonFamily_DB PF_Db = new PersonFamily_DB();
     public void ProcessRequest (HttpContext context) {
         try
         {
@@ -73,6 +74,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiCreateId = USERINFO.MemberGuid;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.addFamilyIns();
+                    WriteBackInfo(pfi_PfGuid, pfi_SubsidyLevel);
                     break;
                 case "Modify":
                     FI_Db._pfiGuid = id;
@@ -86,6 +88,7 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
                     FI_Db._pfiPs = pfi_Ps;
                     FI_Db._pfiModifyId = USERINFO.MemberGuid;
                     FI_Db.modFamilyIns();
+                    WriteBackInfo(pfi_PfGuid, pfi_SubsidyLevel);
                     break;
             }
 
@@ -93,6 +96,14 @@ public class addFamilyIns : IHttpHandler,IRequiresSessionState {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('PFI');</script>");
         }
         catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addFamilyIns');</script>"); }
+    }
+
+    //同步眷屬基本資料補助身分
+    private void WriteBackInfo(string pfGuid, string SL_val)
+    {
+        PF_Db._pfGuid = pfGuid;
+        PF_Db._pfCode = SL_val;
+        PF_Db.FamilySL();
     }
 
     public bool IsReusable {

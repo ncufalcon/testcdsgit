@@ -255,4 +255,22 @@ where pfGuid=@pfGuid
         oda.Fill(ds);
         return ds;
     }
+
+    public void FamilySL()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.CommandText = @"update sy_PersonFamily set
+pfCode=@pfCode
+where pfGuid=@pfGuid
+";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        oCmd.Parameters.AddWithValue("@pfGuid", pfGuid);
+        oCmd.Parameters.AddWithValue("@pfCode", pfCode);
+
+        oCmd.Connection.Open();
+        oCmd.ExecuteNonQuery();
+        oCmd.Connection.Close();
+    }
 }

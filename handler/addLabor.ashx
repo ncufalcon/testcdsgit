@@ -83,6 +83,7 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
                     LH_Db._piCreateId = USERINFO.MemberGuid;
                     LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.addLabor();
+                    WriteBackInfo(pl_No,pl_SubsidyLevel);
                     break;
                 case "Modify":
                     LH_Db._plGuid = id;
@@ -95,6 +96,7 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
                     LH_Db._plPs = pl_Ps;
                     LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.modLabor();
+                    WriteBackInfo(pl_No,pl_SubsidyLevel);
                     break;
             }
 
@@ -116,6 +118,14 @@ public class addLabor : IHttpHandler,IRequiresSessionState {
                 codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
         }
         return codeStr;
+    }
+
+    //同步人員基本資料補助身分
+    private void WriteBackInfo(string pGuid, string SL_val)
+    {
+        Personnel_Db._perGuid = pGuid;
+        Personnel_Db._perLaborID = SL_val;
+        Personnel_Db.LaborSL();
     }
 
     public bool IsReusable {

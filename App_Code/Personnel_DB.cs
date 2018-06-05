@@ -849,7 +849,7 @@ where perGuid=@perGuid ";
         }
 
         sb.Append(@"select * from (
-          select ROW_NUMBER() over (order by slSubsidyCode,slCreatDate) itemNo,
+          select ROW_NUMBER() over (order by slCreatDate) itemNo,
           * from sy_SubsidyLevel where slStatus<>'D' ");
 
         if (KeyWord != "")
@@ -1193,5 +1193,42 @@ order by perComGuid,perDep ");
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oda.Fill(ds);
         return ds;
+    }
+
+    public void LaborSL()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.CommandText = @"update sy_Person set
+perLaborID=@perLaborID
+where perGuid=@perGuid
+";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oCmd.Parameters.AddWithValue("@perLaborID", perLaborID);
+
+        oCmd.Connection.Open();
+        oCmd.ExecuteNonQuery();
+        oCmd.Connection.Close();
+    }
+
+
+    public void HealSL()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        oCmd.CommandText = @"update sy_Person set
+perInsuranceID=@perInsuranceID
+where perGuid=@perGuid
+";
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oCmd.Parameters.AddWithValue("@perInsuranceID", perInsuranceID);
+
+        oCmd.Connection.Open();
+        oCmd.ExecuteNonQuery();
+        oCmd.Connection.Close();
     }
 }

@@ -102,6 +102,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piCreateId = USERINFO.MemberGuid;
                     LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.addHeal();
+                    WriteBackInfo(pi_No, pi_SubsidyLevel);
                     break;
                 case "Modify":
                     LH_Db._piGuid = id;
@@ -115,6 +116,7 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                     LH_Db._piPs = pi_Ps;
                     LH_Db._piModifyId = USERINFO.MemberGuid;
                     LH_Db.modHeal();
+                    WriteBackInfo(pi_No, pi_SubsidyLevel);
                     break;
             }
 
@@ -136,6 +138,14 @@ public class addHeal : IHttpHandler,IRequiresSessionState {
                 codeStr = dt.Rows[0]["comHealthInsuranceCode"].ToString();
         }
         return codeStr;
+    }
+
+    //同步人員基本資料補助身分
+    private void WriteBackInfo(string pGuid, string SL_val)
+    {
+        Personnel_Db._perGuid = pGuid;
+        Personnel_Db._perInsuranceID = SL_val;
+        Personnel_Db.HealSL();
     }
 
     public bool IsReusable {

@@ -2658,7 +2658,7 @@
                                         <td class="width10" align="right"><div class="font-title titlebackicon font-red">員工代號</div></td>
                                         <td class="width15">
                                             <input id="pl_No" name="pl_No" type="text" class="inputex width60" /><input id="pl_NoGuid" name="pl_NoGuid" type="hidden" />
-                                            <img id="PLBBox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" />
+                                            <img id="PLBBox" onclick="openfancybox(this)" src="<%= ResolveUrl("~/images/btn-search.gif") %>" style="cursor:pointer;" /><br />
                                             <span id="pl_pName" class="showStr"></span>
                                             <input id="pl_NoStatus" name="pl_NoStatus" type="hidden" />
                                         </td>
