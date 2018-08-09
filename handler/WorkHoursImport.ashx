@@ -143,12 +143,11 @@ public class WorkHoursImport : IHttpHandler, IRequiresSessionState
                     string dtime1 = (END1 - Start1).TotalMilliseconds.ToString( "#,###" );
                     string dtime2 = (END2 - END1).TotalMilliseconds.ToString( "#,###" );
                 }
-
-                //再commit insert
-                myTrans.Commit();
-
-                File.Delete(context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(uploadFiles[0].FileName)));
             }
+            //再commit insert
+            myTrans.Commit();
+
+            File.Delete(context.Server.MapPath("~/Template/" + System.IO.Path.GetFileName(uploadFiles[0].FileName)));
         }
         catch (Exception ex)
         {
