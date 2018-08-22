@@ -701,7 +701,7 @@ where perGuid=@perGuid ";
         }
 
         sb.Append(@"select * from (
-          select ROW_NUMBER() over (order by siCreatDate) itemNo,
+          select ROW_NUMBER() over (order by siItemCode) itemNo,
           * from sy_SalaryItem where siStatus<>'D' ");
 
         if (KeyWord != "")
