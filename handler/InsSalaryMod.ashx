@@ -11,7 +11,7 @@ using System.Configuration;
 public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
-         if (string.IsNullOrEmpty(USERINFO.MemberGuid))
+        if (string.IsNullOrEmpty(USERINFO.MemberGuid))
         {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
             return;
@@ -35,10 +35,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] L_SLAry = L_SL.Split(','); //前次異動勞保補助等級
         string[] H_SLAry = H_SL.Split(','); //前次異動健保補助等級
         string[] bf_Lary = bf_L.Split(','); //前次異動勞保級距
-        string[] bf_Hary = bf_H.Split(','); //前次異動勞保級距
+        string[] bf_Hary = bf_H.Split(','); //前次異動健保級距
         string[] bf_Pary= bf_P.Split(','); //前次異動勞退級距
         string[] af_Lary = af_L.Split(','); //本次異動勞保級距
-        string[] af_Hary = af_H.Split(','); //本次異動勞保級距
+        string[] af_Hary = af_H.Split(','); //本次異動健保級距
         string[] af_Pary= af_P.Split(','); //本次異動勞退級距
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
@@ -111,33 +111,42 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
 
                 if (bf_Lary[i] != "0")
                 {
-                    oCmd.CommandText += @"insert into sy_PersonLabor (
-                    plGuid,
-                    plPerGuid,
-                    plSubsidyLevel,
-                    plLaborNo,
-                    plChangeDate,
-                    plChange,
-                    plLaborPayroll,
-                    plCreateId,
-                    plModifyId,
-                    plModifyDate,
-                    plStatus
-                    ) values (
-                    @plGuid,
-                    @plPerGuid,
-                    @plSubsidyLevel,
-                    @plLaborNo,
-                    @plChangeDate,
-                    @plChange,
-                    @plLaborPayroll,
-                    @plCreateId,
-                    @plModifyId,
-                    @plModifyDate,
-                    @plStatus
-                    ) ";
+                    /// 2018/8/27 - Nick
+                    /// 信件表示 勞健保最後一筆資料不是【加保】、【保薪調整】就不用調整
+                    if (checkLaborChangeType(Gid[i]) == "01" || checkLaborChangeType(Gid[i]) == "03")
+                    {
+                        /// 2018/8/27 - Nick
+                        /// 信件表示 如果調整前後的投保級距一樣，就不需要進行調整
+                        if (bf_Lary[i] != af_Lary[i])
+                        {
+                            oCmd.CommandText += @"insert into sy_PersonLabor (
+                            plGuid,
+                            plPerGuid,
+                            plSubsidyLevel,
+                            plLaborNo,
+                            plChangeDate,
+                            plChange,
+                            plLaborPayroll,
+                            plCreateId,
+                            plModifyId,
+                            plModifyDate,
+                            plStatus
+                            ) values (
+                            @plGuid,
+                            @plPerGuid,
+                            @plSubsidyLevel,
+                            @plLaborNo,
+                            @plChangeDate,
+                            @plChange,
+                            @plLaborPayroll,
+                            @plCreateId,
+                            @plModifyId,
+                            @plModifyDate,
+                            @plStatus
+                            ) ";
+                        }
+                    }
                 }
-
                 oCmd.Parameters["@piGuid"].Value = Guid.NewGuid().ToString();
                 oCmd.Parameters["@piPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@piSubsidyLevel"].Value = H_SLAry[i];
@@ -150,35 +159,45 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@piModifyDate"].Value = DateTime.Now;
                 oCmd.Parameters["@piStatus"].Value = "A";
 
+
                 if (bf_Hary[i] != "0")
                 {
-                    oCmd.CommandText += @"insert into sy_PersonInsurance (
-                    piGuid,
-                    piPerGuid,
-                    piSubsidyLevel,
-                    piCardNo,
-                    piChangeDate,
-                    piChange,
-                    piInsurancePayroll,
-                    piCreateId,
-                    piModifyId,
-                    piModifyDate,
-                    piStatus
-                    ) values (
-                    @piGuid,
-                    @piPerGuid,
-                    @piSubsidyLevel,
-                    @piCardNo,
-                    @piChangeDate,
-                    @piChange,
-                    @piInsurancePayroll,
-                    @piCreateId,
-                    @piModifyId,
-                    @piModifyDate,
-                    @piStatus
-                    ) ";
+                    /// 2018/8/27 - Nick
+                    /// 信件表示 勞健保最後一筆資料不是【加保】、【保薪調整】就不用調整
+                    if (checkHealChangeType(Gid[i]) == "01" || checkHealChangeType(Gid[i]) == "03")
+                    {
+                        /// 2018/8/27 - Nick
+                        /// 信件表示 如果調整前後的投保級距一樣，就不需要進行調整
+                        if (bf_Hary[i] != af_Hary[i])
+                        {
+                            oCmd.CommandText += @"insert into sy_PersonInsurance (
+                            piGuid,
+                            piPerGuid,
+                            piSubsidyLevel,
+                            piCardNo,
+                            piChangeDate,
+                            piChange,
+                            piInsurancePayroll,
+                            piCreateId,
+                            piModifyId,
+                            piModifyDate,
+                            piStatus
+                            ) values (
+                            @piGuid,
+                            @piPerGuid,
+                            @piSubsidyLevel,
+                            @piCardNo,
+                            @piChangeDate,
+                            @piChange,
+                            @piInsurancePayroll,
+                            @piCreateId,
+                            @piModifyId,
+                            @piModifyDate,
+                            @piStatus
+                            ) ";
+                        }
+                    }
                 }
-
                 oCmd.Parameters["@ppGuid"].Value = Guid.NewGuid().ToString();
                 oCmd.Parameters["@ppPerGuid"].Value = Gid[i];
                 oCmd.Parameters["@ppChange"].Value = "02";
@@ -191,33 +210,45 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@ppModifyDate"].Value = DateTime.Now;
                 oCmd.Parameters["@ppStatus"].Value = "A";
 
+
+
                 if (bf_Pary[i] != "0")
                 {
-                    oCmd.CommandText += @"insert into sy_PersonPension (
-                    ppGuid,
-                    ppPerGuid,
-                    ppChange,
-                    ppChangeDate,
-                    ppPayPayroll,
-                    ppLarboRatio,
-                    ppEmployerRatio,
-                    ppCreateId,
-                    ppModifyId,
-                    ppModifyDate,
-                    ppStatus
-                    ) values (
-                    @ppGuid,
-                    @ppPerGuid,
-                    @ppChange,
-                    @ppChangeDate,
-                    @ppPayPayroll,
-                    @ppLarboRatio,
-                    @ppEmployerRatio,
-                    @ppCreateId,
-                    @ppModifyId,
-                    @ppModifyDate,
-                    @ppStatus
-                    ) ";
+                    /// 2018/8/27 - Nick
+                    /// 信件表示 勞退最後一筆資料不是【開始提繳勞工退休金】、【勞退提繳工資 / 提繳率調整】就不用調整
+                    if (checkPPChangeType(Gid[i]) == "01" || checkPPChangeType(Gid[i]) == "02")
+                    {
+                        /// 2018/8/27 - Nick
+                        /// 信件表示 如果調整前後的投保級距一樣，就不需要進行調整
+                        if (bf_Pary[i] != af_Pary[i])
+                        {
+                            oCmd.CommandText += @"insert into sy_PersonPension (
+                            ppGuid,
+                            ppPerGuid,
+                            ppChange,
+                            ppChangeDate,
+                            ppPayPayroll,
+                            ppLarboRatio,
+                            ppEmployerRatio,
+                            ppCreateId,
+                            ppModifyId,
+                            ppModifyDate,
+                            ppStatus
+                            ) values (
+                            @ppGuid,
+                            @ppPerGuid,
+                            @ppChange,
+                            @ppChangeDate,
+                            @ppPayPayroll,
+                            @ppLarboRatio,
+                            @ppEmployerRatio,
+                            @ppCreateId,
+                            @ppModifyId,
+                            @ppModifyDate,
+                            @ppStatus
+                            ) ";
+                        }
+                    }
                 }
                 oCmd.ExecuteNonQuery();
             }
@@ -240,6 +271,33 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('InsSalaryMod');</script>");
         }
+    }
+
+    private string checkLaborChangeType(string perGuid)
+    {
+        string changeNo = string.Empty;
+        LaborHealth_DB lh_db = new LaborHealth_DB();
+        DataTable dt = lh_db.checkLaborLastStatus(perGuid);
+        changeNo = dt.Rows[0]["plChange"].ToString();
+        return changeNo;
+    }
+
+    private string checkHealChangeType(string perGuid)
+    {
+        string changeNo = string.Empty;
+        LaborHealth_DB lh_db = new LaborHealth_DB();
+        DataTable dt = lh_db.checkInsLastStatus(perGuid);
+        changeNo = dt.Rows[0]["piChange"].ToString();
+        return changeNo;
+    }
+
+    private string checkPPChangeType(string perGuid)
+    {
+        string changeNo = string.Empty;
+        PersonPension_DB pp_db = new PersonPension_DB();
+        DataTable dt = pp_db.checkLastStatus(perGuid);
+        changeNo = dt.Rows[0]["ppChange"].ToString();
+        return changeNo;
     }
 
     public bool IsReusable {

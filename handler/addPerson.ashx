@@ -187,6 +187,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._plChange = "01";
                         LH_Db._plChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
                         LH_Db._plLaborPayroll = decimal.Parse(getStartIns("ssi_labor"));
+                        LH_Db._plCreateId = USERINFO.MemberGuid;
                         LH_Db._plModifyId = USERINFO.MemberGuid;
                         LH_Db.addLabor();
                     }
@@ -202,6 +203,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         LH_Db._piChange = "01";
                         LH_Db._piChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
                         LH_Db._piInsurancePayroll = decimal.Parse(getStartIns("ssi_ganbor"));
+                        LH_Db._piCreateId = USERINFO.MemberGuid;
                         LH_Db._piModifyId = USERINFO.MemberGuid;
                         LH_Db.addHeal();
                     }
@@ -216,9 +218,11 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                         PP_Db._ppChange = "01";
                         PP_Db._ppChangeDate = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
                         PP_Db._ppPayPayroll = decimal.Parse(getStartIns("ssi_tahui"));
-                        string tmpEratio = getValue("sy_InsuranceIdentity", "iiGuid", pInsuranceDes, "iiRetirement","iiStatus");
+                        string tmpEratio = getValue("sy_InsuranceIdentity", "iiGuid", pInsuranceDes, "iiRetirement", "iiStatus");
                         tmpEratio = (tmpEratio != "") ? tmpEratio : "0";
                         PP_Db._ppEmployerRatio = decimal.Parse(tmpEratio);
+                        PP_Db._ppCreateId = USERINFO.MemberGuid;
+                        PP_Db._ppModifyId = USERINFO.MemberGuid;
                         PP_Db.addPension();
                     }
                     //團保
@@ -236,6 +240,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
                             string sDay = getValue("sy_Person", "perGuid", id, "perFirstDate", "perStatus");
                             DateTime daytmp = DateTime.Parse(sDay).AddMonths(1);
                             GI_Db._pgiChangeDate = daytmp.ToString("yyyy/MM/dd");
+                            GI_Db._pgiCreateId = USERINFO.MemberGuid;
                             GI_Db._pgiModifyId = USERINFO.MemberGuid;
                             GI_Db.addGroupInsurance();
                         }
