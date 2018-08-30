@@ -209,7 +209,7 @@ public class ashx_ExportPayroll : IHttpHandler, System.Web.SessionState.IReadOnl
                                 row.CreateCell(41).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣繳-訓
                                 break;
                             case "S002":
-                                row.CreateCell(32).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//颱風天加給
+                                row.CreateCell(32).SetCellValue(com.toDou(adv[j]["psaCost"].ToString()));//颱風天加給
                                 break;
                             case "S104":
                                 row.CreateCell(46).SetCellValue(com.toDou("-" + adv[j]["psaCost"].ToString()));//代扣福利金

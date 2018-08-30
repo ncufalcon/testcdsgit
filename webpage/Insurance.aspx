@@ -2309,8 +2309,8 @@
                                 tabstr += '<input type="hidden" name="bf_H" value="' + $(this).children("b_ganbor").text() + '" />';
                                 tabstr += '<input type="hidden" name="bf_P" value="' + $(this).children("b_tahui").text() + '" />';
                                 tabstr += '<input type="hidden" name="af_L" value="' + $(this).children("pay_i2").text() + '" />';
-                                tabstr += '<input type="hidden" name="af_H" value="' + $(this).children("pay_i3").text() + '" />';
-                                tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i4").text() + '" />';
+                                tabstr += '<input type="hidden" name="af_H" value="' + $(this).children("pay_i4").text() + '" />';
+                                tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i3").text() + '" />';
                                 tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
                                 tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
                                 tabstr += '</td>';
@@ -2326,8 +2326,8 @@
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_ganbor").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("b_tahui").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i2").text() + '</td>';
-                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i3").text() + '</td>';
                                 tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i4").text() + '</td>';
+                                tabstr += '<td align="center" nowrap="nowrap">' + $(this).children("pay_i3").text() + '</td>';
                                 tabstr += '</tr>';
                             });
                             //$("#del_rowbtn").show();

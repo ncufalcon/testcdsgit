@@ -160,6 +160,11 @@
                                     <td class="width10" align="right"><div class="font-title titlebackicon">部門</div></td>
                                     <td class="width15" id="td_PerDep"></td>
                                 </tr>
+                                <tr>
+                                    <td class="width10" align="right"><div class="font-title titlebackicon">發薪日</div></td>
+                                    <td class="width15" id="td_yyyy"></td>
+
+                                </tr>
                                 </table><br /><br />
                                 <table width="98%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
@@ -453,7 +458,7 @@
                 td_PerName: 'td_PerName',
                 td_PerCom: 'td_PerCom',
                 td_PerDep: 'td_PerDep',
-
+                 td_yyyy: 'td_yyyy',
                 //加班類別
                 txt_pWeekdayTime1: 'txt_pWeekdayTime1',                                        
                 txt_pWeekdayTime2: 'txt_pWeekdayTime2',
@@ -733,6 +738,8 @@
                                     $('#' + JsEven.Page1Id.td_PerName).html(CommonEven.XmlNodeGetValue(e, "pPerName"));
                                     $('#' + JsEven.Page1Id.td_PerCom).html(CommonEven.XmlNodeGetValue(e, "pPerCompanyName"));
                                     $('#' + JsEven.Page1Id.td_PerDep).html(CommonEven.XmlNodeGetValue(e, "pPerDep"));
+                                    $('#' + JsEven.Page1Id.td_yyyy).html(CommonEven.XmlNodeGetValue(e, "sr_SalaryDate"));
+                                    
 
                                     $('#' + JsEven.Page1Id.txt_pWeekdayTime1).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime1"));
                                     $('#' + JsEven.Page1Id.txt_pWeekdayTime2).val(CommonEven.XmlNodeGetValue(e, "pWeekdayTime2"));

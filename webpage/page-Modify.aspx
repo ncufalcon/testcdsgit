@@ -961,6 +961,7 @@
                 });//ajax end
             }
         }
+
         //薪資異動 新增/修改
         function mod_paydata() {
             if ($("#span_pay_Status").text() == "修改" && $("#hidden_pay_status").val() == "1") {
@@ -1544,6 +1545,15 @@
                     $.unblockUI();
                 }
             });//ajax end
+        }
+
+        function feedbackFun(type, str) {
+            switch (type) {
+                case "LoginFailed":
+                    alert("請重新登入");
+                    location.href = "../webpage/Page-Login.aspx";
+                break;
+            }
         }
     </script>
 </asp:Content>

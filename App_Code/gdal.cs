@@ -695,6 +695,7 @@ namespace payroll
             sql += "order by convert(int,pPerDepCode), pPerNo ";
 
             SqlCommand cmd = new SqlCommand(sql, Sqlconn);
+            cmd.CommandTimeout = 600;
             cmd.Parameters.AddWithValue("@sr_Guid", com.cSNull(p.sr_Guid));
             cmd.Parameters.AddWithValue("@pPerGuid", com.cSNull(p.pPerGuid));
             cmd.Parameters.AddWithValue("@pPerNo", com.cSNull(p.pPerNo));

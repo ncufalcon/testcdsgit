@@ -97,6 +97,12 @@ public class pageModify : IHttpHandler, IRequiresSessionState
     sy_PersonAllowanceChang1e_DB pac_db = new sy_PersonAllowanceChang1e_DB();
     public void ProcessRequest (HttpContext context)
     {
+        if (string.IsNullOrEmpty(USERINFO.MemberGuid) || string.IsNullOrEmpty(USERINFO.MemberName))
+        {
+            context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('LoginFailed','');</script>");
+            return;
+        }
+
         string session_no = string.IsNullOrEmpty(USERINFO.MemberGuid) ? "" : USERINFO.MemberGuid.ToString().Trim();
         string session_name = string.IsNullOrEmpty(USERINFO.MemberName) ? "" : USERINFO.MemberName.ToString().Trim();
         string str_func = string.IsNullOrEmpty(context.Request.Form["func"]) ? "" : context.Request.Form["func"].ToString().Trim();
