@@ -35,7 +35,7 @@ public class ashx_BuckleTmpList : IHttpHandler, System.Web.SessionState.IReadOnl
 
                 if (sqlinj == "")
                 {
-                    dv = dal.Selsy_PaySalaryBuckle(p).DefaultView;
+                    dv = dal.Selsy_PaySalaryBuckleTmp(p).DefaultView;
 
                     XmlStr += "<dList>";
                     for (int i = 0; i < dv.Count; i++)

@@ -1029,7 +1029,7 @@
                 if (perGuid != '' && pPsmGuid != '') {
                     //$.blockUI({ message: '<img src="../images/loading.gif" />處理中，請稍待...' });
                     var opt = {
-                        url: '../handler/Payroll/ashx_BuckleListTmp.ashx',
+                        url: '../handler/Payroll/ashx_BuckleTmpList.ashx',
                         v: 'psbPerGuid=' + perGuid +
                            '&psbPsmGuid=' + pPsmGuid,
                         type: 'xml',
