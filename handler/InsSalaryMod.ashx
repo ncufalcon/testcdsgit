@@ -257,8 +257,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                     oCmd.ExecuteNonQuery();
             }
 
-            //myTrans.Commit();
-            myTrans.Rollback();
+            myTrans.Commit();
         }
         catch (Exception ex)
         {
