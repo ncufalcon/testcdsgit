@@ -815,9 +815,9 @@ drop table #tmp_ItemPerGuid   ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select * from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid 
-and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid) 
-and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plStatus='A' and plPerGuid=@perGuid) ");
+        sb.Append(@"select * from sy_PersonLabor with(nolock) where plStatus='A' and plPerGuid=@perGuid 
+and plChangeDate=(select MAX(plChangeDate) from sy_PersonLabor with(nolock) where plStatus='A' and plPerGuid=@perGuid) 
+and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor with(nolock) where plStatus='A' and plPerGuid=@perGuid) ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -834,9 +834,9 @@ and plCreateDate=(select MAX(plCreateDate) from sy_PersonLabor where plStatus='A
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select * from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid 
-and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid) 
-and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance where piStatus='A' and piPerGuid=@perGuid) ");
+        sb.Append(@"select * from sy_PersonInsurance with(nolock) where piStatus='A' and piPerGuid=@perGuid 
+and piChangeDate=(select MAX(piChangeDate) from sy_PersonInsurance with(nolock) where piStatus='A' and piPerGuid=@perGuid) 
+and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance with(nolock) where piStatus='A' and piPerGuid=@perGuid) ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

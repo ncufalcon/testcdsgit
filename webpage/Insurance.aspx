@@ -562,6 +562,7 @@
         }
      
         function feedbackFun(type, str) {
+            $.fancybox.close();
             switch (type) {
                 case "LB":
                     alert("完成");
@@ -2180,6 +2181,22 @@
                     return false;
                 }
 
+                $.fancybox({
+                    href: "#loading_PayMod",
+                    minWidth: "320",
+                    minHeight: "50",
+                    closeClick: false,
+                    closeBtn: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        //getData();
+                    },
+                    helpers: {
+                        overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+                    }
+                });
+
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
                 var form = $("form")[0];
 
@@ -3032,6 +3049,7 @@
                                 </table>
                             </div><!-- overwidthblock -->
                         </div>
+                        <div id="loading_PayMod" style="display:none; margin-top:10px; text-align:center;"><img src="../images/loading.gif" /> 處理中，請稍後...</div>
                         <div id="im_InsSalaryblock" style="display:none;">
                             <input type="hidden" id="ism_Status" />
                             <input type="hidden" id="ism_gv" />

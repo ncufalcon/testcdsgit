@@ -333,9 +333,9 @@ where ppGuid in (" + perGuid + @") ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"select * from sy_PersonPension where ppStatus='A' and ppPerGuid=@perGuid 
-and ppChangeDate=(select MAX(ppChangeDate) from sy_PersonPension where ppStatus='A' and ppPerGuid=@perGuid) 
-and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension where ppStatus='A' and ppPerGuid=@perGuid) ");
+        sb.Append(@"select * from sy_PersonPension with(nolock) where ppStatus='A' and ppPerGuid=@perGuid 
+and ppChangeDate=(select MAX(ppChangeDate) from sy_PersonPension with(nolock) where ppStatus='A' and ppPerGuid=@perGuid) 
+and ppCreateDate=(select MAX(ppCreateDate) from sy_PersonPension with(nolock) where ppStatus='A' and ppPerGuid=@perGuid) ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;

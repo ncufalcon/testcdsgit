@@ -43,6 +43,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
         string LCstr = string.Empty;
+        int tmpi = 0;
         if (Gid.Length == 1 && Gid[0] == "")
         {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('exMsg','無保薪調整資料');</script>");
@@ -95,6 +96,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@ppStatus", SqlDbType.NVarChar);
             for (int i = 0; i< Gid.Length; i++)
             {
+                tmpi = i;
                 oCmd.CommandText = "";
 
                 oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
@@ -143,7 +145,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @plModifyId,
                             @plModifyDate,
                             @plStatus
-                            ) ";
+                            ); ";
                         }
                     }
                 }
@@ -194,7 +196,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @piModifyId,
                             @piModifyDate,
                             @piStatus
-                            ) ";
+                            ); ";
                         }
                     }
                 }
@@ -246,14 +248,17 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @ppModifyId,
                             @ppModifyDate,
                             @ppStatus
-                            ) ";
+                            ); ";
                         }
                     }
                 }
-                oCmd.ExecuteNonQuery();
+
+                if (oCmd.CommandText != "")
+                    oCmd.ExecuteNonQuery();
             }
 
-            myTrans.Commit();
+            //myTrans.Commit();
+            myTrans.Rollback();
         }
         catch (Exception ex)
         {
@@ -278,7 +283,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string changeNo = string.Empty;
         LaborHealth_DB lh_db = new LaborHealth_DB();
         DataTable dt = lh_db.checkLaborLastStatus(perGuid);
-        changeNo = dt.Rows[0]["plChange"].ToString();
+        if (dt.Rows.Count > 0)
+            changeNo = dt.Rows[0]["plChange"].ToString();
+        else
+            changeNo = "";
         return changeNo;
     }
 
@@ -287,7 +295,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string changeNo = string.Empty;
         LaborHealth_DB lh_db = new LaborHealth_DB();
         DataTable dt = lh_db.checkInsLastStatus(perGuid);
-        changeNo = dt.Rows[0]["piChange"].ToString();
+        if (dt.Rows.Count > 0)
+            changeNo = dt.Rows[0]["piChange"].ToString();
+        else
+            changeNo = "";
         return changeNo;
     }
 
@@ -296,7 +307,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string changeNo = string.Empty;
         PersonPension_DB pp_db = new PersonPension_DB();
         DataTable dt = pp_db.checkLastStatus(perGuid);
-        changeNo = dt.Rows[0]["ppChange"].ToString();
+        if (dt.Rows.Count > 0)
+            changeNo = dt.Rows[0]["ppChange"].ToString();
+        else
+            changeNo = "";
         return changeNo;
     }
 
