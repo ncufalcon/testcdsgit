@@ -41,7 +41,7 @@
             });
 
             //datepicker
-            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate,#ppRatioChangeDate,#im_changedate,#InsModChangeDate").datepicker({
+            $("#pl_ChangeDate,#pi_ChangeDate,#pp_ChangeDate,#pfi_ChangeDate,#pgi_ChangeDate,#ppRatioChangeDate,#im_changedate,#InsModChangeDate,.dpicker").datepicker({
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy/mm/dd',
@@ -674,6 +674,25 @@
             alert("請重新登入");
             location.href = "../webpage/Page-Login.aspx";
         }
+
+        /// 顯示 Loading 畫面
+        function ShowLoading() {
+            $.fancybox({
+                    href: "#LoadingImg",
+                    minWidth: "320",
+                    minHeight: "50",
+                    closeClick: false,
+                    closeBtn: false,
+                    openEffect: 'elastic',
+                    closeEffect: 'elastic',
+                    afterClose: function () {
+                        //getData();
+                    },
+                    helpers: {
+                        overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+                    }
+                });
+        }
     </script>
     <%--勞保--%>
     <script type="text/javascript">
@@ -699,6 +718,12 @@
                         $(this).prop("checked", false);
                     });
                 }
+            });
+
+             //匯出類別 change
+            $(document).on("change", "#ddlLaborExport", function () {
+                $("#searchDiv").show();
+                $("#LB_SearchBtn").attr("sv", "Y");
             });
 
             //勞保 新增/修改
@@ -860,7 +885,9 @@
                 url: "../handler/getLaborList.ashx",
                 data: {
                     keyword: $("#lb_keyword").val(),
-                    ddlLabor: $("#ddlLaborExport").val()
+                    ddlLabor: $("#ddlLaborExport").val(),
+                    startday:$("#lb_sday").val(),
+                    endday:$("#lb_eday").val()
                 },
                 error: function (xhr) {
                     $.unblockUI();
@@ -940,6 +967,12 @@
                         $(this).prop("checked", false);
                     });
                 }
+            });
+            
+             //匯出類別 change
+            $(document).on("change", "#ddlHealExport", function () {
+                $("#h_searchDiv").show();
+                $("#H_SearchBtn").attr("sv", "Y");
             });
 
             //退保原因說明別
@@ -1132,7 +1165,9 @@
                 url: "../handler/getHealList.ashx",
                 data: {
                     keyword: $("#h_keyword").val(),
-                    ddlHeal: $("#ddlHealExport").val()
+                    ddlHeal: $("#ddlHealExport").val(),
+                    startday:$("#h_sday").val(),
+                    endday:$("#h_eday").val()
                 },
                 error: function (xhr) {
                     $.unblockUI();
@@ -1211,6 +1246,12 @@
                         $(this).prop("checked", false);
                     });
                 }
+            });
+            
+             //匯出類別 change
+            $(document).on("change", "#ddlPensionExport", function () {
+                $("#pp_searchDiv").show();
+                $("#PP_SearchBtn").attr("sv", "Y");
             });
 
             //勞退 新增/修改
@@ -1413,7 +1454,9 @@
                 url: "../handler/getPensionList.ashx",
                 data: {
                     keyword: $("#pp_keyword").val(),
-                    ddlPension: $("#ddlPensionExport").val()
+                    ddlPension: $("#ddlPensionExport").val(),
+                    startday:$("#pp_sday").val(),
+                    endday:$("#pp_eday").val()
                 },
                 error: function (xhr) {
                     $.unblockUI();
@@ -1500,7 +1543,12 @@
                     });
                 }
             });
-
+            
+             //匯出類別 change
+            $(document).on("change", "#ddlPfExport", function () {
+                $("#pf_searchDiv").show();
+                $("#PF_SearchBtn").attr("sv", "Y");
+            });
 
             //退保原因說明別
             $(".pfidor").hide();
@@ -1710,7 +1758,9 @@
                 url: "../handler/getFamilyInsList.ashx",
                 data: {
                     keyword: $("#pf_keyword").val(),
-                    ddlPfExport: $("#ddlPfExport").val()
+                    ddlPfExport: $("#ddlPfExport").val(),
+                    startday:$("#pf_sday").val(),
+                    endday:$("#pf_eday").val()
                 },
                 error: function (xhr) {
                     $.unblockUI();
@@ -2096,12 +2146,6 @@
                 });
             });
 
-            //保薪調整 刪除
-            //$(document).on("click", "a[name='IMdelbtn']", function () {
-            //    if (confirm('確定刪除 員工編號：' + $(this).attr("ano") + "？"))
-            //        $(this).parent().parent().remove();
-            //});
-
             //保薪調整,勾選刪除
             $(document).on("click", "#del_rowbtn", function () {
                 if ($("input[name='cb_InsMod']:checked").length > 0)
@@ -2109,6 +2153,7 @@
                 else
                     alert("請勾選要刪除的項目")
             });
+
             //批次刪除,勾選刪除
             $(document).on("click", "#batchdel_rowbtn", function () {
                 if ($("input[name='cb_batchdel']:checked").length > 0)
@@ -2181,21 +2226,7 @@
                     return false;
                 }
 
-                $.fancybox({
-                    href: "#loading_PayMod",
-                    minWidth: "320",
-                    minHeight: "50",
-                    closeClick: false,
-                    closeBtn: false,
-                    openEffect: 'elastic',
-                    closeEffect: 'elastic',
-                    afterClose: function () {
-                        //getData();
-                    },
-                    helpers: {
-                        overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
-                    }
-                });
+                ShowLoading();
 
                 var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
                 var form = $("form")[0];
@@ -2248,19 +2279,23 @@
 
             //執行批次刪除
             $(document).on("click", "#start_del", function () {
-                var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
-                var form = $("form")[0];
+                if (confirm('確定刪除?')) {
+                    ShowLoading();
 
-                $("#postiframe").remove();
+                    var iframe = $('<iframe name="postiframe" id="postiframe" style="display: none" />');
+                    var form = $("form")[0];
 
-                form.appendChild(iframe[0]);
+                    $("#postiframe").remove();
 
-                form.setAttribute("action", "../handler/delInsSalary.ashx");
-                form.setAttribute("method", "post");
-                form.setAttribute("enctype", "multipart/form-data");
-                form.setAttribute("encoding", "multipart/form-data");
-                form.setAttribute("target", "postiframe");
-                form.submit();
+                    form.appendChild(iframe[0]);
+
+                    form.setAttribute("action", "../handler/delInsSalary.ashx");
+                    form.setAttribute("method", "post");
+                    form.setAttribute("enctype", "multipart/form-data");
+                    form.setAttribute("encoding", "multipart/form-data");
+                    form.setAttribute("target", "postiframe");
+                    form.submit();
+                }
             });
         });
 
@@ -2320,6 +2355,7 @@
                                 tabstr += '<tr aid=' + $(this).children("pPerGuid").text() + '>';
                                 tabstr += '<td style="display:none">';
                                 tabstr += '<input type="hidden" name="im_gv" value="' + $(this).children("pPerGuid").text() + '" />';
+                                tabstr += '<input type="hidden" name="payavg" value="' + $(this).children("pay_avg").text() + '" />';
                                 tabstr += '<input type="hidden" name="im_lSL" value="' + $(this).children("L_SL").text() + '" />';
                                 tabstr += '<input type="hidden" name="im_hSL" value="' + $(this).children("H_SL").text() + '" />';
                                 tabstr += '<input type="hidden" name="bf_L" value="' + $(this).children("b_labor").text() + '" />';
@@ -2375,7 +2411,7 @@
 
             $.ajax({
                 type: "POST",
-                async: false, //在沒有返回值之前,不會執行下一步動作
+                async: true, //在沒有返回值之前,不會執行下一步動作
                 url: "../handler/getDelInsSalary.ashx",
                 data: {
                     sortMethod: $("#sortMethod").val(),
@@ -2383,9 +2419,14 @@
                     changedate: $("#im_changedate").val()
                 },
                 error: function (xhr) {
+                    $.unblockUI();
                     alert(xhr);
                 },
+                beforeSend: function () {
+                    $.blockUI({ message: '<img src="../images/loading.gif" />Loading...' });
+                },
                 success: function (data) {
+                    $.unblockUI();
                     if (data == "error") {
                         alert("getDelInsSalary Error");
                         return false;
@@ -2643,7 +2684,7 @@
                             <div>
                                 <a href="javascript:void(0);" id="L_ExportBtn" class="keybtn">匯出</a>
                                 <input type="radio" name="rbLaborOut" value="3" checked="checked" class="ep" />三合一<input type="radio" name="rbLaborOut" value="2" class="ep" />二合一
-                                <select id="ddlLaborExport" name="ddlLaborExport" onchange="getLaborList()">
+                                <select id="ddlLaborExport" name="ddlLaborExport">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
                                     <option value="02">退保</option>
@@ -2652,8 +2693,11 @@
                             </div>
                         </div><br />
                         <div id="searchDiv" style="display:none;">
-                            <span class="font-title">關鍵字：</span><input id="lb_keyword" type="text" class="inputex" />
-                            <input type="button" value="查詢" class="keybtn" onclick="getLaborList()" />
+                            <div><span class="font-title">日期區間：</span><input id="lb_sday" type="text" class="inputex dpicker" /> ~ <input id="lb_eday" type="text" class="inputex dpicker" /></div>
+                            <div style="margin-top:5px;">
+                                <span class="font-title">關鍵字：</span><input id="lb_keyword" type="text" class="inputex" />
+                                <input type="button" value="查詢" class="keybtn" onclick="getLaborList()" />
+                            </div>
                         </div>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:175px;">
@@ -2712,7 +2756,7 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="H_ExportBtn" class="keybtn">匯出</a>
-                                <select id="ddlHealExport" name="ddlHealExport" onchange="getHealList()">
+                                <select id="ddlHealExport" name="ddlHealExport">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
                                     <option value="02">退保</option>
@@ -2721,8 +2765,11 @@
                             </div>
                         </div><br />
                         <div id="h_searchDiv" style="display:none;">
-                            <span class="font-title">關鍵字：</span><input id="h_keyword" type="text" class="inputex" />
-                            <input type="button" value="查詢" class="keybtn" onclick="getHealList()" />
+                            <div><span class="font-title">日期區間：</span><input id="h_sday" type="text" class="inputex dpicker" /> ~ <input id="h_eday" type="text" class="inputex dpicker" /></div>
+                            <div style="margin-top:5px;">
+                                <span class="font-title">關鍵字：</span><input id="h_keyword" type="text" class="inputex" />
+                                <input type="button" value="查詢" class="keybtn" onclick="getHealList()" />
+                            </div>
                         </div>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:175px;">
@@ -2784,7 +2831,7 @@
                             <div>
                                 <a href="javascript:void(0);" id="ppExportBtn" class="keybtn fancybox">匯出</a>
                                 <a href="javascript:void(0);" id="ppDeclareBtn" class="keybtn" style="display:none;">產出提繳申報表</a>
-                                <select id="ddlPensionExport" name="ddlPensionExport" onchange="getPensionList()">
+                                <select id="ddlPensionExport" name="ddlPensionExport">
                                     <option value="">--請選擇--</option>
                                     <option value="01">提繳</option>
                                     <option value="02">提繳工資調整</option>
@@ -2793,8 +2840,11 @@
                             </div>
                         </div><br />
                         <div id="pp_searchDiv" style="display:none;">
-                            <span class="font-title">關鍵字：</span><input id="pp_keyword" type="text" class="inputex" />
-                            <input type="button" value="查詢" class="keybtn" onclick="getPensionList()" />
+                            <div><span class="font-title">日期區間：</span><input id="pp_sday" type="text" class="inputex dpicker" /> ~ <input id="pp_eday" type="text" class="inputex dpicker" /></div>
+                            <div style="margin-top:5px;">
+                                <span class="font-title">關鍵字：</span><input id="pp_keyword" type="text" class="inputex" />
+                                <input type="button" value="查詢" class="keybtn" onclick="getPensionList()" />
+                            </div>
                         </div>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:175px;">
@@ -2850,7 +2900,7 @@
                             </div>
                             <div>
                                 <a href="javascript:void(0);" id="PfiExportBtn" class="keybtn">匯出</a>
-                                <select id="ddlPfExport" name="ddlPfExport" onchange="getFamilyInsList()">
+                                <select id="ddlPfExport" name="ddlPfExport">
                                     <option value="">--請選擇--</option>
                                     <option value="01">加保</option>
                                     <option value="02">退保</option>
@@ -2858,8 +2908,11 @@
                             </div>
                         </div><br />
                         <div id="pf_searchDiv" style="display:none;">
-                            <span class="font-title">關鍵字：</span><input id="pf_keyword" type="text" class="inputex" />
-                            <input type="button" value="查詢" class="keybtn" onclick="getFamilyInsList()" />
+                            <div><span class="font-title">日期區間：</span><input id="pf_sday" type="text" class="inputex dpicker" /> ~ <input id="pf_eday" type="text" class="inputex dpicker" /></div>
+                            <div style="margin-top:5px;">
+                                <span class="font-title">關鍵字：</span><input id="pf_keyword" type="text" class="inputex" />
+                                <input type="button" value="查詢" class="keybtn" onclick="getFamilyInsList()" />
+                            </div>
                         </div>
                         <div class="tabfixwidth margin15T">
                             <div class="stripeMe fixTable" style="max-height:175px;">
@@ -3049,7 +3102,6 @@
                                 </table>
                             </div><!-- overwidthblock -->
                         </div>
-                        <div id="loading_PayMod" style="display:none; margin-top:10px; text-align:center;"><img src="../images/loading.gif" /> 處理中，請稍後...</div>
                         <div id="im_InsSalaryblock" style="display:none;">
                             <input type="hidden" id="ism_Status" />
                             <input type="hidden" id="ism_gv" />
@@ -3113,5 +3165,6 @@
             </div><!-- fixwidth -->         
         </div><!-- WrapperMain -->
     </div>
+    <div id="LoadingImg" style="display:none; margin-top:10px; text-align:center;"><img src="../images/loading.gif" /> 處理中，請稍後...</div>
 </asp:Content>
 

@@ -13,9 +13,19 @@ using System.Configuration;
 public class PersonPension_DB
 {
     string KeyWord = string.Empty;
+    string StartDate = string.Empty;
+    string EndDate = string.Empty;
     public string _KeyWord
     {
         set { KeyWord = value; }
+    }
+    public string _StartDate
+    {
+        set { StartDate = value; }
+    }
+    public string _EndDate
+    {
+        set { EndDate = value; }
     }
     #region 私用
     string ppGuid = string.Empty;
@@ -94,21 +104,29 @@ public class PersonPension_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 ppGuid,ppPerGuid,perNo,perName,ppChangeDate,ppChange,code_desc,
+        sb.Append(@"SELECT ");
+        if (ppChange == "")
+            sb.Append(@"top 200 ");
+
+        sb.Append(@"ppGuid,ppPerGuid,perNo,perName,ppChangeDate,ppChange,code_desc,
 ppLarboRatio,ppEmployerRatio,ppPayPayroll
 from sy_PersonPension
 left join sy_Person on perGuid=ppPerGuid
 left join sy_codetable on code_group='13' and code_value=ppChange
 where ppStatus<>'D' ");
+
         if (KeyWord != "")
-        {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
-        }
+
         if (ppChange != "")
-        {
             sb.Append(@"and ppChange=@ppChange ");
-        }
-        sb.Append(@"order by sy_PersonPension.ppChangeDate desc,ppCreateDate desc ");
+
+        if (StartDate != "")
+            sb.Append(@"and CONVERT(datetime,ppChangeDate) >= CONVERT(datetime,@StartDate) ");
+        if (EndDate != "")
+            sb.Append(@"and CONVERT(datetime,ppChangeDate) <= CONVERT(datetime,@EndDate) ");
+
+        sb.Append(@"order by ppChangeDate desc,ppCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -116,6 +134,8 @@ where ppStatus<>'D' ");
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@ppChange", ppChange);
+        oCmd.Parameters.AddWithValue("@StartDate", StartDate);
+        oCmd.Parameters.AddWithValue("@EndDate", EndDate);
         oda.Fill(ds);
         return ds;
     }

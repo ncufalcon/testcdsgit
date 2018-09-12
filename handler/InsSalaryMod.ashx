@@ -21,6 +21,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string exStr = string.Empty;
         string ChangeDate = (context.Request.Form["InsModChangeDate"] != null) ? context.Request.Form["InsModChangeDate"].ToString() : "";
         string IM_Guid = (context.Request.Form["im_gv"] != null) ? context.Request.Form["im_gv"].ToString() : "";
+        string PayAvg = (context.Request.Form["payavg"] != null) ? context.Request.Form["payavg"].ToString() : "";
         string L_SL = (context.Request.Form["im_lSL"] != null) ? context.Request.Form["im_lSL"].ToString() : "";
         string H_SL = (context.Request.Form["im_hSL"] != null) ? context.Request.Form["im_hSL"].ToString() : "";
         string bf_L = (context.Request.Form["bf_L"] != null) ? context.Request.Form["bf_L"].ToString() : "";
@@ -32,6 +33,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string labor_id = (context.Request.Form["labor_id"] != null) ? context.Request.Form["labor_id"].ToString() : "";
         string ganbor_id = (context.Request.Form["ganbor_id"] != null) ? context.Request.Form["ganbor_id"].ToString() : "";
         string[] Gid = IM_Guid.Split(','); //Person Guid
+        string[] Avg = PayAvg.Split(','); //平均月薪
         string[] L_SLAry = L_SL.Split(','); //前次異動勞保補助等級
         string[] H_SLAry = H_SL.Split(','); //前次異動健保補助等級
         string[] bf_Lary = bf_L.Split(','); //前次異動勞保級距
@@ -43,7 +45,6 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
         string LCstr = string.Empty;
-        int tmpi = 0;
         if (Gid.Length == 1 && Gid[0] == "")
         {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('exMsg','無保薪調整資料');</script>");
@@ -70,6 +71,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@plModifyId", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@plModifyDate", SqlDbType.DateTime);
             oCmd.Parameters.Add("@plStatus", SqlDbType.NVarChar);
+            oCmd.Parameters.Add("@plSalaryAvg", SqlDbType.NVarChar);
             //健保
             oCmd.Parameters.Add("@piGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piPerGuid", SqlDbType.NVarChar);
@@ -82,6 +84,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@piModifyId", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@piModifyDate", SqlDbType.DateTime);
             oCmd.Parameters.Add("@piStatus", SqlDbType.NVarChar);
+            oCmd.Parameters.Add("@piSalaryAvg", SqlDbType.NVarChar);
             //勞退
             oCmd.Parameters.Add("@ppGuid", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@ppPerGuid", SqlDbType.NVarChar);
@@ -94,9 +97,9 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
             oCmd.Parameters.Add("@ppModifyId", SqlDbType.NVarChar);
             oCmd.Parameters.Add("@ppModifyDate", SqlDbType.DateTime);
             oCmd.Parameters.Add("@ppStatus", SqlDbType.NVarChar);
+            oCmd.Parameters.Add("@ppSalaryAvg", SqlDbType.NVarChar);
             for (int i = 0; i< Gid.Length; i++)
             {
-                tmpi = i;
                 oCmd.CommandText = "";
 
                 oCmd.Parameters["@plGuid"].Value = Guid.NewGuid().ToString();
@@ -110,6 +113,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@plModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@plModifyDate"].Value = DateTime.Now;
                 oCmd.Parameters["@plStatus"].Value = "A";
+                oCmd.Parameters["@plSalaryAvg"].Value =  Avg[i];
 
                 if (bf_Lary[i] != "0")
                 {
@@ -132,7 +136,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             plCreateId,
                             plModifyId,
                             plModifyDate,
-                            plStatus
+                            plStatus,
+                            plSalaryAvg
                             ) values (
                             @plGuid,
                             @plPerGuid,
@@ -144,7 +149,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @plCreateId,
                             @plModifyId,
                             @plModifyDate,
-                            @plStatus
+                            @plStatus,
+                            @plSalaryAvg
                             ); ";
                         }
                     }
@@ -160,6 +166,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@piModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@piModifyDate"].Value = DateTime.Now;
                 oCmd.Parameters["@piStatus"].Value = "A";
+                oCmd.Parameters["@piSalaryAvg"].Value =  Avg[i];
 
 
                 if (bf_Hary[i] != "0")
@@ -183,7 +190,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             piCreateId,
                             piModifyId,
                             piModifyDate,
-                            piStatus
+                            piStatus,
+                            piSalaryAvg
                             ) values (
                             @piGuid,
                             @piPerGuid,
@@ -195,7 +203,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @piCreateId,
                             @piModifyId,
                             @piModifyDate,
-                            @piStatus
+                            @piStatus,
+                            @piSalaryAvg
                             ); ";
                         }
                     }
@@ -211,6 +220,7 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@ppModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@ppModifyDate"].Value = DateTime.Now;
                 oCmd.Parameters["@ppStatus"].Value = "A";
+                oCmd.Parameters["@ppSalaryAvg"].Value =  Avg[i];
 
 
 
@@ -235,7 +245,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             ppCreateId,
                             ppModifyId,
                             ppModifyDate,
-                            ppStatus
+                            ppStatus,
+                            ppSalaryAvg
                             ) values (
                             @ppGuid,
                             @ppPerGuid,
@@ -247,7 +258,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                             @ppCreateId,
                             @ppModifyId,
                             @ppModifyDate,
-                            @ppStatus
+                            @ppStatus,
+                            @ppSalaryAvg
                             ); ";
                         }
                     }

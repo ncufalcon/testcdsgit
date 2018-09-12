@@ -13,9 +13,19 @@ using System.Configuration;
 public class LaborHealth_DB
 {
     string KeyWord = string.Empty;
+    string StartDate = string.Empty;
+    string EndDate = string.Empty;
     public string _KeyWord
     {
         set { KeyWord = value; }
+    }
+    public string _StartDate
+    {
+        set { StartDate = value; }
+    }
+    public string _EndDate
+    {
+        set { EndDate = value; }
     }
     #region 勞保私用
     string plGuid = string.Empty;
@@ -169,23 +179,41 @@ public class LaborHealth_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 plGuid,plPerGuid,perNo,perName,plSubsidyLevel,slSubsidyCode,plLaborNo,plChangeDate,plChange,code_desc,
-plLaborPayroll,plChangeDate,plChangeDate,iiIdentity
-from sy_PersonLabor
-left join sy_Person on perGuid=plPerGuid
-left join sy_SubsidyLevel on slGuid=plSubsidyLevel
-left join sy_codetable on code_group='11' and code_value=plChange
-left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
-where plStatus<>'D' ");
+        sb.Append(@"SELECT ");
+        if (plChange == "")
+            sb.Append(@"top 200 ");
+
+        sb.Append(@"plGuid,
+        plPerGuid,
+        perNo,
+        perName,
+        plSubsidyLevel,
+        slSubsidyCode,
+        plLaborNo,
+        plChangeDate,
+        plChange,
+        code_desc,
+        plLaborPayroll,
+        iiIdentity
+        from sy_PersonLabor
+        left join sy_Person on perGuid=plPerGuid
+        left join sy_SubsidyLevel on slGuid=plSubsidyLevel
+        left join sy_codetable on code_group='11' and code_value=plChange
+        left join sy_InsuranceIdentity on perInsuranceDes=iiGuid
+        where plStatus<>'D' ");
+
         if (KeyWord != "")
-        {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
-        }
+
         if (plChange != "")
-        {
             sb.Append(@"and plChange=@plChange ");
-        }
-        sb.Append(@"order by sy_PersonLabor.plChangeDate desc,plCreateDate desc ");
+        
+        if (StartDate != "")
+            sb.Append(@"and CONVERT(datetime,plChangeDate) >= CONVERT(datetime,@StartDate) ");
+        if (EndDate != "")
+            sb.Append(@"and CONVERT(datetime,plChangeDate) <= CONVERT(datetime,@EndDate) ");
+
+        sb.Append(@"order by plChangeDate desc,plCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -193,6 +221,8 @@ where plStatus<>'D' ");
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@plChange", plChange);
+        oCmd.Parameters.AddWithValue("@StartDate", StartDate);
+        oCmd.Parameters.AddWithValue("@EndDate", EndDate);
         oda.Fill(ds);
         return ds;
     }
@@ -345,17 +375,21 @@ where  plStatus<>'D' and plGuid=@plGuid  ");
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 piGuid,piPerGuid,perNo,perName,piSubsidyLevel,slSubsidyCode,piCardNo,piChangeDate,piChange,code_desc,piInsurancePayroll,
+        sb.Append(@"SELECT ");
+        if (piChange == "")
+            sb.Append(@"top 200 ");
+
+        sb.Append(@"piGuid,piPerGuid,perNo,perName,piSubsidyLevel,slSubsidyCode,piCardNo,piChangeDate,piChange,code_desc,piInsurancePayroll,
 piChangeDate
 from sy_PersonInsurance 
 left join sy_Person on perGuid=piPerGuid
 left join sy_SubsidyLevel on slGuid=piSubsidyLevel
 left join sy_codetable on code_group='12' and code_value=piChange
 where piStatus<>'D' ");
+
         if (KeyWord != "")
-        {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%')) ");
-        }
+
         if (piChange != "")
         {
             if (piChange == "02")
@@ -363,6 +397,12 @@ where piStatus<>'D' ");
             else
                 sb.Append(@"and piChange=@piChange ");
         }
+
+        if (StartDate != "")
+            sb.Append(@"and CONVERT(datetime,piChangeDate) >= CONVERT(datetime,@StartDate) ");
+        if (EndDate != "")
+            sb.Append(@"and CONVERT(datetime,piChangeDate) <= CONVERT(datetime,@EndDate) ");
+
         sb.Append(@"order by sy_PersonInsurance.piChangeDate desc,piCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
@@ -371,6 +411,8 @@ where piStatus<>'D' ");
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@piChange", piChange);
+        oCmd.Parameters.AddWithValue("@StartDate", StartDate);
+        oCmd.Parameters.AddWithValue("@EndDate", EndDate);
         oda.Fill(ds);
         return ds;
     }
@@ -756,48 +798,62 @@ where plGuid in (" + itemGv + ") ");
             select piPerGuid from sy_PersonInsurance where piGuid in (" + itemGv + @") 
             )#tmp ");
         }
+
         sb.Append(@"
 --Top 3 計薪週期
-select psmGuid 
-into #tmp_psmguid
-from 
-(
-	select psmGuid from sy_PaySalaryMain where 
-	psmSalaryRange in (select top 3 sr_Guid from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc)
-)#tmp2
+--select psmGuid 
+--into #tmp_psmguid
+--from 
+--(
+--	select psmGuid from sy_PaySalaryMain where 
+--	psmSalaryRange in (select top 3 sr_Guid from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc)
+--)#tmp2
+
 
 --撈出連續三個月都有資料的人類guid
-select perGuid 
-into #tmp_perguid
-from 
-(
-	select perGuid,COUNT(perName) as row_count from sy_PaySalaryDetail
-	left join sy_PaySalaryMain on psmGuid=pPsmGuid
-	left join sy_Person on perGuid=pPerGuid
-	where pPsmGuid in (select * from #tmp_psmguid) and pStatus='A'
-	group by perGuid
-)#tmp3
-where row_count>=3
+--select perGuid 
+--into #tmp_perguid
+--from 
+--(
+--	select perGuid,COUNT(perName) as row_count from sy_PaySalaryDetail
+--	left join sy_PaySalaryMain on psmGuid=pPsmGuid
+--	left join sy_Person on perGuid=pPerGuid
+--	where pPsmGuid in (select * from #tmp_psmguid) and pStatus='A'
+--	group by perGuid
+--)#tmp3
+--where row_count>=3
 
 --撈出主檔guid
-select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2 
-from sy_PaySalaryDetail
-left join sy_PaySalaryMain on psmGuid=pPsmGuid
-left join sy_Person on perGuid=pPerGuid
+--select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2 
+--from sy_PaySalaryDetail
+--left join sy_PaySalaryMain on psmGuid=pPsmGuid
+--left join sy_Person on perGuid=pPerGuid
+--left join sy_Company on comGuid=perComGuid
+--where pPsmGuid in (select * from #tmp_psmguid) and 
+--perGuid in (select perGuid from #tmp_perguid) and 
+--pStatus='A' and perGuid in (select * from #tmp_ItemPerGuid)
+
+--group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
+
+select 
+perGuid,
+perName,
+perIDNumber,
+perBirthday,
+comHealthInsuranceCode as GanborID,
+comLaborProtection1 as LaborID1,
+comLaborProtection2 as LaborID2 
+from sy_Person
 left join sy_Company on comGuid=perComGuid
-where pPsmGuid in (select * from #tmp_psmguid) and perGuid in (select perGuid from #tmp_perguid) and pStatus='A'
+where perStatus='A' and perGuid in (select * from #tmp_ItemPerGuid)
 
-        and perGuid in (select * from #tmp_ItemPerGuid)
-
-group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
-
-select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate from sy_PersonInsurance 
-where piPerGuid in (select * from #tmp_ItemPerGuid) and (piChange='01' or piChange='03')  and piStatus='A'
+select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate,piSalaryAvg from sy_PersonInsurance 
+where piPerGuid in (select * from #tmp_ItemPerGuid) and  (piChange='01' or piChange='03') and piStatus='A'
 order by piChangeDate desc,piCreateDate desc
 
-drop table #tmp_psmguid 
-drop table #tmp_perguid 
-drop table #tmp_ItemPerGuid   ");
+--drop table #tmp_psmguid 
+--drop table #tmp_perguid 
+drop table #tmp_ItemPerGuid  ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -855,7 +911,7 @@ and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance with(nolock) 
 
         sb.Append(@"select plGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
-plLaborPayroll Pay,plChangeDate ChangeDate,'L' TypeName,'勞保' cnName
+plLaborPayroll Pay,plChangeDate ChangeDate,'L' TypeName,N'勞保' cnName
 from sy_PersonLabor
 left join sy_Person on plPerGuid=perGuid
 where perGuid=plPerGuid and plChange='03' and plChangeDate=@changedate 
@@ -863,7 +919,7 @@ where perGuid=plPerGuid and plChange='03' and plChangeDate=@changedate
 union
 select piGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
-piInsurancePayroll Pay,piChangeDate ChangeDate,'H' TypeName,'健保' cnName
+piInsurancePayroll Pay,piChangeDate ChangeDate,'H' TypeName,N'健保' cnName
 from sy_PersonInsurance
 left join sy_Person on piPerGuid=perGuid
 where perGuid=piPerGuid and piChange='03' and piChangeDate=@changedate 
@@ -871,7 +927,7 @@ where perGuid=piPerGuid and piChange='03' and piChangeDate=@changedate
 union
 select ppGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
-ppPayPayroll Pay,ppChangeDate ChangeDate,'P' TypeName,'勞退' cnName
+ppPayPayroll Pay,ppChangeDate ChangeDate,'P' TypeName,N'勞退' cnName
 from sy_PersonPension
 left join sy_Person on ppPerGuid=perGuid
 where perGuid=ppPerGuid and ppChange='02' and ppChangeDate=@changedate 

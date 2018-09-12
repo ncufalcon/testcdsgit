@@ -13,9 +13,19 @@ using System.Configuration;
 public class FamilyInsurance_DB
 {
     string KeyWord = string.Empty;
+    string StartDate = string.Empty;
+    string EndDate = string.Empty;
     public string _KeyWord
     {
         set { KeyWord = value; }
+    }
+    public string _StartDate
+    {
+        set { StartDate = value; }
+    }
+    public string _EndDate
+    {
+        set { EndDate = value; }
     }
     #region 私用
     string pfiGuid = string.Empty;
@@ -104,7 +114,11 @@ public class FamilyInsurance_DB
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        sb.Append(@"SELECT top 200 pfiGuid,pfiPerGuid,pfiPfGuid,perNo,perName,pfName,pfTitle
+        sb.Append(@"SELECT ");
+        if (pfiChange == "")
+            sb.Append(@"top 200 ");
+
+        sb.Append(@"pfiGuid,pfiPerGuid,pfiPfGuid,perNo,perName,pfName,pfTitle
 ,slSubsidyCode,pfiChangeDate,pfiChange,code_desc
 from sy_PersonFamilyInsurance
 left join sy_Person on perGuid=pfiPerGuid
@@ -112,11 +126,13 @@ left join sy_PersonFamily on pfGuid=pfiPfGuid
 left join sy_SubsidyLevel on slGuid=pfiSubsidyLevel
 left join sy_codetable on code_group='14' and code_value=pfiChange
 where pfiStatus<>'D' ");
+
         if (KeyWord != "")
         {
             sb.Append(@"and ((upper(perNo) LIKE '%' + upper(@KeyWord) + '%') or (upper(perName) LIKE '%' + upper(@KeyWord) + '%') or (upper(pfName) LIKE '%' + upper(@KeyWord) + '%')
  or (upper(pfIDNumber) LIKE '%' + upper(@KeyWord) + '%')) ");
         }
+
         if (pfiChange != "")
         {
             if (pfiChange == "02")
@@ -124,7 +140,13 @@ where pfiStatus<>'D' ");
             else
                 sb.Append(@"and pfiChange=@pfiChange ");
         }
-            sb.Append(@"order by sy_PersonFamilyInsurance.pfiChangeDate desc,pfiCreateDate desc ");
+
+        if (StartDate != "")
+            sb.Append(@"and CONVERT(datetime,pfiChangeDate) >= CONVERT(datetime,@StartDate) ");
+        if (EndDate != "")
+            sb.Append(@"and CONVERT(datetime,pfiChangeDate) <= CONVERT(datetime,@EndDate) ");
+
+        sb.Append(@"order by sy_PersonFamilyInsurance.pfiChangeDate desc,pfiCreateDate desc ");
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
@@ -132,6 +154,8 @@ where pfiStatus<>'D' ");
         DataTable ds = new DataTable();
         oCmd.Parameters.AddWithValue("@KeyWord", KeyWord);
         oCmd.Parameters.AddWithValue("@pfiChange", pfiChange);
+        oCmd.Parameters.AddWithValue("@StartDate", StartDate);
+        oCmd.Parameters.AddWithValue("@EndDate", EndDate);
         oda.Fill(ds);
         return ds;
     }
