@@ -775,65 +775,29 @@ where plGuid in (" + itemGv + ") ");
         oda.Fill(ds);
         return ds;
     }
-    
-    public DataSet LH_3in1_mod(string itemGv,string category)
+
+    public DataTable L_2in1_mod(string itemGv)
     {
         SqlCommand oCmd = new SqlCommand();
         oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
         StringBuilder sb = new StringBuilder();
 
-        if (category == "L")
-        {
-            sb.Append(@"select plPerGuid into #tmp_ItemPerGuid
-            from 
-            (
-            select plPerGuid from sy_PersonLabor where plGuid in (" + itemGv + @") 
-            )#tmp ");
-        }
-        else
-        {
-            sb.Append(@"select piPerGuid into #tmp_ItemPerGuid
-            from 
-            (
-            select piPerGuid from sy_PersonInsurance where piGuid in (" + itemGv + @") 
-            )#tmp ");
-        }
-
         sb.Append(@"
---Top 3 計薪週期
---select psmGuid 
---into #tmp_psmguid
---from 
---(
---	select psmGuid from sy_PaySalaryMain where 
---	psmSalaryRange in (select top 3 sr_Guid from sy_SalaryRange where sr_Status='A' order by sr_BeginDate desc)
---)#tmp2
+--資料Guid、人員Guid
+select plGuid,plPerGuid into #tmpItemGuid from 
+(
+	select plGuid,plPerGuid,plSalaryAvg from sy_PersonLabor 
+	where plGuid in (" + itemGv + @")
+)#tmp
 
-
---撈出連續三個月都有資料的人類guid
---select perGuid 
---into #tmp_perguid
---from 
---(
---	select perGuid,COUNT(perName) as row_count from sy_PaySalaryDetail
---	left join sy_PaySalaryMain on psmGuid=pPsmGuid
---	left join sy_Person on perGuid=pPerGuid
---	where pPsmGuid in (select * from #tmp_psmguid) and pStatus='A'
---	group by perGuid
---)#tmp3
---where row_count>=3
-
---撈出主檔guid
---select perGuid,sum(pPay)/3 PayAvg,perName,perIDNumber,perBirthday,comHealthInsuranceCode GanborID,comLaborProtection1 LaborID1,comLaborProtection2 LaborID2 
---from sy_PaySalaryDetail
---left join sy_PaySalaryMain on psmGuid=pPsmGuid
---left join sy_Person on perGuid=pPerGuid
---left join sy_Company on comGuid=perComGuid
---where pPsmGuid in (select * from #tmp_psmguid) and 
---perGuid in (select perGuid from #tmp_perguid) and 
---pStatus='A' and perGuid in (select * from #tmp_ItemPerGuid)
-
---group by perGuid,perName,perIDNumber,perBirthday,comHealthInsuranceCode,comLaborProtection1,comLaborProtection2
+--勞退資料
+select * into #tmpPension from (
+	select plPerGuid,plSalaryAvg,Count(ppGuid) as Count_0 from sy_PersonLabor
+	left join sy_PersonPension on ppPerGuid=plPerGuid and ppChangeDate=plChangeDate
+	where plGuid in (select #tmpItemGuid.plGuid from #tmpItemGuid)
+	group by plPerGuid,plSalaryAvg
+)#tmp
+	
 
 select 
 perGuid,
@@ -842,24 +806,153 @@ perIDNumber,
 perBirthday,
 comHealthInsuranceCode as GanborID,
 comLaborProtection1 as LaborID1,
-comLaborProtection2 as LaborID2 
+comLaborProtection2 as LaborID2,
+#tmpPension.plSalaryAvg,
+#tmpPension.Count_0
 from sy_Person
 left join sy_Company on comGuid=perComGuid
-where perStatus='A' and perGuid in (select * from #tmp_ItemPerGuid)
+left join #tmpPension on perGuid=#tmpPension.plPerGuid
+where perStatus='A' and perGuid in (select #tmpItemGuid.plPerGuid from #tmpItemGuid)
 
-select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate,piSalaryAvg from sy_PersonInsurance 
-where piPerGuid in (select * from #tmp_ItemPerGuid) and  (piChange='01' or piChange='03') and piStatus='A'
-order by piChangeDate desc,piCreateDate desc
+drop table #tmpItemGuid
+drop table #tmpPension ");
 
---drop table #tmp_psmguid 
---drop table #tmp_perguid 
-drop table #tmp_ItemPerGuid  ");
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataSet LH_3in1_mod(string itemGv,string category)
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        if (category == "L")
+        {
+            sb.Append(@"
+--資料Guid、人員Guid
+select plGuid,plPerGuid into #tmpItemGuid from 
+(
+	select plGuid,plPerGuid from sy_PersonLabor 
+	where plGuid in (" + itemGv + @")
+)#tmp
+
+--健保資料
+select * into #tmpHeal from (
+	select plPerGuid,piInsurancePayroll,piSalaryAvg,Count(piGuid) as Count_0 from sy_PersonLabor
+	left join sy_PersonInsurance on piPerGuid=plPerGuid and piChangeDate=plChangeDate
+	where plGuid in (select #tmpItemGuid.plGuid from #tmpItemGuid)
+	group by plPerGuid,piInsurancePayroll,piSalaryAvg
+)#tmp
+
+--勞退資料
+select * into #tmpPension from (
+	select plPerGuid,Count(ppGuid) as Count_1 from sy_PersonLabor
+	left join sy_PersonPension on ppPerGuid=plPerGuid and ppChangeDate=plChangeDate
+	where plGuid in (select #tmpItemGuid.plGuid from #tmpItemGuid)
+	group by plPerGuid
+)#tmp
+
+select 
+perGuid,
+perName,
+perIDNumber,
+perBirthday,
+comHealthInsuranceCode as GanborID,
+comLaborProtection1 as LaborID1,
+comLaborProtection2 as LaborID2,
+#tmpHeal.piInsurancePayroll,
+#tmpHeal.piSalaryAvg,
+#tmpHeal.Count_0,
+#tmpPension.Count_1
+from sy_Person
+left join sy_Company on comGuid=perComGuid
+left join #tmpHeal on perGuid=#tmpHeal.plPerGuid
+left join #tmpPension on perGuid=#tmpPension.plPerGuid
+where perStatus='A' and perGuid in (select #tmpItemGuid.plPerGuid from #tmpItemGuid)
+
+drop table #tmpItemGuid
+drop table #tmpHeal
+drop table #tmpPension ");
+        }
+        else
+        {
+            sb.Append(@"
+--資料Guid、人員Guid
+select piGuid,piPerGuid into #tmpItemGuid from 
+(
+	select piGuid,piPerGuid from sy_PersonInsurance 
+	where piGuid in (" + itemGv + @")
+)#tmp
+
+--勞保資料
+select * into #tmpLabor from (
+	select piPerGuid,piInsurancePayroll,piSalaryAvg,Count(plGuid) as Count_0 from sy_PersonInsurance
+	left join sy_PersonLabor on plPerGuid=piPerGuid and plChangeDate=piChangeDate
+	where piGuid in (select #tmpItemGuid.piGuid from #tmpItemGuid)
+	group by piPerGuid,piInsurancePayroll,piSalaryAvg
+)#tmp
+
+--勞退資料
+select * into #tmpPension from (
+	select piPerGuid,Count(ppGuid) as Count_1 from sy_PersonInsurance
+	left join sy_PersonPension on ppPerGuid=piPerGuid and ppChangeDate=piChangeDate
+	where piGuid in (select #tmpItemGuid.piGuid from #tmpItemGuid)
+	group by piPerGuid
+)#tmp
+
+select 
+perGuid,
+perName,
+perIDNumber,
+perBirthday,
+comHealthInsuranceCode as GanborID,
+comLaborProtection1 as LaborID1,
+comLaborProtection2 as LaborID2,
+#tmpLabor.piInsurancePayroll,
+#tmpLabor.piSalaryAvg,
+#tmpLabor.Count_0,
+#tmpPension.Count_1
+from sy_Person
+left join sy_Company on comGuid=perComGuid
+left join #tmpLabor on perGuid=#tmpLabor.piPerGuid
+left join #tmpPension on perGuid=#tmpPension.piPerGuid
+where perStatus='A' and perGuid in (select #tmpItemGuid.piPerGuid from #tmpItemGuid)
+
+drop table #tmpItemGuid
+drop table #tmpLabor
+drop table #tmpPension ");
+        }
 
         oCmd.CommandText = sb.ToString();
         oCmd.CommandType = CommandType.Text;
         SqlDataAdapter oda = new SqlDataAdapter(oCmd);
         DataSet ds = new DataSet();
         //oCmd.Parameters.AddWithValue("@perGuid", perGuid);
+        oda.Fill(ds);
+        return ds;
+    }
+
+    public DataTable getPersonHealList()
+    {
+        SqlCommand oCmd = new SqlCommand();
+        oCmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnString"].ToString());
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append(@"select piPerGuid,piInsurancePayroll,piChange,piChangeDate,piCreateDate from sy_PersonInsurance 
+where piPerGuid=@piPerGuid and  (piChange='01' or piChange='03' or piChange='05') and piStatus='A'
+order by piChangeDate desc,piCreateDate desc ");
+
+        oCmd.CommandText = sb.ToString();
+        oCmd.CommandType = CommandType.Text;
+        SqlDataAdapter oda = new SqlDataAdapter(oCmd);
+        DataTable ds = new DataTable();
+        oCmd.Parameters.AddWithValue("@piPerGuid", piPerGuid);
         oda.Fill(ds);
         return ds;
     }
@@ -915,7 +1008,6 @@ plLaborPayroll Pay,plChangeDate ChangeDate,'L' TypeName,N'勞保' cnName
 from sy_PersonLabor
 left join sy_Person on plPerGuid=perGuid
 where perGuid=plPerGuid and plChange='03' and plChangeDate=@changedate 
-	and (select MAX(plCreateDate) from sy_PersonLabor where perGuid=plPerGuid)=plCreateDate and plStatus='A'
 union
 select piGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
@@ -923,15 +1015,13 @@ piInsurancePayroll Pay,piChangeDate ChangeDate,'H' TypeName,N'健保' cnName
 from sy_PersonInsurance
 left join sy_Person on piPerGuid=perGuid
 where perGuid=piPerGuid and piChange='03' and piChangeDate=@changedate 
-	and (select MAX(piCreateDate) from sy_PersonInsurance where perGuid=piPerGuid)=piCreateDate and piStatus='A'
 union
 select ppGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
 ppPayPayroll Pay,ppChangeDate ChangeDate,'P' TypeName,N'勞退' cnName
 from sy_PersonPension
 left join sy_Person on ppPerGuid=perGuid
-where perGuid=ppPerGuid and ppChange='02' and ppChangeDate=@changedate 
-	and (select MAX(ppCreateDate) from sy_PersonPension where perGuid=ppPerGuid)=ppCreateDate and ppStatus='A' ");
+where perGuid=ppPerGuid and ppChange='02' and ppChangeDate=@changedate ");
         sb.Append(@"order by " + sortName + " " + sortMethod + " ");
 
         oCmd.CommandText = sb.ToString();
