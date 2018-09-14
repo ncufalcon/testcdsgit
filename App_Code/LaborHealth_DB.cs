@@ -872,9 +872,11 @@ comLaborProtection2 as LaborID2,
 #tmpPension.Count_1
 from sy_Person
 left join sy_Company on comGuid=perComGuid
+left join sy_CodeBranches on cbGuid=perDep and cbStatus<>'D'
 left join #tmpHeal on perGuid=#tmpHeal.plPerGuid
 left join #tmpPension on perGuid=#tmpPension.plPerGuid
 where perStatus='A' and perGuid in (select #tmpItemGuid.plPerGuid from #tmpItemGuid)
+order by CONVERT(float,cbValue),perNo
 
 drop table #tmpItemGuid
 drop table #tmpHeal
@@ -920,9 +922,11 @@ comLaborProtection2 as LaborID2,
 #tmpPension.Count_1
 from sy_Person
 left join sy_Company on comGuid=perComGuid
+left join sy_CodeBranches on cbGuid=perDep and cbStatus<>'D'
 left join #tmpLabor on perGuid=#tmpLabor.piPerGuid
 left join #tmpPension on perGuid=#tmpPension.piPerGuid
 where perStatus='A' and perGuid in (select #tmpItemGuid.piPerGuid from #tmpItemGuid)
+order by CONVERT(float,cbValue),perNo
 
 drop table #tmpItemGuid
 drop table #tmpLabor

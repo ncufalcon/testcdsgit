@@ -32,6 +32,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string af_P = (context.Request.Form["af_P"] != null) ? context.Request.Form["af_P"].ToString() : "";
         string labor_id = (context.Request.Form["labor_id"] != null) ? context.Request.Form["labor_id"].ToString() : "";
         string ganbor_id = (context.Request.Form["ganbor_id"] != null) ? context.Request.Form["ganbor_id"].ToString() : "";
+        string perRatio = (context.Request.Form["perRatio"] != null) ? context.Request.Form["perRatio"].ToString() : "";
+        string compRatio = (context.Request.Form["compRatio"] != null) ? context.Request.Form["compRatio"].ToString() : "";
         string[] Gid = IM_Guid.Split(','); //Person Guid
         string[] Avg = PayAvg.Split(','); //平均月薪
         string[] L_SLAry = L_SL.Split(','); //前次異動勞保補助等級
@@ -44,6 +46,8 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] af_Pary= af_P.Split(','); //本次異動勞退級距
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
+        string[] ppPerRatio= ganbor_id.Split(','); //勞工自提比率
+        string[] ppCompRatio= ganbor_id.Split(','); //雇主提繳比率
         string LCstr = string.Empty;
         if (Gid.Length == 1 && Gid[0] == "")
         {
@@ -214,8 +218,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
                 oCmd.Parameters["@ppChange"].Value = "02";
                 oCmd.Parameters["@ppChangeDate"].Value = ChangeDate;
                 oCmd.Parameters["@ppPayPayroll"].Value = decimal.Parse(af_Pary[i].ToString());
-                oCmd.Parameters["@ppLarboRatio"].Value = decimal.Parse("6");
-                oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse("6");
+                string perR = (string.IsNullOrEmpty(ppPerRatio[i])) ? "0" : ppPerRatio[i];
+                oCmd.Parameters["@ppLarboRatio"].Value = decimal.Parse(perR);
+                string compR = (string.IsNullOrEmpty(ppCompRatio[i])) ? "6" : ppCompRatio[i];
+                oCmd.Parameters["@ppEmployerRatio"].Value = decimal.Parse(compR);
                 oCmd.Parameters["@ppCreateId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@ppModifyId"].Value = USERINFO.MemberGuid;
                 oCmd.Parameters["@ppModifyDate"].Value = DateTime.Now;

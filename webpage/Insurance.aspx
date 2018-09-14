@@ -2366,6 +2366,8 @@
                                 tabstr += '<input type="hidden" name="af_P" value="' + $(this).children("pay_i3").text() + '" />';
                                 tabstr += '<input type="hidden" name="labor_id" value="' + $(this).children("LaborID").text() + '" />';
                                 tabstr += '<input type="hidden" name="ganbor_id" value="' + $(this).children("GanborID").text() + '" />';
+                                tabstr += '<input type="hidden" name="perRatio" value="' + $(this).children("ppLarboRatio").text() + '" />';
+                                tabstr += '<input type="hidden" name="compRatio" value="' + $(this).children("ppEmployerRatio").text() + '" />';
                                 tabstr += '</td>';
                                 //tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><a href="javascript:void(0);" name="IMdelbtn" aid=' + $(this).children("pPerGuid").text() + ' ano=' + $(this).children("perNo").text() + '>刪除</a></td>';
                                 tabstr += '<td align="center" nowrap="nowrap" class="font-normal"><input type="checkbox" name="cb_InsMod" class="imdelbtn" /></td>';
