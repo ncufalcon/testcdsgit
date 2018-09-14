@@ -46,9 +46,10 @@ public class InsSalaryMod : IHttpHandler,IRequiresSessionState {
         string[] af_Pary= af_P.Split(','); //本次異動勞退級距
         string[] LaborIDary= labor_id.Split(','); //勞保卡號
         string[] GanborIDary= ganbor_id.Split(','); //健保卡號
-        string[] ppPerRatio= ganbor_id.Split(','); //勞工自提比率
-        string[] ppCompRatio= ganbor_id.Split(','); //雇主提繳比率
+        string[] ppPerRatio= perRatio.Split(','); //勞工自提比率
+        string[] ppCompRatio= compRatio.Split(','); //雇主提繳比率
         string LCstr = string.Empty;
+            
         if (Gid.Length == 1 && Gid[0] == "")
         {
             context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('exMsg','無保薪調整資料');</script>");
