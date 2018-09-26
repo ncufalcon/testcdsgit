@@ -1011,21 +1011,21 @@ and piCreateDate=(select MAX(piCreateDate) from sy_PersonInsurance with(nolock) 
 plLaborPayroll Pay,plChangeDate ChangeDate,'L' TypeName,N'勞保' cnName
 from sy_PersonLabor
 left join sy_Person on plPerGuid=perGuid
-where perGuid=plPerGuid and plChange='03' and plChangeDate=@changedate 
+where perGuid=plPerGuid and plChange='03' and plStatus='A' and plChangeDate=@changedate 
 union
 select piGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
 piInsurancePayroll Pay,piChangeDate ChangeDate,'H' TypeName,N'健保' cnName
 from sy_PersonInsurance
 left join sy_Person on piPerGuid=perGuid
-where perGuid=piPerGuid and piChange='03' and piChangeDate=@changedate 
+where perGuid=piPerGuid and piChange='03' and piStatus='A' and piChangeDate=@changedate 
 union
 select ppGuid gv,perGuid,perNo,perName,
 (select cbName from sy_CodeBranches where cbGuid=perDep) perDep,
 ppPayPayroll Pay,ppChangeDate ChangeDate,'P' TypeName,N'勞退' cnName
 from sy_PersonPension
 left join sy_Person on ppPerGuid=perGuid
-where perGuid=ppPerGuid and ppChange='02' and ppChangeDate=@changedate ");
+where perGuid=ppPerGuid and ppChange='02' and ppStatus='A' and ppChangeDate=@changedate ");
         sb.Append(@"order by " + sortName + " " + sortMethod + " ");
 
         oCmd.CommandText = sb.ToString();
