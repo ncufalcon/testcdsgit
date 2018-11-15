@@ -276,7 +276,7 @@ public class addPerson : IHttpHandler,IRequiresSessionState {
             else
                 context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun();</script>");
         }
-        catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('error','addPerson');</script>"); }
+        catch (Exception ex) { context.Response.Write("<script type='text/JavaScript'>parent.feedbackFun('Error','addPerson');</script>"); }
     }
 
     private string getLH_Code(string perGuid,string type)
