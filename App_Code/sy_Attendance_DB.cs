@@ -548,7 +548,7 @@ public class sy_Attendance_DB
             {
                 show_value.Append(@"  
                     select top 100 ah_guid,ah_perGuid,ah_perNo,ah_AttendanceDate,ah_Times,ah_Remark,ah_Itme,perGuid,perName
-                    from sy_Attendance_hours left join sy_Person on ah_perNo=perNO
+                    from sy_Attendance_hours left join sy_Person on ah_perNo=perNO and perStatus='A'
                     where ah_Status='A'
                 ");
             }
