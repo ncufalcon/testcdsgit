@@ -545,11 +545,11 @@ public class pageModify : IHttpHandler, IRequiresSessionState
                     }
                     if (mod_pay_status=="1") {//已確認要更新
                         pac_db._str_after = Convert.ToInt32(mod_pay_after);
-                        if (mod_hidden_refcode == "底薪")
+                        if (mod_hidden_refcode == "01")
                         {//底薪 01
                             pac_db.UpdatePersonBasicSalary();
                         }
-                        else if (mod_hidden_refcode == "職能加給")
+                        else if (mod_hidden_refcode == "02")
                         {//職能加給 02
                             pac_db.UpdatePersonAllowance();
                         }
