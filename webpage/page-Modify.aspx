@@ -1126,10 +1126,10 @@
                                 $("#txt_pay_empno").val(response[0].perNo);
                                 $("#txt_pay_cname").text(response[0].perName);
                                 $("#txt_hidden_pay_perguid").val(response[0].perGuid);
-                                if ($("#hidden_pay_refcode").val() == "底薪") {
+                                if ($("#hidden_pay_refcode").val() == "01") {
                                     $("#txt_pay_before").val(response[0].perBasicSalary);
                                 }
-                                else if ($("#hidden_pay_refcode").val() == "職能加給") {
+                                else if ($("#hidden_pay_refcode").val() == "02") {
                                     $("#txt_pay_before").val(response[0].perAllowance);
                                 } else {
                                     $("#txt_pay_before").val("");
