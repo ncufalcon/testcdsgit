@@ -1331,7 +1331,14 @@
                 case "SiItem":
                     $("#txt_pay_siname").val(pname);//項目名稱
                     $("#txt_hidden_pay_siguid").val(gv);//項目GUID
-                    $("#hidden_pay_refcode").val(pname);//底薪 職能加給
+                    if (pname == "底薪") {
+                        $("#hidden_pay_refcode").val("01");//底薪
+                    } else if (pname == "職能加給") {
+                        $("#hidden_pay_refcode").val("02");//職能加給
+                    } else {
+                        $("#hidden_pay_refcode").val(pname);//
+                    }
+                    //$("#hidden_pay_refcode").val(pname);//底薪 職能加給
                     load_thispeopledata($("#txt_pay_empno").val(), "pay");
                     break;
             }
