@@ -300,14 +300,6 @@
 
         function feedbackFun(msg,ern) {
             switch (msg) {
-                default:
-                    alert("完成");
-                    //ClearInput();
-                    getData();
-                    //$("#editstatus").html("新增");
-                    //$("#Psavebtn").hide();
-                    //$("#Paddbtn").show();
-                    break;
                 case "add":
                     alert("完成");
                     getData();
@@ -348,6 +340,14 @@
                     break;
                 case "LoginFailed":
                     reLogin();
+                    break;
+                default:
+                    alert("完成");
+                    //ClearInput();
+                    getData();
+                    //$("#editstatus").html("新增");
+                    //$("#Psavebtn").hide();
+                    //$("#Paddbtn").show();
                     break;
             }
         }

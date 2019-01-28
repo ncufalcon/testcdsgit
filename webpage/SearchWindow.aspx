@@ -15,10 +15,6 @@
 
             $(document).on("click", "#sarchTab tr", function () {
                 switch ($.getParamValue('v')) {
-                    default:
-                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"));
-                        parent.$.fancybox.close();
-                        break;
                     case "LInsPerson":
                     case "HInsPerson":
                     case "PPInsPerson":
@@ -48,7 +44,10 @@
                         parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"), $(this).attr("str3"), $(this).attr("str4"));
                         parent.$.fancybox.close();
                         break;
-                        
+                    default:
+                        parent.setReturnValue($.getParamValue('v'), $(this).attr("gv"), $(this).attr("str"), $(this).attr("str2"));
+                        parent.$.fancybox.close();
+                        break;
                 }
             });
         });
